@@ -1,8 +1,6 @@
+-- First, create a database called "pacamara"
+-- Then, execute these queries:
 
--- USER is a reserved keyword with Postgres
--- You must use double quotes in every query that user is in:
--- ex. SELECT * FROM "user";
--- Otherwise you will have errors!
 CREATE TABLE "methods" (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(100) NOT NULL,
@@ -13,15 +11,15 @@ CREATE TABLE "methods" (
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "username" VARCHAR(50) NOT NULL UNIQUE,
-  "password" VARCHAR(50) NOT NULL UNIQUE,
+  "password" VARCHAR(255) NOT NULL UNIQUE,
   "profile_pic" VARCHAR(255),
   "methods_default_id" INT REFERENCES "methods",
   "kettle" VARCHAR(100),
   "grinder" VARCHAR(100),
-  "tds_min" DECIMAL NOT NULL,
-  "tds_max" DECIMAL NOT NULL,
-  "ext_min" DECIMAL NOT NULL,
-  "ext_max" DECIMAL NOT NULL
+  "tds_min" DECIMAL,
+  "tds_max" DECIMAL,
+  "ext_min" DECIMAL,
+  "ext_max" DECIMAL
 );
 
 CREATE TABLE "users_methods" (
@@ -79,3 +77,17 @@ CREATE TABLE "brews" (
   "tds" DECIMAL,
   "ext" DECIMAL
 );
+
+
+INSERT INTO "methods" ("name", "drip_speed", "lrr")
+VALUES ('Chemex', 'Slow',	2.1), 
+('Automatic Brewer', 'Medium	', 2.1),
+('Hario v60',	'Fast',	2.1),
+('December Dripper',	'Medium',	2.1),
+('French Press', NULL, 2.5),
+('Kalita Wave 185',	'Medium', 2.1),
+('Aeropress', NULL, 2.1),
+('Origami Dripper',	'Medium',	2.1);
+
+INSERT INTO "flavors" ("name")
+VALUES ('Chocolate'), ('Fruity'), ('Floral'), ('Light'), ('Bright'), ('Full');

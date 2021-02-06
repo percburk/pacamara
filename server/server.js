@@ -1,36 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-
 const app = express();
-
 const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
 
-// Route includes
+// Route imports
 const userRouter = require('./routes/user.router');
 
-// Body parser middleware
+// Middleware ---------------------------------- //
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Passport Session Configuration //
+// Passport session configuration
 app.use(sessionMiddleware);
-
-// start up passport sessions
+// Start up passport sessions
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* Routes */
+// Routes --------------------- //
 app.use('/api/user', userRouter);
 
 // Serve static files
 app.use(express.static('build'));
-
-// App Set //
+// App set
 const PORT = process.env.PORT || 5000;
-
-/** Listen * */
+// Start server
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
 });

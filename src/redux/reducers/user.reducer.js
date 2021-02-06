@@ -1,3 +1,4 @@
+// userReducer will hold a username and password if someone is logged in
 const userReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_USER':
@@ -9,6 +10,5 @@ const userReducer = (state = {}, action) => {
   }
 };
 
-// user will be on the redux state at:
-// state.user
+// On Redux as state.user
 export default userReducer;
