@@ -7,7 +7,7 @@ import {
   VictoryTooltip,
   VictoryLabel,
 } from 'victory';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // This is one of our simplest components
 // It doesn't have local state
@@ -24,7 +24,7 @@ const sampleData = [
   { tds: 1.6, ext: 24.4 },
 ];
 
-function InfoPage() {
+function CoffeeDetails() {
   const [switchChart, setSwitchChart] = useState(false);
   const [single, setSingle] = useState({ x: '', y: '' });
 
@@ -136,4 +136,4 @@ function InfoPage() {
   );
 }
 
-export default InfoPage;
+export default CoffeeDetails;
