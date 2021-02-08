@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
 import { useSelector } from 'react-redux';
+import { Typography, Box } from '@material-ui/core';
 
 function Nav() {
+  const history = useHistory();
   const user = useSelector((store) => store.user);
 
   let loginLinkData = {
@@ -18,11 +20,31 @@ function Nav() {
   }
 
   return (
-    <div className="nav">
-      <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
-      </Link>
-      <div>
+    <Box
+      display="flex"
+      alignItems="center"
+      p={2}
+      justifyContent="space-between"
+      boxShadow={2}
+    >
+      <Box display="flex" alignItems="center">
+        <Box px={3}>
+          <img
+            src="/images/coffee-illustration.jpg"
+            height="75"
+            onClick={() => history.push('/home')}
+            style={{ cursor: 'pointer' }}
+          />
+        </Box>
+        <Typography
+          variant="h4"
+          onClick={() => history.push('/home')}
+          style={{ cursor: 'pointer' }}
+        >
+          PACAMARA
+        </Typography>
+      </Box>
+      <Box>
         <Link className="navLink" to={loginLinkData.path}>
           {loginLinkData.text}
         </Link>
@@ -35,12 +57,8 @@ function Nav() {
             <LogOutButton className="navLink" />
           </>
         )}
-
-        <Link className="navLink" to="/about">
-          About
-        </Link>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

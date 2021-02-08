@@ -12,15 +12,48 @@ import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-
-import AboutPage from '../AboutPage/AboutPage';
-import UserPage from '../UserPage/UserPage';
-import InfoPage from '../InfoPage/InfoPage';
+import Dashboard from '../Dashboard/Dashboard';
+import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
-
 import './App.css';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#35baf6',
+    },
+    secondary: {
+      main: '#33eb91',
+    },
+  },
+  typography: {
+    fontFamily: 'Lato',
+    fontSize: 14,
+    fontWeightLight: 100,
+    fontWeightRegular: 300,
+    fontWeightMedium: 300,
+    fontWeightBold: 400,
+    h2: {
+      fontFamily: 'Mulish',
+      fontWeight: 200,
+      letterSpacing: '0.1em',
+    },
+    h4: {
+      fontFamily: 'Mulish',
+      fontSize: '1.5em',
+      fontWeight: 200,
+      letterSpacing: '0.1em',
+    },
+    h5: {
+      fontFamily: 'Mulish',
+      fontWeight: 400,
+      letterSpacing: '0.1em',
+    },
+  },
+});
 
 function App() {
   const dispatch = useDispatch();
@@ -30,86 +63,78 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Router>
-      <div>
-        <Nav />
-        <Switch>
-          {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-          <Redirect exact from="/" to="/home" />
-
-          {/* Visiting localhost:3000/about will show the about page. */}
-          <Route
-            // shows AboutPage at all times (logged in or not)
-            exact
-            path="/about"
-          >
-            <AboutPage />
-          </Route>
-
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:3000/user will show the UserPage if the user is logged in.
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div>
+          <Nav />
+          <Switch>
+            {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
+            <Redirect exact from="/" to="/home" />
+            {/* For protected routes, the view could show one of several things on the same route.
+            Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
-          <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
-            exact
-            path="/user"
-          >
-            <UserPage />
-          </ProtectedRoute>
+            <ProtectedRoute
+              // logged in shows Dashboard else shows LoginPage
+              exact
+              path="/dashboard"
+            >
+              <Dashboard />
+            </ProtectedRoute>
 
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/info"
-          >
-            <InfoPage />
-          </ProtectedRoute>
+            <ProtectedRoute
+              // logged in shows CoffeeDetails else shows LoginPage
+              exact
+              path="/details"
+            >
+              <CoffeeDetails />
+            </ProtectedRoute>
 
-          {/* When a value is supplied for the authRedirect prop the user will
+            {/* When a value is supplied for the authRedirect prop the user will
             be redirected to the path supplied when logged in, otherwise they will
             be taken to the component and path supplied. */}
-          <ProtectedRoute
-            // with authRedirect:
-            // - if logged in, redirects to "/user"
-            // - else shows LoginPage at /login
-            exact
-            path="/login"
-            authRedirect="/user"
-          >
-            <LoginPage />
-          </ProtectedRoute>
+            <ProtectedRoute
+              // with authRedirect:
+              // - if logged in, redirects to '/dashboard'
+              // - else shows LoginPage at '/login'
+              exact
+              path="/login"
+              authRedirect="/dashboard"
+            >
+              <LoginPage />
+            </ProtectedRoute>
 
-          <ProtectedRoute
-            // with authRedirect:
-            // - if logged in, redirects to "/user"
-            // - else shows RegisterPage at "/registration"
-            exact
-            path="/registration"
-            authRedirect="/user"
-          >
-            <RegisterPage />
-          </ProtectedRoute>
+            <ProtectedRoute
+              // with authRedirect:
+              // - if logged in, redirects to '/dashboard'
+              // - else shows RegisterPage at '/registration'
+              exact
+              path="/registration"
+              authRedirect="/dashboard"
+            >
+              <RegisterPage />
+            </ProtectedRoute>
 
-          <ProtectedRoute
-            // with authRedirect:
-            // - if logged in, redirects to "/user"
-            // - else shows LandingPage at "/home"
-            exact
-            path="/home"
-            authRedirect="/user"
-          >
-            <LandingPage />
-          </ProtectedRoute>
+            <ProtectedRoute
+              // with authRedirect:
+              // - if logged in, redirects to '/dashboard'
+              // - else shows LandingPage at '/home'
+              exact
+              path="/home"
+              authRedirect="/user"
+            >
+              <LandingPage />
+            </ProtectedRoute>
 
-          {/* If none of the other routes matched, we will show a 404. */}
-          <Route>
-            <h1>404</h1>
-          </Route>
-        </Switch>
-        <Footer />
-      </div>
-    </Router>
+            {/* If none of the other routes matched, we will show a 404. */}
+            <Route>
+              <h1>404</h1>
+            </Route>
+          </Switch>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
