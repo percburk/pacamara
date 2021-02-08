@@ -3,7 +3,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchMethods() {
   try {
-    const response = yield axios.get('/methods');
+    const response = yield axios.get('/api/methods');
     yield put({ type: 'SET_METHODS', payload: response.data });
   } catch (err) {
     console.log('error in fetchMethods:', err);

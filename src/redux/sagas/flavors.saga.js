@@ -3,7 +3,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchFlavors() {
   try {
-    const response = yield axios.get('/flavors');
+    const response = yield axios.get('/api/flavors');
     yield put({ type: 'SET_FLAVORS', payload: response.data });
   } catch (err) {
     console.log('error in fetchFlavors', err);

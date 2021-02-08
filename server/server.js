@@ -7,8 +7,11 @@ const passport = require('./strategies/user.strategy');
 
 // Route imports
 const userRouter = require('./routes/user.router');
+const methodsRouter = require('./routes/methods.router');
+const coffeeRouter = require('./routes/coffee.router');
+const flavorsRouter = require('./routes/flavors.router');
 
-// Middleware ---------------------------------- //
+// Middleware //
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -18,8 +21,11 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes --------------------- //
+// Routes //
 app.use('/api/user', userRouter);
+app.use('/api/methods', methodsRouter);
+app.use('/api/coffee', coffeeRouter);
+app.use('/api/flavors', flavorsRouter);
 
 // Serve static files
 app.use(express.static('build'));

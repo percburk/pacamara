@@ -19,7 +19,8 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import './App.css';
 
-import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { createMuiTheme, ThemeProvider, Container } from '@material-ui/core';
+import NewProfile from '../NewProfile/NewProfile';
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -65,8 +66,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div>
-          <Nav />
+        <Nav />
+        <Container maxWidth="lg">
           <Switch>
             {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
             <Redirect exact from="/" to="/home" />
@@ -74,6 +75,9 @@ function App() {
             Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
+            <ProtectedRoute exact path="/new">
+              <NewProfile />
+            </ProtectedRoute>
             <ProtectedRoute
               // logged in shows Dashboard else shows LoginPage
               exact
@@ -131,8 +135,8 @@ function App() {
               <h1>404</h1>
             </Route>
           </Switch>
-          <Footer />
-        </div>
+        </Container>
+        <Footer />
       </Router>
     </ThemeProvider>
   );

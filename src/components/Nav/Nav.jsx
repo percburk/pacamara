@@ -26,6 +26,7 @@ function Nav() {
       p={2}
       justifyContent="space-between"
       boxShadow={2}
+      marginBottom={5}
     >
       <Box display="flex" alignItems="center">
         <Box px={3}>
