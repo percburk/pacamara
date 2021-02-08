@@ -3,7 +3,8 @@ import errors from './errors.reducer';
 import user from './user.reducer';
 import methods from './methods.reducer';
 import coffees from './coffees.reducer';
-import oneCoffeePlusBrews from './oneCoffeePlusBrews.reducer'
+import oneCoffee from './oneCoffee.reducer';
+import flavors from './flavors.reducer';
 
 // rootReducer is the primary reducer for the entire project
 // It bundles up all of the other reducers so the project can use them.
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   user, // Will have an id and username if someone is logged in
   methods, // Contains 'methods' table for NewProfile
   coffees, // Contains list of coffees for Dashboard
-  oneCoffeePlusBrews, // Contains info for CoffeeDetails page plus brews
+  oneCoffee, // Contains info for CoffeeDetails page plus brews
+  flavors, // Contains flavors for flavor palette in AddCoffee
 });
 
 export default rootReducer;

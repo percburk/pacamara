@@ -1,5 +1,5 @@
-import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchMethods() {
   try {
@@ -11,7 +11,7 @@ function* fetchMethods() {
 }
 
 function* methodsSaga() {
-  yield takeLatest('FETCH_METHODS', fetchMethods);
+  yield takeEvery('FETCH_METHODS', fetchMethods);
 }
 
 export default methodsSaga;
