@@ -6,6 +6,7 @@ import methodsSaga from './methods.saga';
 import coffeesSaga from './coffees.saga';
 import oneCoffeeSaga from './oneCoffee.saga';
 import flavorsSaga from './flavors.saga';
+import updateProfileSaga from './updateProfile.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so the project can use them.
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     coffeesSaga(),
     oneCoffeeSaga(),
     flavorsSaga(),
+    updateProfileSaga(),
   ]);
 }

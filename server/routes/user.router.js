@@ -10,7 +10,7 @@ const router = express.Router();
 
 // Handles request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
-  // Send back user object from the session (previously queried from the 
+  // Send back user object from the session (previously queried from the
   // database)
   res.send(req.user);
 });
@@ -48,6 +48,75 @@ router.post('/logout', (req, res) => {
   // Use passport's built-in method to log out the user
   req.logout();
   res.sendStatus(200);
+});
+
+// Handles adding all other information to 'users', in creating both a new
+// profile or updating existing profile, contains 3 SQL queries
+router.put('/update', (req, res) => {
+  const sqlText = `
+    UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
+    "methods_default_id" = $3, "kettle" = $4, "grinder" = $5, "tds_min" = $6, "tds_max" = $7, "ext_min" = $8, "ext_max" = $9 
+    WHERE "id" = $10;
+  `;
+
+  // Query #1 - sending all non-array data
+  pool
+    .query(sqlText, [
+      req.body.name,
+      req.body.profile_pic,
+      req.body.methods_default_id,
+      req.body.kettle,
+      req.body.grinder,
+      req.body.tds_min,
+      req.body.tds_max,
+      req.body.ext_min,
+      req.body.ext_max,
+      req.user.id,
+    ])
+    .then(() => {
+      const deleteSqlText = `
+        DELETE FROM "users_methods" WHERE "users_id" = $1;
+      `;
+      // Query #2 - deleting old entries in "users_methods"
+      pool
+        .query(deleteSqlText, [req.user.id])
+        .then(() => {
+          // Array of updated methods sent from UpdateProfile
+          const newMethods = req.body.methods_array;
+
+          // Loop through array of methods, prepare $'s for query
+          let sqlValues = '';
+          for (i = 2; i <= newMethods.length + 1; i++) {
+            sqlValues += `($1, $${i}),`;
+          }
+          sqlValues = sqlValues.slice(0, -1); // Takes off last comma
+
+          const methodsSqlText = `
+            INSERT INTO "users_methods" ("users_id", "methods_id")
+            VALUES ${sqlValues};
+          `;
+
+          // Query #3 - Sends newMethods array to "users_methods"
+          pool
+            .query(methodsSqlText, [req.user.id, ...newMethods])
+            .then(res.sendStatus(201)) // Send back success!
+            .catch((err) => {
+              // Catch for Query #3
+              console.log(`error in PUT with query ${methodsSqlText}`, err);
+              res.sendStatus(500);
+            });
+        })
+        .catch((err) => {
+          // Catch for Query #2
+          console.log(`error in PUT with query ${deleteSqlText}`, err);
+          res.sendStatus(500);
+        });
+    })
+    .catch((err) => {
+      // Catch for Query #1
+      console.log(`error in PUT with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;

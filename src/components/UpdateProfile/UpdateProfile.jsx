@@ -1,5 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Typography,
@@ -22,16 +23,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NewProfile() {
+function UpdateProfile() {
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
   const methods = useSelector((state) => state.methods);
   const [newMethods, setNewMethods] = useState([]);
   const [newTds, setNewTds] = useState([1.37, 1.43]);
   const [newExt, setNewExt] = useState([20, 23]);
-  const [newUser, setNewUser] = useState({
+  const [newUpdates, setNewUpdates] = useState({
     name: '',
-    methods_default_id: '',
+    profile_pic: '',
+    methods_default_id: null,
     kettle: '',
     grinder: '',
   });
@@ -44,12 +47,39 @@ function NewProfile() {
       : setNewMethods(newMethods.filter((index) => index !== id));
   };
 
-  const handleNewUser = (key) => (event) => {
-    setNewUser({ ...newUser, [key]: event.target.value });
+  const handleNewUpdates = (key) => (event) => {
+    setNewUpdates({ ...newUpdates, [key]: event.target.value });
   };
 
   const handleSliders = (moved) => (event, newVal) => {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
+  };
+
+  const handleSubmit = () => {
+    dispatch({
+      type: 'UPDATE_PROFILE',
+      payload: {
+        ...newUpdates,
+        tds_min: newTds[0],
+        tds_max: newTds[1],
+        ext_min: newExt[0],
+        ext_max: newExt[1],
+        methods_array: newMethods,
+      },
+    });
+    clearInputs();
+  };
+
+  const clearInputs = () => {
+    setNewTds([1.37, 1.43]);
+    setNewExt([20, 23]);
+    setNewUpdates({
+      name: '',
+      profile_pic: '',
+      methods_default_id: '',
+      kettle: '',
+      grinder: '',
+    });
   };
 
   return (
@@ -64,8 +94,8 @@ function NewProfile() {
               label="Name"
               variant="outlined"
               fullWidth
-              onChange={handleNewUser('name')}
-              value={newUser.name}
+              onChange={handleNewUpdates('name')}
+              value={newUpdates.name}
             />
           </Box>
           <Box p={3}>
@@ -74,15 +104,15 @@ function NewProfile() {
               label="Grinder"
               variant="outlined"
               fullWidth
-              onChange={handleNewUser('grinder')}
-              value={newUser.grinder}
+              onChange={handleNewUpdates('grinder')}
+              value={newUpdates.grinder}
             />
             <TextField
               label="Kettle"
               variant="outlined"
               fullWidth
-              onChange={handleNewUser('kettle')}
-              value={newUser.kettle}
+              onChange={handleNewUpdates('kettle')}
+              value={newUpdates.kettle}
             />
           </Box>
           <Box p={3}>
@@ -134,8 +164,16 @@ function NewProfile() {
             p={3}
             className={classes.root}
           >
-            <Button variant="contained">Cancel</Button>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              onClick={() => {
+                history.push('/login');
+                clearInputs();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
               Create New Profile
             </Button>
           </Box>
@@ -145,4 +183,4 @@ function NewProfile() {
   );
 }
 
-export default NewProfile;
+export default UpdateProfile;
