@@ -22,13 +22,13 @@ router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  const queryText = `
-    INSERT INTO "users" (username, password)
-    VALUES ($1, $2) RETURNING id;
+  const sqlText = `
+    INSERT INTO "users" ("username", "password")
+    VALUES ($1, $2) RETURNING "id";
   `;
 
   pool
-    .query(queryText, [username, password])
+    .query(sqlText, [username, password])
     .then(() => res.sendStatus(201))
     .catch((err) => {
       console.log('User registration failed: ', err);
@@ -52,10 +52,11 @@ router.post('/logout', (req, res) => {
 
 // Handles adding all other information to 'users', in creating both a new
 // profile or updating existing profile, contains 3 SQL queries
-router.put('/update', (req, res) => {
+router.put('/update', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
-    "methods_default_id" = $3, "kettle" = $4, "grinder" = $5, "tds_min" = $6, "tds_max" = $7, "ext_min" = $8, "ext_max" = $9 
+    "methods_default_id" = $3, "kettle" = $4, "grinder" = $5, 
+    "tds_min" = $6, "tds_max" = $7, "ext_min" = $8, "ext_max" = $9 
     WHERE "id" = $10;
   `;
 
@@ -77,6 +78,7 @@ router.put('/update', (req, res) => {
       const deleteSqlText = `
         DELETE FROM "users_methods" WHERE "users_id" = $1;
       `;
+
       // Query #2 - deleting old entries in "users_methods"
       pool
         .query(deleteSqlText, [req.user.id])
@@ -99,7 +101,7 @@ router.put('/update', (req, res) => {
           // Query #3 - Sends newMethods array to "users_methods"
           pool
             .query(methodsSqlText, [req.user.id, ...newMethods])
-            .then(res.sendStatus(201)) // Send back success!
+            .then(() => res.sendStatus(201)) // Send back success!
             .catch((err) => {
               // Catch for Query #3
               console.log(`error in PUT with query ${methodsSqlText}`, err);

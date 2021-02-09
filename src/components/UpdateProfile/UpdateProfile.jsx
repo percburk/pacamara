@@ -11,13 +11,18 @@ import {
   Chip,
   Snackbar,
   Slider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
-      margin: theme.spacing(1.5),
+      margin: theme.spacing(1),
       width: '25ch',
     },
   },
@@ -28,13 +33,15 @@ function UpdateProfile() {
   const history = useHistory();
   const dispatch = useDispatch();
   const methods = useSelector((state) => state.methods);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [defaultMethod, setDefaultMethod] = useState(0);
   const [newMethods, setNewMethods] = useState([]);
   const [newTds, setNewTds] = useState([1.37, 1.43]);
   const [newExt, setNewExt] = useState([20, 23]);
   const [newUpdates, setNewUpdates] = useState({
     name: '',
     profile_pic: '',
-    methods_default_id: null,
+    methods_default_id: '',
     kettle: '',
     grinder: '',
   });
@@ -55,7 +62,7 @@ function UpdateProfile() {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (passedNumber) => {
     dispatch({
       type: 'UPDATE_PROFILE',
       payload: {
@@ -65,6 +72,7 @@ function UpdateProfile() {
         ext_min: newExt[0],
         ext_max: newExt[1],
         methods_array: newMethods,
+        methods_default_id: passedNumber,
       },
     });
     clearInputs();
@@ -73,6 +81,7 @@ function UpdateProfile() {
   const clearInputs = () => {
     setNewTds([1.37, 1.43]);
     setNewExt([20, 23]);
+    setDefaultMethod(0);
     setNewUpdates({
       name: '',
       profile_pic: '',
@@ -143,7 +152,7 @@ function UpdateProfile() {
               valueLabelDisplay="on"
               step={0.01}
               min={1.3}
-              max={1.5}
+              max={1.55}
             />
           </Box>
           <Box p={3}>
@@ -173,12 +182,72 @@ function UpdateProfile() {
             >
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                newMethods.length === 1
+                  ? handleSubmit(newMethods[0])
+                  : setDialogOpen(true)
+              }
+            >
               Create New Profile
             </Button>
           </Box>
         </Grid>
       </Grid>
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle align="center">Default Brew Method</DialogTitle>
+        <DialogContent>
+          <DialogContentText align="center">
+            Would you like to set a brew method as your default?
+          </DialogContentText>
+          <Box className={classes.root} display="flex" justifyContent="center">
+            {methods.map((item) => {
+              if (newMethods.indexOf(item.id) > -1) {
+                return (
+                  <Chip
+                    key={item.id}
+                    label={item.name}
+                    color="primary"
+                    variant={item.id === defaultMethod ? 'default' : 'outlined'}
+                    onClick={() => setDefaultMethod(item.id)}
+                  />
+                );
+              }
+            })}
+          </Box>
+        </DialogContent>
+        <Box display="flex" justifyContent="center">
+          <DialogActions>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setDialogOpen(false);
+                setDefaultMethod(0);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleSubmit(null);
+                setDefaultMethod(0);
+              }}
+            >
+              No Thanks
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleSubmit(defaultMethod)}
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </>
   );
 }
