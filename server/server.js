@@ -11,7 +11,7 @@ const methodsRouter = require('./routes/methods.router');
 const coffeeRouter = require('./routes/coffee.router');
 const flavorsRouter = require('./routes/flavors.router');
 
-// Middleware //
+// --- Middleware --- //
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,7 +21,7 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes //
+// --- Routes --- //
 app.use('/api/user', userRouter);
 app.use('/api/methods', methodsRouter);
 app.use('/api/coffee', coffeeRouter);
@@ -32,6 +32,4 @@ app.use(express.static('build'));
 // App set
 const PORT = process.env.PORT || 5000;
 // Start server
-app.listen(PORT, () => {
-  console.log(`Listening on port: ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

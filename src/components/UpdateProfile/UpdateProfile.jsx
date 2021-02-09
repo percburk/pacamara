@@ -32,7 +32,7 @@ function UpdateProfile() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const methods = useSelector((state) => state.methods);
+  const methods = useSelector((store) => store.methods);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [defaultMethod, setDefaultMethod] = useState(0);
   const [newMethods, setNewMethods] = useState([]);
@@ -82,6 +82,7 @@ function UpdateProfile() {
     setNewTds([1.37, 1.43]);
     setNewExt([20, 23]);
     setDefaultMethod(0);
+    setNewMethods([]);
     setNewUpdates({
       name: '',
       profile_pic: '',
@@ -209,8 +210,7 @@ function UpdateProfile() {
                   <Chip
                     key={item.id}
                     label={item.name}
-                    color="primary"
-                    variant={item.id === defaultMethod ? 'default' : 'outlined'}
+                    color={item.id === defaultMethod ? 'primary' : 'default'}
                     onClick={() => setDefaultMethod(item.id)}
                   />
                 );
@@ -241,7 +241,11 @@ function UpdateProfile() {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleSubmit(defaultMethod)}
+              onClick={() =>
+                !defaultMethod
+                  ? alert('Please select a default brew method.')
+                  : handleSubmit(defaultMethod)
+              }
             >
               Submit
             </Button>

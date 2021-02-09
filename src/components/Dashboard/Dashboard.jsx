@@ -1,5 +1,4 @@
 import React from 'react';
-import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector } from 'react-redux';
 import { Box, Typography } from '@material-ui/core';
 
@@ -10,7 +9,6 @@ function Dashboard() {
     <Box className="container">
       <Typography variant="h5">Welcome, {user.username}!</Typography>
       <Typography>Your ID is: {user.id}</Typography>
-      <LogOutButton className="btn" />
     </Box>
   );
 }

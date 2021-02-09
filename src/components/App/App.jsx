@@ -20,7 +20,12 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import './App.css';
 
-import { createMuiTheme, ThemeProvider, Container } from '@material-ui/core';
+import {
+  createMuiTheme,
+  ThemeProvider,
+  Container,
+  CssBaseline,
+} from '@material-ui/core';
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -65,6 +70,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <Nav />
         <Container maxWidth="lg">
