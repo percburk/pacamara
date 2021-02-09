@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
   const sqlText = `
     SELECT * FROM "methods" ORDER BY "methods".name;
   `;
-
+  
   pool
     .query(sqlText)
     .then((response) => res.send(response.rows))

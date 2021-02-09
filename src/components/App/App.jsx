@@ -17,10 +17,10 @@ import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import './App.css';
 
 import { createMuiTheme, ThemeProvider, Container } from '@material-ui/core';
-import NewProfile from '../NewProfile/NewProfile';
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -75,8 +75,8 @@ function App() {
             Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
-            <ProtectedRoute exact path="/new">
-              <NewProfile />
+            <ProtectedRoute exact path="/profile">
+              <UpdateProfile />
             </ProtectedRoute>
             <ProtectedRoute
               // logged in shows Dashboard else shows LoginPage
