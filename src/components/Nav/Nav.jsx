@@ -12,7 +12,7 @@ import {
   ListItemText,
   Button,
 } from '@material-ui/core';
-import { Edit, Add } from '@material-ui/icons';
+import { Edit, Add, ViewModule } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   medium: {
@@ -36,11 +36,6 @@ function Nav() {
     text: 'Login / Register',
   };
 
-  if (user.id != null) {
-    loginLinkData.path = '/user';
-    loginLinkData.text = 'Home';
-  }
-
   const handleMenuOpen = (event) => {
     console.log('clicked!');
     setAnchorEl(event.currentTarget);
@@ -62,13 +57,13 @@ function Nav() {
             <img
               src="/images/coffee-illustration.jpg"
               className={classes.large}
-              onClick={() => history.push('/home')}
+              onClick={() => history.push('/dashboard')}
               style={{ cursor: 'pointer' }}
             />
           </Box>
           <Typography
             variant="h4"
-            onClick={() => history.push('/home')}
+            onClick={() => history.push('/dashboard')}
             style={{ cursor: 'pointer' }}
           >
             PACAMARA
@@ -100,7 +95,23 @@ function Nav() {
           <Typography align="center">{user.name}</Typography>
           <Typography align="center">{user.username}</Typography>
         </Box>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push('/dashboard');
+            setAnchorEl(null);
+          }}
+        >
+          <ListItemIcon>
+            <ViewModule />
+          </ListItemIcon>
+          <ListItemText primary="Go To Dashboard" />
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push('/profile');
+            setAnchorEl(null);
+          }}
+        >
           <ListItemIcon>
             <Edit />
           </ListItemIcon>
