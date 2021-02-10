@@ -8,8 +8,14 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
+  // Get all info from 'users' table along with array of brew methods
+  const sqlText = `
+    SELECT "users".*, ARRAY_AGG("users_methods".methods_id) AS "methods_array" FROM "users" JOIN "users_methods" ON "users".id = "users_methods".users_id
+    WHERE "users".id = $1 GROUP BY "users".id;
+  `;
+
   pool
-    .query('SELECT * FROM "users" WHERE id = $1', [id])
+    .query(sqlText, [id])
     .then((result) => {
       // Handle Errors
       const user = result && result.rows && result.rows[0];

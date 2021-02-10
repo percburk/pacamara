@@ -33,17 +33,27 @@ function UpdateProfile() {
   const history = useHistory();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
+  const user = useSelector((store) => store.user);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [defaultMethod, setDefaultMethod] = useState(0);
-  const [newMethods, setNewMethods] = useState([]);
-  const [newTds, setNewTds] = useState([1.37, 1.43]);
-  const [newExt, setNewExt] = useState([20, 23]);
+  const [newMethods, setNewMethods] = useState(user.methods_array || []);
+
+  const [newTds, setNewTds] = useState([
+    user.tds_min || 1.37,
+    user.tds_max || 1.43,
+  ]);
+
+  const [newExt, setNewExt] = useState([
+    user.ext_min || 20,
+    user.ext_max || 23.5,
+  ]);
+
   const [newUpdates, setNewUpdates] = useState({
-    name: '',
-    profile_pic: '',
-    methods_default_id: '',
-    kettle: '',
-    grinder: '',
+    name: user.name || '',
+    profile_pic: user.profile_pic || '',
+    methods_default_id: user.methods_default_id || '',
+    kettle: user.kettle || '',
+    grinder: user.grinder || '',
   });
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
@@ -76,6 +86,7 @@ function UpdateProfile() {
       },
     });
     clearInputs();
+    history.push('/dashboard');
   };
 
   const clearInputs = () => {
@@ -95,7 +106,9 @@ function UpdateProfile() {
   return (
     <>
       <Box paddingBottom={3}>
-        <Typography variant="h4">Create New Profile</Typography>
+        <Typography variant="h4">
+          {user.name ? 'Edit Profile' : 'Create New Profile'}
+        </Typography>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
@@ -147,10 +160,10 @@ function UpdateProfile() {
           <Box p={3}>
             <Typography>Set TDS Window:</Typography>
             <Slider
-              value={newTds}
               onChange={handleSliders('tds')}
               valueLabelDisplay="auto"
               valueLabelDisplay="on"
+              value={newTds}
               step={0.01}
               min={1.3}
               max={1.55}
@@ -159,10 +172,10 @@ function UpdateProfile() {
           <Box p={3}>
             <Typography>Set Extraction Window:</Typography>
             <Slider
-              value={newExt}
               onChange={handleSliders('ext')}
               valueLabelDisplay="auto"
               valueLabelDisplay="on"
+              value={newExt}
               step={0.1}
               min={17}
               max={25}
@@ -192,7 +205,7 @@ function UpdateProfile() {
                   : setDialogOpen(true)
               }
             >
-              Create New Profile
+              {user.name ? 'Submit' : 'Create'}
             </Button>
           </Box>
         </Grid>

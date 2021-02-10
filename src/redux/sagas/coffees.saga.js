@@ -19,9 +19,19 @@ function* setFavorite(action) {
   }
 }
 
+function* deleteCoffee(action) {
+  try {
+    yield axios.delete(`/api/coffee/delete/${action.payload}`);
+    yield put({ type: 'FETCH_COFFEES' });
+  } catch (err) {
+    console.log('error in deleteCoffee', err);
+  }
+}
+
 function* coffeesSaga() {
   yield takeEvery('FETCH_COFFEES', fetchCoffees);
   yield takeEvery('SET_FAVORITE', setFavorite);
+  yield takeEvery('DELETE_COFFEE', deleteCoffee);
 }
 
 export default coffeesSaga;
