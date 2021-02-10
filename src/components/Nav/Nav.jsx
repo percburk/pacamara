@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
   Box,
@@ -27,19 +27,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Nav() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((store) => store.user);
   const [anchorEl, setAnchorEl] = useState(null);
-
-  let loginLinkData = {
-    path: '/login',
-    text: 'Login / Register',
-  };
-
-  const handleMenuOpen = (event) => {
-    console.log('clicked!');
-    setAnchorEl(event.currentTarget);
-  };
 
   return (
     <>
@@ -73,7 +64,7 @@ function Nav() {
           <Avatar
             className={classes.medium}
             src={user.profile_pic}
-            onClick={handleMenuOpen}
+            onClick={(event) => setAnchorEl(event.currentTarget)}
             style={{ cursor: 'pointer' }}
           >
             {user.name && user.name.charAt(0)}
@@ -124,7 +115,15 @@ function Nav() {
           <ListItemText primary="Add a New Coffee" />
         </MenuItem>
         <Box display="flex" justifyContent="center" py={2}>
-          <Button variant="outlined">Logout</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              dispatch({ type: 'LOGOUT' });
+              setAnchorEl(null);
+            }}
+          >
+            Logout
+          </Button>
         </Box>
       </Menu>
     </>

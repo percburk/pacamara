@@ -13,8 +13,6 @@ function Dashboard() {
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
 
-  console.log(coffees);
-
   return (
     <>
       <Box>
@@ -31,5 +29,4 @@ function Dashboard() {
   );
 }
 
-// this allows us to use <App /> in index.js
 export default Dashboard;
