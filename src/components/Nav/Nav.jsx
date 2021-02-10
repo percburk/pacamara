@@ -108,7 +108,12 @@ function Nav() {
           </ListItemIcon>
           <ListItemText primary="Edit Profile" />
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push('/addCoffee');
+            setAnchorEl(null);
+          }}
+        >
           <ListItemIcon>
             <Add />
           </ListItemIcon>
