@@ -12,11 +12,18 @@ function* fetchUser() {
     // Config includes credentials which allow the server to recognize the user
     // If a user is logged in, this will return their information
     // from the server session (req.user)
-    const response = yield axios.get('/api/user', config);
+    const userResponse = yield axios.get('/api/user', config);
+    const methodsResponse = yield axios.get('/api/user/methods');
 
-    // Now that the session has given us a user object with an id and username, // set the client-side user object to let the client-side know the user is 
+    // Now that the session has given us a user object with an id and username, // set the client-side user object to let the client-side know the user is
     // logged in
-    yield put({ type: 'SET_USER', payload: response.data });
+    yield put({
+      type: 'SET_USER',
+      payload: {
+        ...userResponse.data,
+        methods_array: methodsResponse.data[0].array_agg,
+      },
+    });
   } catch (err) {
     console.log('User get request failed', err);
   }

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   media: {
-    height: 140,
+    height: 160,
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -50,16 +50,16 @@ function CoffeeCard({ coffee }) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const formattedDate = DateTime.fromISO(coffee.date).toFormat('LLL d');
+  
+  const coffeeName = coffee.is_blend
+    ? coffee.blend_name
+    : `${coffee.country} ${coffee.producer}`;
 
   return (
     <>
       <Card className={classes.root} elevation={3}>
         <CardHeader
-          title={
-            coffee.is_blend
-              ? coffee.blend_name
-              : `${coffee.country} ${coffee.producer}`
-          }
+          title={coffeeName}
           subheader={coffee.roaster}
           action={
             <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
@@ -70,7 +70,8 @@ function CoffeeCard({ coffee }) {
         <CardMedia
           className={classes.media}
           image={coffee.coffee_pic}
-          title="Coffee Pic"
+          title={coffeeName}
+          style={{ cursor: 'pointer' }}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">

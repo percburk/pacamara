@@ -8,14 +8,8 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  // Get all info from 'users' table along with array of brew methods
-  const sqlText = `
-    SELECT "users".*, ARRAY_AGG("users_methods".methods_id) AS "methods_array" FROM "users" JOIN "users_methods" ON "users".id = "users_methods".users_id
-    WHERE "users".id = $1 GROUP BY "users".id;
-  `;
-
   pool
-    .query(sqlText, [id])
+    .query('SELECT * FROM "users" WHERE id = $1', [id])
     .then((result) => {
       // Handle Errors
       const user = result && result.rows && result.rows[0];
@@ -45,7 +39,7 @@ passport.use(
   'local',
   new LocalStrategy((username, password, done) => {
     pool
-      .query('SELECT * FROM "users" WHERE "username" = $1', [username])
+      .query('SELECT * FROM "users" WHERE username = $1', [username])
       .then((result) => {
         const user = result && result.rows && result.rows[0];
         if (user && encryptLib.comparePassword(password, user.password)) {

@@ -8,11 +8,26 @@ const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 
-// Handles request for user information if user is authenticated
+// GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the
   // database)
   res.send(req.user);
+});
+
+// GET request for the methods user owns from 'users_methods' junction table
+router.get('/methods', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
+  `;
+
+  pool
+    .query(sqlText, [req.user.id])
+    .then((response) => res.send(response.rows))
+    .catch((err) => {
+      console.log(`error in GET with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
 });
 
 // Handles POST request with new user data

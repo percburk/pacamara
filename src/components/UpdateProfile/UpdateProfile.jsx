@@ -103,6 +103,8 @@ function UpdateProfile() {
     });
   };
 
+  console.log(newUpdates);
+
   return (
     <>
       <Box paddingBottom={3}>
