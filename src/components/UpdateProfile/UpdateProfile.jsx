@@ -259,6 +259,7 @@ function UpdateProfile() {
               onClick={() =>
                 !defaultMethod
                   ? alert('Please select a default brew method.')
+                  // Change from 'alert' to Snackbar!!
                   : handleSubmit(defaultMethod)
               }
             >
