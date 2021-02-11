@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { DateTime } from 'luxon';
 import {
   Box,
   makeStyles,
@@ -54,7 +55,9 @@ function AddEditCoffee() {
   };
 
   const handleRoastDate = (date) => {
-    setNewCoffee({ ...newCoffee, roast_date: date });
+    const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
+    console.log(formattedDate);
+    setNewCoffee({ ...newCoffee, roast_date: formattedDate });
   };
 
   const handleNewFlavor = (id) => {
@@ -63,7 +66,7 @@ function AddEditCoffee() {
       : setNewFlavors(newFlavors.filter((index) => index !== id));
   };
 
-  const handleBlendSwitch = (event) => {
+  const handleBlendSwitch = () => {
     setNewCoffee({
       ...newCoffee,
       is_blend: !newCoffee.is_blend,
@@ -78,7 +81,7 @@ function AddEditCoffee() {
       payload: { ...newCoffee, flavors_array: newFlavors },
     });
     clearInputs();
-    history.push('/dashboard') // Change to CoffeeDetails!!
+    history.push('/dashboard'); // Change to CoffeeDetails!!
   };
 
   const clearInputs = () => {
@@ -98,8 +101,6 @@ function AddEditCoffee() {
     });
     setNewFlavors([]);
   };
-
-  console.log(newFlavors);
 
   return (
     <>
@@ -224,6 +225,17 @@ function AddEditCoffee() {
                 />
               );
             })}
+          </Box>
+          <Box p={3}>
+            <TextField
+              label="Tasting Notes"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={5}
+              onChange={handleNewCoffee('notes')}
+              value={newCoffee.notes}
+            />
           </Box>
           <Box
             display="flex"

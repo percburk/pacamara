@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Typography, Menu, MenuItem, Button } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+  FormControlLabel,
+  Switch,
+} from '@material-ui/core';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 
 function Dashboard() {
@@ -8,6 +16,7 @@ function Dashboard() {
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [favSwitch, setFavSwitch] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_COFFEES' });
@@ -28,6 +37,8 @@ function Dashboard() {
           return a[howSort].localeCompare(b[howSort]);
         }
       });
+    } else if (howSort === 'date') {
+      return coffees.sort((a, b) => b[howSort].localeCompare(a[howSort]));
     } else {
       return coffees.sort((a, b) => a[howSort].localeCompare(b[howSort]));
     }
@@ -40,6 +51,16 @@ function Dashboard() {
           <Typography variant="h6">{user.name}'s Dashboard</Typography>
         </Box>
         <Box>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={favSwitch}
+                onChange={() => setFavSwitch(!favSwitch)}
+                color="primary"
+              />
+            }
+            label="Favorites"
+          />
           <Button
             variant="outlined"
             onClick={(event) => setAnchorEl(event.currentTarget)}
@@ -60,9 +81,15 @@ function Dashboard() {
         </Box>
       </Box>
       <Box display="flex" flexWrap="wrap" justifyContent="center">
-        {coffees.map((coffeeItem) => {
-          return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
-        })}
+        {favSwitch
+          ? coffees.map((coffeeItem) => {
+              if (coffeeItem.is_fav) {
+                return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
+              }
+            })
+          : coffees.map((coffeeItem) => {
+              return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
+            })}
       </Box>
     </>
   );
