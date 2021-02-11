@@ -122,6 +122,13 @@ function UpdateProfile() {
               onChange={handleNewUpdates('name')}
               value={newUpdates.name}
             />
+            <TextField
+              label="Profile Pic"
+              variant="outlined"
+              fullWidth
+              onChange={handleNewUpdates('profile_pic')}
+              value={newUpdates.profile_pic}
+            />
           </Box>
           <Box p={3}>
             <Typography>Select Equipment:</Typography>
@@ -259,7 +266,8 @@ function UpdateProfile() {
               onClick={() =>
                 !defaultMethod
                   ? alert('Please select a default brew method.')
-                  : handleSubmit(defaultMethod)
+                  : // Change from 'alert' to Snackbar!!
+                    handleSubmit(defaultMethod)
               }
             >
               Submit

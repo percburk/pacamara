@@ -28,10 +28,21 @@ function* deleteCoffee(action) {
   }
 }
 
+function* addCoffee(action) {
+  try {
+    yield axios.post('/api/coffee', action.payload);
+    yield put({type: 'FETCH_COFFEES'})
+  } catch (err) {
+    console.log('error in addCoffee', err);
+    
+  }
+}
+
 function* coffeesSaga() {
   yield takeEvery('FETCH_COFFEES', fetchCoffees);
   yield takeEvery('SET_FAVORITE', setFavorite);
   yield takeEvery('DELETE_COFFEE', deleteCoffee);
+  yield takeEvery('ADD_COFFEE', addCoffee);
 }
 
 export default coffeesSaga;
