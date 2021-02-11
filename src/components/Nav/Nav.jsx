@@ -60,16 +60,18 @@ function Nav() {
             PACAMARA
           </Typography>
         </Box>
-        <Box display="flex" alignItems="center">
-          <Avatar
-            className={classes.medium}
-            src={user.profile_pic}
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            style={{ cursor: 'pointer' }}
-          >
-            {user.name && user.name.charAt(0)}
-          </Avatar>
-        </Box>
+        {user.username && (
+          <Box display="flex" alignItems="center">
+            <Avatar
+              className={classes.medium}
+              src={user.profile_pic}
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+              style={{ cursor: 'pointer' }}
+            >
+              {user.name && user.name.charAt(0)}
+            </Avatar>
+          </Box>
+        )}
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -90,6 +92,7 @@ function Nav() {
           onClick={() => {
             history.push('/dashboard');
             setAnchorEl(null);
+            dispatch({ type: 'CLEAR_SNACKBARS' });
           }}
         >
           <ListItemIcon>
@@ -99,18 +102,20 @@ function Nav() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/profile');
+            history.push(`/profile/${user.id}`);
             setAnchorEl(null);
           }}
         >
           <ListItemIcon>
             <Edit />
           </ListItemIcon>
-          <ListItemText primary="Edit Profile" />
+          <ListItemText
+            primary={user.name ? 'Edit Profile' : 'Create New Profile'}
+          />
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/addCoffee');
+            history.push('/addCoffee/new');
             setAnchorEl(null);
           }}
         >

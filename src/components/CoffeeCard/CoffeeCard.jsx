@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -42,18 +43,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CoffeeCard({ coffee }) {
+function CoffeeCard({ coffee, setSnackbarOpen, index }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const formattedDate = DateTime.fromISO(coffee.date).toFormat('LLL d');
-  
+
   const coffeeName = coffee.is_blend
     ? coffee.blend_name
     : `${coffee.country} ${coffee.producer}`;
+
+  const handleDelete = () => {
+    setDialogOpen(false);
+    dispatch({ type: 'DELETE_COFFEE', payload: coffee.id });
+    dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
+    setSnackbarOpen(true);
+  };
 
   return (
     <>
@@ -67,6 +76,35 @@ function CoffeeCard({ coffee }) {
             </IconButton>
           }
         />
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              history.push(`/addCoffee/${index}`);
+            }}
+          >
+            <ListItemIcon>
+              <Edit />
+            </ListItemIcon>
+            <ListItemText primary="Edit Coffee" />
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              setDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText primary="Delete Coffee" />
+          </MenuItem>
+        </Menu>
         <CardMedia
           className={classes.media}
           image={coffee.coffee_pic}
@@ -109,30 +147,6 @@ function CoffeeCard({ coffee }) {
           </Box>
         </CardContent>
       </Card>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-      >
-        <MenuItem onClick={() => setAnchorEl(null)}>
-          <ListItemIcon>
-            <Edit />
-          </ListItemIcon>
-          <ListItemText primary="Edit Coffee" />
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setAnchorEl(null);
-            setDialogOpen(true);
-          }}
-        >
-          <ListItemIcon>
-            <DeleteOutline />
-          </ListItemIcon>
-          <ListItemText primary="Delete Coffee" />
-        </MenuItem>
-      </Menu>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle align="center">Delete Coffee</DialogTitle>
         <DialogContent align="center">
@@ -143,13 +157,7 @@ function CoffeeCard({ coffee }) {
             <Button variant="contained" onClick={() => setDialogOpen(false)}>
               No
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setDialogOpen(false);
-                dispatch({ type: 'DELETE_COFFEE', payload: coffee.id });
-              }}
-            >
+            <Button variant="contained" onClick={handleDelete}>
               Yes
             </Button>
           </DialogActions>

@@ -8,45 +8,58 @@ import {
   Button,
   FormControlLabel,
   Switch,
+  Snackbar,
+  IconButton,
 } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 
 function Dashboard() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
+  const snackbars = useSelector((store) => store.snackbars);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [favSwitch, setFavSwitch] = useState(false);
+  const [favFilter, setFavFilter] = useState(false);
+  const [sort, setSort] = useState('date');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_COFFEES' });
     dispatch({ type: 'FETCH_FLAVORS' });
+    checkSnackbar();
   }, []);
 
-  const handleSort = (howSort) => {
-    setAnchorEl(null);
-    if (howSort === 'country' || howSort === 'producer') {
-      coffees.sort((a, b) => {
-        if (a.is_blend && b.is_blend) {
-          return a.blend_name.localeCompare(b.blend_name);
-        } else if (a.is_blend) {
-          return a.blend_name.localeCompare(b[howSort]);
-        } else if (b.is_blend) {
-          return a[howSort].localeCompare(b.blend_name);
-        } else {
-          return a[howSort].localeCompare(b[howSort]);
-        }
-      });
-    } else if (howSort === 'date') {
-      return coffees.sort((a, b) => b[howSort].localeCompare(a[howSort]));
-    } else {
-      return coffees.sort((a, b) => a[howSort].localeCompare(b[howSort]));
+  const checkSnackbar = () => {
+    if (snackbars) {
+      setSnackbarOpen(true);
     }
   };
 
+  const handleSort = (howToSort) => {
+    setSort(howToSort);
+    setAnchorEl(null);
+  };
+
+  const sortedCoffees = coffees.sort((a, b) => {
+    if (sort === 'date') {
+      return b[sort] > a[sort] ? 1 : -1;
+    } else {
+      if (a[sort] === b[sort]) {
+        return 0;
+      } else if (a[sort] === '') {
+        return 1;
+      } else if (b[sort] === '') {
+        return -1;
+      } else {
+        return a[sort] < b[sort] ? -1 : 1;
+      }
+    }
+  });
+
   return (
     <>
-      <Box display="flex" alignItems="center" px={2}>
+      <Box display="flex" px={2}>
         <Box flexGrow={1}>
           <Typography variant="h6">{user.name}'s Dashboard</Typography>
         </Box>
@@ -54,8 +67,8 @@ function Dashboard() {
           <FormControlLabel
             control={
               <Switch
-                checked={favSwitch}
-                onChange={() => setFavSwitch(!favSwitch)}
+                checked={favFilter}
+                onChange={() => setFavFilter(!favFilter)}
                 color="primary"
               />
             }
@@ -80,17 +93,42 @@ function Dashboard() {
           </Menu>
         </Box>
       </Box>
-      <Box display="flex" flexWrap="wrap" justifyContent="center">
-        {favSwitch
-          ? coffees.map((coffeeItem) => {
+      <Box display="flex" justifyContent="center" flexWrap="wrap">
+        {favFilter
+          ? sortedCoffees.map((coffeeItem, i) => {
               if (coffeeItem.is_fav) {
-                return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
+                return (
+                  <CoffeeCard
+                    key={coffeeItem.id}
+                    index={i}
+                    coffee={coffeeItem}
+                    setSnackbarOpen={setSnackbarOpen}
+                  />
+                );
               }
             })
-          : coffees.map((coffeeItem) => {
-              return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
+          : sortedCoffees.map((coffeeItem, i) => {
+              return (
+                <CoffeeCard
+                  key={coffeeItem.id}
+                  index={i}
+                  coffee={coffeeItem}
+                  setSnackbarOpen={setSnackbarOpen}
+                />
+              );
             })}
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbars}
+        action={
+          <IconButton size="small" onClick={() => setSnackbarOpen(false)}>
+            <Close fontSize="small" />
+          </IconButton>
+        }
+      />
     </>
   );
 }

@@ -9,21 +9,6 @@ import {
 } from 'victory';
 import { Box, Typography } from '@material-ui/core';
 
-// This is one of our simplest components
-// It doesn't have local state
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is
-
-const sampleData = [
-  { tds: 1.34, ext: 22.4 },
-  { tds: 1.21, ext: 17.8 },
-  { tds: 1.54, ext: 24 },
-  { tds: 1.3, ext: 18 },
-  { tds: 1.37, ext: 23.4 },
-  { tds: 1.4, ext: 23.1 },
-  { tds: 1.6, ext: 24.4 },
-];
-
 function CoffeeDetails() {
   const [switchChart, setSwitchChart] = useState(false);
   const [single, setSingle] = useState({ x: '', y: '' });

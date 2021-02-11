@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   TextField,
   Switch,
   Chip,
+  Snackbar,
   Button,
 } from '@material-ui/core';
 import {
@@ -31,24 +32,35 @@ function AddEditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  let { id } = useParams();
   const flavors = useSelector((store) => store.flavors);
-  const [newFlavors, setNewFlavors] = useState([]);
-  const [newCoffee, setNewCoffee] = useState({
-    roaster: '',
-    roast_date: new Date(),
-    is_blend: false,
-    blend_name: '',
-    country: '',
-    producer: '',
-    region: '',
-    elevation: '',
-    cultivars: '',
-    processing: '',
-    notes: '',
-    coffee_pic: '',
-  });
+  const coffees = useSelector((store) => store.coffees);
+  const [newFlavors, setNewFlavors] = useState(
+    id === 'new' ? [] : coffees[id].flavors_array
+  );
+  const [newCoffee, setNewCoffee] = useState(
+    id === 'new'
+      ? {
+          roaster: '',
+          roast_date: new Date(),
+          is_blend: false,
+          blend_name: '',
+          country: '',
+          producer: '',
+          region: '',
+          elevation: '',
+          cultivars: '',
+          processing: '',
+          notes: '',
+          coffee_pic: '',
+        }
+      : coffees[id]
+  );
 
-  useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
+  useEffect(() => {
+    dispatch({ type: 'FETCH_COFFEES' });
+    dispatch({ type: 'FETCH_FLAVORS' });
+  }, []);
 
   const handleNewCoffee = (key) => (event) => {
     setNewCoffee({ ...newCoffee, [key]: event.target.value });
@@ -75,13 +87,24 @@ function AddEditCoffee() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleNew = () => {
+    dispatch({type: 'SNACKBAR_ADDED_COFFEE'})
     dispatch({
       type: 'ADD_COFFEE',
       payload: { ...newCoffee, flavors_array: newFlavors },
     });
     clearInputs();
     history.push('/dashboard'); // Change to CoffeeDetails!!
+  };
+
+  const handleUpdate = () => {
+    dispatch({
+      type: 'EDIT_COFFEE',
+      payload: { ...newCoffee, flavors_array: newFlavors },
+    });
+    clearInputs();
+    dispatch({ type: 'SNACKBARS_UPDATED_COFFEE' });
+    history.push('/dashboard');
   };
 
   const clearInputs = () => {
@@ -105,7 +128,9 @@ function AddEditCoffee() {
   return (
     <>
       <Box paddingBottom={3}>
-        <Typography variant="h4">Add New Coffee</Typography>
+        <Typography variant="h4">
+          {id === 'new' ? 'Add New Coffee' : 'Update Coffee'}
+        </Typography>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
@@ -246,14 +271,19 @@ function AddEditCoffee() {
             <Button
               variant="contained"
               onClick={() => {
+                dispatch({ type: 'CLEAR_SNACKBARS' });
                 history.push('/dashboard');
                 clearInputs();
               }}
             >
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Add New Coffee
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={id === 'new' ? handleNew : handleUpdate}
+            >
+              {id === 'new' ? 'Add New Coffee' : 'Update Coffee'}
             </Button>
           </Box>
         </Grid>
