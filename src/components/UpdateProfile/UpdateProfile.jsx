@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -16,7 +16,9 @@ import {
   DialogContent,
   DialogTitle,
   DialogContentText,
+  IconButton,
 } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 function UpdateProfile() {
   const classes = useStyles();
   const history = useHistory();
+  let { id } = useParams();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const user = useSelector((store) => store.user);
@@ -85,6 +88,9 @@ function UpdateProfile() {
         methods_default_id: passedNumber,
       },
     });
+    id === 'new'
+      ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
+      : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
     clearInputs();
     history.push('/dashboard');
   };
@@ -102,8 +108,6 @@ function UpdateProfile() {
       grinder: '',
     });
   };
-
-  console.log(newUpdates);
 
   return (
     <>
@@ -199,6 +203,7 @@ function UpdateProfile() {
             <Button
               variant="contained"
               onClick={() => {
+                dispatch({ type: 'CLEAR_SNACKBARS' });
                 history.push('/login');
                 clearInputs();
               }}

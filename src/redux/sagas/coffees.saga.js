@@ -30,11 +30,19 @@ function* deleteCoffee(action) {
 
 function* addCoffee(action) {
   try {
-    yield axios.post('/api/coffee', action.payload);
-    yield put({type: 'FETCH_COFFEES'})
+    yield axios.post('/api/coffee/add', action.payload);
+    yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
     console.log('error in addCoffee', err);
-    
+  }
+}
+
+function* editCoffee(action) {
+  try {
+    yield axios.put(`/api/coffee/edit/`, action.payload);
+    yield put({ type: 'FETCH_COFFEES' });
+  } catch (err) {
+    console.log('error in editCoffee', err);
   }
 }
 
@@ -43,6 +51,7 @@ function* coffeesSaga() {
   yield takeEvery('SET_FAVORITE', setFavorite);
   yield takeEvery('DELETE_COFFEE', deleteCoffee);
   yield takeEvery('ADD_COFFEE', addCoffee);
+  yield takeEvery('EDIT_COFFEE', editCoffee);
 }
 
 export default coffeesSaga;

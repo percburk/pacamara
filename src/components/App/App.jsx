@@ -82,7 +82,7 @@ function App() {
             Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
-            <ProtectedRoute exact path="/profile">
+            <ProtectedRoute exact path="/profile/:id">
               <UpdateProfile />
             </ProtectedRoute>
             <ProtectedRoute
@@ -96,14 +96,14 @@ function App() {
             <ProtectedRoute
               // logged in shows CoffeeDetails else shows LoginPage
               exact
-              path="/details"
+              path="/details/:id"
             >
               <CoffeeDetails />
             </ProtectedRoute>
             <ProtectedRoute
               // logged in shows CoffeeDetails else shows LoginPage
               exact
-              path="/addCoffee"
+              path="/addCoffee/:id"
             >
               <AddEditCoffee />
             </ProtectedRoute>
