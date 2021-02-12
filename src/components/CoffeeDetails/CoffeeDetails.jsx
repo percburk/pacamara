@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { DateTime } from 'luxon';
 import {
   VictoryChart,
   VictoryScatter,
@@ -7,116 +10,93 @@ import {
   VictoryTooltip,
   VictoryLabel,
 } from 'victory';
-import { Box, Typography } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  Grid,
+  makeStyles,
+  Chip,
+  Button,
+} from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 280,
+    margin: theme.spacing(2),
+  },
+  media: {
+    height: 160,
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+}));
 
 function CoffeeDetails() {
-  const [switchChart, setSwitchChart] = useState(false);
-  const [single, setSingle] = useState({ x: '', y: '' });
+  const classes = useStyles();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const oneCoffee = useSelector((store) => store.oneCoffee);
+  const flavors = useSelector((store) => store.flavors);
+  const user = useSelector((store) => store.user);
 
-  const handleClick = (x, y) => {
-    setSwitchChart(!switchChart);
-    setSingle({ x, y });
-  };
+  useEffect(() => {
+    dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
+    dispatch({ type: 'FETCH_FLAVORS' });
+  }, []);
+  const formattedDate = DateTime.fromISO(oneCoffee.roast_date).toFormat(
+    'LLL d'
+  );
+
+  const daysOffRoast = DateTime.local()
+    .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
+    .toFormat('d');
+
+  console.log(flavors);
 
   return (
     <>
-      <Box>
-        <Typography variant="h4" align="center">
-          Victory Chart
-        </Typography>
-      </Box>
-      <Box display="flex" justifyContent="center">
-        <Box height={500} width={500}>
-          <VictoryChart
-            theme={VictoryTheme.material}
-            domain={{ x: [17, 26], y: [1.1, 1.7] }}
-          >
-            <VictoryLine
-              style={{
-                data: { stroke: '#c43a31' },
-                parent: { border: '1px solid #ccc' },
-              }}
-              data={[
-                { x: 17, y: 1.37 },
-                { x: 26, y: 1.37 },
-              ]}
-            />
-            <VictoryLine
-              style={{
-                data: { stroke: '#c43a31' },
-                parent: { border: '1px solid #ccc' },
-              }}
-              data={[
-                { x: 17, y: 1.43 },
-                { x: 26, y: 1.43 },
-              ]}
-            />
-            <VictoryLine
-              style={{
-                data: { stroke: '#c43a31' },
-                parent: { border: '1px solid #ccc' },
-              }}
-              data={[
-                { x: 20, y: 1.1 },
-                { x: 20, y: 1.7 },
-              ]}
-            />
-            <VictoryLine
-              style={{
-                data: { stroke: '#c43a31' },
-                parent: { border: '1px solid #ccc' },
-              }}
-              data={[
-                { x: 24, y: 1.1 },
-                { x: 24, y: 1.7 },
-              ]}
-            />
-            {!switchChart ? (
-              <VictoryScatter
-                labelComponent={<VictoryTooltip />}
-                data={sampleData.map((item) => {
-                  return {
-                    x: item.ext,
-                    y: item.tds,
-                    label: `TDS: ${item.tds} EXT: ${item.ext}%`,
-                  };
-                })}
-                size={7}
-                events={[
-                  {
-                    target: 'data',
-                    eventHandlers: {
-                      onClick: (event, data) =>
-                        handleClick(data.datum.x, data.datum.y),
-                    },
-                  },
-                ]}
-              />
-            ) : (
-              <VictoryScatter
-                labelComponent={<VictoryLabel />}
-                size={11}
-                data={[
-                  {
-                    x: single.x,
-                    y: single.y,
-                    label: `TDS: ${single.y} EXT: ${single.x}%`,
-                  },
-                ]}
-                events={[
-                  {
-                    target: 'data',
-                    eventHandlers: {
-                      onClick: () => setSwitchChart(!switchChart)
-                        
-                    }
-                  },
-                ]}
-              />
-            )}
-          </VictoryChart>
-        </Box>
-      </Box>
+      <Typography variant="h4">
+        {oneCoffee.is_blend
+          ? oneCoffee.blend_name
+          : `${oneCoffee.country} ${oneCoffee.producer}`}
+      </Typography>
+      <Grid container spacing={4}>
+        <Grid item xs={6}>
+          <Typography>
+            Roasted by {oneCoffee.roaster} on {formattedDate}
+          </Typography>
+          <Typography>
+            {daysOffRoast} day{daysOffRoast === 1 ? '' : 's'} off roast
+          </Typography>
+          {!oneCoffee.is_blend && (
+            <Box>
+              <Typography>Region: {oneCoffee.region}</Typography>
+              <Typography>Elevation: {oneCoffee.elevation} meters</Typography>
+              <Typography>Cultivars: {oneCoffee.cultivars}</Typography>
+              <Typography>Processing: {oneCoffee.processing}</Typography>
+              <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+            </Box>
+          )}
+          <Box display="flex" justifyContent="center">
+            {oneCoffee.flavors_array &&
+              flavors.map((item) => {
+                if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
+                  return (
+                    <Chip
+                      key={item.id}
+                      className={classes.chip}
+                      variant="outlined"
+                      label={item.name}
+                    />
+                  );
+                }
+              })}
+          </Box>
+          <Button onClick={() => history.push(`/editCoffee/${id}`)}>Edit</Button>
+        </Grid>
+      </Grid>
     </>
   );
 }

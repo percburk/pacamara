@@ -14,7 +14,8 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Dashboard from '../Dashboard/Dashboard';
 import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
-import AddEditCoffee from '../AddEditCoffee/AddEditCoffee';
+import AddCoffee from '../AddCoffee/AddCoffee';
+import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
@@ -101,12 +102,20 @@ function App() {
               <CoffeeDetails />
             </ProtectedRoute>
             <ProtectedRoute
-              // logged in shows CoffeeDetails else shows LoginPage
+              // logged in shows AddCoffee else shows LoginPage
               exact
-              path="/addCoffee/:id"
+              path="/addCoffee/"
             >
-              <AddEditCoffee />
+              <AddCoffee />
             </ProtectedRoute>
+            <ProtectedRoute
+              // logged in shows AddCoffee else shows LoginPage
+              exact
+              path="/editCoffee/:id"
+            >
+              <EditCoffee />
+            </ProtectedRoute>
+
             {/* When a value is supplied for the authRedirect prop the user will
             be redirected to the path supplied when logged in, otherwise they will
             be taken to the component and path supplied. */}

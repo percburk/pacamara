@@ -37,21 +37,11 @@ function* addCoffee(action) {
   }
 }
 
-function* editCoffee(action) {
-  try {
-    yield axios.put(`/api/coffee/edit/`, action.payload);
-    yield put({ type: 'FETCH_COFFEES' });
-  } catch (err) {
-    console.log('error in editCoffee', err);
-  }
-}
-
 function* coffeesSaga() {
   yield takeEvery('FETCH_COFFEES', fetchCoffees);
   yield takeEvery('SET_FAVORITE', setFavorite);
   yield takeEvery('DELETE_COFFEE', deleteCoffee);
   yield takeEvery('ADD_COFFEE', addCoffee);
-  yield takeEvery('EDIT_COFFEE', editCoffee);
 }
 
 export default coffeesSaga;

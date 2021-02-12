@@ -115,7 +115,7 @@ function Nav() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/addCoffee/new');
+            history.push('/addCoffee');
             setAnchorEl(null);
           }}
         >

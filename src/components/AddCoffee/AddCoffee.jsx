@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -10,8 +10,8 @@ import {
   TextField,
   Switch,
   Chip,
-  Snackbar,
   Button,
+  CardActions,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -28,39 +28,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddEditCoffee() {
+function AddCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  let { id } = useParams();
   const flavors = useSelector((store) => store.flavors);
-  const coffees = useSelector((store) => store.coffees);
-  const [newFlavors, setNewFlavors] = useState(
-    id === 'new' ? [] : coffees[id].flavors_array
-  );
-  const [newCoffee, setNewCoffee] = useState(
-    id === 'new'
-      ? {
-          roaster: '',
-          roast_date: new Date(),
-          is_blend: false,
-          blend_name: '',
-          country: '',
-          producer: '',
-          region: '',
-          elevation: '',
-          cultivars: '',
-          processing: '',
-          notes: '',
-          coffee_pic: '',
-        }
-      : coffees[id]
-  );
+  const [newFlavors, setNewFlavors] = useState([]);
+  const [newCoffee, setNewCoffee] = useState({
+    roaster: '',
+    roast_date: new Date(),
+    is_blend: false,
+    blend_name: '',
+    country: '',
+    producer: '',
+    region: '',
+    elevation: '',
+    cultivars: '',
+    processing: '',
+    notes: '',
+    coffee_pic: '',
+  });
 
-  useEffect(() => {
-    dispatch({ type: 'FETCH_COFFEES' });
-    dispatch({ type: 'FETCH_FLAVORS' });
-  }, []);
+  useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
 
   const handleNewCoffee = (key) => (event) => {
     setNewCoffee({ ...newCoffee, [key]: event.target.value });
@@ -68,7 +57,6 @@ function AddEditCoffee() {
 
   const handleRoastDate = (date) => {
     const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
-    console.log(formattedDate);
     setNewCoffee({ ...newCoffee, roast_date: formattedDate });
   };
 
@@ -88,22 +76,12 @@ function AddEditCoffee() {
   };
 
   const handleNew = () => {
-    dispatch({type: 'SNACKBAR_ADDED_COFFEE'})
+    dispatch({ type: 'SNACKBAR_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
       payload: { ...newCoffee, flavors_array: newFlavors },
     });
     clearInputs();
-    history.push('/dashboard'); // Change to CoffeeDetails!!
-  };
-
-  const handleUpdate = () => {
-    dispatch({
-      type: 'EDIT_COFFEE',
-      payload: { ...newCoffee, flavors_array: newFlavors },
-    });
-    clearInputs();
-    dispatch({ type: 'SNACKBARS_UPDATED_COFFEE' });
     history.push('/dashboard');
   };
 
@@ -128,9 +106,7 @@ function AddEditCoffee() {
   return (
     <>
       <Box paddingBottom={3}>
-        <Typography variant="h4">
-          {id === 'new' ? 'Add New Coffee' : 'Update Coffee'}
-        </Typography>
+        <Typography variant="h4">Add New Coffee</Typography>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
@@ -238,18 +214,19 @@ function AddEditCoffee() {
             flexWrap="wrap"
             justifyContent="center"
           >
-            {flavors.map((item) => {
-              return (
-                <Chip
-                  key={item.id}
-                  label={item.name}
-                  color={
-                    newFlavors.indexOf(item.id) === -1 ? 'default' : 'primary'
-                  }
-                  onClick={() => handleNewFlavor(item.id)}
-                />
-              );
-            })}
+            {newFlavors &&
+              flavors.map((item) => {
+                return (
+                  <Chip
+                    key={item.id}
+                    label={item.name}
+                    color={
+                      newFlavors.indexOf(item.id) === -1 ? 'default' : 'primary'
+                    }
+                    onClick={() => handleNewFlavor(item.id)}
+                  />
+                );
+              })}
           </Box>
           <Box p={3}>
             <TextField
@@ -278,12 +255,8 @@ function AddEditCoffee() {
             >
               Cancel
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={id === 'new' ? handleNew : handleUpdate}
-            >
-              {id === 'new' ? 'Add New Coffee' : 'Update Coffee'}
+            <Button variant="contained" color="primary" onClick={handleNew}>
+              Add New Coffee
             </Button>
           </Box>
         </Grid>
@@ -292,4 +265,4 @@ function AddEditCoffee() {
   );
 }
 
-export default AddEditCoffee;
+export default AddCoffee;

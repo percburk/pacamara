@@ -8,7 +8,7 @@ const snackbarsReducer = (state = '', action) => {
       return 'Profile Updated';
     case 'SNACKBARS_DELETED_COFFEE':
       return 'Coffee Deleted';
-    case 'SNACKBARS_UPDATED_COFFEE':
+    case 'SNACKBARS_EDITED_COFFEE':
       return 'Coffee Updated';
     case 'CLEAR_SNACKBARS':
       return '';

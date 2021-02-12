@@ -85,7 +85,7 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
-              history.push(`/addCoffee/${index}`);
+              history.push(`/editCoffee/${coffee.id}`);
             }}
           >
             <ListItemIcon>
@@ -110,6 +110,7 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           image={coffee.coffee_pic}
           title={coffeeName}
           style={{ cursor: 'pointer' }}
+          onClick={() => history.push(`/details/${coffee.id}`)}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">

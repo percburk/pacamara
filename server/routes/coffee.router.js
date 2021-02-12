@@ -26,6 +26,27 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// GET route for one coffee for CoffeeDetails
+router.get('/details/:id', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    SELECT "coffees".*, "users_coffees".is_fav, 
+    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+    FROM "coffees_flavors"
+    JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
+    WHERE "coffees".id = $1
+    GROUP BY "coffees".id, "users_coffees".is_fav;
+  `;
+
+  pool
+    .query(sqlText, [req.params.id])
+    .then((response) => res.send(response.rows))
+    .catch((err) => {
+      console.log(`error in GET with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
 // POST route for adding a new coffee, this contains 3 SQL queries
 router.post('/add', rejectUnauthenticated, (req, res) => {
   const sqlTextNewCoffee = `
@@ -103,6 +124,7 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// PUT route to toggle Favorite status of a coffee
 router.put('/fav/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     UPDATE "users_coffees" SET "is_fav" = NOT "is_fav" 
