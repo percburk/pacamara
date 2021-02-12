@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import LoginPage from '../LoginPage/LoginPage';
+import LandingPage from '../LandingPage/LandingPage';
 import { useSelector } from 'react-redux';
 
 /*
@@ -38,7 +38,7 @@ function ProtectedRoute(props) {
   } else {
     // If they are not logged in, check the loginMode on Redux State
     // If the mode is 'login', show the LoginPage
-    ComponentToShow = LoginPage;
+    ComponentToShow = LandingPage;
   }
 
   // Redirect a logged in user if an authRedirect prop has been provided

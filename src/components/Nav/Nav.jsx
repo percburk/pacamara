@@ -41,7 +41,6 @@ function Nav() {
         py={1}
         justifyContent="space-between"
         boxShadow={2}
-        marginBottom={5}
       >
         <Box display="flex" alignItems="center">
           <Box paddingRight={3}>
@@ -60,7 +59,9 @@ function Nav() {
             PACAMARA
           </Typography>
         </Box>
-        {user.username && (
+        {!user.name ? (
+          <Typography variant="h6">Your Coffee Companion</Typography>
+        ) : (
           <Box display="flex" alignItems="center">
             <Avatar
               className={classes.medium}
@@ -129,6 +130,7 @@ function Nav() {
             variant="outlined"
             onClick={() => {
               dispatch({ type: 'LOGOUT' });
+              history.push('/home');
               setAnchorEl(null);
             }}
           >

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import errors from './errors.reducer';
+import landingErrors from './landingErrors.reducer';
 import user from './user.reducer';
 import methods from './methods.reducer';
 import coffees from './coffees.reducer';
@@ -14,7 +14,7 @@ import brews from './brews.reducer';
 
 // Makes one object for our store, containing the objects from all reducers.
 const rootReducer = combineReducers({
-  errors, // Contains errors.registrationMessage and errors.loginMessage
+  landingErrors, // Contains all errors for LandingPage login/registration
   user, // Will have an id and username if someone is logged in
   methods, // Contains 'methods' table for NewProfile
   coffees, // Contains list of coffees for Dashboard

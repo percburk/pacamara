@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -10,11 +11,16 @@ import {
   Switch,
   Snackbar,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 
 function Dashboard() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
@@ -23,6 +29,9 @@ function Dashboard() {
   const [favFilter, setFavFilter] = useState(false);
   const [sort, setSort] = useState('date');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [newUserDialogOpen, setNewUserDialogOpen] = useState(
+    !user.name ? true : false
+  );
 
   useEffect(() => {
     dispatch({ type: 'FETCH_COFFEES' });
@@ -59,9 +68,11 @@ function Dashboard() {
 
   return (
     <>
-      <Box display="flex" px={2}>
+      <Box display="flex" p={4}>
         <Box flexGrow={1}>
-          <Typography variant="h6">{user.name}'s Dashboard</Typography>
+          <Typography variant="h6">
+            {user.name ? `${user.name}'s Dashboard` : 'Welcome!'}
+          </Typography>
         </Box>
         <Box>
           <FormControlLabel
@@ -129,6 +140,25 @@ function Dashboard() {
           </IconButton>
         }
       />
+      <Dialog
+        open={newUserDialogOpen}
+        onClose={() => setNewUserDialogOpen(false)}
+      >
+        <DialogTitle align="center">Welcome to Pacamara!</DialogTitle>
+        <DialogContent align="center">
+          Let's set you up with a new profile.
+        </DialogContent>
+        <Box display="flex" justifyContent="center">
+          <DialogActions>
+            <Button
+              variant="contained"
+              onClick={() => history.push('/profile/new')}
+            >
+              Let's go
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </>
   );
 }

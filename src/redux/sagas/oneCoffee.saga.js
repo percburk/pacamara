@@ -20,9 +20,19 @@ function* editCoffee(action) {
   }
 }
 
+function* setFavoriteOneCoffee(action) {
+  try {
+    yield axios.put(`/api/coffee/fav/${action.payload}`);
+    yield put({ type: 'FETCH_ONE_COFFEE', payload: action.payload });
+  } catch (err) {
+    console.log('error in setFavoriteOneCoffee', err);
+  }
+}
+
 function* oneCoffeeSaga() {
   yield takeEvery('FETCH_ONE_COFFEE', fetchOneCoffee);
   yield takeEvery('EDIT_COFFEE', editCoffee);
+  yield takeEvery('SET_FAVORITE_ONE_COFFEE', setFavoriteOneCoffee);
 }
 
 export default oneCoffeeSaga;

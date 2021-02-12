@@ -17,7 +17,9 @@ import {
   makeStyles,
   Chip,
   Button,
+  IconButton,
 } from '@material-ui/core';
+import { Favorite, FavoriteBorder } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,11 +61,42 @@ function CoffeeDetails() {
 
   return (
     <>
-      <Typography variant="h4">
-        {oneCoffee.is_blend
-          ? oneCoffee.blend_name
-          : `${oneCoffee.country} ${oneCoffee.producer}`}
-      </Typography>
+      <Box p={3}>
+        <Typography variant="h4">
+          {oneCoffee.is_blend
+            ? oneCoffee.blend_name
+            : `${oneCoffee.country} ${oneCoffee.producer}`}
+        </Typography>
+        <Box display="flex" my={2}>
+          <IconButton
+            onClick={() =>
+              dispatch({
+                type: 'SET_FAVORITE_ONE_COFFEE',
+                payload: oneCoffee.id,
+              })
+            }
+          >
+            {oneCoffee.is_fav ? (
+              <Favorite color="primary" />
+            ) : (
+              <FavoriteBorder />
+            )}
+          </IconButton>
+          {oneCoffee.flavors_array &&
+            flavors.map((item) => {
+              if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
+                return (
+                  <Chip
+                    key={item.id}
+                    className={classes.chip}
+                    variant="outlined"
+                    label={item.name}
+                  />
+                );
+              }
+            })}
+        </Box>
+      </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <Typography>
@@ -81,21 +114,6 @@ function CoffeeDetails() {
               <Typography>Tasting notes: {oneCoffee.notes}</Typography>
             </Box>
           )}
-          <Box display="flex" justifyContent="center">
-            {oneCoffee.flavors_array &&
-              flavors.map((item) => {
-                if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
-                  return (
-                    <Chip
-                      key={item.id}
-                      className={classes.chip}
-                      variant="outlined"
-                      label={item.name}
-                    />
-                  );
-                }
-              })}
-          </Box>
           <Button onClick={() => history.push(`/editCoffee/${id}`)}>
             Edit
           </Button>
