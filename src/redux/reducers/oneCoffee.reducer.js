@@ -6,7 +6,7 @@ const oneCoffeeReducer = (state = {}, action) => {
       return { ...state, [action.payload.key]: action.payload.change };
     case 'EDIT_ROAST_DATE':
       return { ...state, roast_date: action.payload };
-    case 'EDIT_BLEND':
+    case 'EDIT_IS_BLEND':
       return { ...state, is_blend: !state.is_blend };
     case 'EDIT_FLAVORS_ARRAY':
       const id = action.payload;

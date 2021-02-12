@@ -30,7 +30,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.get('/details/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, 
-    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id

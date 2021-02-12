@@ -38,11 +38,13 @@ function CoffeeDetails() {
   const dispatch = useDispatch();
   const history = useHistory();
   const oneCoffee = useSelector((store) => store.oneCoffee);
+  const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
   const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
+    dispatch({ type: 'FETCH_BREWS', payload: id });
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
   const formattedDate = DateTime.fromISO(oneCoffee.roast_date).toFormat(
@@ -53,7 +55,7 @@ function CoffeeDetails() {
     .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
     .toFormat('d');
 
-  console.log(flavors);
+  console.log(brews);
 
   return (
     <>
@@ -94,7 +96,9 @@ function CoffeeDetails() {
                 }
               })}
           </Box>
-          <Button onClick={() => history.push(`/editCoffee/${id}`)}>Edit</Button>
+          <Button onClick={() => history.push(`/editCoffee/${id}`)}>
+            Edit
+          </Button>
         </Grid>
       </Grid>
     </>

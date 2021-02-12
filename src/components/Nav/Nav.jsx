@@ -102,7 +102,7 @@ function Nav() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push(`/profile/${user.id}`);
+            history.push('/profile/update');
             setAnchorEl(null);
           }}
         >

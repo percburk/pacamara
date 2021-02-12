@@ -86,7 +86,7 @@ function AddCoffee() {
               <Grid item>
                 <Switch
                   checked={oneCoffee.is_blend}
-                  onChange={() => dispatch({ type: 'EDIT_BLEND' })}
+                  onChange={() => dispatch({ type: 'EDIT_IS_BLEND' })}
                   color="primary"
                 />
               </Grid>

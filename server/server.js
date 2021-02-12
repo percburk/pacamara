@@ -10,6 +10,7 @@ const userRouter = require('./routes/user.router');
 const methodsRouter = require('./routes/methods.router');
 const coffeeRouter = require('./routes/coffee.router');
 const flavorsRouter = require('./routes/flavors.router');
+const brewsRouter = require('./routes/brews.router');
 
 // --- Middleware --- //
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.use('/api/user', userRouter);
 app.use('/api/methods', methodsRouter);
 app.use('/api/coffee', coffeeRouter);
 app.use('/api/flavors', flavorsRouter);
+app.use('/api/brews', brewsRouter);
 
 // Serve static files
 app.use(express.static('build'));
