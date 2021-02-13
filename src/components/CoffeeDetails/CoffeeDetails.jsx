@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
+import BrewInstance from '../BrewInstance/BrewInstance';
+import './CoffeeDetails.css';
 import {
   VictoryChart,
   VictoryScatter,
@@ -16,10 +18,10 @@ import {
   Grid,
   makeStyles,
   Chip,
-  Button,
   IconButton,
+  Paper,
 } from '@material-ui/core';
-import { Favorite, FavoriteBorder } from '@material-ui/icons';
+import { Favorite, FavoriteBorder, Edit } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +50,7 @@ function CoffeeDetails() {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
     dispatch({ type: 'FETCH_BREWS', payload: id });
     dispatch({ type: 'FETCH_FLAVORS' });
+    dispatch({ type: 'FETCH_METHODS' });
   }, []);
   const formattedDate = DateTime.fromISO(oneCoffee.roast_date).toFormat(
     'LLL d'
@@ -57,68 +60,96 @@ function CoffeeDetails() {
     .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
     .toFormat('d');
 
-  console.log(brews);
-
   return (
     <>
-      <Box p={3}>
-        <Typography variant="h4">
-          {oneCoffee.is_blend
-            ? oneCoffee.blend_name
-            : `${oneCoffee.country} ${oneCoffee.producer}`}
-        </Typography>
-        <Box display="flex" my={2}>
-          <IconButton
-            onClick={() =>
-              dispatch({
-                type: 'SET_FAVORITE_ONE_COFFEE',
-                payload: oneCoffee.id,
-              })
-            }
-          >
-            {oneCoffee.is_fav ? (
-              <Favorite color="primary" />
-            ) : (
-              <FavoriteBorder />
-            )}
-          </IconButton>
-          {oneCoffee.flavors_array &&
-            flavors.map((item) => {
-              if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
-                return (
-                  <Chip
-                    key={item.id}
-                    className={classes.chip}
-                    variant="outlined"
-                    label={item.name}
-                  />
-                );
-              }
-            })}
-        </Box>
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <Typography>
-            Roasted by {oneCoffee.roaster} on {formattedDate}
-          </Typography>
-          <Typography>
-            {daysOffRoast} day{daysOffRoast === 1 ? '' : 's'} off roast
-          </Typography>
-          {!oneCoffee.is_blend && (
-            <Box>
-              <Typography>Region: {oneCoffee.region}</Typography>
-              <Typography>Elevation: {oneCoffee.elevation} meters</Typography>
-              <Typography>Cultivars: {oneCoffee.cultivars}</Typography>
-              <Typography>Processing: {oneCoffee.processing}</Typography>
-              <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+      <Box p={4}>
+        <Grid container spacing={6}>
+          <Grid item xs={4}>
+            <Box display="flex" justifyContent="center">
+              <Paper elevation={4}>
+                <Box p={2}>
+                  <img src={oneCoffee.coffee_pic} className="image" />
+                </Box>
+              </Paper>
             </Box>
-          )}
-          <Button onClick={() => history.push(`/editCoffee/${id}`)}>
-            Edit
-          </Button>
+          </Grid>
+          <Grid item xs={4}>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h4">
+                {oneCoffee.is_blend
+                  ? oneCoffee.blend_name
+                  : `${oneCoffee.country} ${oneCoffee.producer}`}
+              </Typography>
+              <Box paddingLeft={1}>
+                <IconButton
+                  onClick={() => history.push(`/editCoffee/${oneCoffee.id}`)}
+                  size="small"
+                >
+                  <Edit fontSize="inherit" />
+                </IconButton>
+              </Box>
+            </Box>
+            <Typography>By {oneCoffee.roaster}</Typography>
+            <Box display="flex" my={2} alignItems="center">
+              <IconButton
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_FAVORITE_ONE_COFFEE',
+                    payload: oneCoffee.id,
+                  })
+                }
+              >
+                {oneCoffee.is_fav ? (
+                  <Favorite color="primary" />
+                ) : (
+                  <FavoriteBorder />
+                )}
+              </IconButton>
+              {oneCoffee.flavors_array &&
+                flavors.map((item) => {
+                  if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
+                    return (
+                      <Chip
+                        key={item.id}
+                        className={classes.chip}
+                        variant="outlined"
+                        label={item.name}
+                      />
+                    );
+                  }
+                })}
+            </Box>
+            {!oneCoffee.is_blend && (
+              <Box marginBottom={2}>
+                <Typography>Region: {oneCoffee.region}</Typography>
+                <Typography>Elevation: {oneCoffee.elevation} meters</Typography>
+                <Typography>Cultivars: {oneCoffee.cultivars}</Typography>
+                <Typography>Processing: {oneCoffee.processing}</Typography>
+              </Box>
+            )}
+            <Box>
+              <Typography>
+                Roasted by {oneCoffee.roaster} on {formattedDate}
+              </Typography>
+              <Typography>
+                {daysOffRoast} day{daysOffRoast === 1 ? '' : 's'} off roast
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography>Chart goes here.</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            {brews &&
+              brews.map((instance) => (
+                <BrewInstance key={instance.id} instance={instance} id={id} />
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </>
   );
 }
