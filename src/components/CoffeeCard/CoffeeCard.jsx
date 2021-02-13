@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CoffeeCard({ coffee, setSnackbarOpen }) {
+function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -68,7 +68,6 @@ function CoffeeCard({ coffee, setSnackbarOpen }) {
     setDialogOpen(false);
     dispatch({ type: 'DELETE_COFFEE', payload: coffee.id });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-    setSnackbarOpen(true);
   };
 
   return (

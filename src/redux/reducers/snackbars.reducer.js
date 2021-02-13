@@ -1,17 +1,17 @@
 const snackbarsReducer = (state = '', action) => {
   switch (action.type) {
     case 'SNACKBARS_ADDED_COFFEE':
-      return 'New Coffee Added';
+      return { string: 'New Coffee Added', open: true };
     case 'SNACKBARS_CREATED_PROFILE':
-      return 'New Profile Created';
+      return { string: 'New Profile Created', open: true };
     case 'SNACKBARS_UPDATED_PROFILE':
-      return 'Profile Updated';
+      return { string: 'Profile Updated', open: true };
     case 'SNACKBARS_DELETED_COFFEE':
-      return 'Coffee Deleted';
+      return { string: 'Coffee Deleted', open: true };
     case 'SNACKBARS_EDITED_COFFEE':
-      return 'Coffee Updated';
+      return { string: 'Coffee Updated', open: true };
     case 'CLEAR_SNACKBARS':
-      return '';
+      return { string: '', open: false };
     default:
       return state;
   }

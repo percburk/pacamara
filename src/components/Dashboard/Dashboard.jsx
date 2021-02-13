@@ -7,8 +7,6 @@ import {
   Menu,
   MenuItem,
   Button,
-  Snackbar,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -16,8 +14,8 @@ import {
   Chip,
   makeStyles,
 } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
+import Snackbars from '../Snackbars/Snackbars';
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -35,12 +33,10 @@ function Dashboard() {
   const classes = useStyles();
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
-  const snackbars = useSelector((store) => store.snackbars);
   const [anchorEl, setAnchorEl] = useState(null);
   const [favFilter, setFavFilter] = useState(false);
   const [brewingFilter, setBrewingFilter] = useState(false);
   const [sort, setSort] = useState('date');
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !user.name ? true : false
   );
@@ -48,9 +44,6 @@ function Dashboard() {
   useEffect(() => {
     dispatch({ type: 'FETCH_COFFEES' });
     dispatch({ type: 'FETCH_FLAVORS' });
-    if (snackbars) {
-      setSnackbarOpen(true);
-    }
   }, []);
 
   const handleSort = (howToSort) => {
@@ -134,27 +127,10 @@ function Dashboard() {
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
         {displayCoffees.map((coffeeItem, i) => {
-          return (
-            <CoffeeCard
-              key={coffeeItem.id}
-              index={i}
-              coffee={coffeeItem}
-              setSnackbarOpen={setSnackbarOpen}
-            />
-          );
+          return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
         })}
       </Box>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-        message={snackbars}
-        action={
-          <IconButton size="small" onClick={() => setSnackbarOpen(false)}>
-            <Close fontSize="small" />
-          </IconButton>
-        }
-      />
+      <Snackbars />
       <Dialog
         open={newUserDialogOpen}
         onClose={() => setNewUserDialogOpen(false)}

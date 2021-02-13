@@ -48,7 +48,7 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
     UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3, 
     "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7, 
     "elevation" = $8, "cultivars" = $9, "processing" = $10, 
-    "notes" = $11, "coffee_pic" = $12, "brewing" = $13 WHERE "id" = $14;
+    "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
   `;
 
   // Query #1 - Updating the data on 'coffees' table
@@ -66,7 +66,6 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
       req.body.processing,
       req.body.notes,
       req.body.coffee_pic,
-      req.body.brewing,
       req.body.id,
     ])
     .then(() => {

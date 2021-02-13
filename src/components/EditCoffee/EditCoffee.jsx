@@ -54,15 +54,13 @@ function AddCoffee() {
   };
 
   const handleSubmitEdit = () => {
-    dispatch({ type: 'SNACKBAR_EDITED_COFFEE' });
+    dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
     dispatch({
       type: 'EDIT_COFFEE',
       payload: oneCoffee,
     });
-    history.push('/dashboard');
+    history.goBack();
   };
-
-  console.log(oneCoffee.brewing);
 
   return (
     <>
@@ -249,7 +247,7 @@ function AddCoffee() {
               variant="contained"
               onClick={() => {
                 dispatch({ type: 'CLEAR_SNACKBARS' });
-                history.push('/dashboard');
+                history.goBack();
               }}
             >
               Cancel

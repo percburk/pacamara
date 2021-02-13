@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import Snackbars from '../Snackbars/Snackbars';
 import './CoffeeDetails.css';
 import {
   VictoryChart,
@@ -26,11 +27,9 @@ import {
 import {
   Favorite,
   FavoriteBorder,
-  Edit,
   LocalCafe,
   LocalCafeOutlined,
-  DeleteOutline,
-  MoreVert,
+  ArrowBackIos,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 
@@ -52,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 function CoffeeDetails() {
   const classes = useStyles();
+  const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
   const oneCoffee = useSelector((store) => store.oneCoffee);
@@ -163,6 +163,13 @@ function CoffeeDetails() {
           </Grid>
           <Grid item xs={4}>
             <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+            <Button
+              variant="contained"
+              startIcon={<ArrowBackIos />}
+              onClick={() => history.push('/dashboard')}
+            >
+              Go Back
+            </Button>
           </Grid>
           <Grid item xs={8}>
             {brews &&
@@ -172,6 +179,7 @@ function CoffeeDetails() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbars />
     </>
   );
 }
