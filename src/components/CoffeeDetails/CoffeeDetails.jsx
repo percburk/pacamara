@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import BrewInstance from '../BrewInstance/BrewInstance';
+import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
 import './CoffeeDetails.css';
 import {
   VictoryChart,
@@ -20,8 +21,18 @@ import {
   Chip,
   IconButton,
   Paper,
+  Button,
 } from '@material-ui/core';
-import { Favorite, FavoriteBorder, Edit } from '@material-ui/icons';
+import {
+  Favorite,
+  FavoriteBorder,
+  Edit,
+  LocalCafe,
+  LocalCafeOutlined,
+  DeleteOutline,
+  MoreVert,
+} from '@material-ui/icons';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,13 +45,15 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
+  mug: {
+    color: grey[600],
+  },
 }));
 
 function CoffeeDetails() {
   const classes = useStyles();
   const { id } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
   const oneCoffee = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
@@ -81,12 +94,7 @@ function CoffeeDetails() {
                   : `${oneCoffee.country} ${oneCoffee.producer}`}
               </Typography>
               <Box paddingLeft={1}>
-                <IconButton
-                  onClick={() => history.push(`/editCoffee/${oneCoffee.id}`)}
-                  size="small"
-                >
-                  <Edit fontSize="inherit" />
-                </IconButton>
+                <EditDeleteMenu id={id} />
               </Box>
             </Box>
             <Typography>By {oneCoffee.roaster}</Typography>
@@ -94,8 +102,8 @@ function CoffeeDetails() {
               <IconButton
                 onClick={() =>
                   dispatch({
-                    type: 'SET_FAVORITE_ONE_COFFEE',
-                    payload: oneCoffee.id,
+                    type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
+                    payload: { id: oneCoffee.id, change: `"is_fav"` },
                   })
                 }
               >
@@ -103,6 +111,20 @@ function CoffeeDetails() {
                   <Favorite color="primary" />
                 ) : (
                   <FavoriteBorder />
+                )}
+              </IconButton>
+              <IconButton
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
+                    payload: { id: oneCoffee.id, change: `"brewing"` },
+                  })
+                }
+              >
+                {oneCoffee.brewing ? (
+                  <LocalCafe color="primary" />
+                ) : (
+                  <LocalCafeOutlined className={classes.mug} />
                 )}
               </IconButton>
               {oneCoffee.flavors_array &&

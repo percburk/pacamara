@@ -11,6 +11,7 @@ import {
   Switch,
   Chip,
   Button,
+  FormControlLabel,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -52,10 +53,6 @@ function AddCoffee() {
     dispatch({ type: 'EDIT_ROAST_DATE', payload: formattedDate });
   };
 
-  const handleEditFlavors = (id) => {
-    dispatch({ type: 'EDIT_FLAVORS_ARRAY', payload: id });
-  };
-
   const handleSubmitEdit = () => {
     dispatch({ type: 'SNACKBAR_EDITED_COFFEE' });
     dispatch({
@@ -64,6 +61,8 @@ function AddCoffee() {
     });
     history.push('/dashboard');
   };
+
+  console.log(oneCoffee.brewing);
 
   return (
     <>
@@ -86,8 +85,14 @@ function AddCoffee() {
               <Grid item>
                 <Switch
                   checked={oneCoffee.is_blend}
-                  onChange={() => dispatch({ type: 'EDIT_IS_BLEND' })}
+                  onChange={(event) =>
+                    dispatch({
+                      type: 'EDIT_SWITCH',
+                      payload: event.target.name,
+                    })
+                  }
                   color="primary"
+                  name="is_blend"
                 />
               </Grid>
               <Grid item>Blend</Grid>
@@ -164,6 +169,23 @@ function AddCoffee() {
                 onChange={handleEditDate}
               />
             </MuiPickersUtilsProvider>
+            <FormControlLabel
+              label="Currently Brewing"
+              labelPlacement="start"
+              control={
+                <Switch
+                  checked={oneCoffee.brewing}
+                  name="brewing"
+                  onChange={(event) =>
+                    dispatch({
+                      type: 'EDIT_SWITCH',
+                      payload: event.target.name,
+                    })
+                  }
+                  color="primary"
+                />
+              }
+            />
           </Box>
         </Grid>
         <Grid item xs={6}>
@@ -195,7 +217,12 @@ function AddCoffee() {
                         ? 'default'
                         : 'primary'
                     }
-                    onClick={() => handleEditFlavors(item.id)}
+                    onClick={() =>
+                      dispatch({
+                        type: 'EDIT_FLAVORS_ARRAY',
+                        payload: item.id,
+                      })
+                    }
                   />
                 );
               })}

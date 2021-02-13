@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 import './LandingPage.css';
@@ -32,7 +31,6 @@ function TabPanel({ children, tab, index }) {
 }
 
 function LandingPage() {
-  const history = useHistory();
   const dispatch = useDispatch();
   const landingErrors = useSelector((store) => store.landingErrors);
   const [tab, setTab] = useState(0);

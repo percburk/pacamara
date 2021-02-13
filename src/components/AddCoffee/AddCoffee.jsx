@@ -11,7 +11,7 @@ import {
   Switch,
   Chip,
   Button,
-  CardActions,
+  FormControlLabel,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -39,6 +39,7 @@ function AddCoffee() {
     roast_date: new Date(),
     is_blend: false,
     blend_name: '',
+    brewing: false,
     country: '',
     producer: '',
     region: '',
@@ -66,15 +67,16 @@ function AddCoffee() {
       : setNewFlavors(newFlavors.filter((index) => index !== id));
   };
 
-  const handleBlendSwitch = () => {
-    setNewCoffee({
-      ...newCoffee,
-      is_blend: !newCoffee.is_blend,
-      country: '',
-      blend_name: '',
-    });
+  const handleSwitch = (event) => {
+    event.target.name === 'is_blend'
+      ? setNewCoffee({
+          ...newCoffee,
+          is_blend: !newCoffee.is_blend,
+          country: '',
+          blend_name: '',
+        })
+      : setNewCoffee({ ...newCoffee, brewing: !newCoffee.brewing });
   };
-
   const handleNew = () => {
     dispatch({ type: 'SNACKBAR_ADDED_COFFEE' });
     dispatch({
@@ -90,6 +92,7 @@ function AddCoffee() {
       roaster: '',
       roast_date: new Date(),
       is_blend: false,
+      brewing: false,
       blend_name: '',
       country: '',
       producer: '',
@@ -123,8 +126,9 @@ function AddCoffee() {
               <Grid item>
                 <Switch
                   checked={newCoffee.is_blend}
-                  onChange={handleBlendSwitch}
+                  onChange={handleSwitch}
                   color="primary"
+                  name="is_blend"
                 />
               </Grid>
               <Grid item>Blend</Grid>
@@ -195,6 +199,18 @@ function AddCoffee() {
                 onChange={handleRoastDate}
               />
             </MuiPickersUtilsProvider>
+            <FormControlLabel
+              label="Currently Brewing"
+              labelPlacement="start"
+              control={
+                <Switch
+                  checked={newCoffee.brewing}
+                  name="brewing"
+                  onChange={handleSwitch}
+                  color="primary"
+                />
+              }
+            />
           </Box>
         </Grid>
         <Grid item xs={6}>

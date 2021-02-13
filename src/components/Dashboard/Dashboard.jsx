@@ -7,26 +7,38 @@ import {
   Menu,
   MenuItem,
   Button,
-  FormControlLabel,
-  Switch,
   Snackbar,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Chip,
+  makeStyles,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 
+const useStyles = makeStyles((theme) => ({
+  chip: {
+    '& > *': {
+      marginLeft: theme.spacing(1.5),
+    },
+  },
+}));
+
+const sortArray = ['Date', 'Country', 'Producer', 'Roaster'];
+
 function Dashboard() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const classes = useStyles();
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
   const snackbars = useSelector((store) => store.snackbars);
   const [anchorEl, setAnchorEl] = useState(null);
   const [favFilter, setFavFilter] = useState(false);
+  const [brewingFilter, setBrewingFilter] = useState(false);
   const [sort, setSort] = useState('date');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
@@ -36,35 +48,50 @@ function Dashboard() {
   useEffect(() => {
     dispatch({ type: 'FETCH_COFFEES' });
     dispatch({ type: 'FETCH_FLAVORS' });
-    checkSnackbar();
-  }, []);
-
-  const checkSnackbar = () => {
     if (snackbars) {
       setSnackbarOpen(true);
     }
-  };
+  }, []);
 
   const handleSort = (howToSort) => {
     setSort(howToSort);
     setAnchorEl(null);
   };
 
-  const sortedCoffees = coffees.sort((a, b) => {
-    if (sort === 'date') {
-      return b[sort] > a[sort] ? 1 : -1;
-    } else {
-      if (a[sort] === b[sort]) {
-        return 0;
-      } else if (a[sort] === '') {
-        return 1;
-      } else if (b[sort] === '') {
-        return -1;
+  const displayCoffees = coffees
+    .sort((a, b) => {
+      if (sort === 'date') {
+        return b[sort] > a[sort] ? 1 : -1;
       } else {
-        return a[sort] < b[sort] ? -1 : 1;
+        if (a[sort] === b[sort]) {
+          return 0;
+        } else if (a[sort] === '') {
+          return 1;
+        } else if (b[sort] === '') {
+          return -1;
+        } else {
+          return a[sort] < b[sort] ? -1 : 1;
+        }
       }
-    }
-  });
+    })
+    .filter((item) => {
+      if (favFilter) {
+        if (item.is_fav) {
+          return item;
+        }
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (brewingFilter) {
+        if (item.brewing) {
+          return item;
+        }
+      } else {
+        return item;
+      }
+    });
 
   return (
     <>
@@ -74,16 +101,16 @@ function Dashboard() {
             {user.name ? `${user.name}'s Dashboard` : 'Welcome!'}
           </Typography>
         </Box>
-        <Box>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={favFilter}
-                onChange={() => setFavFilter(!favFilter)}
-                color="primary"
-              />
-            }
+        <Box className={classes.chip}>
+          <Chip
             label="Favorites"
+            onClick={() => setFavFilter(!favFilter)}
+            color={favFilter ? 'primary' : 'default'}
+          />
+          <Chip
+            label="Currently Brewing"
+            onClick={() => setBrewingFilter(!brewingFilter)}
+            color={brewingFilter ? 'primary' : 'default'}
           />
           <Button
             variant="outlined"
@@ -97,37 +124,25 @@ function Dashboard() {
             open={Boolean(anchorEl)}
             onClose={() => setAnchorEl(null)}
           >
-            <MenuItem onClick={() => handleSort('date')}>Date</MenuItem>
-            <MenuItem onClick={() => handleSort('country')}>Country</MenuItem>
-            <MenuItem onClick={() => handleSort('producer')}>Producer</MenuItem>
-            <MenuItem onClick={() => handleSort('roaster')}>Roaster</MenuItem>
+            {sortArray.map((item, i) => (
+              <MenuItem key={i} onClick={() => handleSort(item.toLowerCase())}>
+                {item}
+              </MenuItem>
+            ))}
           </Menu>
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
-        {favFilter
-          ? sortedCoffees.map((coffeeItem, i) => {
-              if (coffeeItem.is_fav) {
-                return (
-                  <CoffeeCard
-                    key={coffeeItem.id}
-                    index={i}
-                    coffee={coffeeItem}
-                    setSnackbarOpen={setSnackbarOpen}
-                  />
-                );
-              }
-            })
-          : sortedCoffees.map((coffeeItem, i) => {
-              return (
-                <CoffeeCard
-                  key={coffeeItem.id}
-                  index={i}
-                  coffee={coffeeItem}
-                  setSnackbarOpen={setSnackbarOpen}
-                />
-              );
-            })}
+        {displayCoffees.map((coffeeItem, i) => {
+          return (
+            <CoffeeCard
+              key={coffeeItem.id}
+              index={i}
+              coffee={coffeeItem}
+              setSnackbarOpen={setSnackbarOpen}
+            />
+          );
+        })}
       </Box>
       <Snackbar
         open={snackbarOpen}

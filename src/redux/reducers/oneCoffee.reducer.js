@@ -8,6 +8,12 @@ const oneCoffeeReducer = (state = {}, action) => {
       return { ...state, roast_date: action.payload };
     case 'EDIT_IS_BLEND':
       return { ...state, is_blend: !state.is_blend };
+    case 'EDIT_SWITCH':
+      if (action.payload === 'is_blend') {
+        return { ...state, is_blend: !state.is_blend };
+      } else {
+        return { ...state, brewing: !state.brewing };
+      }
     case 'EDIT_FLAVORS_ARRAY':
       const id = action.payload;
       if (state.flavors_array.indexOf(id) === -1) {

@@ -3,16 +3,16 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchCoffees() {
   try {
-    const response = yield axios.get('/api/coffee/');
+    const response = yield axios.get('/api/coffees/');
     yield put({ type: 'SET_COFFEES', payload: response.data });
   } catch (err) {
     console.log('error in fetchCoffees', err);
   }
 }
 
-function* setFavorite(action) {
+function* setBrewingOrFav(action) {
   try {
-    yield axios.put(`/api/coffee/fav/${action.payload}`);
+    yield axios.put('/api/oneCoffee/favBrew/', action.payload);
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
     console.log('error in setFavorite', err);
@@ -21,7 +21,7 @@ function* setFavorite(action) {
 
 function* deleteCoffee(action) {
   try {
-    yield axios.delete(`/api/coffee/delete/${action.payload}`);
+    yield axios.delete(`/api/coffees/delete/${action.payload}`);
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
     console.log('error in deleteCoffee', err);
@@ -30,7 +30,7 @@ function* deleteCoffee(action) {
 
 function* addCoffee(action) {
   try {
-    yield axios.post('/api/coffee/add', action.payload);
+    yield axios.post('/api/coffees/add', action.payload);
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
     console.log('error in addCoffee', err);
@@ -39,7 +39,7 @@ function* addCoffee(action) {
 
 function* coffeesSaga() {
   yield takeEvery('FETCH_COFFEES', fetchCoffees);
-  yield takeEvery('SET_FAVORITE', setFavorite);
+  yield takeEvery('SET_BREWING_OR_FAV', setBrewingOrFav);
   yield takeEvery('DELETE_COFFEE', deleteCoffee);
   yield takeEvery('ADD_COFFEE', addCoffee);
 }

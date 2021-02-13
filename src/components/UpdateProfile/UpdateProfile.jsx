@@ -76,7 +76,7 @@ function UpdateProfile() {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
   };
 
-  const handleSubmit = (passedNumber) => {
+  const handleSubmit = (defaultId) => {
     dispatch({
       type: 'UPDATE_PROFILE',
       payload: {
@@ -86,7 +86,7 @@ function UpdateProfile() {
         ext_min: newExt[0],
         ext_max: newExt[1],
         methods_array: newMethods,
-        methods_default_id: passedNumber,
+        methods_default_id: defaultId,
       },
     });
     id === 'new'
