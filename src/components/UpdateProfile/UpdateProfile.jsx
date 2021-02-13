@@ -37,7 +37,8 @@ function UpdateProfile() {
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const user = useSelector((store) => store.user);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [defaultDialogOpen, setDefaultDialogOpen] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [defaultMethod, setDefaultMethod] = useState(0);
   const [newMethods, setNewMethods] = useState(user.methods_array || []);
 
@@ -75,7 +76,7 @@ function UpdateProfile() {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
   };
 
-  const handleSubmit = (passedNumber) => {
+  const handleSubmit = (defaultId) => {
     dispatch({
       type: 'UPDATE_PROFILE',
       payload: {
@@ -85,7 +86,7 @@ function UpdateProfile() {
         ext_min: newExt[0],
         ext_max: newExt[1],
         methods_array: newMethods,
-        methods_default_id: passedNumber,
+        methods_default_id: defaultId,
       },
     });
     id === 'new'
@@ -93,6 +94,16 @@ function UpdateProfile() {
       : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
     clearInputs();
     history.push('/dashboard');
+  };
+
+  const handleCancel = () => {
+    dispatch({ type: 'CLEAR_SNACKBARS' });
+    if (user.name) {
+      history.push('/dashboard');
+      clearInputs();
+    } else {
+      setCancelDialogOpen(true);
+    }
   };
 
   const clearInputs = () => {
@@ -200,15 +211,8 @@ function UpdateProfile() {
             p={3}
             className={classes.root}
           >
-            <Button
-              variant="contained"
-              onClick={() => {
-                dispatch({ type: 'CLEAR_SNACKBARS' });
-                history.push('/login');
-                clearInputs();
-              }}
-            >
-              Cancel
+            <Button variant="contained" onClick={handleCancel}>
+              {user.name ? 'Cancel' : 'Cancel and logout'}
             </Button>
             <Button
               variant="contained"
@@ -216,7 +220,7 @@ function UpdateProfile() {
               onClick={() =>
                 newMethods.length === 1
                   ? handleSubmit(newMethods[0])
-                  : setDialogOpen(true)
+                  : setDefaultDialogOpen(true)
               }
             >
               {user.name ? 'Submit' : 'Create'}
@@ -224,7 +228,10 @@ function UpdateProfile() {
           </Box>
         </Grid>
       </Grid>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog
+        open={defaultDialogOpen}
+        onClose={() => setDefaultDialogOpen(false)}
+      >
         <DialogTitle align="center">Default Brew Method</DialogTitle>
         <DialogContent>
           <DialogContentText align="center">
@@ -250,7 +257,7 @@ function UpdateProfile() {
             <Button
               variant="contained"
               onClick={() => {
-                setDialogOpen(false);
+                setDefaultDialogOpen(false);
                 setDefaultMethod(0);
               }}
             >
@@ -276,6 +283,34 @@ function UpdateProfile() {
               }
             >
               Submit
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
+      <Dialog
+        open={cancelDialogOpen}
+        onClose={() => setCancelDialogOpen(false)}
+      >
+        <DialogTitle align="center">Are you sure?</DialogTitle>
+        <DialogContent>
+          This will log you out of your new account.
+        </DialogContent>
+        <Box display="flex" justifyContent="center">
+          <DialogActions>
+            <Button
+              variant="contained"
+              onClick={() => setCancelDialogOpen(false)}
+            >
+              No
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                dispatch({ type: 'LOGOUT' });
+                history.push('/home');
+              }}
+            >
+              Yes
             </Button>
           </DialogActions>
         </Box>

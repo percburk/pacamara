@@ -1,6 +1,5 @@
 import React from 'react';
-import './Footer.css';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 // This is one of our simplest components
 // It doesn't have local state, so it can be a function component.
@@ -9,9 +8,9 @@ import { Typography } from '@material-ui/core';
 
 function Footer() {
   return (
-    <footer>
-      <Typography align="right">&copy; Kevin Burk</Typography>
-    </footer>
+    <Box p={3}>
+      <Typography align="right">&copy; Pacamara, 2021</Typography>
+    </Box>
   );
 }
 

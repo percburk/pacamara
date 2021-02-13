@@ -21,13 +21,17 @@ import {
   DialogActions,
   DialogContent,
   Button,
+  Grid,
 } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import {
   Favorite,
   FavoriteBorder,
   MoreVert,
   Edit,
   DeleteOutline,
+  LocalCafe,
+  LocalCafeOutlined,
 } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,9 +45,12 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
+  mug: {
+    color: grey[600],
+  },
 }));
 
-function CoffeeCard({ coffee, setSnackbarOpen, index }) {
+function CoffeeCard({ coffee, setSnackbarOpen }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -71,9 +78,25 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           title={coffeeName}
           subheader={coffee.roaster}
           action={
-            <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
-              <MoreVert />
-            </IconButton>
+            <Grid container direction="column" alignItems="center">
+              <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
+                <MoreVert />
+              </IconButton>
+              <IconButton
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_BREWING_OR_FAV',
+                    payload: { id: coffee.id, change: `"brewing"` },
+                  })
+                }
+              >
+                {coffee.brewing ? (
+                  <LocalCafe color="primary" />
+                ) : (
+                  <LocalCafeOutlined className={classes.mug} />
+                )}
+              </IconButton>
+            </Grid>
           }
         />
         <Menu
@@ -85,7 +108,7 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
-              history.push(`/addCoffee/${index}`);
+              history.push(`/editCoffee/${coffee.id}`);
             }}
           >
             <ListItemIcon>
@@ -110,6 +133,7 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           image={coffee.coffee_pic}
           title={coffeeName}
           style={{ cursor: 'pointer' }}
+          onClick={() => history.push(`/details/${coffee.id}`)}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">
@@ -134,7 +158,10 @@ function CoffeeCard({ coffee, setSnackbarOpen, index }) {
           >
             <IconButton
               onClick={() =>
-                dispatch({ type: 'SET_FAVORITE', payload: coffee.id })
+                dispatch({
+                  type: 'SET_BREWING_OR_FAV',
+                  payload: { id: coffee.id, change: `"is_fav"` },
+                })
               }
             >
               {coffee.is_fav ? (

@@ -6,7 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
@@ -14,19 +14,13 @@ import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Dashboard from '../Dashboard/Dashboard';
 import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
-import AddEditCoffee from '../AddEditCoffee/AddEditCoffee';
+import AddCoffee from '../AddCoffee/AddCoffee';
+import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
-import LoginPage from '../LoginPage/LoginPage';
-import RegisterPage from '../RegisterPage/RegisterPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import './App.css';
 
-import {
-  createMuiTheme,
-  ThemeProvider,
-  Container,
-  CssBaseline,
-} from '@material-ui/core';
+import { createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -64,6 +58,7 @@ const theme = createMuiTheme({
 
 function App() {
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
@@ -74,81 +69,67 @@ function App() {
       <CssBaseline />
       <Router>
         <Nav />
-        <Container maxWidth="lg">
-          <Switch>
-            {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-            <Redirect exact from="/" to="/home" />
-            {/* For protected routes, the view could show one of several things on the same route.
+
+        <Switch>
+          {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
+          <Redirect exact from="/" to="/home" />
+          {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:3000/user */}
-            <ProtectedRoute exact path="/profile/:id">
-              <UpdateProfile />
-            </ProtectedRoute>
-            <ProtectedRoute
-              // logged in shows Dashboard else shows LoginPage
-              exact
-              path="/dashboard"
-            >
-              <Dashboard />
-            </ProtectedRoute>
+          <ProtectedRoute exact path="/profile/:id">
+            <UpdateProfile />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows Dashboard else shows LoginPage
+            exact
+            path="/dashboard"
+          >
+            <Dashboard />
+          </ProtectedRoute>
 
-            <ProtectedRoute
-              // logged in shows CoffeeDetails else shows LoginPage
-              exact
-              path="/details/:id"
-            >
-              <CoffeeDetails />
-            </ProtectedRoute>
-            <ProtectedRoute
-              // logged in shows CoffeeDetails else shows LoginPage
-              exact
-              path="/addCoffee/:id"
-            >
-              <AddEditCoffee />
-            </ProtectedRoute>
-            {/* When a value is supplied for the authRedirect prop the user will
+          <ProtectedRoute
+            // logged in shows CoffeeDetails else shows LoginPage
+            exact
+            path="/details/:id"
+          >
+            <CoffeeDetails />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows AddCoffee else shows LoginPage
+            exact
+            path="/addCoffee/"
+          >
+            <AddCoffee />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows AddCoffee else shows LoginPage
+            exact
+            path="/editCoffee/:id"
+          >
+            <EditCoffee />
+          </ProtectedRoute>
+
+          {/* When a value is supplied for the authRedirect prop the user will
             be redirected to the path supplied when logged in, otherwise they will
             be taken to the component and path supplied. */}
-            <ProtectedRoute
-              // with authRedirect:
-              // - if logged in, redirects to '/dashboard'
-              // - else shows LoginPage at '/login'
-              exact
-              path="/login"
-              authRedirect="/dashboard"
-            >
-              <LoginPage />
-            </ProtectedRoute>
+          <ProtectedRoute
+            // with authRedirect:
+            // - if logged in, redirects to '/dashboard'
+            // - else shows LandingPage at '/home'
+            exact
+            path="/home"
+            authRedirect="/dashboard"
+          >
+            <LandingPage />
+          </ProtectedRoute>
 
-            <ProtectedRoute
-              // with authRedirect:
-              // - if logged in, redirects to '/dashboard'
-              // - else shows RegisterPage at '/registration'
-              exact
-              path="/registration"
-              authRedirect="/dashboard"
-            >
-              <RegisterPage />
-            </ProtectedRoute>
+          {/* If none of the other routes matched, we will show a 404. */}
+          <Route>
+            <h1>404</h1>
+          </Route>
+        </Switch>
 
-            <ProtectedRoute
-              // with authRedirect:
-              // - if logged in, redirects to '/dashboard'
-              // - else shows LandingPage at '/home'
-              exact
-              path="/home"
-              authRedirect="/dashboard"
-            >
-              <LandingPage />
-            </ProtectedRoute>
-
-            {/* If none of the other routes matched, we will show a 404. */}
-            <Route>
-              <h1>404</h1>
-            </Route>
-          </Switch>
-        </Container>
         <Footer />
       </Router>
     </ThemeProvider>
