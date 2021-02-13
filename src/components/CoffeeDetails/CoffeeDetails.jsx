@@ -132,7 +132,7 @@ function CoffeeDetails() {
                 Roasted by {oneCoffee.roaster} on {formattedDate}
               </Typography>
               <Typography>
-                {daysOffRoast} day{daysOffRoast === 1 ? '' : 's'} off roast
+                {daysOffRoast} day{daysOffRoast == 1 ? '' : 's'} off roast
               </Typography>
             </Box>
           </Grid>
