@@ -85,6 +85,10 @@ function CoffeeDetails() {
     .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
     .toFormat('d');
 
+  const nameToDisplay = oneCoffee.is_blend
+    ? oneCoffee.blend_name
+    : `${oneCoffee.country} ${oneCoffee.producer}`;
+
   return (
     <>
       <Box p={4}>
@@ -100,11 +104,7 @@ function CoffeeDetails() {
           </Grid>
           <Grid item xs={4}>
             <Box display="flex" alignItems="center">
-              <Typography variant="h4">
-                {oneCoffee.is_blend
-                  ? oneCoffee.blend_name
-                  : `${oneCoffee.country} ${oneCoffee.producer}`}
-              </Typography>
+              <Typography variant="h4">{nameToDisplay}</Typography>
               <Box paddingLeft={1}>
                 <EditDeleteMenu id={id} />
               </Box>
@@ -187,6 +187,16 @@ function CoffeeDetails() {
             </Button>
           </Grid>
           <Grid item xs={8}>
+            <Box display="flex" flexDirection="row-reverse" paddingBottom={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setAddBrew(true)}
+                endIcon={<Add />}
+              >
+                Add a Brew
+              </Button>
+            </Box>
             {brews &&
               brews.map((instance) => (
                 <BrewInstance key={instance.id} instance={instance} id={id} />
@@ -194,17 +204,13 @@ function CoffeeDetails() {
           </Grid>
         </Grid>
       </Box>
+      <AddBrew
+        id={id}
+        nameToDisplay={nameToDisplay}
+        addBrew={addBrew}
+        setAddBrew={setAddBrew}
+      />
       <Snackbars />
-      <Fab
-        variant="extended"
-        color="primary"
-        className={classes.fab}
-        onClick={() => setAddBrew(true)}
-      >
-        <Add className={classes.fabIcon} />
-        Add a Brew
-      </Fab>
-      <AddBrew id={id} addBrew={addBrew} setAddBrew={setAddBrew} />
     </>
   );
 }

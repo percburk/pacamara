@@ -19,6 +19,37 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.post('/add', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    INSERT INTO "brews" ("coffees_id", "methods_id", "water_dose", 
+    "coffee_dose", "grind", "moisture", "co2", "ratio", "tds", "ext", 
+    "water_temp", "time", "lrr")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
+  `;
+
+  pool
+    .query(sqlText, [
+      req.body.coffees_id,
+      req.body.methods_id,
+      req.body.water_dose,
+      req.body.coffee_dose,
+      req.body.grind,
+      req.body.moisture,
+      req.body.co2,
+      req.body.ratio,
+      req.body.tds,
+      req.body.ext,
+      req.body.water_temp,
+      req.body.time,
+      req.body.lrr,
+    ])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log(`error in POST with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
 router.put('/fav/:id', (req, res) => {
   const sqlText = `
     UPDATE "brews" SET "is_fav" = NOT "is_fav" WHERE "id" = $1;

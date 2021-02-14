@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
   Dialog,
@@ -26,15 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddBrew({ id, addBrew, setAddBrew }) {
+function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const methods = useSelector((store) => store.methods);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [ratio, setRatio] = useState('');
-  const [extraction, setExtraction] = useState('');
+  const [ext, setExt] = useState('');
   const [newBrew, setNewBrew] = useState({
-    methods_id: '',
+    coffees_id: '',
+    methods_id: user.methods_default_id,
     water_dose: '',
     coffee_dose: '',
     grind: '',
@@ -44,8 +46,7 @@ function AddBrew({ id, addBrew, setAddBrew }) {
     ext: '',
     water_temp: 205,
     time: '',
-    lrr: '',
-    bev_weight: '',
+    lrr: user.methods_default_lrr,
   });
 
   const handleNewBrew = (key) => (event) => {
@@ -61,14 +62,43 @@ function AddBrew({ id, addBrew, setAddBrew }) {
       ratioMath !== 0 && Number.isFinite(ratioMath)
         ? setRatio(ratioMath.toFixed(2))
         : setRatio('');
+    } else if (key === 'tds') {
+      const adjustedCoffeeDose =
+        (newBrew.coffee_dose * (100 - newBrew.moisture - newBrew.co2)) / 100;
+      const bevWater = newBrew.water_dose - adjustedCoffeeDose * newBrew.lrr;
+      const tdsWeight =
+        bevWater / ((100 - Number(event.target.value)) / 100) - bevWater;
+      const extraction = (tdsWeight / adjustedCoffeeDose) * 100;
+      extraction !== 0 && Number.isFinite(extraction)
+        ? setExt(extraction.toFixed(1))
+        : setExt('');
     }
   };
 
-  const handleExtraction = () => {};
+  const handleMethod = (id, i) => {
+    setNewBrew({ ...newBrew, methods_id: id, lrr: methods[i].lrr });
+  };
+
+  const handleSubmit = () => {
+    dispatch({
+      type: 'ADD_BREW',
+      payload: {
+        ...newBrew,
+        coffees_id: id,
+        ratio,
+        ext,
+      },
+    });
+    dispatch({ type: 'SNACKBARS_ADDED_BREW' });
+    setAddBrew(false);
+    setAdvancedOpen(false);
+    clearInputs();
+  };
 
   const clearInputs = () => {
     setNewBrew({
-      methods_id: '',
+      coffees_id: '',
+      methods_id: user.methods_default_id,
       water_dose: '',
       coffee_dose: '',
       grind: '',
@@ -78,15 +108,15 @@ function AddBrew({ id, addBrew, setAddBrew }) {
       ext: '',
       water_temp: 205,
       time: '',
-      lrr: '',
-      bev_weight: '',
+      lrr: user.methods_default_lrr,
     });
     setRatio('');
+    setExt('');
   };
 
   return (
-    <Dialog open={addBrew} onClose={setAddBrew}>
-      <DialogTitle>Add a Brew</DialogTitle>
+    <Dialog open={addBrew} onClose={() => setAddBrew(false)}>
+      <DialogTitle>Add a Brew of {nameToDisplay}</DialogTitle>
       <DialogContent>
         <TextField
           label="Water"
@@ -131,7 +161,26 @@ function AddBrew({ id, addBrew, setAddBrew }) {
           value={newBrew.tds}
           onChange={handleNewBrew('tds')}
         />
-        <Typography>Extraction: {extraction}</Typography>
+        <Typography>Extraction: {ext}%</Typography>
+        <Box>
+          <Typography>Brew Method Used:</Typography>
+          <Box className={classes.root}>
+            {methods.map((item, i) => {
+              if (user.methods_array.indexOf(item.id) > -1) {
+                return (
+                  <Chip
+                    key={item.id}
+                    label={item.name}
+                    color={
+                      item.id === newBrew.methods_id ? 'primary' : 'default'
+                    }
+                    onClick={() => handleMethod(item.id, i)}
+                  />
+                );
+              }
+            })}
+          </Box>
+        </Box>
         <Box display="flex" alignItems="center">
           <IconButton onClick={() => setAdvancedOpen(!advancedOpen)}>
             {advancedOpen ? <ExpandLess /> : <ExpandMore />}
@@ -171,8 +220,8 @@ function AddBrew({ id, addBrew, setAddBrew }) {
           <TextField
             label="LRR"
             variant="outlined"
-            value={newBrew.bev_weight}
-            onChange={handleNewBrew('bev_weight')}
+            value={newBrew.lrr}
+            onChange={handleNewBrew('lrr')}
           />
         </Collapse>
       </DialogContent>
@@ -186,7 +235,12 @@ function AddBrew({ id, addBrew, setAddBrew }) {
         >
           Cancel
         </Button>
-        <Button color="primary" variant="contained" endIcon={<Add />}>
+        <Button
+          color="primary"
+          variant="contained"
+          endIcon={<Add />}
+          onClick={handleSubmit}
+        >
           ADD
         </Button>
       </DialogActions>

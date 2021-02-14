@@ -70,7 +70,7 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
     ])
     .then(() => {
       const sqlTextDeleteFlavors = `
-        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1
+        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
       `;
 
       // Query #2 - deleting old entries in 'coffees_flavors'

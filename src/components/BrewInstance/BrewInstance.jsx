@@ -118,12 +118,13 @@ function BrewInstance({ instance, id }) {
           paddingLeft={2}
         >
           <IconButton
-            onClick={() =>
+            onClick={() => {
               dispatch({
                 type: 'DELETE_BREW',
                 payload: { coffeeId: id, brewId: instance.id },
-              })
-            }
+              });
+              dispatch({ type: 'SNACKBARS_DELETED_BREW' });
+            }}
           >
             <Close />
           </IconButton>

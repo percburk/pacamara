@@ -70,9 +70,9 @@ router.post('/logout', (req, res) => {
 router.put('/update', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
-    "methods_default_id" = $3, "kettle" = $4, "grinder" = $5, 
-    "tds_min" = $6, "tds_max" = $7, "ext_min" = $8, "ext_max" = $9 
-    WHERE "id" = $10;
+    "methods_default_id" = $3, "methods_default_lrr" = $4, "kettle" = $5, 
+    "grinder" = $6, "tds_min" = $7, "tds_max" = $8, "ext_min" = $9, 
+    "ext_max" = $10 WHERE "id" = $10;
   `;
 
   // Query #1 - sending all non-array data
@@ -81,6 +81,7 @@ router.put('/update', rejectUnauthenticated, (req, res) => {
       req.body.name,
       req.body.profile_pic,
       req.body.methods_default_id,
+      req.body.methods_default_lrr,
       req.body.kettle,
       req.body.grinder,
       req.body.tds_min,
