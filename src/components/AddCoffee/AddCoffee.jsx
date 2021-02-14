@@ -12,6 +12,7 @@ import {
   Chip,
   Button,
   FormControlLabel,
+  InputAdornment,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -77,8 +78,9 @@ function AddCoffee() {
         })
       : setNewCoffee({ ...newCoffee, brewing: !newCoffee.brewing });
   };
+
   const handleNew = () => {
-    dispatch({ type: 'SNACKBAR_ADDED_COFFEE' });
+    dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
       payload: { ...newCoffee, flavors_array: newFlavors },
@@ -169,8 +171,12 @@ function AddCoffee() {
                 onChange={handleNewCoffee('elevation')}
                 value={newCoffee.elevation}
                 disabled={newCoffee.is_blend}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">meters</InputAdornment>
+                  ),
+                }}
               />
-              <Typography>meters</Typography>
             </Box>
             <TextField
               label="Cultivars"

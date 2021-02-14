@@ -58,13 +58,17 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
 
       // Add entry to "users_coffees" to pair coffee with current user
       const sqlTextUsersCoffees = `
-        INSERT INTO "users_coffees" ("coffees_id", "users_id")
-        VALUES ($1, $2);
+        INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
+        VALUES ($1, $2, $3);
       `;
 
       // Query #2 - send entry to "users_coffees"
       pool
-        .query(sqlTextUsersCoffees, [newCoffeeId, req.user.id])
+        .query(sqlTextUsersCoffees, [
+          newCoffeeId,
+          req.user.id,
+          req.body.brewing,
+        ])
         .then(() => {
           const flavorsArray = req.body.flavors_array;
 

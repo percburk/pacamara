@@ -132,7 +132,10 @@ function CoffeeCard({ coffee }) {
           image={coffee.coffee_pic}
           title={coffeeName}
           style={{ cursor: 'pointer' }}
-          onClick={() => history.push(`/details/${coffee.id}`)}
+          onClick={() => {
+            dispatch({ type: 'CLEAR_SNACKBARS' });
+            history.push(`/details/${coffee.id}`);
+          }}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">

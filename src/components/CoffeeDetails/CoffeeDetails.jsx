@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import AddBrew from '../AddBrew/AddBrew';
 import Snackbars from '../Snackbars/Snackbars';
-import './CoffeeDetails.css';
 import {
   VictoryChart,
   VictoryScatter,
@@ -23,6 +23,7 @@ import {
   IconButton,
   Paper,
   Button,
+  Fab,
 } from '@material-ui/core';
 import {
   Favorite,
@@ -30,6 +31,7 @@ import {
   LocalCafe,
   LocalCafeOutlined,
   ArrowBackIos,
+  Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 
@@ -39,13 +41,23 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   media: {
-    height: 160,
+    height: 250,
+    width: 250,
+    objectFit: 'cover',
   },
   chip: {
     margin: theme.spacing(0.5),
   },
   mug: {
     color: grey[600],
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(5),
+    right: theme.spacing(5),
+  },
+  fabIcon: {
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -57,7 +69,7 @@ function CoffeeDetails() {
   const oneCoffee = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
-  const user = useSelector((store) => store.user);
+  const [addBrew, setAddBrew] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
@@ -81,7 +93,7 @@ function CoffeeDetails() {
             <Box display="flex" justifyContent="center">
               <Paper elevation={4}>
                 <Box p={2}>
-                  <img src={oneCoffee.coffee_pic} className="image" />
+                  <img src={oneCoffee.coffee_pic} className={classes.media} />
                 </Box>
               </Paper>
             </Box>
@@ -166,7 +178,10 @@ function CoffeeDetails() {
             <Button
               variant="contained"
               startIcon={<ArrowBackIos />}
-              onClick={() => history.push('/dashboard')}
+              onClick={() => {
+                dispatch({ type: 'CLEAR_SNACKBARS' });
+                history.push('/dashboard');
+              }}
             >
               Go Back
             </Button>
@@ -180,6 +195,16 @@ function CoffeeDetails() {
         </Grid>
       </Box>
       <Snackbars />
+      <Fab
+        variant="extended"
+        color="primary"
+        className={classes.fab}
+        onClick={() => setAddBrew(true)}
+      >
+        <Add className={classes.fabIcon} />
+        Add a Brew
+      </Fab>
+      <AddBrew id={id} addBrew={addBrew} setAddBrew={setAddBrew} />
     </>
   );
 }
