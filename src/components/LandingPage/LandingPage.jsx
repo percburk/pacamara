@@ -10,9 +10,9 @@ import {
   Button,
   Tabs,
   Tab,
-  Snackbar,
   IconButton,
   Collapse,
+  makeStyles,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
@@ -30,7 +30,22 @@ function TabPanel({ children, tab, index }) {
   );
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 400,
+  },
+  textInputs: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  button: {
+    marginTop: theme.spacing(1),
+    width: 120,
+  },
+}));
+
 function LandingPage() {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const landingErrors = useSelector((store) => store.landingErrors);
   const [tab, setTab] = useState(0);
@@ -71,7 +86,7 @@ function LandingPage() {
         flexDirection="row-reverse"
         height="80vh"
       >
-        <Box marginRight={14}>
+        <Box marginRight={14} className={classes.root}>
           <Paper elevation={5}>
             <Tabs
               value={tab}
@@ -96,18 +111,25 @@ function LandingPage() {
                     <TextField
                       label="Username"
                       fullWidth
+                      className={classes.textInputs}
                       variant="outlined"
                       onChange={(event) => setUsername(event.target.value)}
                     />
                     <TextField
                       label="Password"
                       fullWidth
+                      className={classes.textInputs}
                       variant="outlined"
                       type="password"
                       onChange={(event) => setPassword(event.target.value)}
                     />
-                    <Box display="flex" flexDirection="row-reverse">
-                      <Button variant="contained" color="primary" type="submit">
+                    <Box display="flex" justifyContent="center">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        className={classes.button}
+                      >
                         Login
                       </Button>
                     </Box>
@@ -123,18 +145,25 @@ function LandingPage() {
                     <TextField
                       label="Username"
                       fullWidth
+                      className={classes.textInputs}
                       variant="outlined"
                       onChange={(event) => setUsername(event.target.value)}
                     />
                     <TextField
                       label="Password"
                       fullWidth
+                      className={classes.textInputs}
                       variant="outlined"
                       type="password"
                       onChange={(event) => setPassword(event.target.value)}
                     />
-                    <Box display="flex" flexDirection="row-reverse">
-                      <Button variant="contained" color="primary" type="submit">
+                    <Box display="flex" justifyContent="center">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        className={classes.button}
+                      >
                         Register
                       </Button>
                     </Box>

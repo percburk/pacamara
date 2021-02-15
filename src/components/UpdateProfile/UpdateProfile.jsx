@@ -56,6 +56,7 @@ function UpdateProfile() {
     name: user.name || '',
     profile_pic: user.profile_pic || '',
     methods_default_id: user.methods_default_id || '',
+    methods_default_lrr: user.methods_default_lrr || '',
     kettle: user.kettle || '',
     grinder: user.grinder || '',
   });
@@ -120,6 +121,8 @@ function UpdateProfile() {
     });
   };
 
+  console.log(newUpdates);
+
   return (
     <>
       <Box paddingBottom={3}>
@@ -171,7 +174,7 @@ function UpdateProfile() {
                     key={item.id}
                     label={item.name}
                     color={
-                      newMethods.indexOf(item.id) === -1 ? 'default' : 'primary'
+                      newMethods.indexOf(item.id) > -1 ? 'primary' : 'default'
                     }
                     onClick={() => handleNewMethod(item.id)}
                   />
@@ -245,7 +248,13 @@ function UpdateProfile() {
                     key={item.id}
                     label={item.name}
                     color={item.id === defaultMethod ? 'primary' : 'default'}
-                    onClick={() => setDefaultMethod(item.id)}
+                    onClick={() => {
+                      setDefaultMethod(item.id);
+                      setNewUpdates({
+                        ...newUpdates,
+                        methods_default_lrr: item.lrr,
+                      });
+                    }}
                   />
                 );
               }

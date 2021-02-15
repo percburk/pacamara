@@ -42,14 +42,17 @@ router.put('/favBrew', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// PUT route to edit an individual coffee
+// PUT route to edit an individual coffee, this contains 3 SQL queries
 router.put('/edit', rejectUnauthenticated, (req, res) => {
   const sqlTextUpdateCoffee = `
-    UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3, 
-    "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7, 
-    "elevation" = $8, "cultivars" = $9, "processing" = $10, 
-    "notes" = $11, "coffee_pic" = $12, "brewing" = $13 WHERE "id" = $14;
+    UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
+    "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
+    "elevation" = $8, "cultivars" = $9, "processing" = $10,
+    "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
   `;
+
+  // NOTE: refractor this with transactions, in order to
+  // add brewing status to "users_coffees"
 
   // Query #1 - Updating the data on 'coffees' table
   pool
@@ -66,12 +69,11 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
       req.body.processing,
       req.body.notes,
       req.body.coffee_pic,
-      req.body.brewing,
       req.body.id,
     ])
     .then(() => {
       const sqlTextDeleteFlavors = `
-        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1
+        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
       `;
 
       // Query #2 - deleting old entries in 'coffees_flavors'

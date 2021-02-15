@@ -32,8 +32,8 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
   const sqlTextNewCoffee = `
     INSERT INTO "coffees" ("roaster", "roast_date", "is_blend", "blend_name", 
     "country", "producer", "region", "elevation", "cultivars", "processing", 
-    "notes", "coffee_pic", "brewing")
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    "notes", "coffee_pic")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
     RETURNING "id";
   `;
 
@@ -52,20 +52,23 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
       req.body.processing,
       req.body.notes,
       req.body.coffee_pic,
-      req.body.brewing,
     ])
     .then((result) => {
       const newCoffeeId = result.rows[0].id; // New ID is here
 
       // Add entry to "users_coffees" to pair coffee with current user
       const sqlTextUsersCoffees = `
-        INSERT INTO "users_coffees" ("coffees_id", "users_id")
-        VALUES ($1, $2);
+        INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
+        VALUES ($1, $2, $3);
       `;
 
       // Query #2 - send entry to "users_coffees"
       pool
-        .query(sqlTextUsersCoffees, [newCoffeeId, req.user.id])
+        .query(sqlTextUsersCoffees, [
+          newCoffeeId,
+          req.user.id,
+          req.body.brewing,
+        ])
         .then(() => {
           const flavorsArray = req.body.flavors_array;
 

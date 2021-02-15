@@ -15,10 +15,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import {
-  Favorite,
-  FavoriteBorder,
   ExpandMore,
   Close,
+  ThumbUp,
+  ThumbDown,
+  ThumbsUpDownOutlined,
 } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,16 +60,22 @@ function BrewInstance({ instance, id }) {
           onClick={(event) => {
             event.stopPropagation();
             dispatch({
-              type: 'FAV_BREW',
-              payload: { coffeeId: id, brewId: instance.id },
+              type: 'LIKE_BREW',
+              payload: {
+                coffeeId: id,
+                brewId: instance.id,
+                status: instance.liked,
+              },
             });
           }}
           onFocus={(event) => event.stopPropagation()}
         >
-          {instance.is_fav ? (
-            <Favorite color="primary" fontSize="small" />
+          {instance.liked === 'yes' ? (
+            <ThumbUp color="primary" fontSize="small" />
+          ) : instance.liked === 'no' ? (
+            <ThumbDown fontSize="small" />
           ) : (
-            <FavoriteBorder fontSize="small" />
+            <ThumbsUpDownOutlined fontSize="small" />
           )}
         </IconButton>
         <Typography className={classes.dateMethod}>
@@ -118,12 +125,13 @@ function BrewInstance({ instance, id }) {
           paddingLeft={2}
         >
           <IconButton
-            onClick={() =>
+            onClick={() => {
               dispatch({
                 type: 'DELETE_BREW',
                 payload: { coffeeId: id, brewId: instance.id },
-              })
-            }
+              });
+              dispatch({ type: 'SNACKBARS_DELETED_BREW' });
+            }}
           >
             <Close />
           </IconButton>

@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 160,
+    '&:hover': {
+      opacity: 0.8,
+    },
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -50,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CoffeeCard({ coffee, setSnackbarOpen }) {
+function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -68,7 +71,6 @@ function CoffeeCard({ coffee, setSnackbarOpen }) {
     setDialogOpen(false);
     dispatch({ type: 'DELETE_COFFEE', payload: coffee.id });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-    setSnackbarOpen(true);
   };
 
   return (
@@ -133,7 +135,10 @@ function CoffeeCard({ coffee, setSnackbarOpen }) {
           image={coffee.coffee_pic}
           title={coffeeName}
           style={{ cursor: 'pointer' }}
-          onClick={() => history.push(`/details/${coffee.id}`)}
+          onClick={() => {
+            dispatch({ type: 'CLEAR_SNACKBARS' });
+            history.push(`/details/${coffee.id}`);
+          }}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">

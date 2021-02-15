@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
-import './CoffeeDetails.css';
+import AddBrew from '../AddBrew/AddBrew';
+import Snackbars from '../Snackbars/Snackbars';
 import {
   VictoryChart,
   VictoryScatter,
@@ -22,15 +23,15 @@ import {
   IconButton,
   Paper,
   Button,
+  Fab,
 } from '@material-ui/core';
 import {
   Favorite,
   FavoriteBorder,
-  Edit,
   LocalCafe,
   LocalCafeOutlined,
-  DeleteOutline,
-  MoreVert,
+  ArrowBackIos,
+  Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 
@@ -40,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   media: {
-    height: 160,
+    height: 250,
+    width: 250,
+    objectFit: 'cover',
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -48,16 +51,25 @@ const useStyles = makeStyles((theme) => ({
   mug: {
     color: grey[600],
   },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(5),
+    right: theme.spacing(5),
+  },
+  fabIcon: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 function CoffeeDetails() {
   const classes = useStyles();
+  const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
   const oneCoffee = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
-  const user = useSelector((store) => store.user);
+  const [addBrew, setAddBrew] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
@@ -73,6 +85,10 @@ function CoffeeDetails() {
     .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
     .toFormat('d');
 
+  const nameToDisplay = oneCoffee.is_blend
+    ? oneCoffee.blend_name
+    : `${oneCoffee.country} ${oneCoffee.producer}`;
+
   return (
     <>
       <Box p={4}>
@@ -81,18 +97,14 @@ function CoffeeDetails() {
             <Box display="flex" justifyContent="center">
               <Paper elevation={4}>
                 <Box p={2}>
-                  <img src={oneCoffee.coffee_pic} className="image" />
+                  <img src={oneCoffee.coffee_pic} className={classes.media} />
                 </Box>
               </Paper>
             </Box>
           </Grid>
           <Grid item xs={4}>
             <Box display="flex" alignItems="center">
-              <Typography variant="h4">
-                {oneCoffee.is_blend
-                  ? oneCoffee.blend_name
-                  : `${oneCoffee.country} ${oneCoffee.producer}`}
-              </Typography>
+              <Typography variant="h4">{nameToDisplay}</Typography>
               <Box paddingLeft={1}>
                 <EditDeleteMenu id={id} />
               </Box>
@@ -163,8 +175,28 @@ function CoffeeDetails() {
           </Grid>
           <Grid item xs={4}>
             <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+            <Button
+              variant="contained"
+              startIcon={<ArrowBackIos />}
+              onClick={() => {
+                dispatch({ type: 'CLEAR_SNACKBARS' });
+                history.push('/dashboard');
+              }}
+            >
+              Go Back
+            </Button>
           </Grid>
           <Grid item xs={8}>
+            <Box display="flex" flexDirection="row-reverse" paddingBottom={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setAddBrew(true)}
+                endIcon={<Add />}
+              >
+                Add a Brew
+              </Button>
+            </Box>
             {brews &&
               brews.map((instance) => (
                 <BrewInstance key={instance.id} instance={instance} id={id} />
@@ -172,6 +204,13 @@ function CoffeeDetails() {
           </Grid>
         </Grid>
       </Box>
+      <AddBrew
+        id={id}
+        nameToDisplay={nameToDisplay}
+        addBrew={addBrew}
+        setAddBrew={setAddBrew}
+      />
+      <Snackbars />
     </>
   );
 }
