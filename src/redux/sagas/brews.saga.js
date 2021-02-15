@@ -20,8 +20,15 @@ function* deleteBrew(action) {
 }
 
 function* favBrew(action) {
+  const status =
+    action.payload.status === 'yes'
+      ? 'no'
+      : action.payload.status === 'no'
+      ? 'none'
+      : 'yes';
+      
   try {
-    yield axios.put(`api/brews/fav/${action.payload.brewId}`);
+    yield axios.put(`api/brews/like/${action.payload.brewId}`, { status });
     yield put({ type: 'FETCH_BREWS', payload: action.payload.coffeeId });
   } catch (err) {
     console.log('error in favBrew', err);
@@ -40,7 +47,7 @@ function* addBrew(action) {
 function* brewsSaga() {
   yield takeEvery('FETCH_BREWS', fetchBrews);
   yield takeEvery('DELETE_BREW', deleteBrew);
-  yield takeEvery('FAV_BREW', favBrew);
+  yield takeEvery('LIKE_BREW', favBrew);
   yield takeEvery('ADD_BREW', addBrew);
 }
 

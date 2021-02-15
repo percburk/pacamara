@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 160,
+    '&:hover': {
+      opacity: 0.8,
+    },
   },
   chip: {
     margin: theme.spacing(0.5),

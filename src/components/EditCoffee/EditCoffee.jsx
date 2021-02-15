@@ -11,7 +11,7 @@ import {
   Switch,
   Chip,
   Button,
-  FormControlLabel,
+  InputAdornment,
 } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -23,8 +23,21 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
     },
+  },
+  textInputs: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  chips: {
+    width: '20ch',
+  },
+  buttons: {
+    width: '25ch',
+  },
+  header: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(3),
   },
 }));
 
@@ -64,40 +77,60 @@ function AddCoffee() {
 
   return (
     <>
-      <Box paddingBottom={3}>
-        <Typography variant="h4">Edit Coffee</Typography>
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <Box p={3}>
+      <Box p={3}>
+        <Typography variant="h4" className={classes.header}>
+          Edit Coffee
+        </Typography>
+        <Grid container spacing={4}>
+          <Grid item xs={6}>
             <TextField
               label="Roaster"
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={oneCoffee.roaster}
               onChange={handleEditInputs('roaster')}
             />
-            <Grid container alignItems="center" spacing={1}>
-              <Grid item>Single Origin</Grid>
-              <Grid item>
-                <Switch
-                  checked={oneCoffee.is_blend}
-                  onChange={(event) =>
-                    dispatch({
-                      type: 'EDIT_SWITCH',
-                      payload: event.target.name,
-                    })
-                  }
-                  color="primary"
-                  name="is_blend"
-                />
+            <Box display="flex">
+              <Grid container alignItems="center" spacing={1}>
+                <Grid item>Single Origin</Grid>
+                <Grid item>
+                  <Switch
+                    checked={oneCoffee.is_blend}
+                    onChange={(event) =>
+                      dispatch({
+                        type: 'EDIT_SWITCH',
+                        payload: event.target.name,
+                      })
+                    }
+                    color="primary"
+                    name="is_blend"
+                  />
+                </Grid>
+                <Grid item>Blend</Grid>
               </Grid>
-              <Grid item>Blend</Grid>
-            </Grid>
+              <Grid container alignItems="center" spacing={1}>
+                <Grid item>Currently Brewing:</Grid>
+                <Grid item>
+                  <Switch
+                    checked={oneCoffee.brewing}
+                    name="brewing"
+                    onChange={(event) =>
+                      dispatch({
+                        type: 'EDIT_SWITCH',
+                        payload: event.target.name,
+                      })
+                    }
+                    color="primary"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
             <TextField
               label={oneCoffee.is_blend ? 'Blend Name' : 'Country'}
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={
@@ -112,6 +145,7 @@ function AddCoffee() {
             <TextField
               label="Producer"
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={oneCoffee.producer}
@@ -121,26 +155,17 @@ function AddCoffee() {
             <TextField
               label="Region"
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={oneCoffee.region}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('region')}
             />
-            <Box display="flex" alignItems="center">
-              <TextField
-                label="Elevation"
-                variant="outlined"
-                defaultValue=" "
-                value={oneCoffee.elevation}
-                disabled={oneCoffee.is_blend}
-                onChange={handleEditInputs('elevation')}
-              />
-              <Typography>meters</Typography>
-            </Box>
             <TextField
               label="Cultivars"
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={oneCoffee.cultivars}
@@ -150,118 +175,118 @@ function AddCoffee() {
             <TextField
               label="Processing"
               variant="outlined"
+              className={classes.textInputs}
               fullWidth
               defaultValue=" "
               value={oneCoffee.processing}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('processing')}
             />
-            <MuiPickersUtilsProvider utils={LuxonUtils}>
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yy"
-                margin="normal"
-                label="Roast Date"
-                value={oneCoffee.roast_date}
-                onChange={handleEditDate}
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <TextField
+                label="Elevation"
+                variant="outlined"
+                className={classes.textInputs}
+                defaultValue=" "
+                value={oneCoffee.elevation}
+                disabled={oneCoffee.is_blend}
+                onChange={handleEditInputs('elevation')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">meters</InputAdornment>
+                  ),
+                }}
               />
-            </MuiPickersUtilsProvider>
-            <FormControlLabel
-              label="Currently Brewing"
-              labelPlacement="start"
-              control={
-                <Switch
-                  checked={oneCoffee.brewing}
-                  name="brewing"
-                  onChange={(event) =>
-                    dispatch({
-                      type: 'EDIT_SWITCH',
-                      payload: event.target.name,
-                    })
-                  }
-                  color="primary"
+              <MuiPickersUtilsProvider utils={LuxonUtils}>
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yy"
+                  margin="normal"
+                  label="Roast Date"
+                  value={oneCoffee.roast_date}
+                  onChange={handleEditDate}
                 />
-              }
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box p={3}>
+              </MuiPickersUtilsProvider>
+            </Box>
+          </Grid>
+          <Grid item xs={6} className={classes.gridItem}>
             <TextField
               label="Coffee Photo URL"
               variant="outlined"
               defaultValue=" "
               fullWidth
+              className={classes.textInputs}
               value={oneCoffee.coffee_pic}
               onChange={handleEditInputs('coffee_pic')}
             />
-          </Box>
-          <Typography>Flavor Palette:</Typography>
-          <Box
-            className={classes.root}
-            display="flex"
-            flexWrap="wrap"
-            justifyContent="center"
-          >
-            {oneCoffee.flavors_array &&
-              flavors.map((item) => {
-                return (
-                  <Chip
-                    key={item.id}
-                    label={item.name}
-                    color={
-                      oneCoffee.flavors_array.indexOf(item.id) === -1
-                        ? 'default'
-                        : 'primary'
-                    }
-                    onClick={() =>
-                      dispatch({
-                        type: 'EDIT_FLAVORS_ARRAY',
-                        payload: item.id,
-                      })
-                    }
-                  />
-                );
-              })}
-          </Box>
-          <Box p={3}>
+            <Typography>Flavor Palette:</Typography>
+            <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
+              {oneCoffee.flavors_array &&
+                flavors.map((item) => {
+                  return (
+                    <Chip
+                      className={classes.chips}
+                      key={item.id}
+                      label={item.name}
+                      color={
+                        oneCoffee.flavors_array.indexOf(item.id) === -1
+                          ? 'default'
+                          : 'primary'
+                      }
+                      onClick={() =>
+                        dispatch({
+                          type: 'EDIT_FLAVORS_ARRAY',
+                          payload: item.id,
+                        })
+                      }
+                    />
+                  );
+                })}
+            </Box>
             <TextField
               label="Tasting Notes"
               variant="outlined"
               defaultValue=" "
+              className={classes.textInputs}
               fullWidth
               multiline
-              rows={5}
+              rows={6}
               value={oneCoffee.notes}
               onChange={handleEditInputs('notes')}
             />
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="center"
-            p={3}
-            className={classes.root}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                dispatch({ type: 'CLEAR_SNACKBARS' });
-                history.goBack();
-              }}
+            <Box
+              display="flex"
+              flexDirection="row-reverse"
+              className={classes.root}
+              py={2}
             >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitEdit}
-            >
-              Update Coffee
-            </Button>
-          </Box>
+              <Button
+                className={classes.buttons}
+                variant="contained"
+                color="primary"
+                onClick={handleSubmitEdit}
+              >
+                Update Coffee
+              </Button>
+              <Button
+                variant="contained"
+                className={classes.buttons}
+                onClick={() => {
+                  dispatch({ type: 'CLEAR_SNACKBARS' });
+                  history.goBack();
+                }}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </>
   );
 }

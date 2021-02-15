@@ -72,7 +72,7 @@ router.put('/update', rejectUnauthenticated, (req, res) => {
     UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
     "methods_default_id" = $3, "methods_default_lrr" = $4, "kettle" = $5, 
     "grinder" = $6, "tds_min" = $7, "tds_max" = $8, "ext_min" = $9, 
-    "ext_max" = $10 WHERE "id" = $10;
+    "ext_max" = $10 WHERE "id" = $11;
   `;
 
   // Query #1 - sending all non-array data

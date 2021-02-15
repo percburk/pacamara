@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Snackbar, Fade } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 function Snackbars() {
@@ -10,13 +10,13 @@ function Snackbars() {
     <Snackbar
       open={snackbars.open}
       autoHideDuration={6000}
-      TransitionComponent={Fade}
+      TransitionComponent="none"
       onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
     >
       <Alert
         variant="filled"
         severity={snackbars.severity}
-        TransitionComponent={Fade}
+        TransitionComponent="none"
         onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
       >
         {snackbars.string}

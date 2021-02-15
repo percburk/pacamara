@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const sortArray = ['Date', 'Country', 'Producer', 'Roaster'];
+const filtersArray = [
+  { key: 'fav', string: 'Favorites' },
+  { key: 'brewing', string: 'Currently Brewing' },
+  { key: 'blend', string: 'Blends' },
+];
 
 function Dashboard() {
   const history = useHistory();
@@ -33,9 +38,9 @@ function Dashboard() {
   const classes = useStyles();
   const user = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [favFilter, setFavFilter] = useState(false);
-  const [brewingFilter, setBrewingFilter] = useState(false);
+  const [sortAnchorEl, setSortAnchorEl] = useState(null);
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [filters, setFilters] = useState({ fav: false });
   const [sort, setSort] = useState('date');
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !user.name ? true : false
@@ -48,7 +53,12 @@ function Dashboard() {
 
   const handleSort = (howToSort) => {
     setSort(howToSort);
-    setAnchorEl(null);
+    setSortAnchorEl(null);
+  };
+
+  const handleFilters = (howToFilter) => {
+    setFilters({ ...filters, [howToFilter]: !filters[howToFilter] });
+    setFilterAnchorEl(null);
   };
 
   const displayCoffees = coffees
@@ -68,7 +78,7 @@ function Dashboard() {
       }
     })
     .filter((item) => {
-      if (favFilter) {
+      if (filters.fav) {
         if (item.is_fav) {
           return item;
         }
@@ -77,8 +87,17 @@ function Dashboard() {
       }
     })
     .filter((item) => {
-      if (brewingFilter) {
+      if (filters.brewing) {
         if (item.brewing) {
+          return item;
+        }
+      } else {
+        return item;
+      }
+    })
+    .filter((item) => {
+      if (filters.blend) {
+        if (item.is_blend) {
           return item;
         }
       } else {
@@ -95,30 +114,58 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.chip}>
-          <Chip
-            label="Favorites"
-            onClick={() => setFavFilter(!favFilter)}
-            color={favFilter ? 'primary' : 'default'}
-          />
-          <Chip
-            label="Currently Brewing"
-            onClick={() => setBrewingFilter(!brewingFilter)}
-            color={brewingFilter ? 'primary' : 'default'}
-          />
+          {filtersArray.map((item) => {
+            if (filters[item.key]) {
+              return (
+                <Chip
+                  label={item.string}
+                  onDelete={() => handleFilters(item.key)}
+                  color="primary"
+                />
+              );
+            }
+          })}
           <Button
             variant="outlined"
-            onClick={(event) => setAnchorEl(event.currentTarget)}
+            onClick={(event) => setFilterAnchorEl(event.currentTarget)}
+          >
+            Filter
+          </Button>
+          <Menu
+            anchorEl={filterAnchorEl}
+            keepMounted
+            open={Boolean(filterAnchorEl)}
+            onClose={() => setFilterAnchorEl(null)}
+          >
+            {filtersArray.map((item) => {
+              return (
+                <MenuItem
+                  onClick={() => handleFilters(item.key)}
+                  selected={filters[item.key]}
+                >
+                  {item.string}
+                </MenuItem>
+              );
+            })}
+          </Menu>
+          <Button
+            variant="outlined"
+            onClick={(event) => setSortAnchorEl(event.currentTarget)}
           >
             Sort
           </Button>
           <Menu
-            anchorEl={anchorEl}
+            anchorEl={sortAnchorEl}
             keepMounted
-            open={Boolean(anchorEl)}
-            onClose={() => setAnchorEl(null)}
+            open={Boolean(sortAnchorEl)}
+            onClose={() => setSortAnchorEl(null)}
           >
             {sortArray.map((item, i) => (
-              <MenuItem key={i} onClick={() => handleSort(item.toLowerCase())}>
+              <MenuItem
+                key={i}
+                onClick={() => handleSort(item.toLowerCase())}
+                selected={sort === item.toLowerCase() ? true : false}
+              >
                 {item}
               </MenuItem>
             ))}
@@ -126,7 +173,7 @@ function Dashboard() {
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
-        {displayCoffees.map((coffeeItem, i) => {
+        {displayCoffees.map((coffeeItem) => {
           return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
         })}
       </Box>

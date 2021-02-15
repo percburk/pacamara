@@ -21,8 +21,25 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
     },
+  },
+  formInputs: {
+    flexBasis: '25%',
+    flexShrink: 0,
+    alignSelf: 'center',
+  },
+  formText: {
+    flexBasis: '15%',
+    flexShrink: 0,
+    alignSelf: 'center',
+  },
+  advanced: {
+    flexBasis: '15%',
+    flexShrink: 0,
+  },
+  chips: {
+    width: '20ch',
+    alignSelf: 'center',
   },
 }));
 
@@ -115,60 +132,79 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   };
 
   return (
-    <Dialog open={addBrew} onClose={() => setAddBrew(false)}>
+    <Dialog
+      open={addBrew}
+      onClose={() => setAddBrew(false)}
+      fullWidth
+      maxWidth="md"
+    >
       <DialogTitle>Add a Brew of {nameToDisplay}</DialogTitle>
       <DialogContent>
-        <TextField
-          label="Water"
-          variant="outlined"
-          InputProps={{
-            endAdornment: <InputAdornment position="end">g</InputAdornment>,
-          }}
-          value={newBrew.water_dose}
-          onChange={handleNewBrew('water_dose')}
-        />
-        <TextField
-          label="Coffee"
-          variant="outlined"
-          InputProps={{
-            endAdornment: <InputAdornment position="end">g</InputAdornment>,
-          }}
-          onChange={handleNewBrew('coffee_dose')}
-          value={newBrew.coffee_dose}
-        />
-        <Typography>Ratio: {ratio}</Typography>
-        <TextField
-          label="Grind"
-          variant="outlined"
-          InputProps={{
-            startAdornment: <InputAdornment position="start">#</InputAdornment>,
-          }}
-          value={newBrew.grind}
-          onChange={handleNewBrew('grind')}
-        />
-        <TextField
-          label="Time"
-          variant="outlined"
-          value={newBrew.time}
-          onChange={handleNewBrew('time')}
-        />
-        <TextField
-          label="TDS"
-          variant="outlined"
-          InputProps={{
-            endAdornment: <InputAdornment position="end">%</InputAdornment>,
-          }}
-          value={newBrew.tds}
-          onChange={handleNewBrew('tds')}
-        />
-        <Typography>Extraction: {ext}%</Typography>
-        <Box>
+        <Box display="flex" className={classes.root}>
+          <TextField
+            className={classes.formInputs}
+            label="Water"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">g</InputAdornment>,
+            }}
+            value={newBrew.water_dose}
+            onChange={handleNewBrew('water_dose')}
+          />
+          <TextField
+            className={classes.formInputs}
+            label="Coffee"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">g</InputAdornment>,
+            }}
+            onChange={handleNewBrew('coffee_dose')}
+            value={newBrew.coffee_dose}
+          />
+          <Typography className={classes.formText}>Ratio: {ratio}</Typography>
+          <Typography className={classes.formText}>
+            Extraction: {ext}%
+          </Typography>
+        </Box>
+        <Box display="flex" className={classes.root} alignItems="center">
+          <TextField
+            className={classes.formInputs}
+            label="Grind"
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">#</InputAdornment>
+              ),
+            }}
+            value={newBrew.grind}
+            onChange={handleNewBrew('grind')}
+          />
+          <TextField
+            className={classes.formInputs}
+            label="Time"
+            variant="outlined"
+            value={newBrew.time}
+            onChange={handleNewBrew('time')}
+          />
+          <TextField
+            className={classes.formInputs}
+            label="TDS"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">%</InputAdornment>,
+            }}
+            value={newBrew.tds}
+            onChange={handleNewBrew('tds')}
+          />
+        </Box>
+        <Box className={classes.root}>
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
             {methods.map((item, i) => {
               if (user.methods_array.indexOf(item.id) > -1) {
                 return (
                   <Chip
+                    className={classes.chips}
                     key={item.id}
                     label={item.name}
                     color={
@@ -181,51 +217,57 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             })}
           </Box>
         </Box>
-        <Box display="flex" alignItems="center">
+        <Box display="flex" className={classes.root} alignItems="center">
+          <Typography>Advanced Settings</Typography>
           <IconButton onClick={() => setAdvancedOpen(!advancedOpen)}>
             {advancedOpen ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
-          <Typography>Advanced Settings</Typography>
         </Box>
         <Collapse in={advancedOpen}>
-          <TextField
-            label="Water Temp"
-            variant="outlined"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">&deg;</InputAdornment>
-              ),
-            }}
-            value={newBrew.water_temp}
-            onChange={handleNewBrew('water_temp')}
-          />
-          <TextField
-            label="Moisture"
-            variant="outlined"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-            }}
-            value={newBrew.moisture}
-            onChange={handleNewBrew('moisture')}
-          />
-          <TextField
-            label="CO2"
-            variant="outlined"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-            }}
-            value={newBrew.co2}
-            onChange={handleNewBrew('co2')}
-          />
-          <TextField
-            label="LRR"
-            variant="outlined"
-            value={newBrew.lrr}
-            onChange={handleNewBrew('lrr')}
-          />
+          <Box display="flex" className={classes.root}>
+            <TextField
+              className={classes.advanced}
+              label="Water Temp"
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">&deg;</InputAdornment>
+                ),
+              }}
+              value={newBrew.water_temp}
+              onChange={handleNewBrew('water_temp')}
+            />
+            <TextField
+              className={classes.advanced}
+              label="Moisture"
+              variant="outlined"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              }}
+              value={newBrew.moisture}
+              onChange={handleNewBrew('moisture')}
+            />
+            <TextField
+              className={classes.advanced}
+              label="CO2"
+              variant="outlined"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              }}
+              value={newBrew.co2}
+              onChange={handleNewBrew('co2')}
+            />
+            <TextField
+              className={classes.advanced}
+              label="LRR"
+              variant="outlined"
+              value={newBrew.lrr}
+              onChange={handleNewBrew('lrr')}
+            />
+          </Box>
         </Collapse>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className={classes.root}>
         <Button
           variant="contained"
           onClick={() => {

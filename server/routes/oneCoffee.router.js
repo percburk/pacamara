@@ -42,14 +42,17 @@ router.put('/favBrew', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// PUT route to edit an individual coffee
+// PUT route to edit an individual coffee, this contains 3 SQL queries
 router.put('/edit', rejectUnauthenticated, (req, res) => {
   const sqlTextUpdateCoffee = `
-    UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3, 
-    "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7, 
-    "elevation" = $8, "cultivars" = $9, "processing" = $10, 
+    UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
+    "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
+    "elevation" = $8, "cultivars" = $9, "processing" = $10,
     "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
   `;
+
+  // NOTE: refractor this with transactions, in order to
+  // add brewing status to "users_coffees"
 
   // Query #1 - Updating the data on 'coffees' table
   pool

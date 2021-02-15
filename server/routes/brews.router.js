@@ -50,13 +50,13 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.put('/fav/:id', (req, res) => {
+router.put('/like/:id', (req, res) => {
   const sqlText = `
-    UPDATE "brews" SET "is_fav" = NOT "is_fav" WHERE "id" = $1;
+    UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;
   `;
 
   pool
-    .query(sqlText, [req.params.id])
+    .query(sqlText, [req.body.status, req.params.id])
     .then(() => res.sendStatus(201))
     .catch((err) => {
       console.log(`error in PUT with query ${sqlText}`, err);
