@@ -16,11 +16,6 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  Button,
   Grid,
   Tooltip,
 } from '@material-ui/core';
@@ -28,12 +23,13 @@ import { grey } from '@material-ui/core/colors';
 import {
   Favorite,
   FavoriteBorder,
-  MoreVert,
   Edit,
   DeleteOutline,
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
+
+import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,19 +56,12 @@ function CoffeeCard({ coffee }) {
   const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const formattedDate = DateTime.fromISO(coffee.date).toFormat('LLL d');
 
   const coffeeName = coffee.is_blend
     ? coffee.blend_name
     : `${coffee.country} ${coffee.producer}`;
-
-  const handleDelete = () => {
-    setDialogOpen(false);
-    dispatch({ type: 'DELETE_COFFEE', payload: coffee.id });
-    dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-  };
 
   return (
     <>
@@ -82,9 +71,7 @@ function CoffeeCard({ coffee }) {
           subheader={coffee.roaster}
           action={
             <Grid container direction="column" alignItems="center">
-              <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
-                <MoreVert />
-              </IconButton>
+              <EditDeleteMenu id={coffee.id} />
               <Tooltip
                 title="Currently Brewing"
                 enterDelay={900}
@@ -188,22 +175,6 @@ function CoffeeCard({ coffee }) {
           </Box>
         </CardContent>
       </Card>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle align="center">Delete Coffee</DialogTitle>
-        <DialogContent align="center">
-          Are you sure you want to delete this coffee?
-        </DialogContent>
-        <Box display="flex" justifyContent="center">
-          <DialogActions>
-            <Button variant="contained" onClick={() => setDialogOpen(false)}>
-              No
-            </Button>
-            <Button variant="contained" onClick={handleDelete}>
-              Yes
-            </Button>
-          </DialogActions>
-        </Box>
-      </Dialog>
     </>
   );
 }

@@ -49,8 +49,6 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const user = useSelector((store) => store.user);
   const methods = useSelector((store) => store.methods);
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [ratio, setRatio] = useState('');
-  const [ext, setExt] = useState('');
   const [newBrew, setNewBrew] = useState({
     coffees_id: '',
     methods_id: user.methods_default_id,
@@ -68,29 +66,19 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
 
   const handleNewBrew = (key) => (event) => {
     setNewBrew({ ...newBrew, [key]: event.target.value });
-    if (key === 'water_dose') {
-      const ratioMath =
-        Number(event.target.value) / Number(newBrew.coffee_dose);
-      ratioMath !== 0 && Number.isFinite(ratioMath)
-        ? setRatio(ratioMath.toFixed(2))
-        : setRatio('');
-    } else if (key === 'coffee_dose') {
-      const ratioMath = Number(newBrew.water_dose) / Number(event.target.value);
-      ratioMath !== 0 && Number.isFinite(ratioMath)
-        ? setRatio(ratioMath.toFixed(2))
-        : setRatio('');
-    } else if (key === 'tds') {
-      const adjustedCoffeeDose =
-        (newBrew.coffee_dose * (100 - newBrew.moisture - newBrew.co2)) / 100;
-      const bevWater = newBrew.water_dose - adjustedCoffeeDose * newBrew.lrr;
-      const tdsWeight =
-        bevWater / ((100 - Number(event.target.value)) / 100) - bevWater;
-      const extraction = (tdsWeight / adjustedCoffeeDose) * 100;
-      extraction !== 0 && Number.isFinite(extraction)
-        ? setExt(extraction.toFixed(1))
-        : setExt('');
-    }
   };
+
+  const adjustedCoffeeDose =
+    (newBrew.coffee_dose * (100 - newBrew.moisture - newBrew.co2)) / 100;
+  const bevWater = newBrew.water_dose - adjustedCoffeeDose * newBrew.lrr;
+  const tdsWeight = bevWater / ((100 - newBrew.tds) / 100) - bevWater;
+  const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
+  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
+
+  const ratioCalc =
+    newBrew.coffee_dose && newBrew.water_dose
+      ? Number(newBrew.water_dose / newBrew.coffee_dose).toFixed(2)
+      : '';
 
   const handleMethod = (id, i) => {
     setNewBrew({ ...newBrew, methods_id: id, lrr: methods[i].lrr });
@@ -102,8 +90,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
       payload: {
         ...newBrew,
         coffees_id: id,
-        ratio,
-        ext,
+        ratio: ratioCalc,
+        ext: extCalc,
       },
     });
     dispatch({ type: 'SNACKBARS_ADDED_BREW' });
@@ -127,8 +115,6 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
       time: '',
       lrr: user.methods_default_lrr,
     });
-    setRatio('');
-    setExt('');
   };
 
   return (
@@ -161,9 +147,11 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             onChange={handleNewBrew('coffee_dose')}
             value={newBrew.coffee_dose}
           />
-          <Typography className={classes.formText}>Ratio: {ratio}</Typography>
           <Typography className={classes.formText}>
-            Extraction: {ext}%
+            Ratio: {ratioCalc}
+          </Typography>
+          <Typography className={classes.formText}>
+            Extraction: {extCalc}%
           </Typography>
         </Box>
         <Box display="flex" className={classes.root} alignItems="center">
