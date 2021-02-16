@@ -44,7 +44,7 @@ router.post('/register', (req, res, next) => {
 
   pool
     .query(sqlText, [username, password])
-    .then(() => res.sendStatus(201))
+    .then(() => res.sendStatus(200))
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
@@ -65,19 +65,21 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
-// Handles adding all other information to 'users', in creating both a new
-// profile or updating existing profile, contains 3 SQL queries
-router.put('/update', rejectUnauthenticated, (req, res) => {
-  const sqlText = `
-    UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
-    "methods_default_id" = $3, "methods_default_lrr" = $4, "kettle" = $5, 
-    "grinder" = $6, "tds_min" = $7, "tds_max" = $8, "ext_min" = $9, 
-    "ext_max" = $10 WHERE "id" = $11;
-  `;
+// PUT route adding all other information to 'users', in creating both a
+// new profile or updating existing profile, SQL transaction
+router.put('/update', rejectUnauthenticated, async (req, res) => {
+  const connection = await pool.connect();
+  try {
+    await connection.query('BEGIN;');
 
-  // Query #1 - sending all non-array data
-  pool
-    .query(sqlText, [
+    // Query #1 - sending all non-array user data
+    const updateSqlText = `
+      UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
+      "methods_default_id" = $3, "methods_default_lrr" = $4, "kettle" = $5, 
+      "grinder" = $6, "tds_min" = $7, "tds_max" = $8, "ext_min" = $9, 
+      "ext_max" = $10 WHERE "id" = $11;
+    `;
+    await connection.query(updateSqlText, [
       req.body.name,
       req.body.profile_pic,
       req.body.methods_default_id,
@@ -89,63 +91,39 @@ router.put('/update', rejectUnauthenticated, (req, res) => {
       req.body.ext_min,
       req.body.ext_max,
       req.user.id,
-    ])
-    .then(() => {
-      const deleteSqlText = `
-        DELETE FROM "users_methods" WHERE "users_id" = $1;
-      `;
+    ]);
 
-      // Query #2 - deleting old entries in "users_methods"
-      pool
-        .query(deleteSqlText, [req.user.id])
-        .then(() => {
-          // Array of updated methods sent from UpdateProfile
-          const newMethods = req.body.methods_array;
+    // Query #2 - deleting old entries in users_methods
+    const deleteSqlText = `DELETE FROM "users_methods" WHERE "users_id" = $1;`;
+    await connection.query(deleteSqlText, [req.user.id]);
 
-          // Loop through array of methods, prepare $'s for query
-          let sqlValues = '';
-          for (i = 2; i <= newMethods.length + 1; i++) {
-            sqlValues += `($1, $${i}),`;
-          }
-          sqlValues = sqlValues.slice(0, -1); // Takes off last comma
+    // Query #3, go through methods_array to build query to insert
+    // into users_methods
+    let sqlValues = req.body.methods_array
+      .reduce((sqlValString, val, i) => {
+        return (sqlValString += `($1, $${i + 2}),`);
+      }, '')
+      .slice(0, -1); // Takes off last comma
 
-          const methodsSqlText = `
-            INSERT INTO "users_methods" ("users_id", "methods_id")
-            VALUES ${sqlValues};
-          `;
+    const methodsSqlText = `
+      INSERT INTO "users_methods" ("users_id", "methods_id")
+      VALUES ${sqlValues};
+    `;
+    await connection.query(methodsSqlText, [
+      req.user.id,
+      ...req.body.methods_array,
+    ]);
 
-          // Query #3 - Sends newMethods array to "users_methods"
-          pool
-            .query(methodsSqlText, [req.user.id, ...newMethods])
-            .then(() => res.sendStatus(201)) // Send back success!
-            .catch((err) => {
-              // Catch for Query #3
-              console.log(`error in PUT with query ${methodsSqlText}`, err);
-              res.sendStatus(500);
-            });
-        })
-        .catch((err) => {
-          // Catch for Query #2
-          console.log(`error in PUT with query ${deleteSqlText}`, err);
-          res.sendStatus(500);
-        });
-    })
-    .catch((err) => {
-      // Catch for Query #1
-      console.log(`error in PUT with query ${sqlText}`, err);
-      res.sendStatus(500);
-    });
-});
-
-router.put('/image', (req, res) => {
-  const sqlText = `UPDATE "users" SET "profile_pic" = $1 WHERE "id" = $2;`;
-  pool
-    .query(sqlText, [req.body.url, req.user.id])
-    .then(() => res.sendStatus(201))
-    .catch((err) => {
-      console.log(`error in PUT with query ${sqlText}`, err);
-      res.sendStatus(500);
-    });
+    // Complete transaction
+    await connection.query('COMMIT;');
+    res.sendStatus(201); // Send back success!
+  } catch (err) {
+    await connection.query('ROLLBACK;');
+    console.log('error in PUT transaction in user.router, rollback', err);
+    res.sendStatus(500);
+  } finally {
+    connection.release();
+  }
 });
 
 module.exports = router;

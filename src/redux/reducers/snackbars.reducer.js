@@ -15,7 +15,7 @@ const snackbarsReducer = (state = '', action) => {
     case 'SNACKBARS_DELETED_BREW':
       return { string: 'Brew Deleted', open: true, severity: 'info' };
     case 'CLEAR_SNACKBARS':
-      return { string: '', open: false, severity: '' };
+      return { string: '', open: false };
     default:
       return state;
   }
