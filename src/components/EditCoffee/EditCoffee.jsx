@@ -19,6 +19,8 @@ import {
 } from '@material-ui/pickers';
 import LuxonUtils from '@date-io/luxon';
 
+import S3Uploader from '../S3Uploader/S3Uploader';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -79,7 +81,7 @@ function AddCoffee() {
     <>
       <Box p={3}>
         <Typography variant="h4" className={classes.header}>
-          Edit Coffee
+          Edit a Coffee
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={6}>
@@ -261,18 +263,10 @@ function AddCoffee() {
             />
             <Box
               display="flex"
-              flexDirection="row-reverse"
+              justifyContent="center"
               className={classes.root}
               py={2}
             >
-              <Button
-                className={classes.buttons}
-                variant="contained"
-                color="primary"
-                onClick={handleSubmitEdit}
-              >
-                Update Coffee
-              </Button>
               <Button
                 variant="contained"
                 className={classes.buttons}
@@ -282,6 +276,14 @@ function AddCoffee() {
                 }}
               >
                 Cancel
+              </Button>
+              <Button
+                className={classes.buttons}
+                variant="contained"
+                color="primary"
+                onClick={handleSubmitEdit}
+              >
+                Update Coffee
               </Button>
             </Box>
           </Grid>

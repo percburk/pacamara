@@ -137,4 +137,15 @@ router.put('/update', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.put('/image', (req, res) => {
+  const sqlText = `UPDATE "users" SET "profile_pic" = $1 WHERE "id" = $2;`;
+  pool
+    .query(sqlText, [req.body.url, req.user.id])
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.log(`error in PUT with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;

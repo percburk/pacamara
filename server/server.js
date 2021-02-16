@@ -12,6 +12,18 @@ const coffeesRouter = require('./routes/coffees.router');
 const oneCoffeeRouter = require('./routes/oneCoffee.router');
 const flavorsRouter = require('./routes/flavors.router');
 const brewsRouter = require('./routes/brews.router');
+const s3Router = require('react-dropzone-s3-uploader/s3router');
+
+// S3 Uploader
+app.use(
+  '/s3',
+  s3Router({
+    bucket: process.env.AWS_S3_BUCKET, // required
+    region: process.env.AWS_S3_REGION, // optional
+    headers: { 'Access-Control-Allow-Origin': '*' }, // optional
+    ACL: 'public-read', // this is the default
+  })
+);
 
 // --- Middleware --- //
 app.use(bodyParser.json());
