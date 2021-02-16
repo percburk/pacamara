@@ -9,6 +9,7 @@ import {
   makeStyles,
   Button,
   Chip,
+  Collapse,
   Snackbar,
   Slider,
   Dialog,
@@ -16,17 +17,47 @@ import {
   DialogContent,
   DialogTitle,
   DialogContentText,
-  IconButton,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+
+import S3Uploader from '../S3Uploader/S3Uploader';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
     },
+  },
+  textInputs: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  chips: {
+    width: '18ch',
+  },
+  buttons: {
+    width: '25ch',
+  },
+  header: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(3),
+  },
+  subheader: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  uploadLabel: {
+    marginBottom: theme.spacing(2),
+  },
+  label: {
+    marginBottom: theme.spacing(5),
+  },
+  media: {
+    height: 200,
+    width: 200,
+    objectFit: 'cover',
+    marginLeft: theme.spacing(5),
   },
 }));
 
@@ -54,12 +85,13 @@ function UpdateProfile() {
 
   const [newUpdates, setNewUpdates] = useState({
     name: user.name || '',
-    profile_pic: user.profile_pic || '',
     methods_default_id: user.methods_default_id || '',
     methods_default_lrr: user.methods_default_lrr || '',
     kettle: user.kettle || '',
     grinder: user.grinder || '',
   });
+
+  const [newPic, setNewPic] = useState(user.profile_pic || '');
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
 
@@ -88,6 +120,7 @@ function UpdateProfile() {
         ext_max: newExt[1],
         methods_array: newMethods,
         methods_default_id: defaultId,
+        profile_pic: newPic,
       },
     });
     id === 'new'
@@ -112,9 +145,9 @@ function UpdateProfile() {
     setNewExt([20, 23]);
     setDefaultMethod(0);
     setNewMethods([]);
+    setNewPic('');
     setNewUpdates({
       name: '',
-      profile_pic: '',
       methods_default_id: '',
       kettle: '',
       grinder: '',
@@ -125,35 +158,28 @@ function UpdateProfile() {
 
   return (
     <>
-      <Box paddingBottom={3}>
-        <Typography variant="h4">
+      <Box p={3}>
+        <Typography variant="h4" className={classes.header}>
           {user.name ? 'Edit Profile' : 'Create New Profile'}
         </Typography>
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <Box p={3}>
+        <Grid container spacing={4}>
+          <Grid item xs={6}>
             <TextField
               label="Name"
               variant="outlined"
               fullWidth
+              className={classes.textInputs}
               onChange={handleNewUpdates('name')}
               value={newUpdates.name}
             />
-            <TextField
-              label="Profile Pic"
-              variant="outlined"
-              fullWidth
-              onChange={handleNewUpdates('profile_pic')}
-              value={newUpdates.profile_pic}
-            />
-          </Box>
-          <Box p={3}>
-            <Typography>Select Equipment:</Typography>
+            <Typography className={classes.subheader}>
+              Select Equipment:
+            </Typography>
             <TextField
               label="Grinder"
               variant="outlined"
               fullWidth
+              className={classes.textInputs}
               onChange={handleNewUpdates('grinder')}
               value={newUpdates.grinder}
             />
@@ -161,16 +187,18 @@ function UpdateProfile() {
               label="Kettle"
               variant="outlined"
               fullWidth
+              className={classes.textInputs}
               onChange={handleNewUpdates('kettle')}
               value={newUpdates.kettle}
             />
-          </Box>
-          <Box p={3}>
-            <Typography>Select Brew Methods:</Typography>
+            <Typography className={classes.header}>
+              Select Brew Methods:
+            </Typography>
             <Box className={classes.root}>
               {methods.map((item) => {
                 return (
                   <Chip
+                    className={classes.chips}
                     key={item.id}
                     label={item.name}
                     color={
@@ -181,56 +209,70 @@ function UpdateProfile() {
                 );
               })}
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box p={3}>
-            <Typography>Set TDS Window:</Typography>
-            <Slider
-              onChange={handleSliders('tds')}
-              valueLabelDisplay="auto"
-              valueLabelDisplay="on"
-              value={newTds}
-              step={0.01}
-              min={1.3}
-              max={1.55}
-            />
-          </Box>
-          <Box p={3}>
-            <Typography>Set Extraction Window:</Typography>
-            <Slider
-              onChange={handleSliders('ext')}
-              valueLabelDisplay="auto"
-              valueLabelDisplay="on"
-              value={newExt}
-              step={0.1}
-              min={17}
-              max={25}
-            />
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="center"
-            p={3}
-            className={classes.root}
-          >
-            <Button variant="contained" onClick={handleCancel}>
-              {user.name ? 'Cancel' : 'Cancel and logout'}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                newMethods.length === 1
-                  ? handleSubmit(newMethods[0])
-                  : setDefaultDialogOpen(true)
-              }
+          </Grid>
+          <Grid item xs={6}>
+            <Typography className={classes.uploadLabel}>
+              Upload Profile photo:
+            </Typography>
+            <Box display="flex" paddingBottom={3}>
+              <S3Uploader setPhotoState={setNewPic} />
+              {newPic && <img className={classes.media} src={newPic} />}
+            </Box>
+            <Box paddingTop={2} paddingBottom={2}>
+              <Typography className={classes.label}>Set TDS Window:</Typography>
+              <Slider
+                onChange={handleSliders('tds')}
+                valueLabelDisplay="auto"
+                valueLabelDisplay="on"
+                value={newTds}
+                step={0.01}
+                min={1.3}
+                max={1.55}
+              />
+            </Box>
+            <Box>
+              <Typography className={classes.label}>
+                Set Extraction Window:
+              </Typography>
+              <Slider
+                onChange={handleSliders('ext')}
+                valueLabelDisplay="auto"
+                valueLabelDisplay="on"
+                value={newExt}
+                step={0.1}
+                min={17}
+                max={25}
+              />
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="center"
+              className={classes.root}
+              paddingTop={4}
             >
-              {user.name ? 'Submit' : 'Create'}
-            </Button>
-          </Box>
+              <Button
+                className={classes.buttons}
+                variant="contained"
+                onClick={handleCancel}
+              >
+                {user.name ? 'Cancel' : 'Cancel and logout'}
+              </Button>
+              <Button
+                variant="contained"
+                className={classes.buttons}
+                color="primary"
+                onClick={() =>
+                  newMethods.length === 1
+                    ? handleSubmit(newMethods[0])
+                    : setDefaultDialogOpen(true)
+                }
+              >
+                {user.name ? 'Submit' : 'Create'}
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
       <Dialog
         open={defaultDialogOpen}
         onClose={() => setDefaultDialogOpen(false)}

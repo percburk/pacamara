@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
+} = require('../modules/authentication.middleware');
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
@@ -132,6 +132,17 @@ router.put('/update', rejectUnauthenticated, (req, res) => {
     })
     .catch((err) => {
       // Catch for Query #1
+      console.log(`error in PUT with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
+router.put('/image', (req, res) => {
+  const sqlText = `UPDATE "users" SET "profile_pic" = $1 WHERE "id" = $2;`;
+  pool
+    .query(sqlText, [req.body.url, req.user.id])
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
       console.log(`error in PUT with query ${sqlText}`, err);
       res.sendStatus(500);
     });

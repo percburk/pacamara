@@ -14,6 +14,8 @@ const oneCoffeeReducer = (state = {}, action) => {
       } else {
         return { ...state, brewing: !state.brewing };
       }
+    case 'EDIT_PHOTO':
+      return { ...state, coffee_pic: action.payload };
     case 'EDIT_FLAVORS_ARRAY':
       const id = action.payload;
       if (state.flavors_array.indexOf(id) === -1) {

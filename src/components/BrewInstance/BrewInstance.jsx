@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import {
@@ -39,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BrewInstance({ instance, id }) {
+function BrewInstance({ instance, id, open }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
+  const [expanded, setExpanded] = useState(open || false);
 
   const formattedDate = DateTime.fromISO(instance.date).toFormat('LLL d');
 
@@ -54,7 +56,11 @@ function BrewInstance({ instance, id }) {
   }, {});
 
   return (
-    <Accordion elevation={4}>
+    <Accordion
+      elevation={4}
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+    >
       <AccordionSummary expandIcon={<ExpandMore />}>
         <IconButton
           onClick={(event) => {

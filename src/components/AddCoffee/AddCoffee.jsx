@@ -11,7 +11,6 @@ import {
   Switch,
   Chip,
   Button,
-  FormControlLabel,
   InputAdornment,
 } from '@material-ui/core';
 import {
@@ -19,6 +18,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import LuxonUtils from '@date-io/luxon';
+
+import S3Uploader from '../S3Uploader/S3Uploader';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   chips: {
-    width: '20ch',
+    width: '18ch',
   },
   buttons: {
     width: '25ch',
@@ -48,6 +49,7 @@ function AddCoffee() {
   const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
   const [newFlavors, setNewFlavors] = useState([]);
+  const [newPic, setNewPic] = useState('');
   const [newCoffee, setNewCoffee] = useState({
     roaster: '',
     roast_date: new Date(),
@@ -61,7 +63,6 @@ function AddCoffee() {
     cultivars: '',
     processing: '',
     notes: '',
-    coffee_pic: '',
   });
 
   useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
@@ -96,7 +97,7 @@ function AddCoffee() {
     dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
-      payload: { ...newCoffee, flavors_array: newFlavors },
+      payload: { ...newCoffee, flavors_array: newFlavors, coffee_pic: newPic },
     });
     clearInputs();
     history.push('/dashboard');
@@ -125,7 +126,7 @@ function AddCoffee() {
     <>
       <Box p={3}>
         <Typography variant="h4" className={classes.header}>
-          Add New Coffee
+          Add a New Coffee
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={6}>
@@ -248,10 +249,10 @@ function AddCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              onChange={handleNewCoffee('coffee_pic')}
-              value={newCoffee.coffee_pic}
+              onChange={(event) => setNewPic(event.target.value)}
+              value={newPic}
             />
-
+            <S3Uploader setPhoto={setNewPic} />
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {newFlavors &&
@@ -283,18 +284,10 @@ function AddCoffee() {
             />
             <Box
               display="flex"
-              flexDirection="row-reverse"
+              justifyContent="center"
               className={classes.root}
               py={2}
             >
-              <Button
-                className={classes.buttons}
-                variant="contained"
-                color="primary"
-                onClick={handleNew}
-              >
-                Add New Coffee
-              </Button>
               <Button
                 className={classes.buttons}
                 variant="contained"
@@ -305,6 +298,14 @@ function AddCoffee() {
                 }}
               >
                 Cancel
+              </Button>
+              <Button
+                className={classes.buttons}
+                variant="contained"
+                color="primary"
+                onClick={handleNew}
+              >
+                Add New Coffee
               </Button>
             </Box>
           </Grid>

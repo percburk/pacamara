@@ -9,8 +9,6 @@ import Snackbars from '../Snackbars/Snackbars';
 import {
   VictoryChart,
   VictoryScatter,
-  VictoryLine,
-  VictoryTheme,
   VictoryTooltip,
   VictoryLabel,
 } from 'victory';
@@ -23,7 +21,6 @@ import {
   IconButton,
   Paper,
   Button,
-  Fab,
 } from '@material-ui/core';
 import {
   Favorite,
@@ -51,25 +48,28 @@ const useStyles = makeStyles((theme) => ({
   mug: {
     color: grey[600],
   },
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing(5),
-    right: theme.spacing(5),
-  },
-  fabIcon: {
-    marginRight: theme.spacing(1),
-  },
 }));
+
+const Polygon = ({ data, scale }) => {
+  const points = data.reduce(
+    (pointStr, { x, y }) => `${pointStr} ${scale.x(x)},${scale.y(y)}`,
+    ''
+  );
+  return <polygon points={points} style={{ fill: 'grey', opacity: 0.3 }} />;
+};
 
 function CoffeeDetails() {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
   const oneCoffee = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
   const [addBrew, setAddBrew] = useState(false);
+  const [switchChart, setSwitchChart] = useState(false);
+  const [oneBrew, setOneBrew] = useState({ x: 0, y: 0, i: 0 });
 
   useEffect(() => {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
@@ -77,6 +77,7 @@ function CoffeeDetails() {
     dispatch({ type: 'FETCH_FLAVORS' });
     dispatch({ type: 'FETCH_METHODS' });
   }, []);
+
   const formattedDate = DateTime.fromISO(oneCoffee.roast_date).toFormat(
     'LLL d'
   );
@@ -89,12 +90,25 @@ function CoffeeDetails() {
     ? oneCoffee.blend_name
     : `${oneCoffee.country} ${oneCoffee.producer}`;
 
+  const extractionWindow = [
+    { x: user.ext_min, y: user.tds_min },
+    { x: user.ext_max, y: user.tds_min },
+    { x: user.ext_max, y: user.tds_max },
+    { x: user.ext_min, y: user.tds_max },
+  ];
+
+  const handleSwitchChart = (x, y, i) => {
+    console.log(x, y, i);
+    setOneBrew({ x, y, i });
+    setSwitchChart(!switchChart);
+  };
+
   return (
     <>
       <Box p={4}>
         <Grid container spacing={6}>
           <Grid item xs={4}>
-            <Box display="flex" justifyContent="center">
+            <Box display="flex">
               <Paper elevation={4}>
                 <Box p={2}>
                   <img src={oneCoffee.coffee_pic} className={classes.media} />
@@ -171,7 +185,63 @@ function CoffeeDetails() {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Typography>Chart goes here.</Typography>
+            <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.6] }}>
+              <Polygon data={extractionWindow} />
+              {!switchChart ? (
+                <VictoryScatter
+                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+                  labelComponent={
+                    <VictoryTooltip
+                      flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
+                    />
+                  }
+                  size={7}
+                  data={brews.map((instance) => {
+                    return {
+                      x: Number(instance.ext),
+                      y: Number(instance.tds),
+                      label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
+                    };
+                  })}
+                  events={[
+                    {
+                      target: 'data',
+                      eventHandlers: {
+                        onClick: (event, data) =>
+                          handleSwitchChart(
+                            data.datum.x,
+                            data.datum.y,
+                            data.index
+                          ),
+                      },
+                    },
+                  ]}
+                />
+              ) : (
+                <VictoryScatter
+                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+                  labelComponent={<VictoryLabel />}
+                  size={10}
+                  data={[
+                    {
+                      x: oneBrew.x,
+                      y: oneBrew.y,
+                      label: `TDS: ${brews[oneBrew.i].tds}, EXT: ${
+                        brews[oneBrew.i].ext
+                      }%`,
+                    },
+                  ]}
+                  events={[
+                    {
+                      target: 'data',
+                      eventHandlers: {
+                        onClick: () => setSwitchChart(!switchChart),
+                      },
+                    },
+                  ]}
+                />
+              )}
+            </VictoryChart>
           </Grid>
           <Grid item xs={4}>
             <Typography>Tasting notes: {oneCoffee.notes}</Typography>
@@ -197,10 +267,18 @@ function CoffeeDetails() {
                 Add a Brew
               </Button>
             </Box>
-            {brews &&
+            {brews && !switchChart ? (
               brews.map((instance) => (
                 <BrewInstance key={instance.id} instance={instance} id={id} />
-              ))}
+              ))
+            ) : (
+              <BrewInstance
+                key={brews[oneBrew.i].id}
+                instance={brews[oneBrew.i]}
+                id={id}
+                open={true}
+              />
+            )}
           </Grid>
         </Grid>
       </Box>

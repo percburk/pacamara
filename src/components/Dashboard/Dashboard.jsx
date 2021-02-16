@@ -190,6 +190,7 @@ function Dashboard() {
           <DialogActions>
             <Button
               variant="contained"
+              color="primary"
               onClick={() => history.push('/profile/new')}
             >
               Let's go

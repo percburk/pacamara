@@ -5,12 +5,11 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
-
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Dashboard from '../Dashboard/Dashboard';
 import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
@@ -18,54 +17,18 @@ import AddCoffee from '../AddCoffee/AddCoffee';
 import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
+import MuiTheme from '../MuiTheme/MuiTheme';
 import './App.css';
-
-import { createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#35baf6',
-    },
-    secondary: {
-      main: '#33eb91',
-    },
-  },
-  typography: {
-    fontFamily: 'Lato',
-    fontSize: 14,
-    fontWeightLight: 100,
-    fontWeightRegular: 300,
-    fontWeightMedium: 300,
-    fontWeightBold: 400,
-    h2: {
-      fontFamily: 'Mulish',
-      fontWeight: 200,
-      letterSpacing: '0.1em',
-    },
-    h4: {
-      fontFamily: 'Mulish',
-      fontSize: '1.5em',
-      fontWeight: 200,
-      letterSpacing: '0.1em',
-    },
-    h5: {
-      fontFamily: 'Mulish',
-      fontWeight: 400,
-      letterSpacing: '0.1em',
-    },
-  },
-});
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
   }, [dispatch]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={MuiTheme}>
       <CssBaseline />
       <Router>
         <Nav />
