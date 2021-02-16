@@ -9,14 +9,12 @@ function Snackbars() {
   return (
     <Snackbar
       open={snackbars.open}
-      autoHideDuration={6000}
-      TransitionComponent="none"
+      autoHideDuration={3000}
       onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
     >
       <Alert
         variant="filled"
         severity={snackbars.severity}
-        TransitionComponent="none"
         onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
       >
         {snackbars.string}

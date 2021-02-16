@@ -22,6 +22,7 @@ import {
   DialogContent,
   Button,
   Grid,
+  Tooltip,
 } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import {
@@ -84,20 +85,26 @@ function CoffeeCard({ coffee }) {
               <IconButton onClick={(event) => setAnchorEl(event.currentTarget)}>
                 <MoreVert />
               </IconButton>
-              <IconButton
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_BREWING_OR_FAV',
-                    payload: { id: coffee.id, change: `"brewing"` },
-                  })
-                }
+              <Tooltip
+                title="Currently Brewing"
+                enterDelay={900}
+                leaveDelay={100}
               >
-                {coffee.brewing ? (
-                  <LocalCafe color="primary" />
-                ) : (
-                  <LocalCafeOutlined className={classes.mug} />
-                )}
-              </IconButton>
+                <IconButton
+                  onClick={() =>
+                    dispatch({
+                      type: 'SET_BREWING_OR_FAV',
+                      payload: { id: coffee.id, change: 'brewing' },
+                    })
+                  }
+                >
+                  {coffee.brewing ? (
+                    <LocalCafe color="primary" />
+                  ) : (
+                    <LocalCafeOutlined className={classes.mug} />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Grid>
           }
         />
@@ -161,20 +168,22 @@ function CoffeeCard({ coffee }) {
             justifyContent="space-between"
             px={1}
           >
-            <IconButton
-              onClick={() =>
-                dispatch({
-                  type: 'SET_BREWING_OR_FAV',
-                  payload: { id: coffee.id, change: `"is_fav"` },
-                })
-              }
-            >
-              {coffee.is_fav ? (
-                <Favorite color="primary" />
-              ) : (
-                <FavoriteBorder />
-              )}
-            </IconButton>
+            <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
+              <IconButton
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_BREWING_OR_FAV',
+                    payload: { id: coffee.id, change: 'fav' },
+                  })
+                }
+              >
+                {coffee.is_fav ? (
+                  <Favorite color="primary" />
+                ) : (
+                  <FavoriteBorder />
+                )}
+              </IconButton>
+            </Tooltip>
             <Typography align="right">{formattedDate}</Typography>
           </Box>
         </CardContent>

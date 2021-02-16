@@ -28,8 +28,9 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
 // PUT route to toggle Favorite or Brewing status of a coffee
 router.put('/favBrew', rejectUnauthenticated, (req, res) => {
+  const change = req.body.change === 'fav' ? `"is_fav"` : `"brewing"`;
   const sqlText = `
-    UPDATE "users_coffees" SET ${req.body.change} = NOT ${req.body.change}
+    UPDATE "users_coffees" SET ${change} = NOT ${change}
     WHERE "users_id" = $1 AND "coffees_id" = $2;
   `;
 
@@ -42,21 +43,19 @@ router.put('/favBrew', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// PUT route to edit an individual coffee, this contains 3 SQL queries
-router.put('/edit', rejectUnauthenticated, (req, res) => {
-  const sqlTextUpdateCoffee = `
-    UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
-    "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
-    "elevation" = $8, "cultivars" = $9, "processing" = $10,
-    "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
-  `;
+// PUT route to edit an individual coffee, SQL transaction
+router.put('/edit', rejectUnauthenticated, async (req, res) => {
+  const connection = await pool.connect();
 
-  // NOTE: refractor this with transactions, in order to
-  // add brewing status to "users_coffees"
-
-  // Query #1 - Updating the data on 'coffees' table
-  pool
-    .query(sqlTextUpdateCoffee, [
+  try {
+    // Query #1 - Updating the data on 'coffees' table
+    const updateCoffeeSqlText = `
+      UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
+      "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
+      "elevation" = $8, "cultivars" = $9, "processing" = $10,
+      "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
+    `;
+    await connection.query(updateCoffeeSqlText, [
       req.body.roaster,
       req.body.roast_date,
       req.body.is_blend,
@@ -70,55 +69,51 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
       req.body.notes,
       req.body.coffee_pic,
       req.body.id,
-    ])
-    .then(() => {
-      const sqlTextDeleteFlavors = `
-        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
-      `;
+    ]);
 
-      // Query #2 - deleting old entries in 'coffees_flavors'
-      pool
-        .query(sqlTextDeleteFlavors, [req.body.id])
-        .then(() => {
-          const flavorsArray = req.body.flavors_array;
+    // Query #2 - deleting old entries in coffees_flavors
+    const deleteFlavorsSqlText = `
+      DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
+    `;
+    await connection.query(deleteFlavorsSqlText, [req.body.id]);
 
-          // Loop through flavors to create enough $'s for query
-          let sqlValues = '';
-          for (i = 2; i <= flavorsArray.length + 1; i++) {
-            sqlValues += `($1, $${i}),`;
-          }
-          sqlValues = sqlValues.slice(0, -1); // Takes off last comma
+    // Query #3 - adding new flavors to coffees_flavors
+    // Build SQL query for each new entry in flavors_array
+    let sqlValues = req.body.flavors_array
+      .reduce((sqlValString, val, i) => {
+        return (sqlValString += `($1, $${i + 2}),`);
+      }, '')
+      .slice(0, -1); // Takes off last comma
 
-          // Build query with loop contents
-          const sqlTextUpdateFlavors = `
-            INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
-            VALUES ${sqlValues};
-          `;
+    const updateFlavorsSqlText = `
+      INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
+      VALUES ${sqlValues};
+    `;
+    await connection.query(updateFlavorsSqlText, [
+      req.body.id,
+      ...req.body.flavors_array,
+    ]);
 
-          // Query #3 - inserting new flavors in 'flavors_coffees'
-          pool
-            .query(sqlTextUpdateFlavors, [req.body.id, ...flavorsArray])
-            .then(() => res.sendStatus(201)) // Send back success!
-            .catch((err) => {
-              // Catch for Query #3
-              console.log(
-                `error in PUT with query ${sqlTextUpdateFlavors}`,
-                err
-              );
-              res.sendStatus(500);
-            });
-        })
-        .catch((err) => {
-          // Catch for Query #2
-          console.log(`error in PUT with query ${sqlTextDeleteFlavors}`, err);
-          res.sendStatus(500);
-        });
-    })
-    .catch((err) => {
-      // Catch for Query #1
-      console.log(`error in PUT with query ${sqlTextUpdateCoffee}`, err);
-      res.sendStatus(500);
-    });
+    // Query #4 - update brewing status of the edited coffee
+    const updateBrewingSqlText = `
+      UPDATE "users_coffees" SET "brewing" = $1
+      WHERE "coffees_id" = $2;
+    `;
+    await connection.query(updateBrewingSqlText, [
+      req.body.brewing,
+      req.body.id,
+    ]);
+
+    // Complete transaction
+    await connection.query('COMMIT;');
+    res.sendStatus(201); // Send back success!
+  } catch (err) {
+    await connection.query('ROLLBACK;');
+    console.log('error in PUT transaction in oneCoffee.router, rollback', err);
+    res.sendStatus(500);
+  } finally {
+    connection.release();
+  }
 });
 
 module.exports = router;

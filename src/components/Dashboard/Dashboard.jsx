@@ -114,10 +114,11 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.chip}>
-          {filtersArray.map((item) => {
+          {filtersArray.map((item, i) => {
             if (filters[item.key]) {
               return (
                 <Chip
+                  key={i}
                   label={item.string}
                   onDelete={() => handleFilters(item.key)}
                   color="primary"
@@ -137,9 +138,10 @@ function Dashboard() {
             open={Boolean(filterAnchorEl)}
             onClose={() => setFilterAnchorEl(null)}
           >
-            {filtersArray.map((item) => {
+            {filtersArray.map((item, i) => {
               return (
                 <MenuItem
+                  key={i}
                   onClick={() => handleFilters(item.key)}
                   selected={filters[item.key]}
                 >

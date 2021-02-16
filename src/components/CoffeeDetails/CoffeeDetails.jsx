@@ -21,6 +21,8 @@ import {
   IconButton,
   Paper,
   Button,
+  ClickAwayListener,
+  Tooltip,
 } from '@material-ui/core';
 import {
   Favorite,
@@ -125,34 +127,42 @@ function CoffeeDetails() {
             </Box>
             <Typography>By {oneCoffee.roaster}</Typography>
             <Box display="flex" my={2} alignItems="center">
-              <IconButton
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                    payload: { id: oneCoffee.id, change: `"is_fav"` },
-                  })
-                }
+              <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
+                <IconButton
+                  onClick={() =>
+                    dispatch({
+                      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
+                      payload: { id: oneCoffee.id, change: 'fav' },
+                    })
+                  }
+                >
+                  {oneCoffee.is_fav ? (
+                    <Favorite color="primary" />
+                  ) : (
+                    <FavoriteBorder />
+                  )}
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title="Currently Brewing"
+                enterDelay={900}
+                leaveDelay={100}
               >
-                {oneCoffee.is_fav ? (
-                  <Favorite color="primary" />
-                ) : (
-                  <FavoriteBorder />
-                )}
-              </IconButton>
-              <IconButton
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                    payload: { id: oneCoffee.id, change: `"brewing"` },
-                  })
-                }
-              >
-                {oneCoffee.brewing ? (
-                  <LocalCafe color="primary" />
-                ) : (
-                  <LocalCafeOutlined className={classes.mug} />
-                )}
-              </IconButton>
+                <IconButton
+                  onClick={() =>
+                    dispatch({
+                      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
+                      payload: { id: oneCoffee.id, change: 'brewing' },
+                    })
+                  }
+                >
+                  {oneCoffee.brewing ? (
+                    <LocalCafe color="primary" />
+                  ) : (
+                    <LocalCafeOutlined className={classes.mug} />
+                  )}
+                </IconButton>
+              </Tooltip>
               {oneCoffee.flavors_array &&
                 flavors.map((item) => {
                   if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
@@ -185,63 +195,65 @@ function CoffeeDetails() {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.6] }}>
-              <Polygon data={extractionWindow} />
-              {!switchChart ? (
-                <VictoryScatter
-                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
-                  labelComponent={
-                    <VictoryTooltip
-                      flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
-                    />
-                  }
-                  size={7}
-                  data={brews.map((instance) => {
-                    return {
-                      x: Number(instance.ext),
-                      y: Number(instance.tds),
-                      label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
-                    };
-                  })}
-                  events={[
-                    {
-                      target: 'data',
-                      eventHandlers: {
-                        onClick: (event, data) =>
-                          handleSwitchChart(
-                            data.datum.x,
-                            data.datum.y,
-                            data.index
-                          ),
+            <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
+              <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.6] }}>
+                <Polygon data={extractionWindow} />
+                {!switchChart ? (
+                  <VictoryScatter
+                    style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+                    labelComponent={
+                      <VictoryTooltip
+                        flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
+                      />
+                    }
+                    size={7}
+                    data={brews.map((instance) => {
+                      return {
+                        x: Number(instance.ext),
+                        y: Number(instance.tds),
+                        label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
+                      };
+                    })}
+                    events={[
+                      {
+                        target: 'data',
+                        eventHandlers: {
+                          onClick: (event, data) =>
+                            handleSwitchChart(
+                              data.datum.x,
+                              data.datum.y,
+                              data.index
+                            ),
+                        },
                       },
-                    },
-                  ]}
-                />
-              ) : (
-                <VictoryScatter
-                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
-                  labelComponent={<VictoryLabel />}
-                  size={10}
-                  data={[
-                    {
-                      x: oneBrew.x,
-                      y: oneBrew.y,
-                      label: `TDS: ${brews[oneBrew.i].tds}, EXT: ${
-                        brews[oneBrew.i].ext
-                      }%`,
-                    },
-                  ]}
-                  events={[
-                    {
-                      target: 'data',
-                      eventHandlers: {
-                        onClick: () => setSwitchChart(!switchChart),
+                    ]}
+                  />
+                ) : (
+                  <VictoryScatter
+                    style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+                    labelComponent={<VictoryLabel />}
+                    size={10}
+                    data={[
+                      {
+                        x: oneBrew.x,
+                        y: oneBrew.y,
+                        label: `TDS: ${brews[oneBrew.i].tds}, EXT: ${
+                          brews[oneBrew.i].ext
+                        }%`,
                       },
-                    },
-                  ]}
-                />
-              )}
-            </VictoryChart>
+                    ]}
+                    events={[
+                      {
+                        target: 'data',
+                        eventHandlers: {
+                          onClick: () => setSwitchChart(!switchChart),
+                        },
+                      },
+                    ]}
+                  />
+                )}
+              </VictoryChart>
+            </ClickAwayListener>
           </Grid>
           <Grid item xs={4}>
             <Typography>Tasting notes: {oneCoffee.notes}</Typography>
