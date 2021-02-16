@@ -1,8 +1,9 @@
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const app = express();
-const sessionMiddleware = require('./modules/session-middleware');
+const s3Router = require('react-dropzone-s3-uploader/s3router');
+const sessionMiddleware = require('./modules/session.middleware');
 const passport = require('./strategies/user.strategy');
 
 // Route imports
@@ -12,9 +13,8 @@ const coffeesRouter = require('./routes/coffees.router');
 const oneCoffeeRouter = require('./routes/oneCoffee.router');
 const flavorsRouter = require('./routes/flavors.router');
 const brewsRouter = require('./routes/brews.router');
-const s3Router = require('react-dropzone-s3-uploader/s3router');
 
-// S3 Uploader
+// S3 Router
 app.use(
   '/s3',
   s3Router({
@@ -28,7 +28,6 @@ app.use(
 // --- Middleware --- //
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 // Passport session configuration
 app.use(sessionMiddleware);
 // Start up passport sessions

@@ -40,7 +40,7 @@ function Nav() {
         px={5}
         py={1}
         justifyContent="space-between"
-        boxShadow={2}
+        boxShadow={3}
       >
         <Box display="flex" alignItems="center">
           <Box paddingRight={3}>

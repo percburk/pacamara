@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   chips: {
-    width: '20ch',
+    width: '18ch',
   },
   buttons: {
     width: '25ch',
@@ -61,6 +61,10 @@ function AddCoffee() {
       type: 'EDIT_INPUTS',
       payload: { key, change: event.target.value },
     });
+  };
+
+  const handleEditPic = (newUrl) => {
+    dispatch({ type: 'EDIT_PHOTO', payload: newUrl });
   };
 
   const handleEditDate = (date) => {
@@ -226,6 +230,7 @@ function AddCoffee() {
               value={oneCoffee.coffee_pic}
               onChange={handleEditInputs('coffee_pic')}
             />
+            <S3Uploader setPhoto={handleEditPic} />
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {oneCoffee.flavors_array &&

@@ -85,12 +85,13 @@ function UpdateProfile() {
 
   const [newUpdates, setNewUpdates] = useState({
     name: user.name || '',
-    profile_pic: user.profile_pic || '',
     methods_default_id: user.methods_default_id || '',
     methods_default_lrr: user.methods_default_lrr || '',
     kettle: user.kettle || '',
     grinder: user.grinder || '',
   });
+
+  const [newPic, setNewPic] = useState(user.profile_pic || '');
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
 
@@ -119,6 +120,7 @@ function UpdateProfile() {
         ext_max: newExt[1],
         methods_array: newMethods,
         methods_default_id: defaultId,
+        profile_pic: newPic,
       },
     });
     id === 'new'
@@ -143,9 +145,9 @@ function UpdateProfile() {
     setNewExt([20, 23]);
     setDefaultMethod(0);
     setNewMethods([]);
+    setNewPic('');
     setNewUpdates({
       name: '',
-      profile_pic: '',
       methods_default_id: '',
       kettle: '',
       grinder: '',
@@ -213,10 +215,8 @@ function UpdateProfile() {
               Upload Profile photo:
             </Typography>
             <Box display="flex" paddingBottom={3}>
-              <S3Uploader />
-              {user.profile_pic && (
-                <img className={classes.media} src={user.profile_pic} />
-              )}
+              <S3Uploader setPhotoState={setNewPic} />
+              {newPic && <img className={classes.media} src={newPic} />}
             </Box>
             <Box paddingTop={2} paddingBottom={2}>
               <Typography className={classes.label}>Set TDS Window:</Typography>

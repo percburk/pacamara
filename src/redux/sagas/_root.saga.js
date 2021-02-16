@@ -8,7 +8,6 @@ import oneCoffeeSaga from './oneCoffee.saga';
 import flavorsSaga from './flavors.saga';
 import updateProfileSaga from './updateProfile.saga';
 import brewsSaga from './brews.saga';
-import imageSaga from './image.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so the project can use them.
@@ -28,6 +27,5 @@ export default function* rootSaga() {
     flavorsSaga(),
     updateProfileSaga(),
     brewsSaga(),
-    imageSaga(),
   ]);
 }

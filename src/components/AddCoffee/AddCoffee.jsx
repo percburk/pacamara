@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   chips: {
-    width: '20ch',
+    width: '18ch',
   },
   buttons: {
     width: '25ch',
@@ -49,6 +49,7 @@ function AddCoffee() {
   const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
   const [newFlavors, setNewFlavors] = useState([]);
+  const [newPic, setNewPic] = useState('');
   const [newCoffee, setNewCoffee] = useState({
     roaster: '',
     roast_date: new Date(),
@@ -62,7 +63,6 @@ function AddCoffee() {
     cultivars: '',
     processing: '',
     notes: '',
-    coffee_pic: '',
   });
 
   useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
@@ -97,7 +97,7 @@ function AddCoffee() {
     dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
-      payload: { ...newCoffee, flavors_array: newFlavors },
+      payload: { ...newCoffee, flavors_array: newFlavors, coffee_pic: newPic },
     });
     clearInputs();
     history.push('/dashboard');
@@ -249,10 +249,10 @@ function AddCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              onChange={handleNewCoffee('coffee_pic')}
-              value={newCoffee.coffee_pic}
+              onChange={(event) => setNewPic(event.target.value)}
+              value={newPic}
             />
-
+            <S3Uploader setPhoto={setNewPic} />
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {newFlavors &&

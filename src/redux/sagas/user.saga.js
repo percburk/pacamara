@@ -15,8 +15,9 @@ function* fetchUser() {
     const userResponse = yield axios.get('/api/user', config);
     const methodsResponse = yield axios.get('/api/user/methods');
 
-    // Now that the session has given us a user object with an id and username, // set the client-side user object to let the client-side know the user is
-    // logged in
+    // Now that the session has given us a user object with an id and username, 
+    // set the client-side user object to let the client-side know the user is
+    // logged in, also send along array of brew methods to the user reducer
     yield put({
       type: 'SET_USER',
       payload: {

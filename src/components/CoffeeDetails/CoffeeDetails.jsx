@@ -189,7 +189,7 @@ function CoffeeDetails() {
               <Polygon data={extractionWindow} />
               {!switchChart ? (
                 <VictoryScatter
-                  style={{ data: { fill: '#35baf6' } }}
+                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
                   labelComponent={
                     <VictoryTooltip
                       flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
@@ -200,7 +200,7 @@ function CoffeeDetails() {
                     return {
                       x: Number(instance.ext),
                       y: Number(instance.tds),
-                      label: `TDS: ${instance.tds}, EXT: ${instance.ext}`,
+                      label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
                     };
                   })}
                   events={[
@@ -219,7 +219,7 @@ function CoffeeDetails() {
                 />
               ) : (
                 <VictoryScatter
-                  style={{ data: { fill: '#35baf6' } }}
+                  style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
                   labelComponent={<VictoryLabel />}
                   size={10}
                   data={[
@@ -228,7 +228,7 @@ function CoffeeDetails() {
                       y: oneBrew.y,
                       label: `TDS: ${brews[oneBrew.i].tds}, EXT: ${
                         brews[oneBrew.i].ext
-                      }`,
+                      }%`,
                     },
                   ]}
                   events={[
@@ -276,6 +276,7 @@ function CoffeeDetails() {
                 key={brews[oneBrew.i].id}
                 instance={brews[oneBrew.i]}
                 id={id}
+                open={true}
               />
             )}
           </Grid>
