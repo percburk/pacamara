@@ -6,12 +6,7 @@ import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
 import AddBrew from '../AddBrew/AddBrew';
 import Snackbars from '../Snackbars/Snackbars';
-import {
-  VictoryChart,
-  VictoryScatter,
-  VictoryTooltip,
-  VictoryLabel,
-} from 'victory';
+import ExtractionChart from '../ExtractionChart/ExtractionChart';
 import {
   Box,
   Typography,
@@ -21,7 +16,6 @@ import {
   IconButton,
   Paper,
   Button,
-  ClickAwayListener,
   Tooltip,
 } from '@material-ui/core';
 import {
@@ -52,21 +46,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Polygon = ({ data, scale }) => {
-  const points = data.reduce(
-    (pointStr, { x, y }) => `${pointStr} ${scale.x(x)},${scale.y(y)}`,
-    ''
-  );
-  return <polygon points={points} style={{ fill: 'grey', opacity: 0.3 }} />;
-};
-
 function CoffeeDetails() {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
-  const oneCoffee = useSelector((store) => store.oneCoffee);
+  const {
+    is_fav,
+    brewing,
+    roaster,
+    roast_date,
+    is_blend,
+    blend_name,
+    country,
+    producer,
+    region,
+    elevation,
+    cultivars,
+    processing,
+    notes,
+    coffee_pic,
+    flavors_array,
+  } = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
   const [addBrew, setAddBrew] = useState(false);
@@ -80,30 +81,13 @@ function CoffeeDetails() {
     dispatch({ type: 'FETCH_METHODS' });
   }, []);
 
-  const formattedDate = DateTime.fromISO(oneCoffee.roast_date).toFormat(
-    'LLL d'
-  );
+  const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
 
   const daysOffRoast = DateTime.local()
-    .diff(DateTime.fromISO(oneCoffee.roast_date), 'days')
+    .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
 
-  const nameToDisplay = oneCoffee.is_blend
-    ? oneCoffee.blend_name
-    : `${oneCoffee.country} ${oneCoffee.producer}`;
-
-  const extractionWindow = [
-    { x: user.ext_min, y: user.tds_min },
-    { x: user.ext_max, y: user.tds_min },
-    { x: user.ext_max, y: user.tds_max },
-    { x: user.ext_min, y: user.tds_max },
-  ];
-
-  const handleSwitchChart = (x, y, i) => {
-    console.log(x, y, i);
-    setOneBrew({ x, y, i });
-    setSwitchChart(!switchChart);
-  };
+  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (
     <>
@@ -113,7 +97,7 @@ function CoffeeDetails() {
             <Box display="flex">
               <Paper elevation={4}>
                 <Box p={2}>
-                  <img src={oneCoffee.coffee_pic} className={classes.media} />
+                  <img src={coffee_pic} className={classes.media} />
                 </Box>
               </Paper>
             </Box>
@@ -125,22 +109,18 @@ function CoffeeDetails() {
                 <EditDeleteMenu id={id} />
               </Box>
             </Box>
-            <Typography>By {oneCoffee.roaster}</Typography>
+            <Typography>By {roaster}</Typography>
             <Box display="flex" my={2} alignItems="center">
               <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
                 <IconButton
                   onClick={() =>
                     dispatch({
                       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                      payload: { id: oneCoffee.id, change: 'fav' },
+                      payload: { id, change: 'fav' },
                     })
                   }
                 >
-                  {oneCoffee.is_fav ? (
-                    <Favorite color="primary" />
-                  ) : (
-                    <FavoriteBorder />
-                  )}
+                  {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
                 </IconButton>
               </Tooltip>
               <Tooltip
@@ -152,20 +132,20 @@ function CoffeeDetails() {
                   onClick={() =>
                     dispatch({
                       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                      payload: { id: oneCoffee.id, change: 'brewing' },
+                      payload: { id, change: 'brewing' },
                     })
                   }
                 >
-                  {oneCoffee.brewing ? (
+                  {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (
                     <LocalCafeOutlined className={classes.mug} />
                   )}
                 </IconButton>
               </Tooltip>
-              {oneCoffee.flavors_array &&
+              {flavors_array &&
                 flavors.map((item) => {
-                  if (oneCoffee.flavors_array.indexOf(item.id) > -1) {
+                  if (flavors_array.indexOf(item.id) > -1) {
                     return (
                       <Chip
                         key={item.id}
@@ -177,17 +157,17 @@ function CoffeeDetails() {
                   }
                 })}
             </Box>
-            {!oneCoffee.is_blend && (
+            {!is_blend && (
               <Box marginBottom={2}>
-                <Typography>Region: {oneCoffee.region}</Typography>
-                <Typography>Elevation: {oneCoffee.elevation} meters</Typography>
-                <Typography>Cultivars: {oneCoffee.cultivars}</Typography>
-                <Typography>Processing: {oneCoffee.processing}</Typography>
+                <Typography>Region: {region}</Typography>
+                <Typography>Elevation: {elevation} meters</Typography>
+                <Typography>Cultivars: {cultivars}</Typography>
+                <Typography>Processing: {processing}</Typography>
               </Box>
             )}
             <Box>
               <Typography>
-                Roasted by {oneCoffee.roaster} on {formattedDate}
+                Roasted by {roaster} on {formattedDate}
               </Typography>
               <Typography>
                 {daysOffRoast} day{daysOffRoast == 1 ? '' : 's'} off roast
@@ -195,68 +175,15 @@ function CoffeeDetails() {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
-              <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.6] }}>
-                <Polygon data={extractionWindow} />
-                {!switchChart ? (
-                  <VictoryScatter
-                    style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
-                    labelComponent={
-                      <VictoryTooltip
-                        flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
-                      />
-                    }
-                    size={7}
-                    data={brews.map((instance) => {
-                      return {
-                        x: Number(instance.ext),
-                        y: Number(instance.tds),
-                        label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
-                      };
-                    })}
-                    events={[
-                      {
-                        target: 'data',
-                        eventHandlers: {
-                          onClick: (event, data) =>
-                            handleSwitchChart(
-                              data.datum.x,
-                              data.datum.y,
-                              data.index
-                            ),
-                        },
-                      },
-                    ]}
-                  />
-                ) : (
-                  <VictoryScatter
-                    style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
-                    labelComponent={<VictoryLabel />}
-                    size={10}
-                    data={[
-                      {
-                        x: oneBrew.x,
-                        y: oneBrew.y,
-                        label: `TDS: ${brews[oneBrew.i].tds}, EXT: ${
-                          brews[oneBrew.i].ext
-                        }%`,
-                      },
-                    ]}
-                    events={[
-                      {
-                        target: 'data',
-                        eventHandlers: {
-                          onClick: () => setSwitchChart(!switchChart),
-                        },
-                      },
-                    ]}
-                  />
-                )}
-              </VictoryChart>
-            </ClickAwayListener>
+            <ExtractionChart
+              switchChart={switchChart}
+              setSwitchChart={setSwitchChart}
+              oneBrew={oneBrew}
+              setOneBrew={setOneBrew}
+            />
           </Grid>
           <Grid item xs={4}>
-            <Typography>Tasting notes: {oneCoffee.notes}</Typography>
+            <Typography>Tasting notes: {notes}</Typography>
             <Button
               variant="contained"
               startIcon={<ArrowBackIos />}
@@ -281,13 +208,17 @@ function CoffeeDetails() {
             </Box>
             {brews && !switchChart ? (
               brews.map((instance) => (
-                <BrewInstance key={instance.id} instance={instance} id={id} />
+                <BrewInstance
+                  key={instance.id}
+                  instance={instance}
+                  coffeeId={id}
+                />
               ))
             ) : (
               <BrewInstance
                 key={brews[oneBrew.i].id}
                 instance={brews[oneBrew.i]}
-                id={id}
+                coffeeId={id}
                 open={true}
               />
             )}

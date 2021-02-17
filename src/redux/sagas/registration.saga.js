@@ -14,7 +14,7 @@ function* registerUser(action) {
     yield put({ type: 'LOGIN', payload: action.payload });
     
   } catch (err) {
-    console.log('Error with user registration:', err);
+    console.log('error in registerUser', err);
     yield put({ type: 'REGISTRATION_FAILED' });
   }
 }

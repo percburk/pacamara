@@ -11,8 +11,10 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
+  TextField,
 } from '@material-ui/core';
-import { Edit, Add, ViewModule } from '@material-ui/icons';
+import { Edit, Add, ViewModule, Search, Close } from '@material-ui/icons';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   medium: {
@@ -23,53 +25,96 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(9),
     height: theme.spacing(9),
   },
+  searchBar: {
+    flexBasis: '30%',
+    marginRight: theme.spacing(7),
+  },
+  searchBarIcons: {
+    color: grey[600],
+  },
 }));
 
 function Nav() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((store) => store.user);
+  const { name, username, profile_pic } = useSelector((store) => store.user);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    dispatch({ type: 'FETCH_COFFEES', payload: event.target.value });
+  };
+
+  const handleHistorySearch = (event) => {
+    event.preventDefault();
+    dispatch({ type: 'SET_SEARCH_STRING', payload: search });
+    history.push('/dashboard');
+  };
+
+  const handleHistoryClearSearch = () => {
+    dispatch({ type: 'CLEAR_SEARCH_STRING' });
+    history.push('/dashboard');
+  };
 
   return (
     <>
-      <Box
-        display="flex"
-        alignItems="center"
-        px={5}
-        py={1}
-        justifyContent="space-between"
-        boxShadow={3}
-      >
-        <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" px={5} py={1} boxShadow={3}>
+        <Box display="flex" alignItems="center" flexGrow={1}>
           <Box paddingRight={3}>
             <img
               src="/images/coffee-illustration.jpg"
               className={classes.large}
-              onClick={() => history.push('/dashboard')}
+              onClick={handleHistoryClearSearch}
               style={{ cursor: 'pointer' }}
             />
           </Box>
           <Typography
             variant="h4"
-            onClick={() => history.push('/dashboard')}
+            onClick={handleHistoryClearSearch}
             style={{ cursor: 'pointer' }}
           >
             PACAMARA
           </Typography>
         </Box>
-        {!user.name ? (
+        {name && (
+          <form className={classes.searchBar} onSubmit={handleHistorySearch}>
+            <TextField
+              label="Search Coffees"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={search}
+              InputProps={{
+                endAdornment: search ? (
+                  <Close
+                    className={classes.searchBarIcons}
+                    onClick={() => {
+                      setSearch('');
+                      dispatch({ type: 'FETCH_COFFEES' });
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                ) : (
+                  <Search className={classes.searchBarIcons} />
+                ),
+              }}
+              onChange={handleSearch}
+            />
+          </form>
+        )}
+        {!name ? (
           <Typography variant="h6">Your Coffee Companion</Typography>
         ) : (
           <Box display="flex" alignItems="center">
             <Avatar
               className={classes.medium}
-              src={user.profile_pic}
+              src={profile_pic}
               onClick={(event) => setAnchorEl(event.currentTarget)}
               style={{ cursor: 'pointer' }}
             >
-              {user.name && user.name.charAt(0)}
+              {name && name.charAt(0)}
             </Avatar>
           </Box>
         )}
@@ -81,13 +126,13 @@ function Nav() {
         onClose={() => setAnchorEl(null)}
       >
         <Box display="flex" justifyContent="center" py={1}>
-          <Avatar className={classes.large} src={user.profile_pic}>
-            {user.name && user.name.charAt(0)}
+          <Avatar className={classes.large} src={profile_pic}>
+            {name && name.charAt(0)}
           </Avatar>
         </Box>
         <Box py={1}>
-          <Typography align="center">{user.name}</Typography>
-          <Typography align="center">{user.username}</Typography>
+          <Typography align="center">{name}</Typography>
+          <Typography align="center">{username}</Typography>
         </Box>
         <MenuItem
           onClick={() => {
@@ -111,7 +156,7 @@ function Nav() {
             <Edit />
           </ListItemIcon>
           <ListItemText
-            primary={user.name ? 'Edit Profile' : 'Create New Profile'}
+            primary={name ? 'Edit Profile' : 'Create New Profile'}
           />
         </MenuItem>
         <MenuItem

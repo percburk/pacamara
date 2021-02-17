@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const s3Router = require('react-dropzone-s3-uploader/s3router');
 const sessionMiddleware = require('./modules/session.middleware');
 const passport = require('./strategies/user.strategy');
+const s3Router = require('react-dropzone-s3-uploader/s3router');
 
 // Route imports
 const userRouter = require('./routes/user.router');

@@ -27,6 +27,31 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// GET route for search
+router.get('/search', rejectUnauthenticated, (req, res) => {
+
+  const sqlText = `
+    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
+    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+    FROM "coffees_flavors"
+    JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
+    WHERE ("coffees".country ILIKE $1 OR "coffees".producer ILIKE $1 
+    OR "coffees".roaster ILIKE $1 OR "coffees".blend_name ILIKE $1) 
+    AND "users_coffees".users_id = $2
+    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing
+    ORDER BY "coffees".date DESC;
+  `;
+
+  pool
+    .query(sqlText, [`%${req.query.string}%`, req.user.id])
+    .then((response) => res.send(response.rows))
+    .catch((err) => {
+      console.log(`error in GET with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
 // POST route for adding a new coffee, this contains 3 SQL queries
 router.post('/add', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
@@ -40,7 +65,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id";
     `;
-    const result = await pool.query(newCoffeeSqlText, [
+    const response = await pool.query(newCoffeeSqlText, [
       req.body.roaster,
       req.body.roast_date,
       req.body.is_blend,
@@ -56,7 +81,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     ]);
 
     // Query #2 - add entry to "users_coffees" to pair coffee with current user
-    const newCoffeeId = result.rows[0].id; // New ID is here
+    const newCoffeeId = response.rows[0].id; // New ID is here
     const usersCoffeesSqlText = `
       INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
       VALUES ($1, $2, $3);

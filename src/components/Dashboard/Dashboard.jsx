@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -33,21 +33,23 @@ const filtersArray = [
 ];
 
 function Dashboard() {
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const user = useSelector((store) => store.user);
+  const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
+  const search = useSelector((store) => store.search);
   const [sortAnchorEl, setSortAnchorEl] = useState(null);
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [filters, setFilters] = useState({ fav: false });
   const [sort, setSort] = useState('date');
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
-    !user.name ? true : false
+    !name ? true : false
   );
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_COFFEES' });
+    dispatch({ type: 'FETCH_COFFEES', payload: search || '' });
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
 
@@ -110,7 +112,7 @@ function Dashboard() {
       <Box display="flex" p={4}>
         <Box flexGrow={1}>
           <Typography variant="h6">
-            {user.name ? `${user.name}'s Dashboard` : 'Welcome!'}
+            {name ? `${name}'s Dashboard` : 'Welcome!'}
           </Typography>
         </Box>
         <Box className={classes.chip}>
