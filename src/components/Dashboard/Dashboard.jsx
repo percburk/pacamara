@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -33,13 +34,12 @@ const filtersArray = [
 ];
 
 function Dashboard() {
-  const location = useLocation();
+  let query = useQuery();
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
   const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
-  const search = useSelector((store) => store.search);
   const [sortAnchorEl, setSortAnchorEl] = useState(null);
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [filters, setFilters] = useState({ fav: false });
@@ -49,7 +49,7 @@ function Dashboard() {
   );
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_COFFEES', payload: search || '' });
+    dispatch({ type: 'FETCH_COFFEES', payload: query.get('q') || '' });
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
 

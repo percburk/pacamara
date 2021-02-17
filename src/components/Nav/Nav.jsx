@@ -50,7 +50,7 @@ function Nav() {
   const handleHistorySearch = (event) => {
     event.preventDefault();
     dispatch({ type: 'SET_SEARCH_STRING', payload: search });
-    history.push('/dashboard');
+    history.push(`/dashboard/?q=${search}`);
   };
 
   const handleHistoryClearSearch = () => {
