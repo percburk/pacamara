@@ -56,22 +56,35 @@ function CoffeeCard({ coffee }) {
   const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
   const [anchorEl, setAnchorEl] = useState(null);
+  const {
+    id,
+    date,
+    roaster,
+    is_blend,
+    blend_name,
+    country,
+    producer,
+    flavors_array,
+    is_fav,
+    brewing,
+    coffee_pic,
+  } = coffee;
 
-  const formattedDate = DateTime.fromISO(coffee.date).toFormat('LLL d');
+  const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
 
-  const coffeeName = coffee.is_blend
-    ? coffee.blend_name
-    : `${coffee.country} ${coffee.producer}`;
+  const coffeeName = is_blend
+    ? blend_name
+    : `${country} ${producer}`;
 
   return (
     <>
       <Card className={classes.root} elevation={3}>
         <CardHeader
           title={coffeeName}
-          subheader={coffee.roaster}
+          subheader={roaster}
           action={
             <Grid container direction="column" alignItems="center">
-              <EditDeleteMenu id={coffee.id} />
+              <EditDeleteMenu id={id} />
               <Tooltip
                 title="Currently Brewing"
                 enterDelay={900}
@@ -81,11 +94,11 @@ function CoffeeCard({ coffee }) {
                   onClick={() =>
                     dispatch({
                       type: 'SET_BREWING_OR_FAV',
-                      payload: { id: coffee.id, change: 'brewing' },
+                      payload: { id, change: 'brewing' },
                     })
                   }
                 >
-                  {coffee.brewing ? (
+                  {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (
                     <LocalCafeOutlined className={classes.mug} />
@@ -104,7 +117,7 @@ function CoffeeCard({ coffee }) {
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
-              history.push(`/editCoffee/${coffee.id}`);
+              history.push(`/editCoffee/${id}`);
             }}
           >
             <ListItemIcon>
@@ -126,18 +139,18 @@ function CoffeeCard({ coffee }) {
         </Menu>
         <CardMedia
           className={classes.media}
-          image={coffee.coffee_pic}
+          image={coffee_pic}
           title={coffeeName}
           style={{ cursor: 'pointer' }}
           onClick={() => {
             dispatch({ type: 'CLEAR_SNACKBARS' });
-            history.push(`/details/${coffee.id}`);
+            history.push(`/details/${id}`);
           }}
         />
         <CardContent>
           <Box display="flex" justifyContent="center">
             {flavors.map((item) => {
-              if (coffee.flavors_array.indexOf(item.id) > -1) {
+              if (flavors_array.indexOf(item.id) > -1) {
                 return (
                   <Chip
                     key={item.id}
@@ -160,11 +173,11 @@ function CoffeeCard({ coffee }) {
                 onClick={() =>
                   dispatch({
                     type: 'SET_BREWING_OR_FAV',
-                    payload: { id: coffee.id, change: 'fav' },
+                    payload: { id, change: 'fav' },
                   })
                 }
               >
-                {coffee.is_fav ? (
+                {is_fav ? (
                   <Favorite color="primary" />
                 ) : (
                   <FavoriteBorder />

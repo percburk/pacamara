@@ -40,20 +40,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BrewInstance({ instance, id, open }) {
+function BrewInstance({ coffeeId, instance, open }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const [expanded, setExpanded] = useState(open || false);
+  const {
+    id,
+    methods_id,
+    liked,
+    date,
+    water_dose,
+    coffee_dose,
+    grind,
+    moisture,
+    co2,
+    ratio,
+    tds,
+    ext,
+    water_temp,
+    time,
+    lrr,
+  } = instance;
 
-  const formattedDate = DateTime.fromISO(instance.date).toFormat('LLL d');
+  const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
 
   const methodUsed = methods.reduce((method, entry) => {
-    if (entry.id === instance.methods_id) {
-      method = entry;
+    if (entry.id === methods_id) {
+      method = entry.name;
     }
     return method;
-  }, {});
+  }, '');
+
+  const likeBrew = (event) => {
+    event.stopPropagation();
+    dispatch({
+      type: 'LIKE_BREW',
+      payload: { coffeeId, brewId: id, status: liked },
+    });
+  };
+
+  const deleteBrew = () => {
+    dispatch({
+      type: 'DELETE_BREW',
+      payload: { coffeeId, brewId: id },
+    });
+    dispatch({ type: 'SNACKBARS_DELETED_BREW' });
+  };
 
   return (
     <Accordion
@@ -63,38 +96,28 @@ function BrewInstance({ instance, id, open }) {
     >
       <AccordionSummary expandIcon={<ExpandMore />}>
         <IconButton
-          onClick={(event) => {
-            event.stopPropagation();
-            dispatch({
-              type: 'LIKE_BREW',
-              payload: {
-                coffeeId: id,
-                brewId: instance.id,
-                status: instance.liked,
-              },
-            });
-          }}
+          onClick={likeBrew}
           onFocus={(event) => event.stopPropagation()}
         >
-          {instance.liked === 'yes' ? (
+          {liked === 'yes' ? (
             <ThumbUp color="primary" fontSize="small" />
-          ) : instance.liked === 'no' ? (
+          ) : liked === 'no' ? (
             <ThumbDown fontSize="small" />
           ) : (
             <ThumbsUpDownOutlined fontSize="small" />
           )}
         </IconButton>
         <Typography className={classes.dateMethod}>
-          {formattedDate} with {methodUsed.name}
+          {formattedDate} with {methodUsed}
         </Typography>
         <Typography className={classes.summary}>
-          Water: {instance.water_dose}g
+          Water: {water_dose}g
         </Typography>
         <Typography className={classes.summary}>
-          Coffee: {instance.coffee_dose}g
+          Coffee: {coffee_dose}g
         </Typography>
         <Typography className={classes.summary}>
-          Grind Setting: {instance.grind}
+          Grind Setting: {grind}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -113,14 +136,14 @@ function BrewInstance({ instance, id, open }) {
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell>{instance.ratio}</TableCell>
-              <TableCell>{instance.time}</TableCell>
-              <TableCell>{instance.tds}%</TableCell>
-              <TableCell>{instance.ext}%</TableCell>
-              <TableCell>{methodUsed.lrr}</TableCell>
-              <TableCell>{instance.moisture}%</TableCell>
-              <TableCell>{instance.co2}%</TableCell>
-              <TableCell>{instance.water_temp}&deg;</TableCell>
+              <TableCell>{ratio}</TableCell>
+              <TableCell>{time}</TableCell>
+              <TableCell>{tds}%</TableCell>
+              <TableCell>{ext}%</TableCell>
+              <TableCell>{lrr}</TableCell>
+              <TableCell>{moisture}%</TableCell>
+              <TableCell>{co2}%</TableCell>
+              <TableCell>{water_temp}&deg;</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -130,15 +153,7 @@ function BrewInstance({ instance, id, open }) {
           justifyContent="right"
           paddingLeft={2}
         >
-          <IconButton
-            onClick={() => {
-              dispatch({
-                type: 'DELETE_BREW',
-                payload: { coffeeId: id, brewId: instance.id },
-              });
-              dispatch({ type: 'SNACKBARS_DELETED_BREW' });
-            }}
-          >
+          <IconButton onClick={deleteBrew}>
             <Close />
           </IconButton>
         </Box>

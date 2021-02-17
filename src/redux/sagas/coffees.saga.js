@@ -1,9 +1,15 @@
 import axios from 'axios';
 import { put, takeEvery } from 'redux-saga/effects';
 
-function* fetchCoffees() {
+function* fetchCoffees(action) {
+  const whichRoute = action.payload
+    ? axios.get('api/coffees/search', {
+        params: { string: action.payload },
+      })
+    : axios.get('/api/coffees/');
+
   try {
-    const response = yield axios.get('/api/coffees/');
+    const response = yield whichRoute;
     yield put({ type: 'SET_COFFEES', payload: response.data });
   } catch (err) {
     console.log('error in fetchCoffees', err);

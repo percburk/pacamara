@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddCoffee() {
+function EditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -298,4 +298,4 @@ function AddCoffee() {
   );
 }
 
-export default AddCoffee;
+export default EditCoffee;
