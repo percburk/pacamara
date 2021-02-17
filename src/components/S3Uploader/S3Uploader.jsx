@@ -7,7 +7,7 @@ function S3Uploader({ setPhoto }) {
     setPhoto(info.fileUrl);
   };
 
-  const s3Url = `https://burkbucket.s3.amazonaws.com`;
+  const s3Url = 'https://burkbucket.s3.amazonaws.com';
   return (
     <DropzoneS3Uploader
       onFinish={handleFinishedUpload}

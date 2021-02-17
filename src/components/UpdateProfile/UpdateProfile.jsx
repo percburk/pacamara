@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogContentText,
+  IconButton,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
@@ -68,9 +69,12 @@ function UpdateProfile() {
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const user = useSelector((store) => store.user);
-  const [defaultDialogOpen, setDefaultDialogOpen] = useState(false);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-  const [defaultMethod, setDefaultMethod] = useState(0);
+  const [collapseOpen, setCollapseOpen] = useState(false);
+  const [dialogsOpen, setDialogsOpen] = useState({
+    default: false,
+    cancel: false,
+  });
+
   const [newMethods, setNewMethods] = useState(user.methods_array || []);
 
   const [newTds, setNewTds] = useState([
@@ -83,6 +87,8 @@ function UpdateProfile() {
     user.ext_max || 23.5,
   ]);
 
+  const [newPic, setNewPic] = useState(user.profile_pic || '');
+
   const [newUpdates, setNewUpdates] = useState({
     name: user.name || '',
     methods_default_id: user.methods_default_id || '',
@@ -90,8 +96,6 @@ function UpdateProfile() {
     kettle: user.kettle || '',
     grinder: user.grinder || '',
   });
-
-  const [newPic, setNewPic] = useState(user.profile_pic || '');
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
 
@@ -109,7 +113,7 @@ function UpdateProfile() {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
   };
 
-  const handleSubmit = (defaultId) => {
+  const handleSubmit = () => {
     dispatch({
       type: 'UPDATE_PROFILE',
       payload: {
@@ -119,7 +123,6 @@ function UpdateProfile() {
         ext_min: newExt[0],
         ext_max: newExt[1],
         methods_array: newMethods,
-        methods_default_id: defaultId,
         profile_pic: newPic,
       },
     });
@@ -136,25 +139,24 @@ function UpdateProfile() {
       history.push('/dashboard');
       clearInputs();
     } else {
-      setCancelDialogOpen(true);
+      setDialogsOpen({ ...dialogsOpen, cancel: true });
     }
   };
 
   const clearInputs = () => {
+    setDialogsOpen({});
     setNewTds([1.37, 1.43]);
     setNewExt([20, 23]);
-    setDefaultMethod(0);
     setNewMethods([]);
     setNewPic('');
     setNewUpdates({
       name: '',
       methods_default_id: '',
+      methods_default_lrr: '',
       kettle: '',
       grinder: '',
     });
   };
-
-  console.log(newUpdates);
 
   return (
     <>
@@ -215,7 +217,7 @@ function UpdateProfile() {
               Upload Profile photo:
             </Typography>
             <Box display="flex" paddingBottom={3}>
-              <S3Uploader setPhotoState={setNewPic} />
+              <S3Uploader setPhoto={setNewPic} />
               {newPic && <img className={classes.media} src={newPic} />}
             </Box>
             <Box paddingTop={2} paddingBottom={2}>
@@ -264,7 +266,7 @@ function UpdateProfile() {
                 onClick={() =>
                   newMethods.length === 1
                     ? handleSubmit(newMethods[0])
-                    : setDefaultDialogOpen(true)
+                    : setDialogsOpen({ ...dialogsOpen, default: true })
                 }
               >
                 {user.name ? 'Submit' : 'Create'}
@@ -274,8 +276,8 @@ function UpdateProfile() {
         </Grid>
       </Box>
       <Dialog
-        open={defaultDialogOpen}
-        onClose={() => setDefaultDialogOpen(false)}
+        open={dialogsOpen.default}
+        onClose={() => setDialogsOpen({ ...dialogsOpen, default: false })}
       >
         <DialogTitle align="center">Default Brew Method</DialogTitle>
         <DialogContent>
@@ -289,11 +291,15 @@ function UpdateProfile() {
                   <Chip
                     key={item.id}
                     label={item.name}
-                    color={item.id === defaultMethod ? 'primary' : 'default'}
+                    color={
+                      item.id === newUpdates.methods_default_id
+                        ? 'primary'
+                        : 'default'
+                    }
                     onClick={() => {
-                      setDefaultMethod(item.id);
                       setNewUpdates({
                         ...newUpdates,
+                        methods_default_id: item.id,
                         methods_default_lrr: item.lrr,
                       });
                     }}
@@ -308,8 +314,8 @@ function UpdateProfile() {
             <Button
               variant="contained"
               onClick={() => {
-                setDefaultDialogOpen(false);
-                setDefaultMethod(0);
+                setDialogsOpen({ ...dialogsOpen, default: false });
+                setNewUpdates({ ...newUpdates, methods_default_id: '' });
               }}
             >
               Cancel
@@ -317,8 +323,8 @@ function UpdateProfile() {
             <Button
               variant="contained"
               onClick={() => {
-                handleSubmit(null);
-                setDefaultMethod(0);
+                setNewUpdates({ ...newUpdates, methods_default_id: '' });
+                handleSubmit();
               }}
             >
               No Thanks
@@ -327,20 +333,31 @@ function UpdateProfile() {
               variant="contained"
               color="primary"
               onClick={() =>
-                !defaultMethod
-                  ? alert('Please select a default brew method.')
-                  : // Change from 'alert' to Snackbar!!
-                    handleSubmit(defaultMethod)
+                !newUpdates.methods_default_id
+                  ? setCollapseOpen(true)
+                  : handleSubmit()
               }
             >
               Submit
             </Button>
           </DialogActions>
         </Box>
+        <Collapse in={collapseOpen}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton size="small" onClick={() => setCollapseOpen(false)}>
+                <Close fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            Please select a default brew method, or click 'No Thanks'
+          </Alert>
+        </Collapse>
       </Dialog>
       <Dialog
-        open={cancelDialogOpen}
-        onClose={() => setCancelDialogOpen(false)}
+        open={dialogsOpen.cancel}
+        onClose={() => setDialogsOpen({ ...dialogsOpen, cancel: false })}
       >
         <DialogTitle align="center">Are you sure?</DialogTitle>
         <DialogContent>
@@ -350,7 +367,7 @@ function UpdateProfile() {
           <DialogActions>
             <Button
               variant="contained"
-              onClick={() => setCancelDialogOpen(false)}
+              onClick={() => setDialogsOpen({ ...dialogsOpen, cancel: false })}
             >
               No
             </Button>
