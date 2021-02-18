@@ -27,24 +27,45 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// GET route for search
-router.get('/search', rejectUnauthenticated, (req, res) => {
-
+// GET route for search results
+router.get('/searchResults', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
-    WHERE ("coffees".country ILIKE $1 OR "coffees".producer ILIKE $1 
-    OR "coffees".roaster ILIKE $1 OR "coffees".blend_name ILIKE $1) 
-    AND "users_coffees".users_id = $2
+    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
+    WHERE to_tsvector(CONCAT_WS(' ', "coffees".roaster, 
+    "coffees".country, "coffees".producer, "coffees".blend_name))
+    @@ to_tsquery($1) AND "users_coffees".users_id = $2
     GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing
     ORDER BY "coffees".date DESC;
   `;
 
+  // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
+  // Outer single quotes get added when the query is sanitized using '$1'
+  const parsedQuery = `"${req.query.string.replace(/\s/g, '&')}":*`;
+
   pool
-    .query(sqlText, [`%${req.query.string}%`, req.user.id])
+    .query(sqlText, [parsedQuery, req.user.id])
+    .then((response) => res.send(response.rows))
+    .catch((err) => {
+      console.log(`error in GET with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
+// GET route for search drop down
+router.get('/search', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    SELECT "coffees".country, "coffees".producer, "coffees".roaster, 
+    "coffees".blend_name, "users_coffees".users_id FROM "coffees"
+    JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
+    WHERE "users_coffees".users_id = $1 ORDER BY "coffees".date DESC;
+  `;
+
+  pool
+    .query(sqlText, [req.user.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);

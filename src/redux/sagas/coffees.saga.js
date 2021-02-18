@@ -3,7 +3,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchCoffees(action) {
   const whichRoute = action.payload
-    ? axios.get('api/coffees/search', {
+    ? axios.get('api/coffees/searchResults', {
         params: { string: action.payload },
       })
     : axios.get('/api/coffees/');
@@ -19,7 +19,7 @@ function* fetchCoffees(action) {
 function* setBrewingOrFav(action) {
   try {
     yield axios.put('/api/oneCoffee/favBrew/', action.payload);
-    yield put({ type: 'FETCH_COFFEES' });
+    yield put({ type: 'FETCH_COFFEES', payload: action.payload.q || '' });
   } catch (err) {
     console.log('error in setFavorite', err);
   }

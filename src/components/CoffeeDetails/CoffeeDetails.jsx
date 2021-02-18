@@ -189,7 +189,7 @@ function CoffeeDetails() {
               startIcon={<ArrowBackIos />}
               onClick={() => {
                 dispatch({ type: 'CLEAR_SNACKBARS' });
-                history.push('/dashboard');
+                history.goBack();
               }}
             >
               Go Back

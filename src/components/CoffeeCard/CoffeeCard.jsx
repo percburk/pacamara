@@ -30,6 +30,7 @@ import {
 } from '@material-ui/icons';
 
 import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,7 @@ function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const query = useQuery();
   const flavors = useSelector((store) => store.flavors);
   const [anchorEl, setAnchorEl] = useState(null);
   const {
@@ -72,9 +74,14 @@ function CoffeeCard({ coffee }) {
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
 
-  const coffeeName = is_blend
-    ? blend_name
-    : `${country} ${producer}`;
+  const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
+
+  const handleBrewOrFav = (type) => {
+    dispatch({
+      type: 'SET_BREWING_OR_FAV',
+      payload: { id, change: type, q: query.get('q') || '' },
+    });
+  };
 
   return (
     <>
@@ -90,14 +97,7 @@ function CoffeeCard({ coffee }) {
                 enterDelay={900}
                 leaveDelay={100}
               >
-                <IconButton
-                  onClick={() =>
-                    dispatch({
-                      type: 'SET_BREWING_OR_FAV',
-                      payload: { id, change: 'brewing' },
-                    })
-                  }
-                >
+                <IconButton onClick={() => handleBrewOrFav('brewing')}>
                   {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (
@@ -169,19 +169,8 @@ function CoffeeCard({ coffee }) {
             px={1}
           >
             <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-              <IconButton
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_BREWING_OR_FAV',
-                    payload: { id, change: 'fav' },
-                  })
-                }
-              >
-                {is_fav ? (
-                  <Favorite color="primary" />
-                ) : (
-                  <FavoriteBorder />
-                )}
+              <IconButton onClick={() => handleBrewOrFav('fav')}>
+                {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
               </IconButton>
             </Tooltip>
             <Typography align="right">{formattedDate}</Typography>

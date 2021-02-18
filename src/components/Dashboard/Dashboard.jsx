@@ -34,7 +34,7 @@ const filtersArray = [
 ];
 
 function Dashboard() {
-  let query = useQuery();
+  const query = useQuery();
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -47,9 +47,10 @@ function Dashboard() {
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
+  const searchQuery = query.get('q');
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_COFFEES', payload: query.get('q') || '' });
+    dispatch({ type: 'FETCH_COFFEES', payload: searchQuery || '' });
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
 
@@ -116,6 +117,15 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.chip}>
+          {searchQuery && (
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push('/dashboard')}
+            >
+              Go Back
+            </Button>
+          )}
           {filtersArray.map((item, i) => {
             if (filters[item.key]) {
               return (
