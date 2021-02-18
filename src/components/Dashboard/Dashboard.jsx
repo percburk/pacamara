@@ -1,37 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Menu,
-  MenuItem,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Chip,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, Typography, Button, makeStyles } from '@material-ui/core';
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
 import useQuery from '../../hooks/useQuery';
+import FilterMenu from '../FilterMenu/FilterMenu';
+import SortMenu from '../SortMenu/SortMenu';
+import NewUserDialog from '../NewUserDialog/NewUserDialog';
 
 const useStyles = makeStyles((theme) => ({
-  chip: {
+  sortFilter: {
     '& > *': {
       marginLeft: theme.spacing(1.5),
     },
   },
 }));
-
-const sortArray = ['Date', 'Country', 'Producer', 'Roaster'];
-const filtersArray = [
-  { key: 'fav', string: 'Favorites' },
-  { key: 'brewing', string: 'Currently Brewing' },
-  { key: 'blend', string: 'Blends' },
-];
 
 function Dashboard() {
   const query = useQuery();
@@ -40,10 +24,12 @@ function Dashboard() {
   const classes = useStyles();
   const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
-  const [sortAnchorEl, setSortAnchorEl] = useState(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  const [filters, setFilters] = useState({ fav: false });
   const [sort, setSort] = useState('date');
+  const [filters, setFilters] = useState({
+    fav: false,
+    brewing: false,
+    is_blend: false,
+  });
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
@@ -53,16 +39,6 @@ function Dashboard() {
     dispatch({ type: 'FETCH_COFFEES', payload: searchQuery || '' });
     dispatch({ type: 'FETCH_FLAVORS' });
   }, []);
-
-  const handleSort = (howToSort) => {
-    setSort(howToSort);
-    setSortAnchorEl(null);
-  };
-
-  const handleFilters = (howToFilter) => {
-    setFilters({ ...filters, [howToFilter]: !filters[howToFilter] });
-    setFilterAnchorEl(null);
-  };
 
   const displayCoffees = coffees
     .sort((a, b) => {
@@ -116,7 +92,7 @@ function Dashboard() {
             {name ? `${name}'s Dashboard` : 'Welcome!'}
           </Typography>
         </Box>
-        <Box className={classes.chip}>
+        <Box className={classes.sortFilter}>
           {searchQuery && (
             <Button
               variant="outlined"
@@ -126,64 +102,8 @@ function Dashboard() {
               Go Back
             </Button>
           )}
-          {filtersArray.map((item, i) => {
-            if (filters[item.key]) {
-              return (
-                <Chip
-                  key={i}
-                  label={item.string}
-                  onDelete={() => handleFilters(item.key)}
-                  color="primary"
-                />
-              );
-            }
-          })}
-          <Button
-            variant="outlined"
-            onClick={(event) => setFilterAnchorEl(event.currentTarget)}
-          >
-            Filter
-          </Button>
-          <Menu
-            anchorEl={filterAnchorEl}
-            keepMounted
-            open={Boolean(filterAnchorEl)}
-            onClose={() => setFilterAnchorEl(null)}
-          >
-            {filtersArray.map((item, i) => {
-              return (
-                <MenuItem
-                  key={i}
-                  onClick={() => handleFilters(item.key)}
-                  selected={filters[item.key]}
-                >
-                  {item.string}
-                </MenuItem>
-              );
-            })}
-          </Menu>
-          <Button
-            variant="outlined"
-            onClick={(event) => setSortAnchorEl(event.currentTarget)}
-          >
-            Sort
-          </Button>
-          <Menu
-            anchorEl={sortAnchorEl}
-            keepMounted
-            open={Boolean(sortAnchorEl)}
-            onClose={() => setSortAnchorEl(null)}
-          >
-            {sortArray.map((item, i) => (
-              <MenuItem
-                key={i}
-                onClick={() => handleSort(item.toLowerCase())}
-                selected={sort === item.toLowerCase() ? true : false}
-              >
-                {item}
-              </MenuItem>
-            ))}
-          </Menu>
+          <FilterMenu filters={filters} setFilters={setFilters} />
+          <SortMenu sort={sort} setSort={setSort} />
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
@@ -192,26 +112,7 @@ function Dashboard() {
         })}
       </Box>
       <Snackbars />
-      <Dialog
-        open={newUserDialogOpen}
-        onClose={() => setNewUserDialogOpen(false)}
-      >
-        <DialogTitle align="center">Welcome to Pacamara!</DialogTitle>
-        <DialogContent align="center">
-          Let's set you up with a new profile.
-        </DialogContent>
-        <Box display="flex" justifyContent="center">
-          <DialogActions>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => history.push('/profile/new')}
-            >
-              Let's go
-            </Button>
-          </DialogActions>
-        </Box>
-      </Dialog>
+      <NewUserDialog open={newUserDialogOpen} setOpen={setNewUserDialogOpen} />
     </>
   );
 }
