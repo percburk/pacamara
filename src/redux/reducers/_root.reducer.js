@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   flavors, // Contains flavors for flavor palette in AddCoffee
   snackbars, // Contains all Snackbar messages that display on Dashboard
   brews, // Contains the brew instances paired to the coffee in oneCoffee
-  search,
+  search, // Contains smaller list of searchable terms for use in Nav
 });
 
 export default rootReducer;

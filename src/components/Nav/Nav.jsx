@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -6,31 +6,28 @@ import {
   Box,
   Avatar,
   makeStyles,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Button,
   TextField,
 } from '@material-ui/core';
-import { Edit, Add, ViewModule, Search, Close } from '@material-ui/icons';
+import { Autocomplete } from '@material-ui/lab';
+import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 
+import AvatarMenu from '../AvatarMenu/AvatarMenu';
+
 const useStyles = makeStyles((theme) => ({
-  medium: {
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-  },
-  large: {
-    width: theme.spacing(9),
-    height: theme.spacing(9),
+  logo: {
+    width: 70,
+    height: 70,
   },
   searchBar: {
     flexBasis: '30%',
     marginRight: theme.spacing(7),
+    display: 'flex',
+    alignItems: 'center',
   },
-  searchBarIcons: {
+  searchBarIcon: {
     color: grey[600],
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -38,24 +35,28 @@ function Nav() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { name, username, profile_pic } = useSelector((store) => store.user);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [search, setSearch] = useState('');
+  const { name, profile_pic } = useSelector((store) => store.user);
+  const search = useSelector((store) => store.search);
+  const [avatarAnchorEl, setAvatarAnchorEl] = useState(null);
+  const [autoOpen, setAutoOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-    dispatch({ type: 'FETCH_COFFEES', payload: event.target.value });
+  useEffect(() => dispatch({ type: 'FETCH_SEARCH' }), []);
+
+  const handleAutoOpen = () => {
+    if (searchText.length > 0) {
+      setAutoOpen(true);
+    }
+  };
+
+  const handleSearch = (event, newValue) => {
+    setSearchText(newValue);
+    newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
 
   const handleHistorySearch = (event) => {
     event.preventDefault();
-    dispatch({ type: 'SET_SEARCH_STRING', payload: search });
-    history.push(`/dashboard/?q=${search}`);
-  };
-
-  const handleHistoryClearSearch = () => {
-    dispatch({ type: 'CLEAR_SEARCH_STRING' });
-    history.push('/dashboard');
+    history.push(`/dashboard/?q=${searchText}`);
   };
 
   return (
@@ -65,42 +66,45 @@ function Nav() {
           <Box paddingRight={3}>
             <img
               src="/images/coffee-illustration.jpg"
-              className={classes.large}
-              onClick={handleHistoryClearSearch}
+              className={classes.logo}
+              onClick={() => history.push('/dashboard')}
               style={{ cursor: 'pointer' }}
             />
           </Box>
           <Typography
             variant="h4"
-            onClick={handleHistoryClearSearch}
+            onClick={() => history.push('/dashboard')}
             style={{ cursor: 'pointer' }}
           >
             PACAMARA
           </Typography>
         </Box>
         {name && (
-          <form className={classes.searchBar} onSubmit={handleHistorySearch}>
-            <TextField
-              label="Search Coffees"
-              variant="outlined"
-              size="small"
+          <form onSubmit={handleHistorySearch} className={classes.searchBar}>
+            <Search className={classes.searchBarIcon} />
+            <Autocomplete
+              open={autoOpen}
+              onOpen={handleAutoOpen}
+              onClose={() => setAutoOpen(false)}
+              freeSolo
               fullWidth
-              value={search}
-              InputProps={{
-                endAdornment: search ? (
-                  <Close
-                    className={classes.searchBarIcons}
-                    onClick={() => {
-                      setSearch('');
-                      dispatch({ type: 'FETCH_COFFEES' });
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  />
-                ) : (
-                  <Search className={classes.searchBarIcons} />
-                ),
-              }}
-              onChange={handleSearch}
+              inputValue={searchText}
+              onInputChange={handleSearch}
+              options={search.map((item) =>
+                item.blend_name
+                  ? `${item.roaster} ${item.blend_name}`
+                  : `${item.roaster} ${item.country} ${item.producer}`
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search Coffees"
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  autoComplete="off"
+                />
+              )}
             />
           </form>
         )}
@@ -111,7 +115,7 @@ function Nav() {
             <Avatar
               className={classes.medium}
               src={profile_pic}
-              onClick={(event) => setAnchorEl(event.currentTarget)}
+              onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
               style={{ cursor: 'pointer' }}
             >
               {name && name.charAt(0)}
@@ -119,70 +123,7 @@ function Nav() {
           </Box>
         )}
       </Box>
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-      >
-        <Box display="flex" justifyContent="center" py={1}>
-          <Avatar className={classes.large} src={profile_pic}>
-            {name && name.charAt(0)}
-          </Avatar>
-        </Box>
-        <Box py={1}>
-          <Typography align="center">{name}</Typography>
-          <Typography align="center">{username}</Typography>
-        </Box>
-        <MenuItem
-          onClick={() => {
-            history.push('/dashboard');
-            setAnchorEl(null);
-            dispatch({ type: 'CLEAR_SNACKBARS' });
-          }}
-        >
-          <ListItemIcon>
-            <ViewModule />
-          </ListItemIcon>
-          <ListItemText primary="Go To Dashboard" />
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            history.push('/profile/update');
-            setAnchorEl(null);
-          }}
-        >
-          <ListItemIcon>
-            <Edit />
-          </ListItemIcon>
-          <ListItemText
-            primary={name ? 'Edit Profile' : 'Create New Profile'}
-          />
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            history.push('/addCoffee');
-            setAnchorEl(null);
-          }}
-        >
-          <ListItemIcon>
-            <Add />
-          </ListItemIcon>
-          <ListItemText primary="Add a New Coffee" />
-        </MenuItem>
-        <Box display="flex" justifyContent="center" py={2}>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              dispatch({ type: 'LOGOUT' });
-              history.push('/home');
-              setAnchorEl(null);
-            }}
-          >
-            Logout
-          </Button>
-        </Box>
-      </Menu>
+      <AvatarMenu anchorEl={avatarAnchorEl} setAnchorEl={setAvatarAnchorEl} />
     </>
   );
 }

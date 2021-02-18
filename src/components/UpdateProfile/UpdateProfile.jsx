@@ -136,7 +136,7 @@ function UpdateProfile() {
   const handleCancel = () => {
     dispatch({ type: 'CLEAR_SNACKBARS' });
     if (user.name) {
-      history.push('/dashboard');
+      history.goBack();
       clearInputs();
     } else {
       setDialogsOpen({ ...dialogsOpen, cancel: true });

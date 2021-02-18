@@ -103,6 +103,12 @@ function AddCoffee() {
     history.push('/dashboard');
   };
 
+  const handleCancel = () => {
+    dispatch({ type: 'CLEAR_SNACKBARS' });
+    clearInputs();
+    history.goBack();
+  };
+
   const clearInputs = () => {
     setNewCoffee({
       roaster: '',
@@ -291,11 +297,7 @@ function AddCoffee() {
               <Button
                 className={classes.buttons}
                 variant="contained"
-                onClick={() => {
-                  dispatch({ type: 'CLEAR_SNACKBARS' });
-                  history.push('/dashboard');
-                  clearInputs();
-                }}
+                onClick={handleCancel}
               >
                 Cancel
               </Button>
