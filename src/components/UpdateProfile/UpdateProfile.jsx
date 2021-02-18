@@ -10,7 +10,6 @@ import {
   Button,
   Chip,
   Collapse,
-  Snackbar,
   Slider,
   Dialog,
   DialogActions,
@@ -68,33 +67,35 @@ function UpdateProfile() {
   let { id } = useParams();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
-  const user = useSelector((store) => store.user);
+  const {
+    name,
+    profile_pic,
+    methods_default_id,
+    methods_default_lrr,
+    kettle,
+    grinder,
+    tds_min,
+    tds_max,
+    ext_min,
+    ext_max,
+    methods_array,
+  } = useSelector((store) => store.user);
   const [collapseOpen, setCollapseOpen] = useState(false);
   const [dialogsOpen, setDialogsOpen] = useState({
     default: false,
     cancel: false,
   });
 
-  const [newMethods, setNewMethods] = useState(user.methods_array || []);
-
-  const [newTds, setNewTds] = useState([
-    user.tds_min || 1.37,
-    user.tds_max || 1.43,
-  ]);
-
-  const [newExt, setNewExt] = useState([
-    user.ext_min || 20,
-    user.ext_max || 23.5,
-  ]);
-
-  const [newPic, setNewPic] = useState(user.profile_pic || '');
-
+  const [newMethods, setNewMethods] = useState(methods_array || []);
+  const [newTds, setNewTds] = useState([tds_min || 1.37, tds_max || 1.43]);
+  const [newExt, setNewExt] = useState([ext_min || 20, ext_max || 23.5]);
+  const [newPic, setNewPic] = useState(profile_pic || '');
   const [newUpdates, setNewUpdates] = useState({
-    name: user.name || '',
-    methods_default_id: user.methods_default_id || '',
-    methods_default_lrr: user.methods_default_lrr || '',
-    kettle: user.kettle || '',
-    grinder: user.grinder || '',
+    name: name || '',
+    methods_default_id: methods_default_id || '',
+    methods_default_lrr: methods_default_lrr || '',
+    kettle: kettle || '',
+    grinder: grinder || '',
   });
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
@@ -135,7 +136,7 @@ function UpdateProfile() {
 
   const handleCancel = () => {
     dispatch({ type: 'CLEAR_SNACKBARS' });
-    if (user.name) {
+    if (name) {
       history.goBack();
       clearInputs();
     } else {
@@ -162,7 +163,7 @@ function UpdateProfile() {
     <>
       <Box p={3}>
         <Typography variant="h4" className={classes.header}>
-          {user.name ? 'Edit Profile' : 'Create New Profile'}
+          {name ? 'Edit Profile' : 'Create New Profile'}
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={6}>
@@ -257,7 +258,7 @@ function UpdateProfile() {
                 variant="contained"
                 onClick={handleCancel}
               >
-                {user.name ? 'Cancel' : 'Cancel and logout'}
+                {name ? 'Cancel' : 'Cancel and logout'}
               </Button>
               <Button
                 variant="contained"
@@ -269,7 +270,7 @@ function UpdateProfile() {
                     : setDialogsOpen({ ...dialogsOpen, default: true })
                 }
               >
-                {user.name ? 'Submit' : 'Create'}
+                {name ? 'Submit' : 'Create'}
               </Button>
             </Box>
           </Grid>
