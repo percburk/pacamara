@@ -24,10 +24,12 @@ function SharedCoffeeMenu({ open, setOpen }) {
   const dispatch = useDispatch();
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [sentUsername, setSentUsername] = useState('');
+  const [senderUsername, setSenderUsername] = useState('');
 
-  const handleClickCoffee = (id) => {
+  const handleClickCoffee = (id, username) => {
     dispatch({ type: 'FETCH_ONE_SHARED_COFFEE', payload: id });
+    setSenderUsername(username);
+    setDialogOpen(true);
   };
 
   return (
@@ -38,7 +40,7 @@ function SharedCoffeeMenu({ open, setOpen }) {
           return (
             <MenuItem
               key={item.id}
-              onClick={() => handleClickCoffee(item.coffees_id)}
+              onClick={() => handleClickCoffee(item.coffees_id, item.username)}
             >
               <Avatar className={classes.small} src={item.profile_pic}>
                 {item.username.charAt(0)}
@@ -55,7 +57,7 @@ function SharedCoffeeMenu({ open, setOpen }) {
       <SharedCoffeeDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        sentUsername={sentUsername}
+        senderUsername={senderUsername}
       />
     </>
   );

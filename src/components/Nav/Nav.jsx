@@ -82,6 +82,7 @@ function Nav() {
     history.push(`/dashboard/?q=${searchText}`);
   };
 
+
   return (
     <>
       <Box display="flex" alignItems="center" px={5} py={1} boxShadow={3}>

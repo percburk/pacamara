@@ -14,7 +14,6 @@ import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
 
 function EditDeleteShareMenu({ id, coffeeName, pic }) {
   const history = useHistory();
-  const dispatch = useDispatch();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);

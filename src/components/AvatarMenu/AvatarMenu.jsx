@@ -46,6 +46,12 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
   const { name, username, profile_pic } = useSelector((store) => store.user);
   const [sharedOpen, setSharedOpen] = useState(false);
 
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+    history.push('/home');
+    setAnchorEl(null);
+  };
+
   return (
     <Menu
       className={classes.menu}
@@ -66,7 +72,10 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         <Typography align="center">{name}</Typography>
         <Typography align="center">{username}</Typography>
       </Box>
-      <MenuItem onClick={() => setSharedOpen(!sharedOpen)}>
+      <MenuItem
+        disabled={sharedCoffees[0] ? false : true}
+        onClick={() => setSharedOpen(!sharedOpen)}
+      >
         <ListItemIcon>
           <Avatar
             className={sharedCoffees[0] ? classes.smallBlue : classes.small}
@@ -76,7 +85,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         </ListItemIcon>
         <ListItemText primary="Shared Coffees" />
       </MenuItem>
-      <SharedCoffeeMenu open={sharedOpen} setOpen={setSharedOpen} />
+      <SharedCoffeeMenu open={sharedOpen} />
       <MenuItem
         onClick={() => {
           history.push('/dashboard');
@@ -112,14 +121,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         <ListItemText primary="Add a New Coffee" />
       </MenuItem>
       <Box display="flex" justifyContent="center" py={2}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            dispatch({ type: 'LOGOUT' });
-            history.push('/home');
-            setAnchorEl(null);
-          }}
-        >
+        <Button variant="outlined" onClick={handleLogout}>
           Logout
         </Button>
       </Box>
