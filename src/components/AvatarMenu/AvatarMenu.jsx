@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 import {
   Menu,
   Box,
@@ -14,6 +16,18 @@ import {
 import { Edit, Add, ViewModule } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
+  menu: {
+    width: 300,
+  },
+  smallBlue: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    backgroundColor: '#35baf6',
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
   medium: {
     width: theme.spacing(5),
     height: theme.spacing(5),
@@ -25,17 +39,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AvatarMenu({ anchorEl, setAnchorEl }) {
+  const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const { name, username, profile_pic } = useSelector((store) => store.user);
+  const [sharedOpen, setSharedOpen] = useState(false);
 
   return (
     <Menu
+      className={classes.menu}
       anchorEl={anchorEl}
       keepMounted
       open={Boolean(anchorEl)}
-      onClose={() => setAnchorEl(null)}
+      onClose={() => {
+        setAnchorEl(null);
+        setSharedOpen(false);
+      }}
     >
       <Box display="flex" justifyContent="center" py={1}>
         <Avatar className={classes.large} src={profile_pic}>
@@ -46,6 +66,17 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         <Typography align="center">{name}</Typography>
         <Typography align="center">{username}</Typography>
       </Box>
+      <MenuItem onClick={() => setSharedOpen(!sharedOpen)}>
+        <ListItemIcon>
+          <Avatar
+            className={sharedCoffees[0] ? classes.smallBlue : classes.small}
+          >
+            <Typography variant="subtitle2">{sharedCoffees.length}</Typography>
+          </Avatar>
+        </ListItemIcon>
+        <ListItemText primary="Shared Coffees" />
+      </MenuItem>
+      <SharedCoffeeMenu open={sharedOpen} setOpen={setSharedOpen} />
       <MenuItem
         onClick={() => {
           history.push('/dashboard');

@@ -12,10 +12,6 @@ import {
   CardContent,
   IconButton,
   Chip,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
   Grid,
   Tooltip,
 } from '@material-ui/core';
@@ -23,13 +19,11 @@ import { grey } from '@material-ui/core/colors';
 import {
   Favorite,
   FavoriteBorder,
-  Edit,
-  DeleteOutline,
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
 
-import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
 import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +51,6 @@ function CoffeeCard({ coffee }) {
   const history = useHistory();
   const query = useQuery();
   const flavors = useSelector((store) => store.flavors);
-  const [anchorEl, setAnchorEl] = useState(null);
   const {
     id,
     date,
@@ -66,10 +59,10 @@ function CoffeeCard({ coffee }) {
     blend_name,
     country,
     producer,
-    flavors_array,
-    is_fav,
-    brewing,
     coffee_pic,
+    brewing,
+    is_fav,
+    flavors_array,
   } = coffee;
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
@@ -79,7 +72,7 @@ function CoffeeCard({ coffee }) {
   const handleBrewOrFav = (type) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV',
-      payload: { id, change: type, q: query.get('q') || '' },
+      payload: { id: id, change: type, q: query.get('q') || '' },
     });
   };
 
@@ -91,7 +84,11 @@ function CoffeeCard({ coffee }) {
           subheader={roaster}
           action={
             <Grid container direction="column" alignItems="center">
-              <EditDeleteMenu id={id} />
+              <EditDeleteShareMenu
+                id={id}
+                coffeeName={coffeeName}
+                pic={coffee_pic}
+              />
               <Tooltip
                 title="Currently Brewing"
                 enterDelay={900}
@@ -108,35 +105,6 @@ function CoffeeCard({ coffee }) {
             </Grid>
           }
         />
-        <Menu
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-        >
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              history.push(`/editCoffee/${id}`);
-            }}
-          >
-            <ListItemIcon>
-              <Edit />
-            </ListItemIcon>
-            <ListItemText primary="Edit Coffee" />
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              setDialogOpen(true);
-            }}
-          >
-            <ListItemIcon>
-              <DeleteOutline />
-            </ListItemIcon>
-            <ListItemText primary="Delete Coffee" />
-          </MenuItem>
-        </Menu>
         <CardMedia
           className={classes.media}
           image={coffee_pic}
@@ -149,18 +117,19 @@ function CoffeeCard({ coffee }) {
         />
         <CardContent>
           <Box display="flex" justifyContent="center">
-            {flavors.map((item) => {
-              if (flavors_array.indexOf(item.id) > -1) {
-                return (
-                  <Chip
-                    key={item.id}
-                    className={classes.chip}
-                    variant="outlined"
-                    label={item.name}
-                  />
-                );
-              }
-            })}
+            {flavors_array[0] &&
+              flavors.map((item) => {
+                if (flavors_array.indexOf(item.id) > -1) {
+                  return (
+                    <Chip
+                      key={item.id}
+                      className={classes.chip}
+                      variant="outlined"
+                      label={item.name}
+                    />
+                  );
+                }
+              })}
           </Box>
           <Box
             display="flex"

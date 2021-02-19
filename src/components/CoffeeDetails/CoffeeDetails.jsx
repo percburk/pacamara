@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import BrewInstance from '../BrewInstance/BrewInstance';
-import EditDeleteMenu from '../EditDeleteMenu/EditDeleteMenu';
+import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
 import AddBrew from '../AddBrew/AddBrew';
 import Snackbars from '../Snackbars/Snackbars';
 import ExtractionChart from '../ExtractionChart/ExtractionChart';
@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   },
   mug: {
     color: grey[600],
+  },
+  backButton: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -106,7 +109,11 @@ function CoffeeDetails() {
             <Box display="flex" alignItems="center">
               <Typography variant="h4">{nameToDisplay}</Typography>
               <Box paddingLeft={1}>
-                <EditDeleteMenu id={id} />
+                <EditDeleteShareMenu
+                  id={id}
+                  coffeeName={nameToDisplay}
+                  pic={coffee_pic}
+                />
               </Box>
             </Box>
             <Typography>By {roaster}</Typography>
@@ -185,7 +192,8 @@ function CoffeeDetails() {
           <Grid item xs={4}>
             <Typography>Tasting notes: {notes}</Typography>
             <Button
-              variant="contained"
+              variant="outlined"
+              className={classes.backButton}
               startIcon={<ArrowBackIos />}
               onClick={() => {
                 dispatch({ type: 'CLEAR_SNACKBARS' });

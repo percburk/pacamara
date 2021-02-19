@@ -13,6 +13,7 @@ const coffeesRouter = require('./routes/coffees.router');
 const oneCoffeeRouter = require('./routes/oneCoffee.router');
 const flavorsRouter = require('./routes/flavors.router');
 const brewsRouter = require('./routes/brews.router');
+const shareRouter = require('./routes/share.router');
 
 // S3 Router
 app.use(
@@ -41,6 +42,7 @@ app.use('/api/coffees', coffeesRouter);
 app.use('/api/flavors', flavorsRouter);
 app.use('/api/brews', brewsRouter);
 app.use('/api/oneCoffee', oneCoffeeRouter);
+app.use('/api/share', shareRouter);
 
 // Serve static files
 app.use(express.static('build'));

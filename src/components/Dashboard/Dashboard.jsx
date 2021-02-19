@@ -36,8 +36,10 @@ function Dashboard() {
   const searchQuery = query.get('q');
 
   useEffect(() => {
+    dispatch({ type: 'FETCH_SHARE_USER_LIST' });
     dispatch({ type: 'FETCH_COFFEES', payload: searchQuery || '' });
     dispatch({ type: 'FETCH_FLAVORS' });
+    dispatch({ type: 'FETCH_SHARED_COFFEES' });
   }, []);
 
   const displayCoffees = coffees

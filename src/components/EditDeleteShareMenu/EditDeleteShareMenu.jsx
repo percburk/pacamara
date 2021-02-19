@@ -2,31 +2,26 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
-  Box,
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
   IconButton,
 } from '@material-ui/core';
-import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons';
+import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons';
+import DeleteCoffeeDialog from '../DeleteCoffeeDialog/DeleteCoffeeDialog';
+import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
 
-function EditDeleteMenu({ id }) {
+function EditDeleteShareMenu({ id, coffeeName, pic }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleDelete = () => {
-    setDialogOpen(false);
-    dispatch({ type: 'DELETE_COFFEE', payload: id });
-    dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-    history.push('/dashboard');
+  const openShare = () => {
+    setSendDialogOpen(true);
+    setAnchorEl(null);
   };
 
   return (
@@ -40,6 +35,12 @@ function EditDeleteMenu({ id }) {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
       >
+        <MenuItem onClick={openShare}>
+          <ListItemIcon>
+            <Share />
+          </ListItemIcon>
+          <ListItemText primary="Share Coffee" />
+        </MenuItem>
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
@@ -54,7 +55,7 @@ function EditDeleteMenu({ id }) {
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
-            setDialogOpen(true);
+            setDeleteDialogOpen(true);
           }}
         >
           <ListItemIcon>
@@ -63,24 +64,20 @@ function EditDeleteMenu({ id }) {
           <ListItemText primary="Delete Coffee" />
         </MenuItem>
       </Menu>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle align="center">Delete Coffee</DialogTitle>
-        <DialogContent align="center">
-          Are you sure you want to delete this coffee?
-        </DialogContent>
-        <Box display="flex" justifyContent="center">
-          <DialogActions>
-            <Button variant="contained" onClick={() => setDialogOpen(false)}>
-              No
-            </Button>
-            <Button variant="contained" onClick={handleDelete}>
-              Yes
-            </Button>
-          </DialogActions>
-        </Box>
-      </Dialog>
+      <DeleteCoffeeDialog
+        open={deleteDialogOpen}
+        setOpen={setDeleteDialogOpen}
+        id={id}
+      />
+      <SendCoffeeDialog
+        open={sendDialogOpen}
+        setOpen={setSendDialogOpen}
+        id={id}
+        coffeeName={coffeeName}
+        pic={pic}
+      />
     </>
   );
 }
 
-export default EditDeleteMenu;
+export default EditDeleteShareMenu;

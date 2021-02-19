@@ -44,7 +44,7 @@ function FilterMenu({ filters, setFilters }) {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={() => setanchorEl(null)}
+        onClose={() => setAnchorEl(null)}
       >
         {filtersArray.map((item, i) => {
           return (
