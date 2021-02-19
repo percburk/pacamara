@@ -9,15 +9,15 @@ import {
   DialogContentText,
 } from '@material-ui/core';
 
-function SharedCoffeeDialog({ open, setOpen, sentUsername }) {
-  const { is_blend, country, producer } = useSelector(
+function SharedCoffeeDialog({ dialogOpen, setDialogOpen, sentUsername }) {
+  const { is_blend, country, producer, coffee_pic } = useSelector(
     (store) => store.oneSharedCoffee
   );
 
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <DialogTitle>{sentUsername} shared a coffee with you:</DialogTitle>
       <DialogContent>
         <DialogContentText>{nameToDisplay}</DialogContentText>

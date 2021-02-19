@@ -82,7 +82,6 @@ function Nav() {
     history.push(`/dashboard/?q=${searchText}`);
   };
 
-
   return (
     <>
       <Box display="flex" alignItems="center" px={5} py={1} boxShadow={3}>
@@ -167,7 +166,10 @@ function Nav() {
           </Box>
         )}
       </Box>
-      <AvatarMenu anchorEl={avatarAnchorEl} setAnchorEl={setAvatarAnchorEl} />
+      <AvatarMenu
+        avatarAnchorEl={avatarAnchorEl}
+        setAvatarAnchorEl={setAvatarAnchorEl}
+      />
     </>
   );
 }

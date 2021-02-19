@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AvatarMenu({ anchorEl, setAnchorEl }) {
+function AvatarMenu({ avatarAnchorEl, setAvatarAnchorEl }) {
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -49,17 +49,17 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
     history.push('/home');
-    setAnchorEl(null);
+    setAvatarAnchorEl(null);
   };
 
   return (
     <Menu
       className={classes.menu}
-      anchorEl={anchorEl}
+      anchorEl={avatarAnchorEl}
       keepMounted
-      open={Boolean(anchorEl)}
+      open={Boolean(avatarAnchorEl)}
       onClose={() => {
-        setAnchorEl(null);
+        setAvatarAnchorEl(null);
         setSharedOpen(false);
       }}
     >
@@ -85,11 +85,11 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         </ListItemIcon>
         <ListItemText primary="Shared Coffees" />
       </MenuItem>
-      <SharedCoffeeMenu open={sharedOpen} />
+      <SharedCoffeeMenu sharedOpen={sharedOpen} />
       <MenuItem
         onClick={() => {
           history.push('/dashboard');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
           dispatch({ type: 'CLEAR_SNACKBARS' });
         }}
       >
@@ -101,7 +101,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
       <MenuItem
         onClick={() => {
           history.push('/profile/update');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
         }}
       >
         <ListItemIcon>
@@ -112,7 +112,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
       <MenuItem
         onClick={() => {
           history.push('/addCoffee');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
         }}
       >
         <ListItemIcon>

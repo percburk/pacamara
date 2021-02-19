@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SharedCoffeeMenu({ open, setOpen }) {
+function SharedCoffeeMenu({ sharedOpen }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
@@ -34,7 +34,7 @@ function SharedCoffeeMenu({ open, setOpen }) {
 
   return (
     <>
-      <Collapse in={open}>
+      <Collapse in={sharedOpen}>
         <Divider />
         {sharedCoffees.map((item) => {
           return (
@@ -55,8 +55,8 @@ function SharedCoffeeMenu({ open, setOpen }) {
         <Divider />
       </Collapse>
       <SharedCoffeeDialog
-        open={dialogOpen}
-        setOpen={setDialogOpen}
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
         senderUsername={senderUsername}
       />
     </>
