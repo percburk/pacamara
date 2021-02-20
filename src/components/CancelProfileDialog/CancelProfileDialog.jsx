@@ -9,6 +9,9 @@ import {
   Button,
 } from '@material-ui/core';
 
+// CancelProfileDialog opens for a brand new user, if they would rather not
+// fill out the information on UpdateProfile on initial login
+// Only options are to log out, or cancel and stay in UpdateProfile
 function CancelProfileDialog({ cancelDialogOpen, setCancelDialogOpen }) {
   const dispatch = useDispatch();
   const history = useHistory();

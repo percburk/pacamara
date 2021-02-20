@@ -20,16 +20,16 @@ import shareSaga from './share.saga';
 // and login triggers setting the user
 export default function* rootSaga() {
   yield all([
-    loginSaga(), // login saga is now registered
-    registrationSaga(),
-    userSaga(),
-    methodsSaga(),
-    coffeesSaga(),
-    oneCoffeeSaga(),
-    flavorsSaga(),
-    updateProfileSaga(),
-    brewsSaga(),
-    searchSaga(),
-    shareSaga(),
+    loginSaga(), // Login saga is now registered
+    registrationSaga(), // Handles new user registration
+    userSaga(), // Gets all info of the current user logged in
+    methodsSaga(), // Gets the list from brew methods from database
+    coffeesSaga(), // Handles variety of coffee-related routes
+    oneCoffeeSaga(), // Handles GET and PUT of individual coffees
+    flavorsSaga(), // Gets the list of flavors from database
+    updateProfileSaga(), // Handles any profile updates for new/existing users
+    brewsSaga(), // Handles GET, PUT, and DELETE routes for brew instances
+    searchSaga(), // Gets the list of pared down searchable info for coffees
+    shareSaga(), // Handles all coffee-sharing related routes
   ]);
 }

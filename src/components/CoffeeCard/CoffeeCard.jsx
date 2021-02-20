@@ -21,10 +21,12 @@ import {
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
-
-import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
+// Custom hooks
 import useQuery from '../../hooks/useQuery';
+// Imported components
+import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 280,
@@ -44,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// CoffeeCard is the individual rendering of each coffee on a user's Dashboard
 function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -64,12 +67,20 @@ function CoffeeCard({ coffee }) {
     is_fav,
     flavors_array,
     shared_by_id,
-  } = coffee;
+  } = coffee; // All the required info needed from Dashboard, sent as props
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
-  const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
-  const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id);
 
+  // coffeeName is deciding what to render as the title of CoffeeCard
+  // If blend, it will show the blend name.
+  // If single origin, country and producer. This happens throughout.
+  const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
+
+  // If this coffee has been shared by another user, their username is shown
+  const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id)
+    ?.username;
+
+  // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
   const handleBrewOrFav = (type) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV',
@@ -148,7 +159,7 @@ function CoffeeCard({ coffee }) {
           <Box px={1}>
             {sharedByUser && (
               <Typography variant="subtitle2" align="right">
-                From @{sharedByUser.username}
+                From @{sharedByUser}
               </Typography>
             )}
           </Box>

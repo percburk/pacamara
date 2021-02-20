@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { Add, ExpandLess, ExpandMore } from '@material-ui/icons';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -43,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// AddBrew is a Dialog that has all the inputs needed to create a 
+// new brew instance, opens in CoffeeDetails
 function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -64,10 +67,12 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
     lrr: user.methods_default_lrr,
   });
 
+  // Curried function to handle all text inputs in local state object
   const handleNewBrew = (key) => (event) => {
     setNewBrew({ ...newBrew, [key]: event.target.value });
   };
 
+  // This is the math to calculate the Extraction %, result is rendered
   const adjustedCoffeeDose =
     (newBrew.coffee_dose * (100 - newBrew.moisture - newBrew.co2)) / 100;
   const bevWater = newBrew.water_dose - adjustedCoffeeDose * newBrew.lrr;
@@ -75,15 +80,18 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
   const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
 
+  // This is the math to calculate the brew ratio, result is rendered
   const ratioCalc =
     newBrew.coffee_dose && newBrew.water_dose
       ? Number(newBrew.water_dose / newBrew.coffee_dose).toFixed(2)
       : '';
 
+  // This adds whatever method was used for the brew into the local state object
   const handleMethod = (id, i) => {
     setNewBrew({ ...newBrew, methods_id: id, lrr: methods[i].lrr });
   };
 
+  // Sends the new brew instance to the database
   const handleSubmit = () => {
     dispatch({
       type: 'ADD_BREW',

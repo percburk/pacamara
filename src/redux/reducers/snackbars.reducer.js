@@ -1,3 +1,5 @@
+// snackbarsReducer contains all the messages and color schemes of Snackbars
+// displayed throughout the app. They're called from multiple components
 const snackbarsReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SNACKBARS_ADDED_COFFEE':

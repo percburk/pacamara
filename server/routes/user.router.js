@@ -10,12 +10,11 @@ const router = express.Router();
 
 // GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
-  // Send back user object from the session (previously queried from the
-  // database)
+  // Send back user object from session, previously queried from the database
   res.send(req.user);
 });
 
-// GET request for the methods user owns from 'users_methods' junction table
+// GET request for the methods user owns from "users_methods" junction table
 router.get('/methods', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
@@ -30,9 +29,7 @@ router.get('/methods', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// Handles POST request with new user data
-// The only thing different from this and every other post we've seen
-// is that the password gets encrypted before being inserted
+// Handles POST request with new user data, the password gets encrypted
 router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);

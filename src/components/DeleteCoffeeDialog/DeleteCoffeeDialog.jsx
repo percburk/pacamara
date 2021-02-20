@@ -8,15 +8,19 @@ import {
   Button,
   Box,
 } from '@material-ui/core';
+// Custom hooks
 import useQuery from '../../hooks/useQuery';
 
+// Opens to make sure a user wants to delete a coffee from their dashboard
 function DeleteCoffeeDialog({ open, setOpen, id }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const query = useQuery();
 
+  // Checks to see if there is a search query in the URL
   const searchQuery = query.get('q');
 
+  // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
     setOpen(false);
     dispatch({

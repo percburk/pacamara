@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 import {
   Menu,
   Box,
@@ -14,7 +13,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Edit, Add, ViewModule } from '@material-ui/icons';
+// Imported components
+import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   menu: {
     width: 300,
@@ -38,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// AvatarMenu opens when the user clicks on their avatar in Nav
+// Their home base to edit their profile, add a new coffee, view any shared
+// coffees, navigate back to their dashboard, or log out
 function AvatarMenu({ avatarAnchorEl, setAvatarAnchorEl }) {
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const dispatch = useDispatch();
@@ -46,6 +51,7 @@ function AvatarMenu({ avatarAnchorEl, setAvatarAnchorEl }) {
   const { name, username, profile_pic } = useSelector((store) => store.user);
   const [sharedOpen, setSharedOpen] = useState(false);
 
+  // Logs the user out and sends them to LandingPage
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
     history.push('/home');

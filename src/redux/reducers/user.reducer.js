@@ -10,5 +10,4 @@ const userReducer = (state = [], action) => {
   }
 };
 
-// On Redux as state.user
 export default userReducer;

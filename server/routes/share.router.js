@@ -5,7 +5,7 @@ const {
 } = require('../modules/authentication.middleware');
 const router = express.Router();
 
-// GET request for user list to share coffees with
+// GET route for user list to share coffees with
 router.get('/users', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "id", "username", "name", "profile_pic" 
@@ -21,6 +21,7 @@ router.get('/users', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// GET route for a list of any coffees that have been shared with current user
 router.get('/', (req, res) => {
   const sqlText = `SELECT * FROM "shared_coffees" WHERE "recipient_id" = $1;`;
 
@@ -33,7 +34,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET route for one coffee for CoffeeDetails
+// GET route for one coffee to display on SharedCoffeeDialog
 router.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, 
@@ -53,6 +54,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// POST route to share a coffee with another user
 router.post('/', rejectUnauthenticated, (req, res) => {
   const { recipient_id, coffees_id, coffee_name, message } = req.body;
 
@@ -79,6 +81,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// POST route to add a shared coffee to the user's dashboard
 router.post('/add', (req, res) => {
   const { coffees_id, shared_by_id } = req.body;
   const sqlText = `
@@ -95,6 +98,8 @@ router.post('/add', (req, res) => {
     });
 });
 
+// DELETE route that deletes the entry from "shared_coffees" when
+// a user declines to add a shared coffee to their dashboard
 router.delete('/delete/:id', (req, res) => {
   const sqlText = `DELETE FROM "shared_coffees" WHERE "id" = $1;`;
 

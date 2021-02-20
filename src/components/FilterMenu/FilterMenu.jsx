@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
 
+// Contains all the possible Dashboard filter options
 const filtersArray = [
   { key: 'fav', string: 'Favorites' },
   { key: 'brewing', string: 'Currently Brewing' },
@@ -8,9 +9,12 @@ const filtersArray = [
   { key: 'shared', string: 'Shared' },
 ];
 
+// FilterMenu opens on the Dashboard, displaying the options for filtering 
+// their list of coffees. Filters appear as Chips when clicked, can be deleted
 function FilterMenu({ filters, setFilters }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // Sets the filters in local state on Dashboard
   const handleFilters = (howToFilter) => {
     setFilters({ ...filters, [howToFilter]: !filters[howToFilter] });
     setAnchorEl(null);

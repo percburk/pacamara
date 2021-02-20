@@ -5,7 +5,7 @@ const {
 } = require('../modules/authentication.middleware');
 const router = express.Router();
 
-// GET route for all the user's coffees
+// GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing, 
@@ -29,7 +29,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// GET route for search results
+// GET route for search results, called conditionally in coffees.saga
 router.get('/searchResults', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
@@ -47,7 +47,7 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
   `;
 
   // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
-  // Outer single quotes get added when the query is sanitized using '$1'
+  // Outer single quotes get added when the query is sanitized using $1
   const parsedQuery = `"${req.query.string.replace(/\s/g, '&')}":*`;
 
   pool
@@ -59,7 +59,7 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// GET route for search drop down
+// GET route of pared down coffee info for search Autocomplete menu
 router.get('/search', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".country, "coffees".producer, "coffees".roaster, 
@@ -77,7 +77,7 @@ router.get('/search', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// POST route for adding a new coffee, this contains 3 SQL queries
+// POST route for adding a new coffee, SQL transaction
 router.post('/add', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
 

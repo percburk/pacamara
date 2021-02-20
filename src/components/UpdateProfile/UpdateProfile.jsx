@@ -11,11 +11,12 @@ import {
   Chip,
   Slider,
 } from '@material-ui/core';
-
+// Component imports
 import S3Uploader from '../S3Uploader/S3Uploader';
 import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog';
 import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -54,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// UpdateProfile handles any changes in profile information for new or existing
+// users. Handles all changes in local state.
 function UpdateProfile() {
   const classes = useStyles();
   const history = useHistory();
@@ -90,20 +93,25 @@ function UpdateProfile() {
 
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
 
+  // Handles toggling of methods being added to a user's profile
   const handleNewMethod = (id) => {
     newMethods.indexOf(id) === -1
       ? setNewMethods([...newMethods, id])
       : setNewMethods(newMethods.filter((index) => index !== id));
   };
 
+  // Curried function which handles all text inputs
   const handleNewUpdates = (key) => (event) => {
     setNewUpdates({ ...newUpdates, [key]: event.target.value });
   };
 
+  // Curried function which handles both sliders on the page, tds and ext
   const handleSliders = (moved) => (event, newVal) => {
     moved === 'tds' ? setNewTds(newVal) : setNewExt(newVal);
   };
 
+  // Submits any profile updates. This is a PUT route for both a new and
+  // existing user, since the username and password is made first
   const handleSubmit = () => {
     dispatch({
       type: 'UPDATE_PROFILE',
@@ -124,6 +132,7 @@ function UpdateProfile() {
     history.push('/dashboard');
   };
 
+  // Cancels any updates and sends the user to the previous page
   const handleCancel = () => {
     dispatch({ type: 'CLEAR_SNACKBARS' });
     if (name) {

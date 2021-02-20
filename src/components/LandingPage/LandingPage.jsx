@@ -14,9 +14,11 @@ import {
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
+// Imported components
 import RegisterForm from '../RegisterForm/RegisterForm';
 import LoginForm from '../LoginForm/LoginForm';
 
+// TabPanel component to create swiping effect with SwipeableViews
 function TabPanel({ children, tab, index }) {
   return (
     <div
@@ -30,6 +32,7 @@ function TabPanel({ children, tab, index }) {
   );
 }
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 400,
@@ -44,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// LandingPage is the login and registration page
 function LandingPage() {
   const classes = useStyles();
   const dispatch = useDispatch();

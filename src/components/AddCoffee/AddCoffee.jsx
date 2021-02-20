@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import LuxonUtils from '@date-io/luxon';
 import {
   Box,
   makeStyles,
@@ -17,10 +18,10 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import LuxonUtils from '@date-io/luxon';
-
+// Imported components
 import S3Uploader from '../S3Uploader/S3Uploader';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// AddCoffee includes all the inputs to add a new coffee to a user's dashboard
 function AddCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -73,21 +75,25 @@ function AddCoffee() {
 
   useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
 
+  // Curried function which handles all text inputs, adds to local state object
   const handleNewCoffee = (key) => (event) => {
     setNewCoffee({ ...newCoffee, [key]: event.target.value });
   };
 
+  // Formats the date chosen from MuiDatePicker using Luxon
   const handleRoastDate = (date) => {
     const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
     setNewCoffee({ ...newCoffee, roast_date: formattedDate });
   };
 
+  // Toggles adding and removing flavors for the coffee in local state array
   const handleNewFlavor = (id) => {
     newFlavors.indexOf(id) === -1
       ? setNewFlavors([...newFlavors, id])
       : setNewFlavors(newFlavors.filter((index) => index !== id));
   };
 
+  // Handles the two switches on the page, for 'is_blend' and 'brewing'
   const handleSwitch = (event) => {
     event.target.name === 'is_blend'
       ? setNewCoffee({
@@ -99,6 +105,7 @@ function AddCoffee() {
       : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
   };
 
+  // Adds the new coffee to the database
   const handleNew = () => {
     dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
@@ -114,6 +121,7 @@ function AddCoffee() {
     history.push('/dashboard');
   };
 
+  // This is a cheat to autofill inputs for the solo project demonstration
   const handlePreparedInputs = () => {
     setNewCoffee({
       ...newCoffee,
@@ -128,6 +136,7 @@ function AddCoffee() {
     });
   };
 
+  // Clears all local state data and sends user back to their dashboard
   const handleCancel = () => {
     dispatch({ type: 'CLEAR_SNACKBARS' });
     clearInputs();

@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   avatar: {
     marginRight: theme.spacing(3),
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// SendCoffeeDialog opens when a user wants to share a coffee with another user
+// Contains a searchable list of users, as well as a field for a message
 function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -34,19 +37,27 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
   const [shareMessage, setShareMessage] = useState('');
   const [listOpen, setListOpen] = useState(false);
 
+  // Toggles the Autocomplete menu opening only when the user is typing in the 
+  // TextField
   const handleListOpen = () => {
     if (shareUsername.length > 0) {
       setListOpen(true);
     }
   };
 
+  // Updates the username that the coffee will be sent to in local state
   const handleShareUsername = (event, newValue) => {
     setShareUsername(newValue);
     newValue.length > 0 ? setListOpen(true) : setListOpen(false);
   };
-  const match = sharingUserList.find((item) => item.username === shareUsername);
 
+  // Handles sending this coffee to another selected user
   const handleSendShare = () => {
+    // Finds the matching ID number of the user that is being sent to
+    const match = sharingUserList.find(
+      (item) => item.username === shareUsername
+    );
+
     dispatch({
       type: 'SEND_SHARED_COFFEE',
       payload: {

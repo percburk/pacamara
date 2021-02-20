@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import LuxonUtils from '@date-io/luxon';
 import {
   Box,
   makeStyles,
@@ -17,10 +18,10 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import LuxonUtils from '@date-io/luxon';
-
+// Imported components
 import S3Uploader from '../S3Uploader/S3Uploader';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -49,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// EditCoffee contains all the inputs to edit an existing coffee entry
+// All editing is done in Redux so the page can refresh without losing the
+// existing filled data
 function EditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -62,6 +66,7 @@ function EditCoffee() {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
   }, []);
 
+  // Curried function that handles all text input edits
   const handleEditInputs = (key) => (event) => {
     dispatch({
       type: 'EDIT_INPUTS',
@@ -69,15 +74,18 @@ function EditCoffee() {
     });
   };
 
+  // Handles a new pic uploaded from S3Uploader
   const handleEditPic = (newUrl) => {
     dispatch({ type: 'EDIT_PHOTO', payload: newUrl });
   };
 
+  // Formats the date using Luxon
   const handleEditDate = (date) => {
     const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
     dispatch({ type: 'EDIT_ROAST_DATE', payload: formattedDate });
   };
 
+  // Submits the edited coffee entry to the database
   const handleSubmitEdit = () => {
     dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
     dispatch({

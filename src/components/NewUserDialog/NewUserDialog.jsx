@@ -8,7 +8,9 @@ import {
   Box,
 } from '@material-ui/core';
 
-function newUserDialog({open, setOpen}) {
+// NewUserDialog opens if the user is logging in for the first time 
+// or has not created a profile yet, only redirects to UpdateProfile
+function NewUserDialog({open, setOpen}) {
   const history = useHistory();
 
   return (
@@ -35,4 +37,4 @@ function newUserDialog({open, setOpen}) {
   );
 }
 
-export default newUserDialog;
+export default NewUserDialog;

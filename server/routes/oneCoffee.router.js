@@ -28,7 +28,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// PUT route to toggle Favorite or Brewing status of a coffee
+// PUT route to toggle boolean Favorite or Brewing status of a coffee
 router.put('/favBrew', rejectUnauthenticated, (req, res) => {
   const { change, id } = req.body;
 

@@ -8,15 +8,19 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons';
+// Imported components
 import DeleteCoffeeDialog from '../DeleteCoffeeDialog/DeleteCoffeeDialog';
 import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
 
+// EditDeleteShareMenu appears when the 'more' icon is clicked on a CoffeeCard
+// or in CoffeeDetails, where users can edit, delete, or share a coffee
 function EditDeleteShareMenu({ id, coffeeName, pic }) {
   const history = useHistory();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // Opens the menu
   const openShare = () => {
     setSendDialogOpen(true);
     setAnchorEl(null);

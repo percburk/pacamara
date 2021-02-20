@@ -13,9 +13,10 @@ import {
   Grid,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-
+// Custom hooks
 import useQuery from '../../hooks/useQuery';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   avatar: {
     marginTop: theme.spacing(2),
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// SharedCoffeeDialog opens when the user clicks on an item from 
+// SharedCoffeeMenu, displays some brief information about the coffee as well as
+// the personal message the sender wrote
 function SharedCoffeeDialog({
   dialogOpen,
   setDialogOpen,
@@ -61,6 +65,8 @@ function SharedCoffeeDialog({
 
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
+  // If the user doesn't want to add this coffee to their dashboard, they can
+  // decline and the message is deleted
   const handleDelete = () => {
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
@@ -70,6 +76,7 @@ function SharedCoffeeDialog({
     resetAll();
   };
 
+  // Handles adding this shared coffee to the user's dashboard
   const handleAdd = () => {
     dispatch({
       type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',

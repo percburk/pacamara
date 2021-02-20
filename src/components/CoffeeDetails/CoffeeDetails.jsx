@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
-import BrewInstance from '../BrewInstance/BrewInstance';
-import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
-import AddBrew from '../AddBrew/AddBrew';
-import Snackbars from '../Snackbars/Snackbars';
-import ExtractionChart from '../ExtractionChart/ExtractionChart';
 import {
   Box,
   Typography,
@@ -27,7 +22,14 @@ import {
   Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
+// Imported components
+import BrewInstance from '../BrewInstance/BrewInstance';
+import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
+import AddBrew from '../AddBrew/AddBrew';
+import Snackbars from '../Snackbars/Snackbars';
+import ExtractionChart from '../ExtractionChart/ExtractionChart';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 280,
@@ -49,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// CoffeeDetails shows all coffee information, all the brew instances, and 
+// the extraction chart that displays TDS and EXT for all brews
 function CoffeeDetails() {
   const classes = useStyles();
   const history = useHistory();
@@ -85,11 +89,11 @@ function CoffeeDetails() {
   }, []);
 
   const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
-
+  // Uses Luxon to calculate the amount of days post roast for this coffee
   const daysOffRoast = DateTime.local()
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
-
+    
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (

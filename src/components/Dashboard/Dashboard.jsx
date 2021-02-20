@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Box, Typography, Button, makeStyles } from '@material-ui/core';
+// Custom hooks
+import useQuery from '../../hooks/useQuery';
+// Imported components
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
-import useQuery from '../../hooks/useQuery';
 import FilterMenu from '../FilterMenu/FilterMenu';
 import SortMenu from '../SortMenu/SortMenu';
 import NewUserDialog from '../NewUserDialog/NewUserDialog';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   sortFilter: {
     '& > *': {
@@ -17,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Dashboard is the user's homepage. It shows all the coffees in the user's
+// collection, displayed as multiple CoffeeCard components
 function Dashboard() {
   const query = useQuery();
   const history = useHistory();
@@ -25,15 +30,20 @@ function Dashboard() {
   const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
   const [sort, setSort] = useState('date');
+  // Local state for the four filter possibilities
   const [filters, setFilters] = useState({
     fav: false,
     brewing: false,
     is_blend: false,
+    shared: false,
   });
+  // This local state sees if a user is new, and if so, displays a dialog
+  // telling them to create a new profile
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
 
+  // Checks to see if there's a search query in the URL
   const searchQuery = query.get('q');
 
   useEffect(() => {
@@ -43,6 +53,8 @@ function Dashboard() {
     dispatch({ type: 'FETCH_SHARED_COFFEES' });
   }, []);
 
+  // This long chain of sort() and filter() puts coffees through any sort or
+  // filter options selected by the user, then displays on the DOM
   const displayCoffees = coffees
     .sort((a, b) => {
       if (sort === 'date') {

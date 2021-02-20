@@ -13,9 +13,10 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
-
+// Imported components
 import AvatarMenu from '../AvatarMenu/AvatarMenu';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   logo: {
     width: 70,
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Custom component for displaying a badge on a user's avatar if they have
+// shared coffees on their profile
 const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: '#35baf6',
@@ -51,6 +54,7 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
+// Nav is the top navigation bar which stays constant throughout the app
 function Nav() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -62,21 +66,27 @@ function Nav() {
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
+  // Gets pared down list of coffees the user can search through
   useEffect(() => {
     dispatch({ type: 'FETCH_SEARCH' });
   }, []);
 
+  // Keeps the Autocomplete list closed until the user starts typing in the 
+  // search TextField
   const handleAutoOpen = () => {
     if (searchText.length > 0) {
       setAutoOpen(true);
     }
   };
 
+  // Sets the search string in local state, toggles the Autocomplete list
   const handleSearch = (event, newValue) => {
     setSearchText(newValue);
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
 
+  // Sends search query, Dashboard picks up the URL change in UseEffect and 
+  // sends a new GET with 'FETCH_COFFEES' to display search results
   const handleHistorySearch = (event) => {
     event.preventDefault();
     history.push(`/dashboard/?q=${searchText}`);

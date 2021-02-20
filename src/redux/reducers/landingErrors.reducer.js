@@ -1,5 +1,5 @@
 // This holds the string that will display on login if there's an error
-// along with the status of the snackbar being open to display the message
+// along with the status of the Collapse being open to display the message
 const landingErrors = (state = '', action) => {
   switch (action.type) {
     case 'CLEAR_LANDING_ERROR':

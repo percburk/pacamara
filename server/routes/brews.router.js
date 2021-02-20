@@ -5,6 +5,7 @@ const {
 } = require('../modules/authentication.middleware');
 const router = express.Router();
 
+// GET route to grab all brew instances for a coffee
 router.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT * FROM "brews" WHERE "coffees_id" = $1 ORDER BY "date" DESC;
@@ -19,6 +20,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// POST route to add new brew instances to a coffee
 router.post('/add', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     INSERT INTO "brews" ("coffees_id", "methods_id", "water_dose", 
@@ -50,6 +52,8 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// PUT route to change the status of 'liked' on a brew instance
+// Can be 'yes', 'no', or 'none'
 router.put('/like/:id', (req, res) => {
   const sqlText = `
     UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;
@@ -64,6 +68,7 @@ router.put('/like/:id', (req, res) => {
     });
 });
 
+// DELETE a brew instance
 router.delete('/delete/:id', (req, res) => {
   const sqlText = `DELETE FROM "brews" WHERE "id" = $1;`;
 

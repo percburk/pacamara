@@ -1,5 +1,7 @@
 import { createMuiTheme } from '@material-ui/core';
 
+// Material-UI theme which is constant throughout, imported into App
+// and sent through ThemeProvider
 const MuiTheme = createMuiTheme({
   palette: {
     primary: {

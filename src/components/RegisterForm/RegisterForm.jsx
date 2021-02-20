@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
+// RegisterForm is displayed on LandingPage, handles registering a new user
 function RegisterForm({
   classes,
   username,
@@ -10,6 +11,7 @@ function RegisterForm({
 }) {
   const dispatch = useDispatch();
 
+  // Handles the registration process
   const handleRegister = (event) => {
     event.preventDefault();
     if (username && password) {

@@ -1,3 +1,5 @@
+// oneCoffeeReducer contains the coffee being displayed on CoffeeDetails
+// It is also edited in EditCoffee through dispatches
 const oneCoffeeReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_ONE_COFFEE':

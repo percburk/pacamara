@@ -23,6 +23,7 @@ import {
   ThumbsUpDownOutlined,
 } from '@material-ui/icons';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -40,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// BrewInstance is the accordion that is displayed on CoffeeDetails for each
+// entry on the 'brews' table
 function BrewInstance({ coffeeId, instance, open }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -64,8 +67,10 @@ function BrewInstance({ coffeeId, instance, open }) {
   } = instance;
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
+  // Finds the name of the brew method used, searching by ID
   const methodUsed = methods.find((item) => item.id === methods_id)?.name;
 
+  // Toggles the status of 'liked' on the entry between, yes, no, and none
   const likeBrew = (event) => {
     event.stopPropagation();
     dispatch({
@@ -74,6 +79,7 @@ function BrewInstance({ coffeeId, instance, open }) {
     });
   };
 
+  // Deletes a brew instance from the database
   const deleteBrew = () => {
     dispatch({
       type: 'DELETE_BREW',

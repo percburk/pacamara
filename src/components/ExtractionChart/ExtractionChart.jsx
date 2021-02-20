@@ -7,6 +7,7 @@ import {
 } from 'victory';
 import { ClickAwayListener } from '@material-ui/core';
 
+// Custom component to display the user's TDS/Extraction window on the chart
 const Polygon = ({ data, scale }) => {
   const points = data.reduce(
     (pointStr, { x, y }) => `${pointStr} ${scale.x(x)},${scale.y(y)}`,
@@ -15,6 +16,9 @@ const Polygon = ({ data, scale }) => {
   return <polygon points={points} style={{ fill: 'grey', opacity: 0.3 }} />;
 };
 
+// ExtractionChart shows a scatter chart of all the brew instances of a coffee
+// It's displayed on CoffeeDetails, users can also click on a point to open the
+// corresponding brew instance
 function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
   const { ext_min, ext_max, tds_min, tds_max } = useSelector(
     (store) => store.user
@@ -27,6 +31,7 @@ function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
     { x: ext_min, y: tds_max },
   ];
 
+  // Toggles the chart between showing all the brews, and one clicked brew
   const handleSwitchChart = (x, y, i) => {
     console.log(x, y, i);
     setOneBrew({ x, y, i });

@@ -1,9 +1,11 @@
 import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
+// LoginForm is displayed on LandingPage, handles login process
 function LoginForm({ classes, username, setUsername, password, setPassword }) {
   const dispatch = useDispatch();
 
+  // Sends login info to server to begin login process
   const handleLogin = (event) => {
     event.preventDefault();
     if (username && password) {

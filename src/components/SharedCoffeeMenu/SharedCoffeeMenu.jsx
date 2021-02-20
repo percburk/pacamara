@@ -9,8 +9,10 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
+// Imported components
 import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog';
 
+// Component styling classes
 const useStyles = makeStyles((theme) => ({
   small: {
     width: theme.spacing(3),
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// SharedCoffeeMenu displays the list of coffees sent from others users
 function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [openSharedCoffee, setOpenSharedCoffee] = useState({});
 
+  // Opens the selected coffee in SharedCoffeeDialog and fetches its details
   const handleClickCoffee = (id) => {
     dispatch({ type: 'FETCH_ONE_SHARED_COFFEE', payload: id });
     setDialogOpen(true);
