@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
+  media: {
+    height: 200,
+    width: 200,
+    objectFit: 'cover',
+    marginLeft: theme.spacing(5),
+  },
 }));
 
 function AddCoffee() {
@@ -54,8 +60,8 @@ function AddCoffee() {
     roaster: '',
     roast_date: new Date(),
     is_blend: false,
-    blend_name: '',
     brewing: false,
+    blend_name: '',
     country: '',
     producer: '',
     region: '',
@@ -86,21 +92,40 @@ function AddCoffee() {
     event.target.name === 'is_blend'
       ? setNewCoffee({
           ...newCoffee,
-          is_blend: !newCoffee.is_blend,
+          is_blend: event.target.checked,
           country: '',
           blend_name: '',
         })
-      : setNewCoffee({ ...newCoffee, brewing: !newCoffee.brewing });
+      : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
   };
 
   const handleNew = () => {
     dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
-      payload: { ...newCoffee, flavors_array: newFlavors, coffee_pic: newPic },
+      payload: {
+        ...newCoffee,
+        flavors_array: newFlavors,
+        coffee_pic: newPic,
+      },
     });
+    dispatch({ type: 'FETCH_SHARED_COFFEES' });
     clearInputs();
     history.push('/dashboard');
+  };
+
+  const handlePreparedInputs = () => {
+    setNewCoffee({
+      ...newCoffee,
+      roaster: 'Intelligentsia',
+      country: 'Peru',
+      producer: 'Rayos Del Sol',
+      region: 'Alto Ihuamaca',
+      elevation: '1500-1800',
+      cultivars: 'Bourbon, Caturra, Pache',
+      processing: 'Washed',
+      notes: `Nuanced coffee from Peru with notes of Honeycrisp apple, demerara, and dark chocolate.`,
+    });
   };
 
   const handleCancel = () => {
@@ -131,7 +156,11 @@ function AddCoffee() {
   return (
     <>
       <Box p={3}>
-        <Typography variant="h4" className={classes.header}>
+        <Typography
+          variant="h4"
+          className={classes.header}
+          onClick={handlePreparedInputs}
+        >
           Add a New Coffee
         </Typography>
         <Grid container spacing={4}>
@@ -258,7 +287,10 @@ function AddCoffee() {
               onChange={(event) => setNewPic(event.target.value)}
               value={newPic}
             />
-            <S3Uploader setPhoto={setNewPic} />
+            <Box display="flex" paddingBottom={3} paddingTop={1}>
+              <S3Uploader setPhoto={setNewPic} />
+              {newPic && <img className={classes.media} src={newPic} />}
+            </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {newFlavors &&

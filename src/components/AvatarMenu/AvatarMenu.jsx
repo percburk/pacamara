@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 import {
   Menu,
   Box,
@@ -14,6 +16,18 @@ import {
 import { Edit, Add, ViewModule } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
+  menu: {
+    width: 300,
+  },
+  smallBlue: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    backgroundColor: '#35baf6',
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
   medium: {
     width: theme.spacing(5),
     height: theme.spacing(5),
@@ -24,18 +38,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AvatarMenu({ anchorEl, setAnchorEl }) {
+function AvatarMenu({ avatarAnchorEl, setAvatarAnchorEl }) {
+  const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const { name, username, profile_pic } = useSelector((store) => store.user);
+  const [sharedOpen, setSharedOpen] = useState(false);
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+    history.push('/home');
+    setAvatarAnchorEl(null);
+  };
 
   return (
     <Menu
-      anchorEl={anchorEl}
+      className={classes.menu}
+      anchorEl={avatarAnchorEl}
       keepMounted
-      open={Boolean(anchorEl)}
-      onClose={() => setAnchorEl(null)}
+      open={Boolean(avatarAnchorEl)}
+      onClose={() => {
+        setAvatarAnchorEl(null);
+        setSharedOpen(false);
+      }}
     >
       <Box display="flex" justifyContent="center" py={1}>
         <Avatar className={classes.large} src={profile_pic}>
@@ -47,9 +73,27 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         <Typography align="center">{username}</Typography>
       </Box>
       <MenuItem
+        disabled={sharedCoffees[0] ? false : true}
+        onClick={() => setSharedOpen(!sharedOpen)}
+      >
+        <ListItemIcon>
+          <Avatar
+            className={sharedCoffees[0] ? classes.smallBlue : classes.small}
+          >
+            <Typography variant="subtitle2">{sharedCoffees.length}</Typography>
+          </Avatar>
+        </ListItemIcon>
+        <ListItemText primary="Shared Coffees" />
+      </MenuItem>
+      <SharedCoffeeMenu
+        sharedOpen={sharedOpen}
+        setSharedOpen={setSharedOpen}
+        setAvatarAnchorEl={setAvatarAnchorEl}
+      />
+      <MenuItem
         onClick={() => {
           history.push('/dashboard');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
           dispatch({ type: 'CLEAR_SNACKBARS' });
         }}
       >
@@ -61,7 +105,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
       <MenuItem
         onClick={() => {
           history.push('/profile/update');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
         }}
       >
         <ListItemIcon>
@@ -72,7 +116,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
       <MenuItem
         onClick={() => {
           history.push('/addCoffee');
-          setAnchorEl(null);
+          setAvatarAnchorEl(null);
         }}
       >
         <ListItemIcon>
@@ -81,14 +125,7 @@ function AvatarMenu({ anchorEl, setAnchorEl }) {
         <ListItemText primary="Add a New Coffee" />
       </MenuItem>
       <Box display="flex" justifyContent="center" py={2}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            dispatch({ type: 'LOGOUT' });
-            history.push('/home');
-            setAnchorEl(null);
-          }}
-        >
+        <Button variant="outlined" onClick={handleLogout}>
           Logout
         </Button>
       </Box>

@@ -5,9 +5,6 @@ import './LandingPage.css';
 import {
   Box,
   Paper,
-  Typography,
-  TextField,
-  Button,
   Tabs,
   Tab,
   IconButton,
@@ -16,6 +13,9 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+
+import RegisterForm from '../RegisterForm/RegisterForm';
+import LoginForm from '../LoginForm/LoginForm';
 
 function TabPanel({ children, tab, index }) {
   return (
@@ -53,30 +53,6 @@ function LandingPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    if (username && password) {
-      dispatch({
-        type: 'LOGIN',
-        payload: { username, password },
-      });
-    } else {
-      dispatch({ type: 'LOGIN_INPUT_ERROR' });
-    }
-  };
-
-  const handleRegister = (event) => {
-    event.preventDefault();
-    if (username && password) {
-      dispatch({
-        type: 'REGISTER',
-        payload: { username, password },
-      });
-    } else {
-      dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
-    }
-  };
-
   return (
     <>
       <Box
@@ -103,72 +79,22 @@ function LandingPage() {
               onChangeIndex={(event, value) => setTab(value)}
             >
               <TabPanel tab={tab} index={0}>
-                <Box p={4}>
-                  <Typography variant="h6" align="center">
-                    LOGIN
-                  </Typography>
-                  <form onSubmit={handleLogin}>
-                    <TextField
-                      label="Username"
-                      fullWidth
-                      className={classes.textInputs}
-                      variant="outlined"
-                      onChange={(event) => setUsername(event.target.value)}
-                    />
-                    <TextField
-                      label="Password"
-                      fullWidth
-                      className={classes.textInputs}
-                      variant="outlined"
-                      type="password"
-                      onChange={(event) => setPassword(event.target.value)}
-                    />
-                    <Box display="flex" justifyContent="center">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        className={classes.button}
-                      >
-                        Login
-                      </Button>
-                    </Box>
-                  </form>
-                </Box>
+                <LoginForm
+                  classes={classes}
+                  username={username}
+                  setUsername={setUsername}
+                  password={password}
+                  setPassword={setPassword}
+                />
               </TabPanel>
               <TabPanel tab={tab} index={1}>
-                <Box p={4}>
-                  <Typography variant="h6" align="center">
-                    REGISTER
-                  </Typography>
-                  <form onSubmit={handleRegister}>
-                    <TextField
-                      label="Username"
-                      fullWidth
-                      className={classes.textInputs}
-                      variant="outlined"
-                      onChange={(event) => setUsername(event.target.value)}
-                    />
-                    <TextField
-                      label="Password"
-                      fullWidth
-                      className={classes.textInputs}
-                      variant="outlined"
-                      type="password"
-                      onChange={(event) => setPassword(event.target.value)}
-                    />
-                    <Box display="flex" justifyContent="center">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        className={classes.button}
-                      >
-                        Register
-                      </Button>
-                    </Box>
-                  </form>
-                </Box>
+                <RegisterForm
+                  classes={classes}
+                  username={username}
+                  setUsername={setUsername}
+                  password={password}
+                  setPassword={setPassword}
+                />
               </TabPanel>
             </SwipeableViews>
             <Collapse in={errorOpen}>

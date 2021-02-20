@@ -8,13 +8,15 @@ const router = express.Router();
 // GET route for all the user's coffees
 router.get('/', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
+    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing, 
+    "users_coffees".shared_by_id,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "users_coffees".users_id = $1
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing
+    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
+    "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `;
 
@@ -31,6 +33,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.get('/searchResults', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
+    "users_coffees".shared_by_id,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
@@ -38,7 +41,8 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
     WHERE to_tsvector(CONCAT_WS(' ', "coffees".roaster, 
     "coffees".country, "coffees".producer, "coffees".blend_name))
     @@ to_tsquery($1) AND "users_coffees".users_id = $2
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing
+    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
+    "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `;
 
@@ -103,6 +107,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
 
     // Query #2 - add entry to "users_coffees" to pair coffee with current user
     const newCoffeeId = response.rows[0].id; // New ID is here
+
     const usersCoffeesSqlText = `
       INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
       VALUES ($1, $2, $3);
@@ -116,8 +121,8 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     // Query #3 - adding new flavors to coffees_flavors
     // Build SQL query for each new entry in flavors_array
     let sqlValues = req.body.flavors_array
-      .reduce((sqlValString, val, i) => {
-        return (sqlValString += `($1, $${i + 2}),`);
+      .reduce((valString, val, i) => {
+        return (valString += `($1, $${i + 2}),`);
       }, '')
       .slice(0, -1); // Takes off last comma
     const newFlavorsSqlText = `

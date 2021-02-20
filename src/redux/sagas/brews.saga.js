@@ -11,25 +11,22 @@ function* fetchBrews(action) {
 }
 
 function* deleteBrew(action) {
+  const { brewId, coffeeId } = action.payload;
   try {
-    yield axios.delete(`/api/brews/delete/${action.payload.brewId}`);
-    yield put({ type: 'FETCH_BREWS', payload: action.payload.coffeeId });
+    yield axios.delete(`/api/brews/delete/${brewId}`);
+    yield put({ type: 'FETCH_BREWS', payload: coffeeId });
   } catch (err) {
     console.log('error in deleteBrew', err);
   }
 }
 
 function* favBrew(action) {
-  const status =
-    action.payload.status === 'yes'
-      ? 'no'
-      : action.payload.status === 'no'
-      ? 'none'
-      : 'yes';
-      
+  const { brewId, coffeeId, change } = action.payload;
+  const status = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
+
   try {
-    yield axios.put(`api/brews/like/${action.payload.brewId}`, { status });
-    yield put({ type: 'FETCH_BREWS', payload: action.payload.coffeeId });
+    yield axios.put(`api/brews/like/${brewId}`, { status });
+    yield put({ type: 'FETCH_BREWS', payload: coffeeId });
   } catch (err) {
     console.log('error in favBrew', err);
   }

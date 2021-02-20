@@ -12,13 +12,15 @@ function Snackbars() {
       autoHideDuration={3000}
       onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
     >
-      <Alert
-        variant="filled"
-        severity={snackbars.severity}
-        onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
-      >
-        {snackbars.string}
-      </Alert>
+      {snackbars.string && (
+        <Alert
+          variant="filled"
+          severity={snackbars.severity}
+          onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
+        >
+          {snackbars.string}
+        </Alert>
+      )}
     </Snackbar>
   );
 }

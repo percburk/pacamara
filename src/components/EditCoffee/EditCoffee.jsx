@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
+  media: {
+    height: 200,
+    width: 200,
+    objectFit: 'cover',
+    marginLeft: theme.spacing(5),
+  },
 }));
 
 function EditCoffee() {
@@ -230,7 +236,12 @@ function EditCoffee() {
               value={oneCoffee.coffee_pic}
               onChange={handleEditInputs('coffee_pic')}
             />
-            <S3Uploader setPhoto={handleEditPic} />
+            <Box display="flex" paddingBottom={3} paddingTop={1}>
+              <S3Uploader setPhoto={handleEditPic} />
+              {oneCoffee.coffee_pic && (
+                <img className={classes.media} src={oneCoffee.coffee_pic} />
+              )}
+            </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {oneCoffee.flavors_array &&

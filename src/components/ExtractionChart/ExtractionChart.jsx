@@ -35,7 +35,7 @@ function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
 
   return (
     <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
-      <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.6] }}>
+      <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.5] }}>
         <Polygon data={extractionWindow} />
         {!switchChart ? (
           <VictoryScatter

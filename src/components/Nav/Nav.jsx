@@ -6,7 +6,9 @@ import {
   Box,
   Avatar,
   makeStyles,
+  withStyles,
   TextField,
+  Badge,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { Search } from '@material-ui/icons';
@@ -31,17 +33,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    backgroundColor: '#35baf6',
+    color: '#35baf6',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+}))(Badge);
+
 function Nav() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const { name, profile_pic } = useSelector((store) => store.user);
   const search = useSelector((store) => store.search);
+  const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [avatarAnchorEl, setAvatarAnchorEl] = useState(null);
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  useEffect(() => dispatch({ type: 'FETCH_SEARCH' }), []);
+  useEffect(() => {
+    dispatch({ type: 'FETCH_SEARCH' });
+  }, []);
 
   const handleAutoOpen = () => {
     if (searchText.length > 0) {
@@ -65,7 +88,7 @@ function Nav() {
         <Box display="flex" alignItems="center" flexGrow={1}>
           <Box paddingRight={3}>
             <img
-              src="/images/coffee-illustration.jpg"
+              src="/images/pacamara-coffee.png"
               className={classes.logo}
               onClick={() => history.push('/dashboard')}
               style={{ cursor: 'pointer' }}
@@ -110,6 +133,26 @@ function Nav() {
         )}
         {!name ? (
           <Typography variant="h6">Your Coffee Companion</Typography>
+        ) : sharedCoffees[0] ? (
+          <Box display="flex" alignItems="center">
+            <StyledBadge
+              overlap="circle"
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              variant="dot"
+            >
+              <Avatar
+                className={classes.medium}
+                src={profile_pic}
+                onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
+                style={{ cursor: 'pointer' }}
+              >
+                {name && name.charAt(0)}
+              </Avatar>
+            </StyledBadge>
+          </Box>
         ) : (
           <Box display="flex" alignItems="center">
             <Avatar
@@ -123,7 +166,10 @@ function Nav() {
           </Box>
         )}
       </Box>
-      <AvatarMenu anchorEl={avatarAnchorEl} setAnchorEl={setAvatarAnchorEl} />
+      <AvatarMenu
+        avatarAnchorEl={avatarAnchorEl}
+        setAvatarAnchorEl={setAvatarAnchorEl}
+      />
     </>
   );
 }
