@@ -8,7 +8,7 @@ import flavors from './flavors.reducer';
 import snackbars from './snackbars.reducer';
 import brews from './brews.reducer';
 import search from './search.reducer';
-import shareUserList from './share.user.list.reducer';
+import shareUserList from './shareUserList.reducer';
 import sharedCoffees from './sharedCoffees.reducer';
 import oneSharedCoffee from './oneSharedCoffee.reducer';
 

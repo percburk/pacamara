@@ -1,4 +1,4 @@
-const snackbarsReducer = (state = '', action) => {
+const snackbarsReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SNACKBARS_ADDED_COFFEE':
       return { string: 'New Coffee Added', open: true, severity: 'success' };
