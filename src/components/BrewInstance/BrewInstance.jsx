@@ -64,13 +64,7 @@ function BrewInstance({ coffeeId, instance, open }) {
   } = instance;
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
-
-  const methodUsed = methods.reduce((method, entry) => {
-    if (entry.id === methods_id) {
-      method = entry.name;
-    }
-    return method;
-  }, '');
+  const methodUsed = methods.find((item) => item.id === methods_id)?.name;
 
   const likeBrew = (event) => {
     event.stopPropagation();

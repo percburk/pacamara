@@ -28,14 +28,15 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
 // PUT route to toggle Favorite or Brewing status of a coffee
 router.put('/favBrew', rejectUnauthenticated, (req, res) => {
-  const change = req.body.change === 'fav' ? `"is_fav"` : `"brewing"`;
+  const { change, id } = req.body;
+
   const sqlText = `
-    UPDATE "users_coffees" SET ${change} = NOT ${change}
+    UPDATE "users_coffees" SET "${change}" = NOT "${change}"
     WHERE "users_id" = $1 AND "coffees_id" = $2;
   `;
 
   pool
-    .query(sqlText, [req.user.id, req.body.id])
+    .query(sqlText, [req.user.id, id])
     .then(() => res.sendStatus(201))
     .catch((err) => {
       console.log(`error in PUT with query ${sqlText}`, err);
@@ -80,8 +81,8 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
     // Query #3 - adding new flavors to coffees_flavors
     // Build SQL query for each new entry in flavors_array
     let sqlValues = req.body.flavors_array
-      .reduce((sqlValString, val, i) => {
-        return (sqlValString += `($1, $${i + 2}),`);
+      .reduce((valString, val, i) => {
+        return (valString += `($1, $${i + 2}),`);
       }, '')
       .slice(0, -1); // Takes off last comma
 

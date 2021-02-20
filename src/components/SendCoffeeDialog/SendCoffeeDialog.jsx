@@ -46,21 +46,17 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
   };
 
   const handleSendShare = () => {
-    const idMatch = shareUserList.reduce((foundId, item) => {
-      if (item.username === shareUsername) {
-        foundId = item.id;
-      }
-      return foundId;
-    }, '');
+    const match = shareUserList.find((item) => item.username === shareUsername);
     dispatch({
       type: 'SEND_SHARED_COFFEE',
       payload: {
-        recipient_id: idMatch,
+        recipient_id: match.id,
         coffees_id: id,
         coffee_name: coffeeName,
         message: shareMessage,
       },
     });
+    dispatch({ type: 'SNACKBARS_SENT_SHARED_COFFEE' });
     setShareUsername('');
     setShareMessage('');
     setOpen(false);

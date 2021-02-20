@@ -100,8 +100,8 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
     // Query #3, go through methods_array to build query to insert
     // into users_methods
     let sqlValues = req.body.methods_array
-      .reduce((sqlValString, val, i) => {
-        return (sqlValString += `($1, $${i + 2}),`);
+      .reduce((valString, val, i) => {
+        return (valString += `($1, $${i + 2}),`);
       }, '')
       .slice(0, -1); // Takes off last comma
 

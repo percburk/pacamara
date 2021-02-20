@@ -123,7 +123,7 @@ function CoffeeDetails() {
                   onClick={() =>
                     dispatch({
                       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                      payload: { id, change: 'fav' },
+                      payload: { id, change: 'is_fav' },
                     })
                   }
                 >

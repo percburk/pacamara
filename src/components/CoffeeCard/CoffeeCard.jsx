@@ -138,7 +138,7 @@ function CoffeeCard({ coffee }) {
             px={1}
           >
             <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-              <IconButton onClick={() => handleBrewOrFav('fav')}>
+              <IconButton onClick={() => handleBrewOrFav('is_fav')}>
                 {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
               </IconButton>
             </Tooltip>
