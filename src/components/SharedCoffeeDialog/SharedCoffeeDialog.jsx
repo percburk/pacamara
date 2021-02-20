@@ -33,7 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
+function SharedCoffeeDialog({
+  dialogOpen,
+  setDialogOpen,
+  openSharedCoffee,
+  setAvatarAnchorEl,
+  setSharedOpen,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const query = useQuery();
@@ -60,19 +66,28 @@ function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
       type: 'DELETE_SHARED_COFFEE',
       payload: { coffeeId: openSharedCoffee.id, query: searchQuery || '' },
     });
-    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
     dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
-    setDialogOpen(false);
+    resetAll();
   };
 
   const handleAdd = () => {
     dispatch({
-      type: 'ADD_SHARED_COFFEE',
+      type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',
       payload: { coffees_id: id, shared_by_id: openSharedCoffee.sender_id },
     });
-    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
+    dispatch({
+      type: 'DELETE_SHARED_COFFEE',
+      payload: { coffeeId: openSharedCoffee.id },
+    });
     dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
+    resetAll();
+  };
+
+  const resetAll = () => {
+    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
     setDialogOpen(false);
+    setAvatarAnchorEl(false);
+    setSharedOpen(false);
   };
 
   return (

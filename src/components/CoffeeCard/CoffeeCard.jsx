@@ -49,7 +49,7 @@ function CoffeeCard({ coffee }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
-  const shareUserList = useSelector((store) => store.shareUserList);
+  const sharingUserList = useSelector((store) => store.sharingUserList);
   const flavors = useSelector((store) => store.flavors);
   const {
     id,
@@ -68,7 +68,7 @@ function CoffeeCard({ coffee }) {
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
-  const sharedByUser = shareUserList.find((item) => (item.id = shared_by_id));
+  const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id);
 
   const handleBrewOrFav = (type) => {
     dispatch({
@@ -148,7 +148,7 @@ function CoffeeCard({ coffee }) {
           <Box px={1}>
             {sharedByUser && (
               <Typography variant="subtitle2" align="right">
-                From {sharedByUser.username}
+                From @{sharedByUser.username}
               </Typography>
             )}
           </Box>

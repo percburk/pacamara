@@ -9,7 +9,7 @@ function Snackbars() {
   return (
     <Snackbar
       open={snackbars.open}
-      autoHideDuration={4000}
+      autoHideDuration={3000}
       onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
     >
       {snackbars.string && (

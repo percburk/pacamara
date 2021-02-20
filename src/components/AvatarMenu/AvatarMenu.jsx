@@ -85,7 +85,11 @@ function AvatarMenu({ avatarAnchorEl, setAvatarAnchorEl }) {
         </ListItemIcon>
         <ListItemText primary="Shared Coffees" />
       </MenuItem>
-      <SharedCoffeeMenu sharedOpen={sharedOpen} />
+      <SharedCoffeeMenu
+        sharedOpen={sharedOpen}
+        setSharedOpen={setSharedOpen}
+        setAvatarAnchorEl={setAvatarAnchorEl}
+      />
       <MenuItem
         onClick={() => {
           history.push('/dashboard');

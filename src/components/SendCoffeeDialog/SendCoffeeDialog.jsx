@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const shareUserList = useSelector((store) => store.shareUserList);
+  const sharingUserList = useSelector((store) => store.sharingUserList);
   const [shareUsername, setShareUsername] = useState('');
   const [shareMessage, setShareMessage] = useState('');
   const [listOpen, setListOpen] = useState(false);
@@ -44,9 +44,9 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
     setShareUsername(newValue);
     newValue.length > 0 ? setListOpen(true) : setListOpen(false);
   };
+  const match = sharingUserList.find((item) => item.username === shareUsername);
 
   const handleSendShare = () => {
-    const match = shareUserList.find((item) => item.username === shareUsername);
     dispatch({
       type: 'SEND_SHARED_COFFEE',
       payload: {
@@ -80,7 +80,7 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
               fullWidth
               inputValue={shareUsername}
               onInputChange={handleShareUsername}
-              options={shareUserList}
+              options={sharingUserList}
               getOptionLabel={(item) => item.username}
               renderOption={(item) => (
                 <Box display="flex" alignItems="center">

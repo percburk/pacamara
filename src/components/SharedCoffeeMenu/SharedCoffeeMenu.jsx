@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SharedCoffeeMenu({ sharedOpen }) {
+function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
@@ -60,6 +60,8 @@ function SharedCoffeeMenu({ sharedOpen }) {
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         openSharedCoffee={openSharedCoffee}
+        setAvatarAnchorEl={setAvatarAnchorEl}
+        setSharedOpen={setSharedOpen}
       />
     </>
   );
