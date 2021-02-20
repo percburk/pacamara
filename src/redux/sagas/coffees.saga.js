@@ -27,8 +27,8 @@ function* setBrewingOrFav(action) {
 
 function* deleteCoffee(action) {
   try {
-    yield axios.delete(`/api/coffees/delete/${action.payload}`);
-    yield put({ type: 'FETCH_COFFEES' });
+    yield axios.delete(`/api/coffees/delete/${action.payload.id}`);
+    yield put({ type: 'FETCH_COFFEES', payload: action.payload.q || '' });
   } catch (err) {
     console.log('error in deleteCoffee', err);
   }

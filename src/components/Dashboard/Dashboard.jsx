@@ -33,6 +33,7 @@ function Dashboard() {
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
+
   const searchQuery = query.get('q');
 
   useEffect(() => {

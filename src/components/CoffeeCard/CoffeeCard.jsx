@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -50,6 +49,7 @@ function CoffeeCard({ coffee }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
+  const shareUserList = useSelector((store) => store.shareUserList);
   const flavors = useSelector((store) => store.flavors);
   const {
     id,
@@ -63,11 +63,12 @@ function CoffeeCard({ coffee }) {
     brewing,
     is_fav,
     flavors_array,
+    shared_by_id,
   } = coffee;
 
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
-
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
+  const sharedByUser = shareUserList.find((item) => (item.id = shared_by_id));
 
   const handleBrewOrFav = (type) => {
     dispatch({
@@ -143,6 +144,13 @@ function CoffeeCard({ coffee }) {
               </IconButton>
             </Tooltip>
             <Typography align="right">{formattedDate}</Typography>
+          </Box>
+          <Box px={1}>
+            {sharedByUser && (
+              <Typography variant="subtitle2" align="right">
+                From {sharedByUser.username}
+              </Typography>
+            )}
           </Box>
         </CardContent>
       </Card>

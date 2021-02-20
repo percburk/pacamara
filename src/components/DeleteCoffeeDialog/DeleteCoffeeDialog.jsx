@@ -8,16 +8,26 @@ import {
   Button,
   Box,
 } from '@material-ui/core';
+import useQuery from '../../hooks/useQuery';
 
 function DeleteCoffeeDialog({ open, setOpen, id }) {
   const history = useHistory();
   const dispatch = useDispatch();
+  const query = useQuery();
+
+  const searchQuery = query.get('q');
 
   const handleDelete = () => {
     setOpen(false);
-    dispatch({ type: 'DELETE_COFFEE', payload: id });
+    dispatch({
+      type: 'DELETE_COFFEE',
+      payload: { id, q: searchQuery || '' },
+    });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-    history.push('/dashboard');
+    dispatch({ type: 'FETCH_SHARED_COFFEES' });
+    searchQuery
+      ? history.push(`/dashboard/?q=${searchQuery}`)
+      : history.push('/dashboard');
   };
 
   return (

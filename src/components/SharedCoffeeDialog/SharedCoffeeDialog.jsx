@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
   Dialog,
@@ -12,6 +12,9 @@ import {
   Button,
   Grid,
 } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -32,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const query = useQuery();
   const {
     is_blend,
     country,
@@ -40,24 +45,43 @@ function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
     id,
     roaster,
     flavors_array,
+    region,
+    elevation,
+    cultivars,
+    processing,
   } = useSelector((store) => store.oneSharedCoffee);
   const flavors = useSelector((store) => store.flavors);
-  const { username, profile_pic, message } = openSharedCoffee;
+  const searchQuery = query.get('q');
+
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   const handleDelete = () => {
-    console.log('clicked handleDelete');
+    dispatch({
+      type: 'DELETE_SHARED_COFFEE',
+      payload: { coffeeId: openSharedCoffee.id, query: searchQuery || '' },
+    });
+    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
+    dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
+    setDialogOpen(false);
   };
 
   const handleAdd = () => {
-    console.log('clicked handleAdd');
+    dispatch({
+      type: 'ADD_SHARED_COFFEE',
+      payload: { coffees_id: id, shared_by_id: openSharedCoffee.sender_id },
+    });
+    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
+    dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
+    setDialogOpen(false);
   };
 
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <Box display="flex" alignItems="center">
-        <Avatar src={profile_pic} className={classes.avatar} />
-        <DialogTitle>{username} shared a coffee with you:</DialogTitle>
+        <Avatar src={openSharedCoffee.profile_pic} className={classes.avatar} />
+        <DialogTitle>
+          {openSharedCoffee.username} shared a coffee with you:
+        </DialogTitle>
       </Box>
       <DialogContent>
         <Grid container>
@@ -82,7 +106,13 @@ function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
                   }
                 })}
             </Box>
-            <Typography>{message}</Typography>
+            <Typography>Region: {region}</Typography>
+            <Typography>Cultivars: {cultivars}</Typography>
+            <Typography>Elevation: {elevation} meters</Typography>
+            <Typography>Processing: {processing}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography align="center">"{openSharedCoffee.message}"</Typography>
           </Grid>
         </Grid>
       </DialogContent>
@@ -93,7 +123,12 @@ function SharedCoffeeDialog({ dialogOpen, setDialogOpen, openSharedCoffee }) {
         <Button variant="contained" onClick={handleDelete}>
           Decline
         </Button>
-        <Button variant="contained" color="primary" onClick={handleAdd}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAdd}
+          endIcon={<Add />}
+        >
           Add
         </Button>
       </DialogActions>

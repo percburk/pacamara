@@ -9,12 +9,14 @@ const router = express.Router();
 router.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
+    "users_coffees".shared_by_id,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "coffees".id = $1
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing;
+    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
+    "users_coffees".shared_by_id;
   `;
 
   pool

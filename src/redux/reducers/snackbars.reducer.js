@@ -16,6 +16,14 @@ const snackbarsReducer = (state = {}, action) => {
       return { string: 'Brew Deleted', open: true, severity: 'info' };
     case 'SNACKBARS_SENT_SHARED_COFFEE':
       return { string: 'Coffee Sent', open: true, severity: 'success' };
+    case 'SNACKBARS_DECLINED_SHARED_COFFEE':
+      return { string: 'Shared Coffee Declined', open: true, severity: 'info' };
+    case 'SNACKBARS_ADDED_SHARED_COFFEE':
+      return {
+        string: 'Coffee Added to your Dashboard',
+        open: true,
+        severity: 'success',
+      };
     case 'CLEAR_SNACKBARS':
       return { string: '', open: false };
     default:

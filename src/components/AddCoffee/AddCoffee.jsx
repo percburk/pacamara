@@ -60,8 +60,8 @@ function AddCoffee() {
     roaster: '',
     roast_date: new Date(),
     is_blend: false,
-    blend_name: '',
     brewing: false,
+    blend_name: '',
     country: '',
     producer: '',
     region: '',
@@ -92,25 +92,31 @@ function AddCoffee() {
     event.target.name === 'is_blend'
       ? setNewCoffee({
           ...newCoffee,
-          is_blend: !newCoffee.is_blend,
+          is_blend: event.target.checked,
           country: '',
           blend_name: '',
         })
-      : setNewCoffee({ ...newCoffee, brewing: !newCoffee.brewing });
+      : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
   };
 
   const handleNew = () => {
     dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
     dispatch({
       type: 'ADD_COFFEE',
-      payload: { ...newCoffee, flavors_array: newFlavors, coffee_pic: newPic },
+      payload: {
+        ...newCoffee,
+        flavors_array: newFlavors,
+        coffee_pic: newPic,
+      },
     });
+    dispatch({ type: 'FETCH_SHARED_COFFEES' });
     clearInputs();
     history.push('/dashboard');
   };
 
   const handlePreparedInputs = () => {
     setNewCoffee({
+      ...newCoffee,
       roaster: 'Intelligentsia',
       country: 'Peru',
       producer: 'Rayos Del Sol',

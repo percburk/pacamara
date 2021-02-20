@@ -21,32 +21,6 @@ router.get('/users', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.post('/', rejectUnauthenticated, (req, res) => {
-  const { recipient_id, coffees_id, coffee_name, message } = req.body;
-
-  const sqlText = `
-    INSERT INTO "shared_coffees" ("sender_id", "username", "profile_pic", "recipient_id",
-    "coffees_id", "coffee_name", "message")
-    VALUES ($1, $2, $3, $4, $5, $6, $7);
-  `;
-
-  pool
-    .query(sqlText, [
-      req.user.id,
-      req.user.username,
-      req.user.profile_pic,
-      recipient_id,
-      coffees_id,
-      coffee_name,
-      message,
-    ])
-    .then(() => res.sendStatus(200))
-    .catch((err) => {
-      console.log(`error in POST with query ${sqlText}`, err);
-      res.sendStatus(500);
-    });
-});
-
 router.get('/', (req, res) => {
   const sqlText = `SELECT * FROM "shared_coffees" WHERE "recipient_id" = $1;`;
 
@@ -75,6 +49,60 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     .then((response) => res.send(response.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/', rejectUnauthenticated, (req, res) => {
+  const { recipient_id, coffees_id, coffee_name, message } = req.body;
+
+  const sqlText = `
+    INSERT INTO "shared_coffees" ("sender_id", "username", "profile_pic", 
+    "recipient_id", "coffees_id", "coffee_name", "message")
+    VALUES ($1, $2, $3, $4, $5, $6, $7);
+  `;
+
+  pool
+    .query(sqlText, [
+      req.user.id,
+      req.user.username,
+      req.user.profile_pic,
+      recipient_id,
+      coffees_id,
+      coffee_name,
+      message,
+    ])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log(`error in POST with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/add', (req, res) => {
+  const { coffees_id, shared_by_id } = req.body;
+  const sqlText = `
+    INSERT INTO "users_coffees" ("users_id", "coffees_id", "shared_by_id") 
+    VALUES ($1, $2, $3);
+  `;
+
+  pool
+    .query(sqlText, [req.user.id, coffees_id, shared_by_id])
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
+      console.log(`error in POST with query ${sqlText}`);
+      res.sendStatus(500);
+    });
+});
+
+router.delete('/delete/:id', (req, res) => {
+  const sqlText = `DELETE FROM "shared_coffees" WHERE "id" = $1;`;
+
+  pool
+    .query(sqlText, [req.params.id])
+    .then(() => res.sendStatus(204))
+    .catch((err) => {
+      console.log(`error in DELETE with query ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

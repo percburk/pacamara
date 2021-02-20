@@ -31,6 +31,8 @@ function DefaultMethodDialog({
     <Dialog
       open={defaultDialogOpen}
       onClose={() => setDefaultDialogOpen(false)}
+      fullWidth
+      maxWidth="md"
     >
       <DialogTitle align="center">Default Brew Method</DialogTitle>
       <DialogContent>

@@ -70,7 +70,7 @@ function BrewInstance({ coffeeId, instance, open }) {
     event.stopPropagation();
     dispatch({
       type: 'LIKE_BREW',
-      payload: { coffeeId, brewId: id, status: liked },
+      payload: { coffeeId, brewId: id, change: liked },
     });
   };
 
