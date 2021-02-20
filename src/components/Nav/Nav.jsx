@@ -88,7 +88,7 @@ function Nav() {
         <Box display="flex" alignItems="center" flexGrow={1}>
           <Box paddingRight={3}>
             <img
-              src="/images/coffee-illustration.jpg"
+              src="/images/pacamara-coffee.png"
               className={classes.logo}
               onClick={() => history.push('/dashboard')}
               style={{ cursor: 'pointer' }}
