@@ -136,7 +136,10 @@ function Dashboard() {
         })}
       </Box>
       <Snackbars />
-      <NewUserDialog open={newUserDialogOpen} setOpen={setNewUserDialogOpen} />
+      <NewUserDialog
+        newUserDialogOpen={newUserDialogOpen}
+        setNewUserDialogOpen={setNewUserDialogOpen}
+      />
     </>
   );
 }

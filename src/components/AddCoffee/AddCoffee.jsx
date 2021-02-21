@@ -106,7 +106,7 @@ function AddCoffee() {
       : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
   };
 
-  // Adds the new coffee to the database
+  // Adds the new coffee to the database with input validation
   const handleNew = () => {
     if (newCoffee.roaster && (newCoffee.country || newCoffee.blend_name)) {
       dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });

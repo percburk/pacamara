@@ -79,7 +79,6 @@ function UpdateProfile() {
   } = useSelector((store) => store.user);
   const [defaultDialogOpen, setDefaultDialogOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-
   const [newMethods, setNewMethods] = useState(methods_array || []);
   const [newTds, setNewTds] = useState([tds_min || 1.37, tds_max || 1.43]);
   const [newExt, setNewExt] = useState([ext_min || 20, ext_max || 23.5]);
@@ -133,6 +132,9 @@ function UpdateProfile() {
       history.push('/dashboard');
   };
 
+  // Handles whether the user continues to choose a default method, submits
+  // only one method which becomes their default, or get an error for not 
+  // entering the minimum amount of required info
   const handleDoneButton = () => {
     if (newUpdates.name && newMethods[0]) {
       if (newMethods.length === 1) {

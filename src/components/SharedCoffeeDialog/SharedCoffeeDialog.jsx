@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 function SharedCoffeeDialog({
   dialogOpen,
   setDialogOpen,
-  openSharedCoffee,
+  selectedCoffee,
   setAvatarAnchorEl,
   setSharedOpen,
 }) {
@@ -75,7 +75,7 @@ function SharedCoffeeDialog({
   const handleDelete = () => {
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: openSharedCoffee.id, query: searchQuery || '' },
+      payload: { coffeeId: selectedCoffee.id, query: searchQuery || '' },
     });
     dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
     resetAll();
@@ -85,11 +85,11 @@ function SharedCoffeeDialog({
   const handleAdd = () => {
     dispatch({
       type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',
-      payload: { coffees_id: id, shared_by_id: openSharedCoffee.sender_id },
+      payload: { coffees_id: id, shared_by_id: selectedCoffee.sender_id },
     });
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: openSharedCoffee.id },
+      payload: { coffeeId: selectedCoffee.id },
     });
     dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
     resetAll();
@@ -105,9 +105,9 @@ function SharedCoffeeDialog({
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <Box display="flex" alignItems="center">
-        <Avatar src={openSharedCoffee.profile_pic} className={classes.avatar} />
+        <Avatar src={selectedCoffee.profile_pic} className={classes.avatar} />
         <DialogTitle>
-          {openSharedCoffee.username} shared a coffee with you:
+          {selectedCoffee.username} shared a coffee with you:
         </DialogTitle>
       </Box>
       <DialogContent>
@@ -151,7 +151,7 @@ function SharedCoffeeDialog({
           <Grid item xs={12}>
             <Box my={2}>
               <Typography align="center">
-                "{openSharedCoffee.message}"
+                "{selectedCoffee.message}"
               </Typography>
             </Box>
           </Grid>

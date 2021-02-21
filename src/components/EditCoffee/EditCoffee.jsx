@@ -86,7 +86,7 @@ function EditCoffee() {
     dispatch({ type: 'EDIT_ROAST_DATE', payload: formattedDate });
   };
 
-  // Submits the edited coffee entry to the database
+  // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
     if (oneCoffee.roaster && (oneCoffee.country || oneCoffee.blend_name)) {
       dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });

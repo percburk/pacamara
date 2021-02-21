@@ -18,12 +18,12 @@ const useStyles = makeStyles((theme) => ({
 
 // NewUserDialog opens if the user is logging in for the first time
 // or has not created a profile yet, only redirects to UpdateProfile
-function NewUserDialog({ open, setOpen }) {
+function NewUserDialog({ newUserDialogOpen, setNewUserDialogOpen }) {
   const classes = useStyles();
   const history = useHistory();
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={newUserDialogOpen} onClose={() => setNewUserDialogOpen(false)}>
       <DialogTitle align="center">Welcome to Pacamara!</DialogTitle>
       <DialogContent align="center">
         Let's set you up with a new profile.

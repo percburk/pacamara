@@ -11,8 +11,12 @@ import {
   TextField,
   Avatar,
   makeStyles,
+  Collapse,
+  IconButton,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { Close } from '@material-ui/icons';
+import { Alert } from '@material-ui/lab';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -36,13 +40,20 @@ const useStyles = makeStyles((theme) => ({
 
 // SendCoffeeDialog opens when a user wants to share a coffee with another user
 // Contains a searchable list of users, as well as a field for a message
-function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
+function SendCoffeeDialog({
+  sendDialogOpen,
+  setSendDialogOpen,
+  id,
+  coffeeName,
+  pic,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const sharingUserList = useSelector((store) => store.sharingUserList);
   const [shareUsername, setShareUsername] = useState('');
   const [shareMessage, setShareMessage] = useState('');
   const [listOpen, setListOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
 
   // Toggles the Autocomplete menu opening only when the user is typing in the
   // TextField
@@ -64,24 +75,27 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
     const match = sharingUserList.find(
       (item) => item.username === shareUsername
     );
-
-    dispatch({
-      type: 'SEND_SHARED_COFFEE',
-      payload: {
-        recipient_id: match.id,
-        coffees_id: id,
-        coffee_name: coffeeName,
-        message: shareMessage,
-      },
-    });
-    dispatch({ type: 'SNACKBARS_SENT_SHARED_COFFEE' });
-    setShareUsername('');
-    setShareMessage('');
-    setOpen(false);
+    if (match) {
+      dispatch({
+        type: 'SEND_SHARED_COFFEE',
+        payload: {
+          recipient_id: match.id,
+          coffees_id: id,
+          coffee_name: coffeeName,
+          message: shareMessage,
+        },
+      });
+      dispatch({ type: 'SNACKBARS_SENT_SHARED_COFFEE' });
+      setShareUsername('');
+      setShareMessage('');
+      setSendDialogOpen(false);
+    } else {
+      setErrorOpen(true);
+    }
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={sendDialogOpen} onClose={() => setSendDialogOpen(false)}>
       <DialogTitle align="center">Share {coffeeName}</DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
@@ -133,7 +147,7 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => setOpen(false)}
+          onClick={() => setSendDialogOpen(false)}
           variant="contained"
           className={classes.button}
         >
@@ -148,6 +162,18 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
           Send
         </Button>
       </DialogActions>
+      <Collapse in={errorOpen}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton onClick={() => setErrorOpen(false)} size="small">
+              <Close fontSize="inherit"/>
+            </IconButton>
+          }
+        >
+          Please select a user.
+        </Alert>
+      </Collapse>
     </Dialog>
   );
 }

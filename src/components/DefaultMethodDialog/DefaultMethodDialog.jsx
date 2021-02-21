@@ -30,6 +30,7 @@ function DefaultMethodDialog({
   const methods = useSelector((store) => store.methods);
   const [collapseOpen, setCollapseOpen] = useState(false);
 
+  // Cancels default method choice and brings the user back to UpdateProfile
   const handleCancel = () => {
     setDefaultDialogOpen(false);
     setNewUpdates({
@@ -39,6 +40,7 @@ function DefaultMethodDialog({
     });
   };
 
+  // Submits the user's information without a default brew method
   const handleNoDefault = () => {
     setNewUpdates({
       ...newUpdates,

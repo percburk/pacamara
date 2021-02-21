@@ -67,13 +67,13 @@ function EditDeleteShareMenu({ id, coffeeName, pic }) {
         </MenuItem>
       </Menu>
       <DeleteCoffeeDialog
-        open={deleteDialogOpen}
-        setOpen={setDeleteDialogOpen}
+        deleteDialogOpen={deleteDialogOpen}
+        setDeleteDialogOpen={setDeleteDialogOpen}
         id={id}
       />
       <SendCoffeeDialog
-        open={sendDialogOpen}
-        setOpen={setSendDialogOpen}
+        sendDialogOpen={sendDialogOpen}
+        setSendDialogOpen={setSendDialogOpen}
         id={id}
         coffeeName={coffeeName}
         pic={pic}

@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Opens to make sure a user wants to delete a coffee from their dashboard
-function DeleteCoffeeDialog({ open, setOpen, id }) {
+function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ function DeleteCoffeeDialog({ open, setOpen, id }) {
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
-    setOpen(false);
+    setDeleteDialogOpen(false);
     dispatch({
       type: 'DELETE_COFFEE',
       payload: { id, q: searchQuery || '' },
@@ -45,7 +45,7 @@ function DeleteCoffeeDialog({ open, setOpen, id }) {
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
       <DialogTitle align="center">Delete Coffee</DialogTitle>
       <DialogContent align="center">
         <DialogContentText>
@@ -56,7 +56,7 @@ function DeleteCoffeeDialog({ open, setOpen, id }) {
         <DialogActions>
           <Button
             variant="contained"
-            onClick={() => setOpen(false)}
+            onClick={() => setDeleteDialogOpen(false)}
             className={classes.button}
           >
             No

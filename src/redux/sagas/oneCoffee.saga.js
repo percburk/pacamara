@@ -3,11 +3,9 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 function* fetchOneCoffee(action) {
   const id = action.payload;
-  console.log(id);
 
   try {
     const response = yield axios.get(`/api/oneCoffee/${id}`);
-    console.log(response.data[0]);
     yield put({ type: 'SET_ONE_COFFEE', payload: response.data[0] });
   } catch (err) {
     console.log('error in fetchOneCoffee', err);
@@ -24,8 +22,6 @@ function* editCoffee(action) {
 }
 
 function* setBrewingOrFavOneCoffee(action) {
-  console.log(action.payload);
-
   try {
     yield axios.put('/api/oneCoffee/favBrew', action.payload);
     yield put({ type: 'FETCH_ONE_COFFEE', payload: action.payload.id });
