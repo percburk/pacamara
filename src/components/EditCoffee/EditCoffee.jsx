@@ -20,6 +20,7 @@ import {
 } from '@material-ui/pickers';
 // Imported components
 import S3Uploader from '../S3Uploader/S3Uploader';
+import Snackbars from '../Snackbars/Snackbars';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -87,12 +88,16 @@ function EditCoffee() {
 
   // Submits the edited coffee entry to the database
   const handleSubmitEdit = () => {
-    dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
-    dispatch({
-      type: 'EDIT_COFFEE',
-      payload: oneCoffee,
-    });
-    history.goBack();
+    if (oneCoffee.roaster && (oneCoffee.country || oneCoffee.blend_name)) {
+      dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
+      dispatch({
+        type: 'EDIT_COFFEE',
+        payload: oneCoffee,
+      });
+      history.goBack();
+    } else {
+      dispatch({ type: 'SNACKBARS_ADD_EDIT_COFFEE_ERROR' });
+    }
   };
 
   return (
@@ -313,6 +318,7 @@ function EditCoffee() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbars />
     </>
   );
 }

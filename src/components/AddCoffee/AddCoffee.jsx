@@ -20,6 +20,7 @@ import {
 } from '@material-ui/pickers';
 // Imported components
 import S3Uploader from '../S3Uploader/S3Uploader';
+import Snackbars from '../Snackbars/Snackbars';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -107,18 +108,22 @@ function AddCoffee() {
 
   // Adds the new coffee to the database
   const handleNew = () => {
-    dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
-    dispatch({
-      type: 'ADD_COFFEE',
-      payload: {
-        ...newCoffee,
-        flavors_array: newFlavors,
-        coffee_pic: newPic,
-      },
-    });
-    dispatch({ type: 'FETCH_SHARED_COFFEES' });
-    clearInputs();
-    history.push('/dashboard');
+    if (newCoffee.roaster && (newCoffee.country || newCoffee.blend_name)) {
+      dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
+      dispatch({
+        type: 'ADD_COFFEE',
+        payload: {
+          ...newCoffee,
+          flavors_array: newFlavors,
+          coffee_pic: newPic,
+        },
+      });
+      dispatch({ type: 'FETCH_SHARED_COFFEES' });
+      clearInputs();
+      history.push('/dashboard');
+    } else {
+      dispatch({ type: 'SNACKBARS_ADD_EDIT_COFFEE_ERROR' });
+    }
   };
 
   // This is a cheat to autofill inputs for the solo project demonstration
@@ -354,6 +359,7 @@ function AddCoffee() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbars />
     </>
   );
 }

@@ -16,6 +16,10 @@ import { Autocomplete } from '@material-ui/lab';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    width: '11ch',
+  },
   avatar: {
     marginRight: theme.spacing(3),
   },
@@ -24,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
     objectFit: 'cover',
     margin: theme.spacing(3),
+  },
+  inputs: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -37,7 +44,7 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
   const [shareMessage, setShareMessage] = useState('');
   const [listOpen, setListOpen] = useState(false);
 
-  // Toggles the Autocomplete menu opening only when the user is typing in the 
+  // Toggles the Autocomplete menu opening only when the user is typing in the
   // TextField
   const handleListOpen = () => {
     if (shareUsername.length > 0) {
@@ -77,13 +84,14 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle align="center">Share {coffeeName}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
+        <DialogContentText align="center">
           Who would you like to share this coffee with?
         </DialogContentText>
         <Box display="flex" alignItems="center">
           {pic && <img src={pic} className={classes.image} />}
           <Box>
             <Autocomplete
+              className={classes.inputs}
               open={listOpen}
               onOpen={handleListOpen}
               onClose={() => setListOpen(false)}
@@ -111,11 +119,12 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
               )}
             />
             <TextField
+              className={classes.inputs}
               label="Message"
               variant="outlined"
               fullWidth
               multiline
-              rows={5}
+              rows={6}
               onChange={(event) => setShareMessage(event.target.value)}
               value={shareMessage}
             />
@@ -123,10 +132,19 @@ function SendCoffeeDialog({ open, setOpen, id, coffeeName, pic }) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)} variant="contained">
+        <Button
+          onClick={() => setOpen(false)}
+          variant="contained"
+          className={classes.button}
+        >
           Cancel
         </Button>
-        <Button onClick={handleSendShare} variant="contained" color="primary">
+        <Button
+          onClick={handleSendShare}
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
           Send
         </Button>
       </DialogActions>

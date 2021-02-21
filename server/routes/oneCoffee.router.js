@@ -14,13 +14,13 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
-    WHERE "coffees".id = $1
+    WHERE "coffees".id = $1 AND "users_coffees".users_id = $2
     GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
     "users_coffees".shared_by_id;
   `;
 
   pool
-    .query(sqlText, [req.params.id])
+    .query(sqlText, [req.params.id, req.user.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);

@@ -4,15 +4,25 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogContentText,
   DialogActions,
   Button,
   Box,
+  makeStyles,
 } from '@material-ui/core';
 // Custom hooks
 import useQuery from '../../hooks/useQuery';
 
+// Component styling classes
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
 // Opens to make sure a user wants to delete a coffee from their dashboard
 function DeleteCoffeeDialog({ open, setOpen, id }) {
+  const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const query = useQuery();
@@ -38,14 +48,24 @@ function DeleteCoffeeDialog({ open, setOpen, id }) {
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle align="center">Delete Coffee</DialogTitle>
       <DialogContent align="center">
-        Are you sure you want to delete this coffee?
+        <DialogContentText>
+          Are you sure you want to delete this coffee?
+        </DialogContentText>
       </DialogContent>
       <Box display="flex" justifyContent="center">
         <DialogActions>
-          <Button variant="contained" onClick={() => setOpen(false)}>
+          <Button
+            variant="contained"
+            onClick={() => setOpen(false)}
+            className={classes.button}
+          >
             No
           </Button>
-          <Button variant="contained" onClick={handleDelete}>
+          <Button
+            variant="contained"
+            onClick={handleDelete}
+            className={classes.button}
+          >
             Yes
           </Button>
         </DialogActions>

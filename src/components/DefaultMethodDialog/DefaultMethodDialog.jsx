@@ -10,7 +10,7 @@ import {
   Button,
   Collapse,
   IconButton,
-  Chip
+  Chip,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
@@ -30,12 +30,28 @@ function DefaultMethodDialog({
   const methods = useSelector((store) => store.methods);
   const [collapseOpen, setCollapseOpen] = useState(false);
 
+  const handleCancel = () => {
+    setDefaultDialogOpen(false);
+    setNewUpdates({
+      ...newUpdates,
+      methods_default_id: '',
+      methods_default_lrr: '',
+    });
+  };
+
+  const handleNoDefault = () => {
+    setNewUpdates({
+      ...newUpdates,
+      methods_default_id: '',
+      methods_default_lrr: '',
+    });
+    handleSubmit();
+  };
+
   return (
     <Dialog
       open={defaultDialogOpen}
       onClose={() => setDefaultDialogOpen(false)}
-      fullWidth
-      maxWidth="md"
     >
       <DialogTitle align="center">Default Brew Method</DialogTitle>
       <DialogContent>
@@ -68,23 +84,11 @@ function DefaultMethodDialog({
         </Box>
       </DialogContent>
       <Box display="flex" justifyContent="center">
-        <DialogActions>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setDefaultDialogOpen(false);
-              setNewUpdates({ ...newUpdates, methods_default_id: '' });
-            }}
-          >
+        <DialogActions className={classes.root}>
+          <Button variant="contained" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setNewUpdates({ ...newUpdates, methods_default_id: '' });
-              handleSubmit();
-            }}
-          >
+          <Button variant="contained" onClick={handleNoDefault}>
             No Thanks
           </Button>
           <Button

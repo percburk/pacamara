@@ -31,14 +31,11 @@ import ExtractionChart from '../ExtractionChart/ExtractionChart';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 280,
-    margin: theme.spacing(2),
-  },
   media: {
-    height: 250,
-    width: 250,
+    height: 350,
+    width: 350,
     objectFit: 'cover',
+    margin: theme.spacing(2),
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -51,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// CoffeeDetails shows all coffee information, all the brew instances, and 
+// CoffeeDetails shows all coffee information, all the brew instances, and
 // the extraction chart that displays TDS and EXT for all brews
 function CoffeeDetails() {
   const classes = useStyles();
@@ -93,23 +90,40 @@ function CoffeeDetails() {
   const daysOffRoast = DateTime.local()
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
-    
+
+  const handleBrewOrFav = (type) => {
+    dispatch({
+      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
+      payload: { id: Number(id), change: type },
+    });
+  };
+
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (
     <>
       <Box p={4}>
-        <Grid container spacing={6}>
-          <Grid item xs={4}>
-            <Box display="flex">
-              <Paper elevation={4}>
-                <Box p={2}>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <Box display="flex" justifyContent="center">
+              <Box>
+                <Paper elevation={4}>
                   <img src={coffee_pic} className={classes.media} />
-                </Box>
-              </Paper>
+                </Paper>
+                <Button
+                  className={classes.backButton}
+                  startIcon={<ArrowBackIos />}
+                  onClick={() => {
+                    dispatch({ type: 'CLEAR_SNACKBARS' });
+                    history.goBack();
+                  }}
+                >
+                  Go Back
+                </Button>
+              </Box>
             </Box>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Box display="flex" alignItems="center">
               <Typography variant="h4">{nameToDisplay}</Typography>
               <Box paddingLeft={1}>
@@ -120,17 +134,10 @@ function CoffeeDetails() {
                 />
               </Box>
             </Box>
-            <Typography>By {roaster}</Typography>
-            <Box display="flex" my={2} alignItems="center">
+            <Typography variant="subtitle1">By {roaster}</Typography>
+            <Box display="flex" alignItems="center" my={1}>
               <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-                <IconButton
-                  onClick={() =>
-                    dispatch({
-                      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                      payload: { id, change: 'is_fav' },
-                    })
-                  }
-                >
+                <IconButton onClick={() => handleBrewOrFav('is_fav')}>
                   {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
                 </IconButton>
               </Tooltip>
@@ -139,14 +146,7 @@ function CoffeeDetails() {
                 enterDelay={900}
                 leaveDelay={100}
               >
-                <IconButton
-                  onClick={() =>
-                    dispatch({
-                      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-                      payload: { id, change: 'brewing' },
-                    })
-                  }
-                >
+                <IconButton onClick={() => handleBrewOrFav('brewing')}>
                   {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (
@@ -170,44 +170,39 @@ function CoffeeDetails() {
             </Box>
             {!is_blend && (
               <Box marginBottom={2}>
-                <Typography>Region: {region}</Typography>
-                <Typography>Elevation: {elevation} meters</Typography>
-                <Typography>Cultivars: {cultivars}</Typography>
-                <Typography>Processing: {processing}</Typography>
+                <Typography variant="subtitle1">Region: {region}</Typography>
+                <Typography variant="subtitle1">
+                  Elevation: {elevation} meters
+                </Typography>
+                <Typography variant="subtitle1">
+                  Cultivars: {cultivars}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Processing: {processing}
+                </Typography>
               </Box>
             )}
-            <Box>
-              <Typography>
+            <Box marginBottom={2}>
+              <Typography variant="subtitle1">
                 Roasted by {roaster} on {formattedDate}
               </Typography>
-              <Typography>
+              <Typography variant="subtitle1">
                 {daysOffRoast} day{daysOffRoast == 1 ? '' : 's'} off roast
               </Typography>
             </Box>
+            <Typography variant="subtitle1">Tasting notes: {notes}</Typography>
           </Grid>
-          <Grid item xs={4}>
-            <ExtractionChart
-              switchChart={switchChart}
-              setSwitchChart={setSwitchChart}
-              oneBrew={oneBrew}
-              setOneBrew={setOneBrew}
-            />
+          <Grid item xs={5}>
+            <Box>
+              <ExtractionChart
+                switchChart={switchChart}
+                setSwitchChart={setSwitchChart}
+                oneBrew={oneBrew}
+                setOneBrew={setOneBrew}
+              />
+            </Box>
           </Grid>
-          <Grid item xs={4}>
-            <Typography>Tasting notes: {notes}</Typography>
-            <Button
-              variant="outlined"
-              className={classes.backButton}
-              startIcon={<ArrowBackIos />}
-              onClick={() => {
-                dispatch({ type: 'CLEAR_SNACKBARS' });
-                history.goBack();
-              }}
-            >
-              Go Back
-            </Button>
-          </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Box display="flex" flexDirection="row-reverse" paddingBottom={2}>
               <Button
                 variant="contained"

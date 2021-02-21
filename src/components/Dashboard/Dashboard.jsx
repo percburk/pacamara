@@ -119,7 +119,7 @@ function Dashboard() {
         <Box className={classes.sortFilter}>
           {searchQuery && (
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               onClick={() => history.push('/dashboard')}
             >

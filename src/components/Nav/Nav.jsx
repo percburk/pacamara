@@ -105,7 +105,7 @@ function Nav() {
             />
           </Box>
           <Typography
-            variant="h4"
+            variant="h3"
             onClick={() => history.push('/dashboard')}
             style={{ cursor: 'pointer' }}
           >
