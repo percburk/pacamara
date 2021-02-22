@@ -66,11 +66,6 @@ function Nav() {
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  // Gets pared down list of coffees the user can search through
-  useEffect(() => {
-    dispatch({ type: 'FETCH_SEARCH' });
-  }, []);
-
   // Keeps the Autocomplete list closed until the user starts typing in the 
   // search TextField
   const handleAutoOpen = () => {
@@ -79,7 +74,7 @@ function Nav() {
     }
   };
 
-  // Sets the search string in local state, toggles the Autocomplete list
+  // Sets the search string in state, toggles the Autocomplete list showing
   const handleSearch = (event, newValue) => {
     setSearchText(newValue);
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);

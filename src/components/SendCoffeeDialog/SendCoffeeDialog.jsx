@@ -74,12 +74,13 @@ function SendCoffeeDialog({
     // Finds the matching ID number of the user that is being sent to
     const match = sharingUserList.find(
       (item) => item.username === shareUsername
-    );
+    )?.id;
+
     if (match) {
       dispatch({
         type: 'SEND_SHARED_COFFEE',
         payload: {
-          recipient_id: match.id,
+          recipient_id: match,
           coffees_id: id,
           coffee_name: coffeeName,
           message: shareMessage,
@@ -94,9 +95,17 @@ function SendCoffeeDialog({
     }
   };
 
+  const autoFill = () => {
+    setShareMessage(
+      'This just might rival the coffee at the Double R Diner.'
+    );
+  };
+
   return (
     <Dialog open={sendDialogOpen} onClose={() => setSendDialogOpen(false)}>
-      <DialogTitle align="center">Share {coffeeName}</DialogTitle>
+      <DialogTitle align="center" onClick={autoFill}>
+        Share {coffeeName}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Who would you like to share this coffee with?
@@ -167,7 +176,7 @@ function SendCoffeeDialog({
           severity="error"
           action={
             <IconButton onClick={() => setErrorOpen(false)} size="small">
-              <Close fontSize="inherit"/>
+              <Close fontSize="inherit" />
             </IconButton>
           }
         >

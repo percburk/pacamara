@@ -47,10 +47,16 @@ function Dashboard() {
   const searchQuery = query.get('q');
 
   useEffect(() => {
+    // Fetches list of users that is searchable when sending a shared coffee
     dispatch({ type: 'FETCH_SHARING_USER_LIST' });
+    // Fetches list of all coffees, or those that match a searchQuery
     dispatch({ type: 'FETCH_COFFEES', payload: searchQuery || '' });
+    // Fetch list of flavor palette entries from the database
     dispatch({ type: 'FETCH_FLAVORS' });
+    // Checks if the user has any shared coffees to show on AvatarMenu
     dispatch({ type: 'FETCH_SHARED_COFFEES' });
+    // Fetches pared down list of coffees that can be searched in bar on Nav
+    dispatch({ type: 'FETCH_SEARCH' });
   }, []);
 
   // This long chain of sort() and filter() puts coffees through any sort or

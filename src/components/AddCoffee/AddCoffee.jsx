@@ -127,7 +127,7 @@ function AddCoffee() {
   };
 
   // This is a cheat to autofill inputs for the solo project demonstration
-  const handlePreparedInputs = () => {
+  const autoFill = () => {
     setNewCoffee({
       ...newCoffee,
       roaster: 'Intelligentsia',
@@ -170,11 +170,7 @@ function AddCoffee() {
   return (
     <>
       <Box p={3}>
-        <Typography
-          variant="h4"
-          className={classes.header}
-          onClick={handlePreparedInputs}
-        >
+        <Typography variant="h4" className={classes.header} onClick={autoFill}>
           Add a New Coffee
         </Typography>
         <Grid container spacing={4}>
