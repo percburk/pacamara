@@ -29,8 +29,9 @@ import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 280,
-    margin: theme.spacing(2),
+    width: 260,
+    height: 420,
+    margin: theme.spacing(1.75),
   },
   media: {
     height: 160,
@@ -73,7 +74,7 @@ function CoffeeCard({ coffee }) {
 
   // coffeeName is deciding what to render as the title of CoffeeCard
   // If blend, it will show the blend name.
-  // If single origin, country and producer. This happens throughout.
+  // If single origin, country and producer. This happens throughout the app
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
 
   // If this coffee has been shared by another user, their username is shown
@@ -147,21 +148,21 @@ function CoffeeCard({ coffee }) {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            px={1}
+            p={1}
           >
             <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
               <IconButton onClick={() => handleBrewOrFav('is_fav')}>
                 {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
               </IconButton>
             </Tooltip>
-            <Typography align="right">{formattedDate}</Typography>
-          </Box>
-          <Box px={1}>
-            {sharedByUser && (
-              <Typography variant="subtitle2" align="right">
-                From @{sharedByUser}
-              </Typography>
-            )}
+            <Box>
+              <Typography align="right">{formattedDate}</Typography>
+              {sharedByUser && (
+                <Typography variant="subtitle2" align="right">
+                  From @{sharedByUser}
+                </Typography>
+              )}
+            </Box>
           </Box>
         </CardContent>
       </Card>

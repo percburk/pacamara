@@ -20,6 +20,7 @@ import {
 } from '@material-ui/pickers';
 // Imported components
 import S3Uploader from '../S3Uploader/S3Uploader';
+import Snackbars from '../Snackbars/Snackbars';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -105,24 +106,28 @@ function AddCoffee() {
       : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
   };
 
-  // Adds the new coffee to the database
+  // Adds the new coffee to the database with input validation
   const handleNew = () => {
-    dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
-    dispatch({
-      type: 'ADD_COFFEE',
-      payload: {
-        ...newCoffee,
-        flavors_array: newFlavors,
-        coffee_pic: newPic,
-      },
-    });
-    dispatch({ type: 'FETCH_SHARED_COFFEES' });
-    clearInputs();
-    history.push('/dashboard');
+    if (newCoffee.roaster && (newCoffee.country || newCoffee.blend_name)) {
+      dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
+      dispatch({
+        type: 'ADD_COFFEE',
+        payload: {
+          ...newCoffee,
+          flavors_array: newFlavors,
+          coffee_pic: newPic,
+        },
+      });
+      dispatch({ type: 'FETCH_SHARED_COFFEES' });
+      clearInputs();
+      history.push('/dashboard');
+    } else {
+      dispatch({ type: 'SNACKBARS_ADD_EDIT_COFFEE_ERROR' });
+    }
   };
 
   // This is a cheat to autofill inputs for the solo project demonstration
-  const handlePreparedInputs = () => {
+  const autoFill = () => {
     setNewCoffee({
       ...newCoffee,
       roaster: 'Intelligentsia',
@@ -165,11 +170,7 @@ function AddCoffee() {
   return (
     <>
       <Box p={3}>
-        <Typography
-          variant="h4"
-          className={classes.header}
-          onClick={handlePreparedInputs}
-        >
+        <Typography variant="h4" className={classes.header} onClick={autoFill}>
           Add a New Coffee
         </Typography>
         <Grid container spacing={4}>
@@ -354,6 +355,7 @@ function AddCoffee() {
           </Grid>
         </Grid>
       </Box>
+      <Snackbars />
     </>
   );
 }

@@ -10,7 +10,7 @@ import {
   Button,
   Collapse,
   IconButton,
-  Chip
+  Chip,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
@@ -30,12 +30,39 @@ function DefaultMethodDialog({
   const methods = useSelector((store) => store.methods);
   const [collapseOpen, setCollapseOpen] = useState(false);
 
+  // Cancels default method choice and brings the user back to UpdateProfile
+  const handleCancel = () => {
+    setDefaultDialogOpen(false);
+    setNewUpdates({
+      ...newUpdates,
+      methods_default_id: '',
+      methods_default_lrr: '',
+    });
+  };
+
+  // Submits the user's information without a default brew method
+  const handleNoDefault = () => {
+    setNewUpdates({
+      ...newUpdates,
+      methods_default_id: '',
+      methods_default_lrr: '',
+    });
+    handleSubmit();
+  };
+
+  // Adds the selected default brew method to local state object
+  const setDefault = () => {
+    setNewUpdates({
+      ...newUpdates,
+      methods_default_id: item.id,
+      methods_default_lrr: item.lrr,
+    });
+  };
+
   return (
     <Dialog
       open={defaultDialogOpen}
       onClose={() => setDefaultDialogOpen(false)}
-      fullWidth
-      maxWidth="md"
     >
       <DialogTitle align="center">Default Brew Method</DialogTitle>
       <DialogContent>
@@ -54,13 +81,7 @@ function DefaultMethodDialog({
                       ? 'primary'
                       : 'default'
                   }
-                  onClick={() => {
-                    setNewUpdates({
-                      ...newUpdates,
-                      methods_default_id: item.id,
-                      methods_default_lrr: item.lrr,
-                    });
-                  }}
+                  onClick={setDefault}
                 />
               );
             }
@@ -68,23 +89,11 @@ function DefaultMethodDialog({
         </Box>
       </DialogContent>
       <Box display="flex" justifyContent="center">
-        <DialogActions>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setDefaultDialogOpen(false);
-              setNewUpdates({ ...newUpdates, methods_default_id: '' });
-            }}
-          >
+        <DialogActions className={classes.root}>
+          <Button variant="contained" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setNewUpdates({ ...newUpdates, methods_default_id: '' });
-              handleSubmit();
-            }}
-          >
+          <Button variant="contained" onClick={handleNoDefault}>
             No Thanks
           </Button>
           <Button

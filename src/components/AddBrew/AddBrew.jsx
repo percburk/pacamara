@@ -15,7 +15,8 @@ import {
   Collapse,
   IconButton,
 } from '@material-ui/core';
-import { Add, ExpandLess, ExpandMore } from '@material-ui/icons';
+import { Add, ExpandLess, ExpandMore, Close } from '@material-ui/icons';
+import { Alert } from '@material-ui/lab';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -29,22 +30,24 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
     alignSelf: 'center',
   },
-  formText: {
+  ratioExtBox: {
     flexBasis: '15%',
     flexShrink: 0,
-    alignSelf: 'center',
+  },
+  formText: {
+    fontWeight: 700,
   },
   advanced: {
-    flexBasis: '15%',
+    flexBasis: '20%',
     flexShrink: 0,
   },
   chips: {
-    width: '20ch',
+    width: '18ch',
     alignSelf: 'center',
   },
 }));
 
-// AddBrew is a Dialog that has all the inputs needed to create a 
+// AddBrew is a Dialog that has all the inputs needed to create a
 // new brew instance, opens in CoffeeDetails
 function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const classes = useStyles();
@@ -52,6 +55,7 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   const user = useSelector((store) => store.user);
   const methods = useSelector((store) => store.methods);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
   const [newBrew, setNewBrew] = useState({
     coffees_id: '',
     methods_id: user.methods_default_id,
@@ -93,19 +97,23 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
 
   // Sends the new brew instance to the database
   const handleSubmit = () => {
-    dispatch({
-      type: 'ADD_BREW',
-      payload: {
-        ...newBrew,
-        coffees_id: id,
-        ratio: ratioCalc,
-        ext: extCalc,
-      },
-    });
-    dispatch({ type: 'SNACKBARS_ADDED_BREW' });
-    setAddBrew(false);
-    setAdvancedOpen(false);
-    clearInputs();
+    if (extCalc && ratioCalc) {
+      dispatch({
+        type: 'ADD_BREW',
+        payload: {
+          ...newBrew,
+          coffees_id: id,
+          ratio: ratioCalc,
+          ext: extCalc,
+        },
+      });
+      dispatch({ type: 'SNACKBARS_ADDED_BREW' });
+      setAddBrew(false);
+      setAdvancedOpen(false);
+      clearInputs();
+    } else {
+      setErrorOpen(true);
+    }
   };
 
   const clearInputs = () => {
@@ -126,12 +134,7 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
   };
 
   return (
-    <Dialog
-      open={addBrew}
-      onClose={() => setAddBrew(false)}
-      fullWidth
-      maxWidth="md"
-    >
+    <Dialog open={addBrew} onClose={() => setAddBrew(false)}>
       <DialogTitle>Add a Brew of {nameToDisplay}</DialogTitle>
       <DialogContent>
         <Box display="flex" className={classes.root}>
@@ -155,14 +158,6 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             onChange={handleNewBrew('coffee_dose')}
             value={newBrew.coffee_dose}
           />
-          <Typography className={classes.formText}>
-            Ratio: {ratioCalc}
-          </Typography>
-          <Typography className={classes.formText}>
-            Extraction: {extCalc}%
-          </Typography>
-        </Box>
-        <Box display="flex" className={classes.root} alignItems="center">
           <TextField
             className={classes.formInputs}
             label="Grind"
@@ -175,6 +170,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             value={newBrew.grind}
             onChange={handleNewBrew('grind')}
           />
+        </Box>
+        <Box display="flex" className={classes.root}>
           <TextField
             className={classes.formInputs}
             label="Time"
@@ -192,6 +189,17 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             value={newBrew.tds}
             onChange={handleNewBrew('tds')}
           />
+          <Box className={classes.ratioExtBox}>
+            <Typography>{ratioCalc && 'Ratio:'}</Typography>
+            <Typography className={classes.formText}>{ratioCalc}</Typography>
+          </Box>
+          <Box className={classes.ratioExtBox}>
+            <Typography>{extCalc && 'Extraction:'}</Typography>
+            <Typography className={classes.formText}>
+              {extCalc}
+              {extCalc && '%'}
+            </Typography>
+          </Box>
         </Box>
         <Box className={classes.root}>
           <Typography>Brew Method Used:</Typography>
@@ -282,6 +290,18 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
           ADD
         </Button>
       </DialogActions>
+      <Collapse in={errorOpen}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton size="small" onClick={() => setErrorOpen(false)}>
+              <Close fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          Please fill out all fields.
+        </Alert>
+      </Collapse>
     </Dialog>
   );
 }

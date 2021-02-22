@@ -15,6 +15,7 @@ import {
 import S3Uploader from '../S3Uploader/S3Uploader';
 import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog';
 import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog';
+import Snackbars from '../Snackbars/Snackbars';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +79,6 @@ function UpdateProfile() {
   } = useSelector((store) => store.user);
   const [defaultDialogOpen, setDefaultDialogOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-
   const [newMethods, setNewMethods] = useState(methods_array || []);
   const [newTds, setNewTds] = useState([tds_min || 1.37, tds_max || 1.43]);
   const [newExt, setNewExt] = useState([ext_min || 20, ext_max || 23.5]);
@@ -113,23 +113,43 @@ function UpdateProfile() {
   // Submits any profile updates. This is a PUT route for both a new and
   // existing user, since the username and password is made first
   const handleSubmit = () => {
-    dispatch({
-      type: 'UPDATE_PROFILE',
-      payload: {
-        ...newUpdates,
-        tds_min: newTds[0],
-        tds_max: newTds[1],
-        ext_min: newExt[0],
-        ext_max: newExt[1],
-        methods_array: newMethods,
-        profile_pic: newPic,
-      },
-    });
-    id === 'new'
-      ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
-      : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
-    clearInputs();
-    history.push('/dashboard');
+      dispatch({
+        type: 'UPDATE_PROFILE',
+        payload: {
+          ...newUpdates,
+          tds_min: newTds[0],
+          tds_max: newTds[1],
+          ext_min: newExt[0],
+          ext_max: newExt[1],
+          methods_array: newMethods,
+          profile_pic: newPic,
+        },
+      });
+      id === 'new'
+        ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
+        : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
+      clearInputs();
+      history.push('/dashboard');
+  };
+
+  // Handles whether the user continues to choose a default method, submits
+  // only one method which becomes their default, or get an error for not 
+  // entering the minimum amount of required info
+  const handleDoneButton = () => {
+    if (newUpdates.name && newMethods[0]) {
+      if (newMethods.length === 1) {
+        setNewUpdates({
+          ...newUpdates,
+          methods_default_id: newMethods[0].id,
+          methods_default_lrr: newMethods[0].lrr,
+        });
+        handleSubmit();
+      } else {
+        setDefaultDialogOpen(true);
+      }
+    } else {
+      dispatch({ type: 'SNACKBARS_PROFILE_ERROR' });
+    }
   };
 
   // Cancels any updates and sends the user to the previous page
@@ -264,11 +284,7 @@ function UpdateProfile() {
                 variant="contained"
                 className={classes.buttons}
                 color="primary"
-                onClick={() =>
-                  newMethods.length === 1
-                    ? handleSubmit(newMethods[0])
-                    : setDefaultDialogOpen(true)
-                }
+                onClick={handleDoneButton}
               >
                 {name ? 'Submit' : 'Create'}
               </Button>
@@ -289,6 +305,7 @@ function UpdateProfile() {
         cancelDialogOpen={cancelDialogOpen}
         setCancelDialogOpen={setCancelDialogOpen}
       />
+      <Snackbars />
     </>
   );
 }

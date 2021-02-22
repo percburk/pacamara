@@ -23,16 +23,29 @@ const MuiTheme = createMuiTheme({
       fontWeight: 200,
       letterSpacing: '0.1em',
     },
+    h3: {
+      fontFamily: 'Mulish',
+      fontSize: '1.55rem',
+      fontWeight: 200,
+      letterSpacing: '0.15em',
+    },
     h4: {
       fontFamily: 'Mulish',
-      fontSize: '1.5em',
-      fontWeight: 200,
-      letterSpacing: '0.1em',
+      fontSize: '1.6rem',
+      fontWeight: 400,
+      letterSpacing: '0.05em',
     },
     h5: {
       fontFamily: 'Mulish',
+      fontSize: '1.4rem',
       fontWeight: 400,
-      letterSpacing: '0.1em',
+      letterSpacing: '0.05em',
+    },
+    subtitle1: {
+      fontFamily: 'Lato',
+      fontWeight: 300,
+      fontSize: '1.1rem',
+      lineHeight: 1.5
     },
   },
 });

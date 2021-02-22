@@ -27,7 +27,7 @@ function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
   const dispatch = useDispatch();
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [openSharedCoffee, setOpenSharedCoffee] = useState({});
+  const [selectedCoffee, setSelectedCoffee] = useState({});
 
   // Opens the selected coffee in SharedCoffeeDialog and fetches its details
   const handleClickCoffee = (id) => {
@@ -45,7 +45,7 @@ function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
               key={item.id}
               onClick={() => {
                 handleClickCoffee(item.coffees_id);
-                setOpenSharedCoffee(item);
+                setSelectedCoffee(item);
               }}
             >
               <Avatar className={classes.small} src={item.profile_pic}>
@@ -63,7 +63,7 @@ function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
       <SharedCoffeeDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
-        openSharedCoffee={openSharedCoffee}
+        selectedCoffee={selectedCoffee}
         setAvatarAnchorEl={setAvatarAnchorEl}
         setSharedOpen={setSharedOpen}
       />

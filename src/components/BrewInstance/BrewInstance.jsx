@@ -117,7 +117,7 @@ function BrewInstance({ coffeeId, instance, open }) {
           Coffee: {coffee_dose}g
         </Typography>
         <Typography className={classes.summary}>
-          Grind Setting: {grind}
+          Grind: #{grind}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>

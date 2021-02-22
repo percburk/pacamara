@@ -11,6 +11,7 @@ import {
   makeStyles,
   Button,
   Grid,
+  Paper,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 // Custom hooks
@@ -19,28 +20,31 @@ import useQuery from '../../hooks/useQuery';
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    marginLeft: theme.spacing(3),
   },
   image: {
-    height: 150,
-    width: 150,
+    height: 200,
+    width: 200,
     objectFit: 'cover',
-    margin: theme.spacing(3),
+    margin: theme.spacing(2),
   },
   chip: {
     margin: theme.spacing(0.5),
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
 
-// SharedCoffeeDialog opens when the user clicks on an item from 
-// SharedCoffeeMenu, displays some brief information about the coffee as well as
-// the personal message the sender wrote
+// SharedCoffeeDialog opens when the user clicks on an item from
+// SharedCoffeeMenu, displays some brief information about the coffee as
+// well as the personal message the sender wrote
 function SharedCoffeeDialog({
   dialogOpen,
   setDialogOpen,
-  openSharedCoffee,
+  selectedCoffee,
   setAvatarAnchorEl,
   setSharedOpen,
 }) {
@@ -49,6 +53,7 @@ function SharedCoffeeDialog({
   const query = useQuery();
   const {
     is_blend,
+    blend_name,
     country,
     producer,
     coffee_pic,
@@ -70,7 +75,7 @@ function SharedCoffeeDialog({
   const handleDelete = () => {
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: openSharedCoffee.id, query: searchQuery || '' },
+      payload: { coffeeId: selectedCoffee.id, query: searchQuery || '' },
     });
     dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
     resetAll();
@@ -80,11 +85,11 @@ function SharedCoffeeDialog({
   const handleAdd = () => {
     dispatch({
       type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',
-      payload: { coffees_id: id, shared_by_id: openSharedCoffee.sender_id },
+      payload: { coffees_id: id, shared_by_id: selectedCoffee.sender_id },
     });
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: openSharedCoffee.id },
+      payload: { coffeeId: selectedCoffee.id },
     });
     dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
     resetAll();
@@ -100,20 +105,26 @@ function SharedCoffeeDialog({
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <Box display="flex" alignItems="center">
-        <Avatar src={openSharedCoffee.profile_pic} className={classes.avatar} />
+        <Avatar src={selectedCoffee.profile_pic} className={classes.avatar} />
         <DialogTitle>
-          {openSharedCoffee.username} shared a coffee with you:
+          {selectedCoffee.username} shared a coffee with you:
         </DialogTitle>
       </Box>
       <DialogContent>
         <Grid container>
           <Grid item xs={6}>
-            {coffee_pic && <img src={coffee_pic} className={classes.image} />}
+            <Box display="flex">
+              <Paper elevation={4}>
+                {coffee_pic && (
+                  <img src={coffee_pic} className={classes.image} />
+                )}
+              </Paper>
+            </Box>
           </Grid>
           <Grid item xs={6}>
-            <Typography>{nameToDisplay}</Typography>
+            <Typography variant="h6">{nameToDisplay}</Typography>
             <Typography>By {roaster}</Typography>
-            <Box display="flex">
+            <Box display="flex" my={1.5}>
               {flavors_array &&
                 flavors.map((item) => {
                   if (flavors_array.indexOf(item.id) > -1) {
@@ -128,24 +139,41 @@ function SharedCoffeeDialog({
                   }
                 })}
             </Box>
-            <Typography>Region: {region}</Typography>
-            <Typography>Cultivars: {cultivars}</Typography>
-            <Typography>Elevation: {elevation} meters</Typography>
-            <Typography>Processing: {processing}</Typography>
+            {!is_blend && (
+              <Box my={1}>
+                <Typography>Region: {region}</Typography>
+                <Typography>Cultivars: {cultivars}</Typography>
+                <Typography>Elevation: {elevation} meters</Typography>
+                <Typography>Processing: {processing}</Typography>
+              </Box>
+            )}
           </Grid>
           <Grid item xs={12}>
-            <Typography align="center">"{openSharedCoffee.message}"</Typography>
+            <Box my={2}>
+              <Typography align="center">
+                "{selectedCoffee.message}"
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => setDialogOpen(false)}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => setDialogOpen(false)}
+        >
           Cancel
         </Button>
-        <Button variant="contained" onClick={handleDelete}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={handleDelete}
+        >
           Decline
         </Button>
         <Button
+          className={classes.button}
           variant="contained"
           color="primary"
           onClick={handleAdd}

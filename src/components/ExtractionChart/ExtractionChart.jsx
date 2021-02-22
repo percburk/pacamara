@@ -50,7 +50,7 @@ function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
                 flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
               />
             }
-            size={7}
+            size={6}
             data={brews.map((instance) => {
               return {
                 x: Number(instance.ext),
@@ -71,7 +71,9 @@ function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
         ) : (
           <VictoryScatter
             style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
-            labelComponent={<VictoryLabel />}
+            labelComponent={
+              <VictoryLabel dy={-20} style={[{ fontSize: 16 }]} />
+            }
             size={10}
             data={[
               {
