@@ -1,5 +1,4 @@
 .background {
-  background: url('../../../public/images/pacamara-background2.jpg') no-repeat
-    center center fixed;
+  background: url('./pacamara-background2.jpg') no-repeat center center fixed;
   background-size: cover;
 }
