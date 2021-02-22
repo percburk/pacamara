@@ -95,17 +95,9 @@ function SendCoffeeDialog({
     }
   };
 
-  const autoFill = () => {
-    setShareMessage(
-      'This just might rival the coffee at the Double R Diner.'
-    );
-  };
-
   return (
     <Dialog open={sendDialogOpen} onClose={() => setSendDialogOpen(false)}>
-      <DialogTitle align="center" onClick={autoFill}>
-        Share {coffeeName}
-      </DialogTitle>
+      <DialogTitle align="center">Share {coffeeName}</DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Who would you like to share this coffee with?

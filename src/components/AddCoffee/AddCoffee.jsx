@@ -126,21 +126,6 @@ function AddCoffee() {
     }
   };
 
-  // This is a cheat to autofill inputs for the solo project demonstration
-  const autoFill = () => {
-    setNewCoffee({
-      ...newCoffee,
-      roaster: 'Intelligentsia',
-      country: 'Peru',
-      producer: 'Rayos Del Sol',
-      region: 'Alto Ihuamaca',
-      elevation: '1500-1800',
-      cultivars: 'Bourbon, Caturra, Pache',
-      processing: 'Washed',
-      notes: `Nuanced coffee from Peru with notes of Honeycrisp apple, demerara, and dark chocolate.`,
-    });
-  };
-
   // Clears all local state data and sends user back to their dashboard
   const handleCancel = () => {
     dispatch({ type: 'CLEAR_SNACKBARS' });
@@ -170,7 +155,7 @@ function AddCoffee() {
   return (
     <>
       <Box p={3}>
-        <Typography variant="h4" className={classes.header} onClick={autoFill}>
+        <Typography variant="h4" className={classes.header}>
           Add a New Coffee
         </Typography>
         <Grid container spacing={4}>
