@@ -22,7 +22,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
       res.sendStatus(500);
@@ -52,7 +52,7 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [parsedQuery, req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
       res.sendStatus(500);
@@ -70,7 +70,7 @@ router.get('/search', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
       res.sendStatus(500);
@@ -82,6 +82,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
 
   try {
+    await connection.query('BEGIN;');
     // Query #1 - Create new coffee entry in "coffees", return ID for flavors
     const newCoffeeSqlText = `
       INSERT INTO "coffees" ("roaster", "roast_date", "is_blend", "blend_name", 
@@ -90,7 +91,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id";
     `;
-    const response = await pool.query(newCoffeeSqlText, [
+    const result = await connection.query(newCoffeeSqlText, [
       req.body.roaster,
       req.body.roast_date,
       req.body.is_blend,
@@ -106,13 +107,13 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     ]);
 
     // Query #2 - add entry to "users_coffees" to pair coffee with current user
-    const newCoffeeId = response.rows[0].id; // New ID is here
+    const newCoffeeId = result.rows[0].id; // New ID is here
 
     const usersCoffeesSqlText = `
       INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
       VALUES ($1, $2, $3);
     `;
-    await pool.query(usersCoffeesSqlText, [
+    await connection.query(usersCoffeesSqlText, [
       newCoffeeId,
       req.user.id,
       req.body.brewing,

@@ -21,7 +21,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.params.id, req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
       res.sendStatus(500);
@@ -51,6 +51,7 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
 
   try {
+    await connection.query('BEGIN;');
     // Query #1 - Updating the data on 'coffees' table
     const updateCoffeeSqlText = `
       UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,

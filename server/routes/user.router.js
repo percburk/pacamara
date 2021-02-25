@@ -22,7 +22,7 @@ router.get('/methods', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`error in GET with query ${sqlText}`, err);
       res.sendStatus(500);
@@ -68,7 +68,7 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
   try {
     await connection.query('BEGIN;');
-
+    
     // Query #1 - sending all non-array user data
     const updateSqlText = `
       UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
