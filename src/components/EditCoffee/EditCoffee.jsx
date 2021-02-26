@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
@@ -61,6 +61,8 @@ function EditCoffee() {
   let { id } = useParams();
   const flavors = useSelector((store) => store.flavors);
   const oneCoffee = useSelector((store) => store.oneCoffee);
+  const [roasterError, setRoasterError] = useState(false);
+  const [blendCountryError, setBlendCountryError] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_FLAVORS' });
@@ -88,7 +90,11 @@ function EditCoffee() {
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
-    if (oneCoffee.roaster && (oneCoffee.country || oneCoffee.blend_name)) {
+    if (
+      oneCoffee.roaster &&
+      (oneCoffee.country || oneCoffee.blend_name) &&
+      oneCoffee.flavors_array[0]
+    ) {
       dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
       dispatch({
         type: 'EDIT_COFFEE',
@@ -96,7 +102,13 @@ function EditCoffee() {
       });
       history.goBack();
     } else {
-      dispatch({ type: 'SNACKBARS_ADD_EDIT_COFFEE_ERROR' });
+      oneCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
+      oneCoffee.country || oneCoffee.blend_name
+        ? setBlendCountryError(false)
+        : setBlendCountryError(true);
+      if (!oneCoffee.flavors_array[0]) {
+        dispatch({type: 'SNACKBARS_FLAVORS_ERROR'});
+      }
     }
   };
 
@@ -109,6 +121,9 @@ function EditCoffee() {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <TextField
+              required
+              error={roasterError}
+              helperText={roasterError && 'Please enter a roaster.'}
               label="Roaster"
               variant="outlined"
               className={classes.textInputs}
@@ -153,6 +168,14 @@ function EditCoffee() {
               </Grid>
             </Box>
             <TextField
+              required
+              error={blendCountryError}
+              helperText={
+                blendCountryError &&
+                (oneCoffee.is_blend
+                  ? 'Please enter the blend name.'
+                  : 'Please enter the country of origin.')
+              }
               label={oneCoffee.is_blend ? 'Blend Name' : 'Country'}
               variant="outlined"
               className={classes.textInputs}

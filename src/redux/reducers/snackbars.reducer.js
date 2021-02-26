@@ -6,9 +6,15 @@ const snackbarsReducer = (state = {}, action) => {
       return { string: 'New Profile Created', open: true, severity: 'success' };
     case 'SNACKBARS_UPDATED_PROFILE':
       return { string: 'Profile Updated', open: true, severity: 'info' };
-    case 'SNACKBARS_PROFILE_ERROR':
+    case 'SNACKBARS_METHODS_ERROR':
       return {
-        string: 'Please complete required fields: Name and Methods',
+        string: 'Please select at least one brew method',
+        open: true,
+        severity: 'error',
+      };
+    case 'SNACKBARS_FLAVORS_ERROR':
+      return {
+        string: 'Please select at least one flavor',
         open: true,
         severity: 'error',
       };
@@ -18,13 +24,6 @@ const snackbarsReducer = (state = {}, action) => {
       return { string: 'Coffee Updated', open: true, severity: 'info' };
     case 'SNACKBARS_DELETED_COFFEE':
       return { string: 'Coffee Deleted', open: true, severity: 'info' };
-    case 'SNACKBARS_ADD_EDIT_COFFEE_ERROR':
-      return {
-        string:
-          'Please fill out required fields: Roaster and Country/Blend Name',
-        open: true,
-        severity: 'error',
-      };
     case 'SNACKBARS_ADDED_BREW':
       return { string: 'New Brew Added', open: true, severity: 'success' };
     case 'SNACKBARS_DELETED_BREW':
