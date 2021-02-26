@@ -57,6 +57,8 @@ function AddCoffee() {
   const dispatch = useDispatch();
   const history = useHistory();
   const flavors = useSelector((store) => store.flavors);
+  const [roasterError, setRoasterError] = useState(false);
+  const [blendCountryError, setBlendCountryError] = useState(false);
   const [newFlavors, setNewFlavors] = useState([]);
   const [newPic, setNewPic] = useState('');
   const [newCoffee, setNewCoffee] = useState({
@@ -108,7 +110,11 @@ function AddCoffee() {
 
   // Adds the new coffee to the database with input validation
   const handleNew = () => {
-    if (newCoffee.roaster && (newCoffee.country || newCoffee.blend_name)) {
+    if (
+      newCoffee.roaster &&
+      (newCoffee.country || newCoffee.blend_name) &&
+      newFlavors[0]
+    ) {
       dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
       dispatch({
         type: 'ADD_COFFEE',
@@ -122,7 +128,13 @@ function AddCoffee() {
       clearInputs();
       history.push('/dashboard');
     } else {
-      dispatch({ type: 'SNACKBARS_ADD_EDIT_COFFEE_ERROR' });
+      newCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
+      newCoffee.country || newCoffee.blend_name
+        ? setBlendCountryError(false)
+        : setBlendCountryError(true);
+      if (!newFlavors[0]) {
+        dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
+      }
     }
   };
 
@@ -161,6 +173,9 @@ function AddCoffee() {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <TextField
+              required
+              error={roasterError}
+              helperText={roasterError && 'Please enter a roaster.'}
               label="Roaster"
               variant="outlined"
               className={classes.textInputs}
@@ -194,6 +209,14 @@ function AddCoffee() {
               </Grid>
             </Box>
             <TextField
+              required
+              error={blendCountryError}
+              helperText={
+                blendCountryError &&
+                (newCoffee.is_blend
+                  ? 'Please enter the blend name.'
+                  : 'Please enter the country of origin.')
+              }
               label={newCoffee.is_blend ? 'Blend Name' : 'Country'}
               variant="outlined"
               className={classes.textInputs}

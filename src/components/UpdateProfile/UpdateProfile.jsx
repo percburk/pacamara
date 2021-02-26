@@ -79,6 +79,7 @@ function UpdateProfile() {
   } = useSelector((store) => store.user);
   const [defaultDialogOpen, setDefaultDialogOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [inputError, setInputError] = useState(false);
   const [newMethods, setNewMethods] = useState(methods_array || []);
   const [newTds, setNewTds] = useState([tds_min || 1.37, tds_max || 1.43]);
   const [newExt, setNewExt] = useState([ext_min || 20, ext_max || 23.5]);
@@ -113,27 +114,27 @@ function UpdateProfile() {
   // Submits any profile updates. This is a PUT route for both a new and
   // existing user, since the username and password is made first
   const handleSubmit = () => {
-      dispatch({
-        type: 'UPDATE_PROFILE',
-        payload: {
-          ...newUpdates,
-          tds_min: newTds[0],
-          tds_max: newTds[1],
-          ext_min: newExt[0],
-          ext_max: newExt[1],
-          methods_array: newMethods,
-          profile_pic: newPic,
-        },
-      });
-      id === 'new'
-        ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
-        : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
-      clearInputs();
-      history.push('/dashboard');
+    dispatch({
+      type: 'UPDATE_PROFILE',
+      payload: {
+        ...newUpdates,
+        tds_min: newTds[0],
+        tds_max: newTds[1],
+        ext_min: newExt[0],
+        ext_max: newExt[1],
+        methods_array: newMethods,
+        profile_pic: newPic,
+      },
+    });
+    id === 'new'
+      ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
+      : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
+    clearInputs();
+    history.push('/dashboard');
   };
 
   // Handles whether the user continues to choose a default method, submits
-  // only one method which becomes their default, or get an error for not 
+  // only one method which becomes their default, or get an error for not
   // entering the minimum amount of required info
   const handleDoneButton = () => {
     if (newUpdates.name && newMethods[0]) {
@@ -148,7 +149,10 @@ function UpdateProfile() {
         setDefaultDialogOpen(true);
       }
     } else {
-      dispatch({ type: 'SNACKBARS_PROFILE_ERROR' });
+      !newUpdates.name ? setInputError(true) : setInputError(false);
+      if (!newMethods[0]) {
+        dispatch({ type: 'SNACKBARS_METHODS_ERROR' });
+      }
     }
   };
 
@@ -188,6 +192,9 @@ function UpdateProfile() {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <TextField
+              required
+              error={inputError}
+              helperText={inputError && 'Please enter your name.'}
               label="Name"
               variant="outlined"
               fullWidth
@@ -215,7 +222,7 @@ function UpdateProfile() {
               value={newUpdates.kettle}
             />
             <Typography className={classes.header}>
-              Select Brew Methods:
+              Select Brew Methods*:
             </Typography>
             <Box className={classes.root}>
               {methods.map((item) => {

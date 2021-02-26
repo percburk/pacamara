@@ -12,7 +12,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     "users_coffees".shared_by_id,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
-    JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+    RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "users_coffees".users_id = $1
     GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
@@ -36,7 +36,7 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
     "users_coffees".shared_by_id,
     ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
-    JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+    RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
     WHERE to_tsvector(CONCAT_WS(' ', "coffees".roaster, 
     "coffees".country, "coffees".producer, "coffees".blend_name))
