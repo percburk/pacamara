@@ -94,7 +94,7 @@ function CoffeeDetails() {
   const handleBrewOrFav = (type) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-      payload: { id: Number(id), change: type },
+      payload: { id, change: type },
     });
   };
 
@@ -154,19 +154,18 @@ function CoffeeDetails() {
                   )}
                 </IconButton>
               </Tooltip>
-              {flavors_array &&
-                flavors.map((item) => {
-                  if (flavors_array.indexOf(item.id) > -1) {
-                    return (
-                      <Chip
-                        key={item.id}
-                        className={classes.chip}
-                        variant="outlined"
-                        label={item.name}
-                      />
-                    );
-                  }
-                })}
+              {flavors.map((item) => {
+                if (flavors_array.indexOf(item.id) > -1) {
+                  return (
+                    <Chip
+                      key={item.id}
+                      className={classes.chip}
+                      variant="outlined"
+                      label={item.name}
+                    />
+                  );
+                }
+              })}
             </Box>
             {!is_blend && (
               <Box marginBottom={2}>
@@ -213,7 +212,7 @@ function CoffeeDetails() {
                 Add a Brew
               </Button>
             </Box>
-            {brews && !switchChart ? (
+            {!switchChart ? (
               brews.map((instance) => (
                 <BrewInstance
                   key={instance.id}

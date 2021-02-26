@@ -130,19 +130,18 @@ function CoffeeCard({ coffee }) {
         />
         <CardContent>
           <Box display="flex" justifyContent="center">
-            {flavors_array[0] &&
-              flavors.map((item) => {
-                if (flavors_array.indexOf(item.id) > -1) {
-                  return (
-                    <Chip
-                      key={item.id}
-                      className={classes.chip}
-                      variant="outlined"
-                      label={item.name}
-                    />
-                  );
-                }
-              })}
+            {flavors.map((item) => {
+              if (flavors_array.indexOf(item.id) > -1) {
+                return (
+                  <Chip
+                    key={item.id}
+                    className={classes.chip}
+                    variant="outlined"
+                    label={item.name}
+                  />
+                );
+              }
+            })}
           </Box>
           <Box
             display="flex"

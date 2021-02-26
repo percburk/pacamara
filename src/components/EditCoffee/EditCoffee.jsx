@@ -58,7 +58,7 @@ function EditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  let { id } = useParams();
+  const { id } = useParams();
   const flavors = useSelector((store) => store.flavors);
   const oneCoffee = useSelector((store) => store.oneCoffee);
   const [roasterError, setRoasterError] = useState(false);
@@ -107,7 +107,7 @@ function EditCoffee() {
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
       if (!oneCoffee.flavors_array[0]) {
-        dispatch({type: 'SNACKBARS_FLAVORS_ERROR'});
+        dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
       }
     }
   };
@@ -280,27 +280,26 @@ function EditCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {oneCoffee.flavors_array &&
-                flavors.map((item) => {
-                  return (
-                    <Chip
-                      className={classes.chips}
-                      key={item.id}
-                      label={item.name}
-                      color={
-                        oneCoffee.flavors_array.indexOf(item.id) === -1
-                          ? 'default'
-                          : 'primary'
-                      }
-                      onClick={() =>
-                        dispatch({
-                          type: 'EDIT_FLAVORS_ARRAY',
-                          payload: item.id,
-                        })
-                      }
-                    />
-                  );
-                })}
+              {flavors.map((item) => {
+                return (
+                  <Chip
+                    className={classes.chips}
+                    key={item.id}
+                    label={item.name}
+                    color={
+                      oneCoffee.flavors_array.indexOf(item.id) === -1
+                        ? 'default'
+                        : 'primary'
+                    }
+                    onClick={() =>
+                      dispatch({
+                        type: 'EDIT_FLAVORS_ARRAY',
+                        payload: item.id,
+                      })
+                    }
+                  />
+                );
+              })}
             </Box>
             <TextField
               label="Tasting Notes"

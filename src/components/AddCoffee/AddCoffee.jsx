@@ -311,22 +311,19 @@ function AddCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {newFlavors &&
-                flavors.map((item) => {
-                  return (
-                    <Chip
-                      className={classes.chips}
-                      key={item.id}
-                      label={item.name}
-                      color={
-                        newFlavors.indexOf(item.id) === -1
-                          ? 'default'
-                          : 'primary'
-                      }
-                      onClick={() => handleNewFlavor(item.id)}
-                    />
-                  );
-                })}
+              {flavors.map((item) => {
+                return (
+                  <Chip
+                    className={classes.chips}
+                    key={item.id}
+                    label={item.name}
+                    color={
+                      newFlavors.indexOf(item.id) === -1 ? 'default' : 'primary'
+                    }
+                    onClick={() => handleNewFlavor(item.id)}
+                  />
+                );
+              })}
             </Box>
             <TextField
               label="Tasting Notes"
