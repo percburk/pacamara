@@ -14,8 +14,6 @@ import {
   Paper,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-// Custom hooks
-import useQuery from '../../hooks/useQuery';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
