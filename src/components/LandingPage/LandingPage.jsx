@@ -21,12 +21,7 @@ import LoginForm from '../LoginForm/LoginForm';
 // TabPanel component to create swiping effect with SwipeableViews
 function TabPanel({ children, tab, index }) {
   return (
-    <div
-      role="tabpanel"
-      hidden={tab !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-    >
+    <div role="tabpanel" hidden={tab !== index} id={`simple-tabpanel-${index}`}>
       {tab === index && <>{children}</>}
     </div>
   );
@@ -51,11 +46,8 @@ const useStyles = makeStyles((theme) => ({
 function LandingPage() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const landingErrors = useSelector((store) => store.landingErrors);
+  const { string, open } = useSelector((store) => store.landingErrors);
   const [tab, setTab] = useState(0);
-  const errorOpen = useSelector((store) => store.landingErrors.open);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   return (
     <>
@@ -83,25 +75,13 @@ function LandingPage() {
               onChangeIndex={(event, value) => setTab(value)}
             >
               <TabPanel tab={tab} index={0}>
-                <LoginForm
-                  classes={classes}
-                  username={username}
-                  setUsername={setUsername}
-                  password={password}
-                  setPassword={setPassword}
-                />
+                <LoginForm classes={classes} />
               </TabPanel>
               <TabPanel tab={tab} index={1}>
-                <RegisterForm
-                  classes={classes}
-                  username={username}
-                  setUsername={setUsername}
-                  password={password}
-                  setPassword={setPassword}
-                />
+                <RegisterForm classes={classes} />
               </TabPanel>
             </SwipeableViews>
-            <Collapse in={errorOpen}>
+            <Collapse in={open}>
               <Alert
                 severity="error"
                 action={
@@ -113,7 +93,7 @@ function LandingPage() {
                   </IconButton>
                 }
               >
-                {landingErrors.string}
+                {string}
               </Alert>
             </Collapse>
           </Paper>

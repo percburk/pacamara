@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
 // LoginForm is displayed on LandingPage, handles login process
-function LoginForm({ classes, username, setUsername, password, setPassword }) {
+function LoginForm({ classes }) {
   const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   // Sends login info to server to begin login process
   const handleLogin = (event) => {
@@ -13,6 +16,7 @@ function LoginForm({ classes, username, setUsername, password, setPassword }) {
         type: 'LOGIN',
         payload: { username, password },
       });
+      dispatch({ type: 'CLEAR_LANDING_ERROR' });
     } else {
       dispatch({ type: 'LOGIN_INPUT_ERROR' });
     }

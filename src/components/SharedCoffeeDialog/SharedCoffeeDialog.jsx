@@ -50,14 +50,13 @@ function SharedCoffeeDialog({
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const query = useQuery();
   const {
     is_blend,
     blend_name,
     country,
     producer,
     coffee_pic,
-    id,
+    id: coffeeId,
     roaster,
     flavors_array,
     region,
@@ -65,8 +64,15 @@ function SharedCoffeeDialog({
     cultivars,
     processing,
   } = useSelector((store) => store.oneSharedCoffee);
+  const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const flavors = useSelector((store) => store.flavors);
-  const searchQuery = query.get('q');
+  const {
+    id: selectedId,
+    username,
+    message,
+    sender_id,
+    profile_pic,
+  } = selectedCoffee;
 
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
@@ -75,40 +81,40 @@ function SharedCoffeeDialog({
   const handleDelete = () => {
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: selectedCoffee.id, query: searchQuery || '' },
+      payload: selectedId,
     });
     dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
-    resetAll();
+    handleReset();
   };
 
   // Handles adding this shared coffee to the user's dashboard
   const handleAdd = () => {
     dispatch({
       type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',
-      payload: { coffees_id: id, shared_by_id: selectedCoffee.sender_id },
+      payload: { coffees_id: coffeeId, shared_by_id: sender_id },
     });
     dispatch({
       type: 'DELETE_SHARED_COFFEE',
-      payload: { coffeeId: selectedCoffee.id },
+      payload: selectedId,
     });
     dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
-    resetAll();
+    handleReset();
   };
 
-  const resetAll = () => {
-    dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
+  const handleReset = () => {
     setDialogOpen(false);
-    setAvatarAnchorEl(false);
-    setSharedOpen(false);
+    if (!sharedCoffees) {
+      dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
+      setAvatarAnchorEl(false);
+      setSharedOpen(false);
+    }
   };
 
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <Box display="flex" alignItems="center">
-        <Avatar src={selectedCoffee.profile_pic} className={classes.avatar} />
-        <DialogTitle>
-          {selectedCoffee.username} shared a coffee with you:
-        </DialogTitle>
+        <Avatar src={profile_pic} className={classes.avatar} />
+        <DialogTitle>{username} shared a coffee with you:</DialogTitle>
       </Box>
       <DialogContent>
         <Grid container>
@@ -150,9 +156,7 @@ function SharedCoffeeDialog({
           </Grid>
           <Grid item xs={12}>
             <Box my={2}>
-              <Typography align="center">
-                "{selectedCoffee.message}"
-              </Typography>
+              <Typography align="center">"{message}"</Typography>
             </Box>
           </Grid>
         </Grid>

@@ -131,7 +131,7 @@ function CoffeeCard({ coffee }) {
         <CardContent>
           <Box display="flex" justifyContent="center">
             {flavors.map((item) => {
-              if (flavors_array.indexOf(item.id) > -1) {
+              if (flavors_array?.indexOf(item.id) > -1) {
                 return (
                   <Chip
                     key={item.id}

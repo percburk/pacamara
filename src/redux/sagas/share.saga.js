@@ -54,11 +54,9 @@ function* addSharedCoffeeToDashboard(action) {
 
 // Deletes the entry if a user declines to add a shared coffee
 function* deleteSharedCoffee(action) {
-  const { coffeeId, query } = action.payload;
   try {
-    axios.delete(`/api/share/delete/${coffeeId}`);
+    axios.delete(`/api/share/delete/${action.payload}`);
     yield put({ type: 'FETCH_SHARED_COFFEES' });
-    yield put({ type: 'FETCH_COFFEES', payload: query || '' });
   } catch (err) {
     console.log('error in deleteSharedCoffee', err);
   }

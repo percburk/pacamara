@@ -17,7 +17,10 @@ const landingErrors = (state = '', action) => {
       return { string: 'Please choose a username and password.', open: true };
     case 'REGISTRATION_FAILED':
       return {
-        string: `That didn't work. The username might already be taken. Please try again.`,
+        string: `
+          That didn't work. The username might already be taken. 
+          Please try again.
+        `,
         open: true,
       };
     default:

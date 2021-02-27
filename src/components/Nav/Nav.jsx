@@ -57,16 +57,14 @@ const StyledBadge = withStyles((theme) => ({
 // Nav is the top navigation bar which stays constant throughout the app
 function Nav() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
-  const { name, profile_pic } = useSelector((store) => store.user);
+  const { name } = useSelector((store) => store.user);
   const search = useSelector((store) => store.search);
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
-  const [avatarAnchorEl, setAvatarAnchorEl] = useState(null);
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  // Keeps the Autocomplete list closed until the user starts typing in the 
+  // Keeps the Autocomplete list closed until the user starts typing in the
   // search TextField
   const handleAutoOpen = () => {
     if (searchText.length > 0) {
@@ -80,7 +78,7 @@ function Nav() {
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
 
-  // Sends search query, Dashboard picks up the URL change in UseEffect and 
+  // Sends search query, Dashboard picks up the URL change in UseEffect and
   // sends a new GET with 'FETCH_COFFEES' to display search results
   const handleHistorySearch = (event) => {
     event.preventDefault();
@@ -138,43 +136,25 @@ function Nav() {
         )}
         {!name ? (
           <Typography variant="h6">Your Coffee Companion</Typography>
-        ) : sharedCoffees[0] ? (
-          <Box display="flex" alignItems="center">
-            <StyledBadge
-              overlap="circle"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              variant="dot"
-            >
-              <Avatar
-                className={classes.medium}
-                src={profile_pic}
-                onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
-                style={{ cursor: 'pointer' }}
-              >
-                {name && name.charAt(0)}
-              </Avatar>
-            </StyledBadge>
-          </Box>
         ) : (
           <Box display="flex" alignItems="center">
-            <Avatar
-              className={classes.medium}
-              src={profile_pic}
-              onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
-              style={{ cursor: 'pointer' }}
-            >
-              {name && name.charAt(0)}
-            </Avatar>
+            {sharedCoffees[0] ? (
+              <StyledBadge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                variant="dot"
+              >
+                <AvatarMenu />
+              </StyledBadge>
+            ) : (
+              <AvatarMenu />
+            )}
           </Box>
         )}
       </Box>
-      <AvatarMenu
-        avatarAnchorEl={avatarAnchorEl}
-        setAvatarAnchorEl={setAvatarAnchorEl}
-      />
     </>
   );
 }

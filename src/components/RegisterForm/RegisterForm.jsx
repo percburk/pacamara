@@ -1,15 +1,12 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
 // RegisterForm is displayed on LandingPage, handles registering a new user
-function RegisterForm({
-  classes,
-  username,
-  setUsername,
-  password,
-  setPassword,
-}) {
+function RegisterForm({ classes }) {
   const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   // Handles the registration process
   const handleRegister = (event) => {
@@ -19,6 +16,7 @@ function RegisterForm({
         type: 'REGISTER',
         payload: { username, password },
       });
+      dispatch({ type: 'CLEAR_LANDING_ERROR' });
     } else {
       dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
     }
