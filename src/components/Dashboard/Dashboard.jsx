@@ -32,10 +32,10 @@ function Dashboard() {
   const [sort, setSort] = useState('date');
   // Local state for the four filter possibilities
   const [filters, setFilters] = useState({
-    fav: false,
+    is_fav: false,
     brewing: false,
     is_blend: false,
-    shared: false,
+    shared_by_id: false,
   });
   // This local state sees if a user is new, and if so, displays a dialog
   // telling them to create a new profile
@@ -61,58 +61,31 @@ function Dashboard() {
 
   // This long chain of sort() and filter() puts coffees through any sort or
   // filter options selected by the user, then displays on the DOM
-  const displayCoffees = coffees
-    .sort((a, b) => {
-      if (sort === 'date') {
-        return b[sort] > a[sort] ? 1 : -1;
+  const displayCoffees = coffees.sort((a, b) => {
+    if (sort === 'date') {
+      return b[sort] > a[sort] ? 1 : -1;
+    } else {
+      if (a[sort] === b[sort]) {
+        return 0;
+      } else if (a[sort] === '') {
+        return 1;
+      } else if (b[sort] === '') {
+        return -1;
       } else {
-        if (a[sort] === b[sort]) {
-          return 0;
-        } else if (a[sort] === '') {
-          return 1;
-        } else if (b[sort] === '') {
-          return -1;
-        } else {
-          return a[sort] < b[sort] ? -1 : 1;
-        }
+        return a[sort] < b[sort] ? -1 : 1;
       }
-    })
-    .filter((item) => {
-      if (filters.fav) {
-        if (item.is_fav) {
-          return item;
-        }
-      } else {
-        return item;
-      }
-    })
-    .filter((item) => {
-      if (filters.brewing) {
-        if (item.brewing) {
-          return item;
-        }
+    }
+  });
+
+  displayCoffees.filter((item) => {
+    for (let key in filters) {
+      if (filters[key]) {
+        
       } else {
         return item;
       }
-    })
-    .filter((item) => {
-      if (filters.blend) {
-        if (item.is_blend) {
-          return item;
-        }
-      } else {
-        return item;
-      }
-    })
-    .filter((item) => {
-      if (filters.shared) {
-        if (item.shared_by_id) {
-          return item;
-        }
-      } else {
-        return item;
-      }
-    });
+    }
+  });
 
   return (
     <>
