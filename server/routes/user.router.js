@@ -68,7 +68,7 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
   try {
     await connection.query('BEGIN;');
-    
+
     // Query #1 - sending all non-array user data
     const updateSqlText = `
       UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
@@ -97,9 +97,7 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
     // Query #3, go through methods_array to build query to insert
     // into users_methods
     let sqlValues = req.body.methods_array
-      .reduce((valString, val, i) => {
-        return (valString += `($1, $${i + 2}),`);
-      }, '')
+      .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
       .slice(0, -1); // Takes off last comma
 
     const methodsSqlText = `

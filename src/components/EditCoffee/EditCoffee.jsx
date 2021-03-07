@@ -128,8 +128,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
-              value={oneCoffee.roaster}
+              value={oneCoffee.roaster || ''}
               onChange={handleEditInputs('roaster')}
             />
             <Box display="flex">
@@ -180,9 +179,10 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
               value={
-                oneCoffee.is_blend ? oneCoffee.blend_name : oneCoffee.country
+                oneCoffee.is_blend
+                  ? oneCoffee.blend_name || ''
+                  : oneCoffee.country || ''
               }
               onChange={
                 oneCoffee.is_blend
@@ -195,8 +195,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
-              value={oneCoffee.producer}
+              value={oneCoffee.producer || ''}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('producer')}
             />
@@ -205,8 +204,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
-              value={oneCoffee.region}
+              value={oneCoffee.region || ''}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('region')}
             />
@@ -215,8 +213,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
-              value={oneCoffee.cultivars}
+              value={oneCoffee.cultivars || ''}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('cultivars')}
             />
@@ -225,8 +222,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              defaultValue=" "
-              value={oneCoffee.processing}
+              value={oneCoffee.processing || ''}
               disabled={oneCoffee.is_blend}
               onChange={handleEditInputs('processing')}
             />
@@ -239,8 +235,7 @@ function EditCoffee() {
                 label="Elevation"
                 variant="outlined"
                 className={classes.textInputs}
-                defaultValue=" "
-                value={oneCoffee.elevation}
+                value={oneCoffee.elevation || ''}
                 disabled={oneCoffee.is_blend}
                 onChange={handleEditInputs('elevation')}
                 InputProps={{
@@ -266,10 +261,9 @@ function EditCoffee() {
             <TextField
               label="Coffee Photo URL"
               variant="outlined"
-              defaultValue=" "
               fullWidth
               className={classes.textInputs}
-              value={oneCoffee.coffee_pic}
+              value={oneCoffee.coffee_pic || ''}
               onChange={handleEditInputs('coffee_pic')}
             />
             <Box display="flex" paddingBottom={3} paddingTop={1}>
@@ -287,7 +281,7 @@ function EditCoffee() {
                     key={item.id}
                     label={item.name}
                     color={
-                      oneCoffee.flavors_array.indexOf(item.id) === -1
+                      oneCoffee.flavors_array?.indexOf(item.id) === -1
                         ? 'default'
                         : 'primary'
                     }
@@ -304,12 +298,11 @@ function EditCoffee() {
             <TextField
               label="Tasting Notes"
               variant="outlined"
-              defaultValue=" "
               className={classes.textInputs}
               fullWidth
               multiline
               rows={6}
-              value={oneCoffee.notes}
+              value={oneCoffee.notes || ''}
               onChange={handleEditInputs('notes')}
             />
             <Box
