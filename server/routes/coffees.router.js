@@ -83,7 +83,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
 
   try {
     await connection.query('BEGIN;');
-    
+
     // Query #1
     // Create new coffee entry in "coffees", return ID for flavors
     const newCoffeeSqlText = `
@@ -117,6 +117,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
       VALUES ($1, $2, $3);
     `;
+
     await connection.query(usersCoffeesSqlText, [
       newCoffeeId,
       req.user.id,
@@ -129,10 +130,12 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     let sqlValues = req.body.flavors_array
       .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
       .slice(0, -1); // Takes off last comma
+      
     const newFlavorsSqlText = `
       INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
       VALUES ${sqlValues};
     `;
+
     pool.query(newFlavorsSqlText, [newCoffeeId, ...req.body.flavors_array]);
 
     // Complete transaction

@@ -32,10 +32,10 @@ function Dashboard() {
   const [sort, setSort] = useState('date');
   // Local state for the four filter possibilities
   const [filters, setFilters] = useState({
-    fav: false,
+    is_fav: false,
     brewing: false,
     is_blend: false,
-    shared: false,
+    shared_by_id: false,
   });
   // This local state sees if a user is new, and if so, displays a dialog
   // telling them to create a new profile
@@ -78,40 +78,12 @@ function Dashboard() {
       }
     })
     .filter((item) => {
-      if (filters.fav) {
-        if (item.is_fav) {
-          return item;
+      for (let key in filters) {
+        if (filters[key] && !item[key]) {
+          return false;
         }
-      } else {
-        return item;
       }
-    })
-    .filter((item) => {
-      if (filters.brewing) {
-        if (item.brewing) {
-          return item;
-        }
-      } else {
-        return item;
-      }
-    })
-    .filter((item) => {
-      if (filters.blend) {
-        if (item.is_blend) {
-          return item;
-        }
-      } else {
-        return item;
-      }
-    })
-    .filter((item) => {
-      if (filters.shared) {
-        if (item.shared_by_id) {
-          return item;
-        }
-      } else {
-        return item;
-      }
+      return true;
     });
 
   return (
