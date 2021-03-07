@@ -61,31 +61,30 @@ function Dashboard() {
 
   // This long chain of sort() and filter() puts coffees through any sort or
   // filter options selected by the user, then displays on the DOM
-  const displayCoffees = coffees.sort((a, b) => {
-    if (sort === 'date') {
-      return b[sort] > a[sort] ? 1 : -1;
-    } else {
-      if (a[sort] === b[sort]) {
-        return 0;
-      } else if (a[sort] === '') {
-        return 1;
-      } else if (b[sort] === '') {
-        return -1;
+  const displayCoffees = coffees
+    .sort((a, b) => {
+      if (sort === 'date') {
+        return b[sort] > a[sort] ? 1 : -1;
       } else {
-        return a[sort] < b[sort] ? -1 : 1;
+        if (a[sort] === b[sort]) {
+          return 0;
+        } else if (a[sort] === '') {
+          return 1;
+        } else if (b[sort] === '') {
+          return -1;
+        } else {
+          return a[sort] < b[sort] ? -1 : 1;
+        }
       }
-    }
-  });
-
-  displayCoffees.filter((item) => {
-    for (let key in filters) {
-      if (filters[key]) {
-        
-      } else {
-        return item;
+    })
+    .filter((item) => {
+      for (let key in filters) {
+        if (filters[key] && !item[key]) {
+          return false;
+        }
       }
-    }
-  });
+      return true;
+    });
 
   return (
     <>
