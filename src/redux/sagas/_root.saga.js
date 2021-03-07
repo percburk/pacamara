@@ -14,17 +14,13 @@ import shareSaga from './share.saga';
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so the project can use them.
 // This is imported into index.js as rootSaga
-
-// Some sagas trigger other sagas, as an example:
-// the registration triggers a login
-// and login triggers setting the user
 export default function* rootSaga() {
   yield all([
-    loginSaga(), // Login saga is now registered
+    loginSaga(), // Handles login/logout actions
     registrationSaga(), // Handles new user registration
     userSaga(), // Gets all info of the current user logged in
     methodsSaga(), // Gets the list from brew methods from database
-    coffeesSaga(), // Handles variety of coffee-related routes
+    coffeesSaga(), // Handles all non-individual coffee-related routes
     oneCoffeeSaga(), // Handles GET and PUT of individual coffees
     flavorsSaga(), // Gets the list of flavors from database
     updateProfileSaga(), // Handles any profile updates for new/existing users

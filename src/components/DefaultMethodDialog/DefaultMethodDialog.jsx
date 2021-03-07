@@ -51,11 +51,11 @@ function DefaultMethodDialog({
   };
 
   // Adds the selected default brew method to local state object
-  const setDefault = () => {
+  const setDefault = (id, lrr) => {
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: item.id,
-      methods_default_lrr: item.lrr,
+      methods_default_id: id,
+      methods_default_lrr: lrr,
     });
   };
 
@@ -81,7 +81,7 @@ function DefaultMethodDialog({
                       ? 'primary'
                       : 'default'
                   }
-                  onClick={setDefault}
+                  onClick={() => setDefault(item.id, item.lrr)}
                 />
               );
             }

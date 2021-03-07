@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     .query(sqlText)
     .then((response) => res.send(response.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

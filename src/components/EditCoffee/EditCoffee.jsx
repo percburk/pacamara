@@ -274,26 +274,24 @@ function EditCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {flavors.map((item) => {
-                return (
-                  <Chip
-                    className={classes.chips}
-                    key={item.id}
-                    label={item.name}
-                    color={
-                      oneCoffee.flavors_array?.indexOf(item.id) === -1
-                        ? 'default'
-                        : 'primary'
-                    }
-                    onClick={() =>
-                      dispatch({
-                        type: 'EDIT_FLAVORS_ARRAY',
-                        payload: item.id,
-                      })
-                    }
-                  />
-                );
-              })}
+              {flavors.map((item) => (
+                <Chip
+                  className={classes.chips}
+                  key={item.id}
+                  label={item.name}
+                  color={
+                    oneCoffee.flavors_array?.indexOf(item.id) > -1
+                      ? 'primary'
+                      : 'default'
+                  }
+                  onClick={() =>
+                    dispatch({
+                      type: 'EDIT_FLAVORS_ARRAY',
+                      payload: item.id,
+                    })
+                  }
+                />
+              ))}
             </Box>
             <TextField
               label="Tasting Notes"

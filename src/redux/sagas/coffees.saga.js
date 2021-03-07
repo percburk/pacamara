@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { put, takeEvery } from 'redux-saga/effects';
 
+// Fetches coffees to display on Dashboard
+// Conditionally sends to different GET routes on coffees.router
+// depending on if a search is being executed
 function* fetchCoffees(action) {
   const whichRoute = action.payload
-    ? axios.get('api/coffees/searchResults', {
+    ? axios.get('api/coffees/search-results', {
         params: { string: action.payload },
       })
     : axios.get('/api/coffees/');
@@ -16,24 +19,33 @@ function* fetchCoffees(action) {
   }
 }
 
+// Toggle boolean 'fav' or 'brewing' status of an individual coffee
 function* setBrewingOrFav(action) {
   try {
-    yield axios.put('/api/oneCoffee/favBrew/', action.payload);
-    yield put({ type: 'FETCH_COFFEES', payload: action.payload.q || '' });
+    yield axios.put('/api/one-coffee/fav-brew/', action.payload);
+    yield put({
+      type: 'FETCH_COFFEES',
+      payload: action.payload.queryUrl || '',
+    });
   } catch (err) {
-    console.log('error in setFavorite', err);
+    console.log('error in setBrewingOrFav', err);
   }
 }
 
+// Delete a coffee from the database
 function* deleteCoffee(action) {
   try {
     yield axios.delete(`/api/coffees/delete/${action.payload.id}`);
-    yield put({ type: 'FETCH_COFFEES', payload: action.payload.q || '' });
+    yield put({
+      type: 'FETCH_COFFEES',
+      payload: action.payload.queryUrl || '',
+    });
   } catch (err) {
     console.log('error in deleteCoffee', err);
   }
 }
 
+// Add a new coffee to the database
 function* addCoffee(action) {
   try {
     yield axios.post('/api/coffees/add', action.payload);

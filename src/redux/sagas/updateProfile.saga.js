@@ -9,7 +9,7 @@ function* updateProfile(action) {
     yield axios.put('/api/user/update', action.payload);
     yield put({ type: 'FETCH_USER' });
   } catch (err) {
-    console.log('error in updateUserProfile', err);
+    console.log('error in updateProfile', err);
   }
 }
 

@@ -24,13 +24,13 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
 
 // GET route for search results, called conditionally in coffees.saga
-router.get('/searchResults', rejectUnauthenticated, (req, res) => {
+router.get('/search-results', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
     "users_coffees".shared_by_id,
@@ -54,7 +54,7 @@ router.get('/searchResults', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [parsedQuery, req.user.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -72,7 +72,7 @@ router.get('/search', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -83,7 +83,9 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
 
   try {
     await connection.query('BEGIN;');
-    // Query #1 - Create new coffee entry in "coffees", return ID for flavors
+    
+    // Query #1
+    // Create new coffee entry in "coffees", return ID for flavors
     const newCoffeeSqlText = `
       INSERT INTO "coffees" ("roaster", "roast_date", "is_blend", "blend_name", 
       "country", "producer", "region", "elevation", "cultivars", "processing", 
@@ -91,6 +93,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id";
     `;
+
     const result = await connection.query(newCoffeeSqlText, [
       req.body.roaster,
       req.body.roast_date,
@@ -106,7 +109,8 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       req.body.coffee_pic,
     ]);
 
-    // Query #2 - add entry to "users_coffees" to pair coffee with current user
+    // Query #2
+    // Add entry to "users_coffees" to pair coffee with current user
     const newCoffeeId = result.rows[0].id; // New ID is here
 
     const usersCoffeesSqlText = `
@@ -119,7 +123,8 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       req.body.brewing,
     ]);
 
-    // Query #3 - adding new flavors to coffees_flavors
+    // Query #3
+    // Adding new flavors to coffees_flavors
     // Build SQL query for each new entry in flavors_array
     let sqlValues = req.body.flavors_array
       .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
@@ -135,7 +140,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     res.sendStatus(201); // Send back success!
   } catch (err) {
     await connection.query('ROLLBACK;');
-    console.log('error in PUT transaction in coffees.router, rollback', err);
+    console.log('Error in transaction in coffees.router, rollback: ', err);
     res.sendStatus(500);
   } finally {
     connection.release();
@@ -152,7 +157,7 @@ router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id, req.params.id])
     .then(() => res.sendStatus(204))
     .catch((err) => {
-      console.log(`error in DELETE with query ${sqlText}`, err);
+      console.log(`Error in DELETE with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

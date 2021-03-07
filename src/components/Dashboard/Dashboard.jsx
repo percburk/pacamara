@@ -137,9 +137,9 @@ function Dashboard() {
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
-        {displayCoffees.map((coffeeItem) => {
-          return <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />;
-        })}
+        {displayCoffees.map((coffeeItem) => (
+          <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />
+        ))}
       </Box>
       <Snackbars />
       <NewUserDialog

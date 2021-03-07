@@ -32,7 +32,7 @@ function* fetchOneSharedCoffee(action) {
   }
 }
 
-// Allows a user to share a coffee with another user
+// Fires when a user shares a coffee entry with another user
 function* sendSharedCoffee(action) {
   try {
     yield axios.post('/api/share', action.payload);

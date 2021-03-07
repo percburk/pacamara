@@ -82,10 +82,11 @@ function CoffeeCard({ coffee }) {
     ?.username;
 
   // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
+  // Makes sure not to change search results displayed
   const handleBrewOrFav = (type) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV',
-      payload: { id: id, change: type, q: query.get('q') || '' },
+      payload: { id: id, change: type, queryUrl: query.get('q') || '' },
     });
   };
 

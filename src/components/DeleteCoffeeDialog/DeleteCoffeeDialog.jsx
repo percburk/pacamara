@@ -35,7 +35,7 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
     setDeleteDialogOpen(false);
     dispatch({
       type: 'DELETE_COFFEE',
-      payload: { id, q: searchQuery || '' },
+      payload: { id, queryUrl: searchQuery || '' },
     });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
     dispatch({ type: 'FETCH_SHARED_COFFEES' });

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { put, takeEvery } from 'redux-saga/effects';
 
+// Fetches list of all brews for the coffee displayed in CoffeeDetails
 function* fetchBrews(action) {
   try {
     const response = yield axios.get(`/api/brews/${action.payload}`);
@@ -10,6 +11,7 @@ function* fetchBrews(action) {
   }
 }
 
+// Deletes a brew instance
 function* deleteBrew(action) {
   const { brewId, coffeeId } = action.payload;
   try {
@@ -20,6 +22,7 @@ function* deleteBrew(action) {
   }
 }
 
+// Toggles whether a brew is thumbs up, down, or none
 function* favBrew(action) {
   const { brewId, coffeeId, change } = action.payload;
   const status = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
@@ -32,6 +35,7 @@ function* favBrew(action) {
   }
 }
 
+// Adds a new brew instance to the db
 function* addBrew(action) {
   try {
     yield axios.post('/api/brews/add', action.payload);

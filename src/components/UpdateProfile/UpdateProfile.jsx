@@ -225,19 +225,17 @@ function UpdateProfile() {
               Select Brew Methods*:
             </Typography>
             <Box className={classes.root}>
-              {methods.map((item) => {
-                return (
-                  <Chip
-                    className={classes.chips}
-                    key={item.id}
-                    label={item.name}
-                    color={
-                      newMethods.indexOf(item.id) > -1 ? 'primary' : 'default'
-                    }
-                    onClick={() => handleNewMethod(item.id)}
-                  />
-                );
-              })}
+              {methods.map((item) => (
+                <Chip
+                  className={classes.chips}
+                  key={item.id}
+                  label={item.name}
+                  color={
+                    newMethods.indexOf(item.id) > -1 ? 'primary' : 'default'
+                  }
+                  onClick={() => handleNewMethod(item.id)}
+                />
+              ))}
             </Box>
           </Grid>
           <Grid item xs={6}>

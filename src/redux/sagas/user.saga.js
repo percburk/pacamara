@@ -26,7 +26,7 @@ function* fetchUser() {
       },
     });
   } catch (err) {
-    console.log('User get request failed', err);
+    console.log('error in fetchUser', err);
   }
 }
 

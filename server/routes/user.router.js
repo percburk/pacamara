@@ -24,7 +24,7 @@ router.get('/methods', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -43,7 +43,7 @@ router.post('/register', (req, res, next) => {
     .query(sqlText, [username, password])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log('User registration failed: ', err);
+      console.log('Error in POST in user registration: ', err);
       res.sendStatus(500);
     });
 });
@@ -114,7 +114,7 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
     res.sendStatus(201); // Send back success!
   } catch (err) {
     await connection.query('ROLLBACK;');
-    console.log('error in PUT transaction in user.router, rollback', err);
+    console.log('Error in PUT transaction in user.router, rollback: ', err);
     res.sendStatus(500);
   } finally {
     connection.release();

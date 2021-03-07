@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const sessionMiddleware = require('./modules/session.middleware');
 const passport = require('./strategies/user.strategy');
-const s3Router = require('react-dropzone-s3-uploader/s3router');
 
 // Route imports
 const userRouter = require('./routes/user.router');
@@ -14,17 +13,7 @@ const oneCoffeeRouter = require('./routes/oneCoffee.router');
 const flavorsRouter = require('./routes/flavors.router');
 const brewsRouter = require('./routes/brews.router');
 const shareRouter = require('./routes/share.router');
-
-// S3 Router
-app.use(
-  '/s3',
-  s3Router({
-    bucket: process.env.AWS_S3_BUCKET, // required
-    region: process.env.AWS_S3_REGION, // optional
-    headers: { 'Access-Control-Allow-Origin': '*' }, // optional
-    ACL: 'public-read', // this is the default
-  })
-);
+const s3Router = require('./routes/s3.router');
 
 // --- Middleware --- //
 app.use(bodyParser.json());
@@ -41,8 +30,9 @@ app.use('/api/methods', methodsRouter);
 app.use('/api/coffees', coffeesRouter);
 app.use('/api/flavors', flavorsRouter);
 app.use('/api/brews', brewsRouter);
-app.use('/api/oneCoffee', oneCoffeeRouter);
+app.use('/api/one-coffee', oneCoffeeRouter);
 app.use('/api/share', shareRouter);
+app.use('/s3', s3Router);
 
 // Serve static files
 app.use(express.static('build'));

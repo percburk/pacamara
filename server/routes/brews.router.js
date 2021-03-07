@@ -15,7 +15,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.params.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -47,7 +47,7 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     ])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log(`error in POST with query ${sqlText}`, err);
+      console.log(`Error in POST with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -63,7 +63,7 @@ router.put('/like/:id', (req, res) => {
     .query(sqlText, [req.body.status, req.params.id])
     .then(() => res.sendStatus(201))
     .catch((err) => {
-      console.log(`error in PUT with query ${sqlText}`, err);
+      console.log(`Error in PUT with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -76,7 +76,7 @@ router.delete('/delete/:id', (req, res) => {
     .query(sqlText, [req.params.id])
     .then(() => res.sendStatus(204))
     .catch((err) => {
-      console.log(`error in DELETE with query ${sqlText}`, err);
+      console.log(`Error in DELETE with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

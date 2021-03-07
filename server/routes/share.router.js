@@ -16,7 +16,7 @@ router.get('/users', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
     .query(sqlText, [req.user.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -49,7 +49,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.params.id])
     .then((response) => res.send(response.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -76,7 +76,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     ])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log(`error in POST with query ${sqlText}`, err);
+      console.log(`Error in POST with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -93,7 +93,7 @@ router.post('/add', (req, res) => {
     .query(sqlText, [req.user.id, coffees_id, shared_by_id])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log(`error in POST with query ${sqlText}`);
+      console.log(`Error in POST with query: ${sqlText}`);
       res.sendStatus(500);
     });
 });
@@ -107,7 +107,7 @@ router.delete('/delete/:id', (req, res) => {
     .query(sqlText, [req.params.id])
     .then(() => res.sendStatus(204))
     .catch((err) => {
-      console.log(`error in DELETE with query ${sqlText}`, err);
+      console.log(`Error in DELETE with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

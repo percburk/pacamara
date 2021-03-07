@@ -23,13 +23,13 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.params.id, req.user.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
-      console.log(`error in GET with query ${sqlText}`, err);
+      console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
 
-// PUT route to toggle boolean Favorite or Brewing status of a coffee
-router.put('/favBrew', rejectUnauthenticated, (req, res) => {
+// PUT route to toggle boolean 'fav' or 'brewing' status of a coffee
+router.put('/fav-brew', rejectUnauthenticated, (req, res) => {
   const { change, id } = req.body;
 
   const sqlText = `
@@ -41,7 +41,7 @@ router.put('/favBrew', rejectUnauthenticated, (req, res) => {
     .query(sqlText, [req.user.id, id])
     .then(() => res.sendStatus(201))
     .catch((err) => {
-      console.log(`error in PUT with query ${sqlText}`, err);
+      console.log(`Error in PUT with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });
@@ -52,13 +52,16 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
 
   try {
     await connection.query('BEGIN;');
-    // Query #1 - Updating the data on 'coffees' table
+    
+    // Query #1
+    // Updating the data on 'coffees' table
     const updateCoffeeSqlText = `
       UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
       "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
       "elevation" = $8, "cultivars" = $9, "processing" = $10,
       "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
     `;
+
     await connection.query(updateCoffeeSqlText, [
       req.body.roaster,
       req.body.roast_date,
@@ -75,13 +78,16 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
       req.body.id,
     ]);
 
-    // Query #2 - deleting old entries in coffees_flavors
+    // Query #2
+    // Deleting old entries in coffees_flavors
     const deleteFlavorsSqlText = `
       DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
     `;
+
     await connection.query(deleteFlavorsSqlText, [req.body.id]);
 
-    // Query #3 - adding new flavors to coffees_flavors
+    // Query #3
+    // Adding new flavors to coffees_flavors
     // Build SQL query for each new entry in flavors_array
     let sqlValues = req.body.flavors_array
       .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
@@ -91,16 +97,19 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
       INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
       VALUES ${sqlValues};
     `;
+
     await connection.query(updateFlavorsSqlText, [
       req.body.id,
       ...req.body.flavors_array,
     ]);
 
-    // Query #4 - update brewing status of the edited coffee
+    // Query #4
+    // Update brewing status of the edited coffee
     const updateBrewingSqlText = `
       UPDATE "users_coffees" SET "brewing" = $1
       WHERE "coffees_id" = $2;
     `;
+
     await connection.query(updateBrewingSqlText, [
       req.body.brewing,
       req.body.id,
@@ -111,7 +120,7 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
     res.sendStatus(201); // Send back success!
   } catch (err) {
     await connection.query('ROLLBACK;');
-    console.log('error in PUT transaction in oneCoffee.router, rollback', err);
+    console.log('Error in transaction in oneCoffee.router, rollback: ', err);
     res.sendStatus(500);
   } finally {
     connection.release();
