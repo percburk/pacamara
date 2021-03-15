@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import {
   Dialog,
   DialogTitle,
@@ -23,12 +24,13 @@ const useStyles = makeStyles((theme) => ({
 // Opens to make sure a user wants to delete a coffee from their dashboard
 function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
   const classes = useStyles();
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const query = useQuery();
 
   // Checks to see if there is a search query in the URL
-  const searchQuery = query.get('q');
+  const searchQuery = location.search;
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
@@ -40,7 +42,7 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
     dispatch({ type: 'FETCH_SHARED_COFFEES' });
     searchQuery
-      ? history.push(`/dashboard/?q=${searchQuery}`)
+      ? history.push(`/dashboard/${searchQuery}`)
       : history.push('/dashboard');
   };
 

@@ -8,15 +8,19 @@ const router = express.Router();
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing, 
-    "users_coffees".shared_by_id,
-    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+    SELECT "coffees".*, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing, 
+      "users_coffees".shared_by_id,
+      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
     RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "users_coffees".users_id = $1
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
-    "users_coffees".shared_by_id
+    GROUP BY "coffees".id, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing,
+      "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `;
 
@@ -31,24 +35,35 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
 // GET route for search results, called conditionally in coffees.saga
 router.get('/search-results', rejectUnauthenticated, (req, res) => {
+  const { string } = req.query;
+
   const sqlText = `
-    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
-    "users_coffees".shared_by_id,
-    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+    SELECT "coffees".*, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing,
+      "users_coffees".shared_by_id,
+      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
     RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
-    WHERE to_tsvector(CONCAT_WS(' ', "coffees".roaster, 
-    "coffees".country, "coffees".producer, "coffees".blend_name))
+    WHERE to_tsvector(CONCAT_WS(' ', 
+      "coffees".roaster, 
+      "coffees".country, 
+      "coffees".producer, 
+      "coffees".blend_name
+    ))
     @@ to_tsquery($1) AND "users_coffees".users_id = $2
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
-    "users_coffees".shared_by_id
+    GROUP BY "coffees".id, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing,
+      "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `;
 
   // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
   // Outer single quotes get added when the query is sanitized using $1
-  const parsedQuery = `"${req.query.string.replace(/\s/g, '&')}":*`;
+  // Also need to remove any '& ' characters already present for to_tsvector
+  const parsedQuery = `"${string.replace('& ', '').replace(/\s/g, '&')}":*`;
 
   pool
     .query(sqlText, [parsedQuery, req.user.id])
@@ -62,10 +77,15 @@ router.get('/search-results', rejectUnauthenticated, (req, res) => {
 // GET route of pared down coffee info for search Autocomplete menu
 router.get('/search', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    SELECT "coffees".country, "coffees".producer, "coffees".roaster, 
-    "coffees".blend_name, "users_coffees".users_id FROM "coffees"
+    SELECT "coffees".country, 
+      "coffees".producer, 
+      "coffees".roaster, 
+      "coffees".blend_name, 
+      "users_coffees".users_id 
+    FROM "coffees"
     JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
-    WHERE "users_coffees".users_id = $1 ORDER BY "coffees".date DESC;
+    WHERE "users_coffees".users_id = $1 
+    ORDER BY "coffees".date DESC;
   `;
 
   pool
@@ -87,9 +107,20 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     // Query #1
     // Create new coffee entry in "coffees", return ID for flavors
     const newCoffeeSqlText = `
-      INSERT INTO "coffees" ("roaster", "roast_date", "is_blend", "blend_name", 
-      "country", "producer", "region", "elevation", "cultivars", "processing", 
-      "notes", "coffee_pic")
+      INSERT INTO "coffees" (
+        "roaster", 
+        "roast_date", 
+        "is_blend", 
+        "blend_name", 
+        "country", 
+        "producer", 
+        "region", 
+        "elevation", 
+        "cultivars", 
+        "processing", 
+        "notes", 
+        "coffee_pic"
+      )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING "id";
     `;
@@ -130,7 +161,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     let sqlValues = req.body.flavors_array
       .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
       .slice(0, -1); // Takes off last comma
-      
+
     const newFlavorsSqlText = `
       INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
       VALUES ${sqlValues};

@@ -8,15 +8,19 @@ const router = express.Router();
 // GET route for one coffee for CoffeeDetails
 router.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    SELECT "coffees".*, "users_coffees".is_fav, "users_coffees".brewing,
-    "users_coffees".shared_by_id,
-    ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
+    SELECT "coffees".*, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing,
+      "users_coffees".shared_by_id,
+      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
     FROM "coffees_flavors"
     JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
     JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "coffees".id = $1 AND "users_coffees".users_id = $2
-    GROUP BY "coffees".id, "users_coffees".is_fav, "users_coffees".brewing,
-    "users_coffees".shared_by_id;
+    GROUP BY "coffees".id, 
+      "users_coffees".is_fav, 
+      "users_coffees".brewing,
+      "users_coffees".shared_by_id;
   `;
 
   pool
@@ -56,10 +60,20 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
     // Query #1
     // Updating the data on 'coffees' table
     const updateCoffeeSqlText = `
-      UPDATE "coffees" SET "roaster" = $1, "roast_date" = $2, "is_blend" = $3,
-      "blend_name" = $4, "country" = $5, "producer" = $6, "region" = $7,
-      "elevation" = $8, "cultivars" = $9, "processing" = $10,
-      "notes" = $11, "coffee_pic" = $12 WHERE "id" = $13;
+      UPDATE "coffees" 
+      SET "roaster" = $1, 
+        "roast_date" = $2, 
+        "is_blend" = $3,
+        "blend_name" = $4, 
+        "country" = $5, 
+        "producer" = $6, 
+        "region" = $7,
+        "elevation" = $8, 
+        "cultivars" = $9, 
+        "processing" = $10,
+        "notes" = $11, 
+        "coffee_pic" = $12 
+      WHERE "id" = $13;
     `;
 
     await connection.query(updateCoffeeSqlText, [

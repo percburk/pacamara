@@ -59,8 +59,15 @@ router.post('/', rejectUnauthenticated, (req, res) => {
   const { recipient_id, coffees_id, coffee_name, message } = req.body;
 
   const sqlText = `
-    INSERT INTO "shared_coffees" ("sender_id", "username", "profile_pic", 
-    "recipient_id", "coffees_id", "coffee_name", "message")
+    INSERT INTO "shared_coffees" (
+      "sender_id", 
+      "username", 
+      "profile_pic", 
+      "recipient_id", 
+      "coffees_id", 
+      "coffee_name", 
+      "message"
+    )
     VALUES ($1, $2, $3, $4, $5, $6, $7);
   `;
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { Box, Typography, Button, makeStyles } from '@material-ui/core';
-// Custom hooks
-import useQuery from '../../hooks/useQuery';
+
 // Imported components
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
@@ -23,34 +23,31 @@ const useStyles = makeStyles((theme) => ({
 // Dashboard is the user's homepage. It shows all the coffees in the user's
 // collection, displayed as multiple CoffeeCard components
 function Dashboard() {
-  const query = useQuery();
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
   const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
   const [sort, setSort] = useState('date');
-  // Local state for the four filter possibilities
-  const [filters, setFilters] = useState({
-    is_fav: false,
-    brewing: false,
-    is_blend: false,
-    shared_by_id: false,
-  });
+
   // This local state sees if a user is new, and if so, displays a dialog
   // telling them to create a new profile
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
+  // Checks to see if there's any search query or filters in the URL
+  const { q, filters } = queryString.parse(location.search, {
+    arrayFormat: 'bracket',
+  });
 
-  // Checks to see if there's a search query in the URL
-  const searchQuery = query.get('q');
+  console.log(q);
 
   useEffect(() => {
     // Fetches list of users that is searchable when sending a shared coffee
     dispatch({ type: 'FETCH_SHARING_USER_LIST' });
-    // Fetches list of all coffees, or those that match a searchQuery
-    dispatch({ type: 'FETCH_COFFEES', payload: searchQuery || '' });
+    // Fetches list of all coffees, or those that match the query in 'q'
+    dispatch({ type: 'FETCH_COFFEES', payload: q || '' });
     // Fetch list of flavor palette entries from the database
     dispatch({ type: 'FETCH_FLAVORS' });
     // Checks if the user has any shared coffees to show on AvatarMenu
@@ -59,8 +56,8 @@ function Dashboard() {
     dispatch({ type: 'FETCH_SEARCH' });
   }, []);
 
-  // This long chain of sort() and filter() puts coffees through any sort or
-  // filter options selected by the user, then displays on the DOM
+  // Puts coffees array through any sort or filters set in state
+  // displayCoffees is then what is rendered on the DOM
   const displayCoffees = coffees
     .sort((a, b) => {
       if (sort === 'date') {
@@ -78,9 +75,11 @@ function Dashboard() {
       }
     })
     .filter((item) => {
-      for (let key in filters) {
-        if (filters[key] && !item[key]) {
-          return false;
+      if (filters) {
+        for (let string of filters) {
+          if (!item[string]) {
+            return false;
+          }
         }
       }
       return true;
@@ -95,7 +94,7 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.sortFilter}>
-          {searchQuery && (
+          {q && (
             <Button
               variant="contained"
               color="primary"
@@ -104,13 +103,13 @@ function Dashboard() {
               Go Back
             </Button>
           )}
-          <FilterMenu filters={filters} setFilters={setFilters} />
+          <FilterMenu />
           <SortMenu sort={sort} setSort={setSort} />
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
-        {displayCoffees.map((coffeeItem) => (
-          <CoffeeCard key={coffeeItem.id} coffee={coffeeItem} />
+        {displayCoffees.map((item) => (
+          <CoffeeCard key={item.id} coffee={item} />
         ))}
       </Box>
       <Snackbars />

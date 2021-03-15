@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import queryString from 'query-string';
 import {
   Typography,
   Box,
@@ -57,6 +58,7 @@ const StyledBadge = withStyles((theme) => ({
 function Nav() {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
   const { name } = useSelector((store) => store.user);
   const search = useSelector((store) => store.search);
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
@@ -77,11 +79,20 @@ function Nav() {
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
 
+  // Checks to see if there is any data currently in the URL
+  const queryObject = queryString.parse(location.search);
+
   // Sends search query, Dashboard picks up the URL change in UseEffect and
   // sends a new GET with 'FETCH_COFFEES' to display search results
   const handleHistorySearch = (event) => {
     event.preventDefault();
-    history.push(`/dashboard/?q=${searchText}`);
+    // Conditional to see if there's any data in the URL
+    const newString = queryObject
+      ? // if so, sends current data, replacing the 'q' key with new searchText
+        queryString.stringify({ ...queryObject, q: searchText })
+      : // If not, just sends searchText with the key of 'q'
+        `q=${searchText}`;
+    history.push(`/dashboard/?${newString}`);
   };
 
   return (

@@ -23,9 +23,21 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 // POST route to add new brew instances to a coffee
 router.post('/add', rejectUnauthenticated, (req, res) => {
   const sqlText = `
-    INSERT INTO "brews" ("coffees_id", "methods_id", "water_dose", 
-    "coffee_dose", "grind", "moisture", "co2", "ratio", "tds", "ext", 
-    "water_temp", "time", "lrr")
+    INSERT INTO "brews" (
+      "coffees_id", 
+      "methods_id", 
+      "water_dose", 
+      "coffee_dose", 
+      "grind", 
+      "moisture", 
+      "co2", 
+      "ratio", 
+      "tds", 
+      "ext", 
+      "water_temp", 
+      "time", 
+      "lrr"
+    )
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
   `;
 
