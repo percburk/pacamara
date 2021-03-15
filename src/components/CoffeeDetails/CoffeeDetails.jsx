@@ -91,10 +91,10 @@ function CoffeeDetails() {
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
 
-  const handleBrewOrFav = (type) => {
+  const handleBrewOrFav = (change) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-      payload: { id, change: type },
+      payload: { id, change },
     });
   };
 

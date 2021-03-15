@@ -63,35 +63,35 @@ function Nav() {
   const search = useSelector((store) => store.search);
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [autoOpen, setAutoOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  // Checks to see if there is any data currently in the URL
+  const { filters } = queryString.parse(location.search, {
+    arrayFormat: 'bracket',
+  });
 
   // Keeps the Autocomplete list closed until the user starts typing in the
   // search TextField
   const handleAutoOpen = () => {
-    if (searchText.length > 0) {
+    if (searchInput.length > 0) {
       setAutoOpen(true);
     }
   };
 
   // Sets the search string in state, toggles the Autocomplete list showing
-  const handleSearch = (event, newValue) => {
-    setSearchText(newValue);
+  const handleSearchBar = (event, newValue) => {
+    setSearchInput(newValue);
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
-
-  // Checks to see if there is any data currently in the URL
-  const queryObject = queryString.parse(location.search);
 
   // Sends search query, Dashboard picks up the URL change in UseEffect and
   // sends a new GET with 'FETCH_COFFEES' to display search results
   const handleHistorySearch = (event) => {
     event.preventDefault();
-    // Conditional to see if there's any data in the URL
-    const newString = queryObject
-      ? // if so, sends current data, replacing the 'q' key with new searchText
-        queryString.stringify({ ...queryObject, q: searchText })
-      : // If not, just sends searchText with the key of 'q'
-        `q=${searchText}`;
+    const newString = queryString.stringify({
+      filters,
+      textSearch: searchInput,
+    });
     history.push(`/dashboard/?${newString}`);
   };
 
@@ -124,8 +124,8 @@ function Nav() {
               onClose={() => setAutoOpen(false)}
               freeSolo
               fullWidth
-              inputValue={searchText}
-              onInputChange={handleSearch}
+              inputValue={searchInput}
+              onInputChange={handleSearchBar}
               options={search.map((item) =>
                 item.blend_name
                   ? `${item.roaster} ${item.blend_name}`

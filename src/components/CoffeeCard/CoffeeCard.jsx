@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import queryString from 'query-string';
 import {
   Box,
   Typography,
@@ -21,8 +22,6 @@ import {
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
-// Custom hooks
-import useQuery from '../../hooks/useQuery';
 // Imported components
 import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
 
@@ -51,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
 function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const location = useLocation();
   const history = useHistory();
-  const query = useQuery();
   const sharingUserList = useSelector((store) => store.sharingUserList);
   const flavors = useSelector((store) => store.flavors);
   const {
@@ -70,6 +69,7 @@ function CoffeeCard({ coffee }) {
     shared_by_id,
   } = coffee; // All the required info needed from Dashboard, sent as props
 
+  const { textSearch } = queryString.parse(location.search);
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
 
   // coffeeName is deciding what to render as the title of CoffeeCard
@@ -83,10 +83,10 @@ function CoffeeCard({ coffee }) {
 
   // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
   // Makes sure not to change search results displayed
-  const handleBrewOrFav = (type) => {
+  const handleBrewOrFav = (change) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV',
-      payload: { id: id, change: type, queryUrl: query.get('q') || '' },
+      payload: { id, change, textSearch },
     });
   };
 

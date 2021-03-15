@@ -37,17 +37,15 @@ function Dashboard() {
     !name ? true : false
   );
   // Checks to see if there's any search query or filters in the URL
-  const { q, filters } = queryString.parse(location.search, {
+  const { textSearch, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   });
-
-  console.log(q);
 
   useEffect(() => {
     // Fetches list of users that is searchable when sending a shared coffee
     dispatch({ type: 'FETCH_SHARING_USER_LIST' });
     // Fetches list of all coffees, or those that match the query in 'q'
-    dispatch({ type: 'FETCH_COFFEES', payload: q || '' });
+    dispatch({ type: 'FETCH_COFFEES', payload: textSearch || '' });
     // Fetch list of flavor palette entries from the database
     dispatch({ type: 'FETCH_FLAVORS' });
     // Checks if the user has any shared coffees to show on AvatarMenu
@@ -76,8 +74,8 @@ function Dashboard() {
     })
     .filter((item) => {
       if (filters) {
-        for (let string of filters) {
-          if (!item[string]) {
+        for (let keyString of filters) {
+          if (!item[keyString]) {
             return false;
           }
         }
@@ -94,7 +92,7 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.sortFilter}>
-          {q && (
+          {textSearch && (
             <Button
               variant="contained"
               color="primary"

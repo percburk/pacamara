@@ -17,19 +17,19 @@ function FilterMenu() {
   const location = useLocation();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { q, filters } = queryString.parse(location.search, {
+  const { textSearch, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   });
 
   // Sets the new URL to add/remove entries to the filters array on Dashboard
-  const handleFilters = (howToFilter) => {
+  const handleFilters = (clickedFilter) => {
     const newFiltersArray = !filters
-      ? [howToFilter]
-      : filters.includes(howToFilter)
-      ? filters.filter((item) => item !== howToFilter)
-      : [...filters, howToFilter];
+      ? [clickedFilter]
+      : filters.includes(clickedFilter)
+      ? filters.filter((item) => item !== clickedFilter)
+      : [...filters, clickedFilter];
     const newString = queryString.stringify(
-      { q, filters: newFiltersArray },
+      { textSearch, filters: newFiltersArray },
       { arrayFormat: 'bracket' }
     );
     history.push(`/dashboard/?${newString}`);

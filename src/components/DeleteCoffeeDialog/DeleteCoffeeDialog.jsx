@@ -11,8 +11,6 @@ import {
   Box,
   makeStyles,
 } from '@material-ui/core';
-// Custom hooks
-import useQuery from '../../hooks/useQuery';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -27,22 +25,21 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const query = useQuery();
 
   // Checks to see if there is a search query in the URL
-  const searchQuery = location.search;
+  const { textSearch } = queryString.parse(location.search);
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
     setDeleteDialogOpen(false);
     dispatch({
       type: 'DELETE_COFFEE',
-      payload: { id, queryUrl: searchQuery || '' },
+      payload: { id, textSearch },
     });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
     dispatch({ type: 'FETCH_SHARED_COFFEES' });
-    searchQuery
-      ? history.push(`/dashboard/${searchQuery}`)
+    location.search
+      ? history.push(`/dashboard/${location.search}`)
       : history.push('/dashboard');
   };
 
