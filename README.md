@@ -1,6 +1,6 @@
-![REPO SIZE](https://img.shields.io/github/repo-size/scottbromander/the_marketplace.svg?style=flat-square)
-![TOP_LANGUAGE](https://img.shields.io/github/languages/top/scottbromander/the_marketplace.svg?style=flat-square)
-![FORKS](https://img.shields.io/github/forks/scottbromander/the_marketplace.svg?style=social)
+![REPO SIZE](https://img.shields.io/github/languages/code-size/percburk/pacamara?style=flat-square)
+![TOP_LANGUAGE](https://img.shields.io/github/languages/top/percburk/pacamara?style=flat-square)
+![FORKS](https://img.shields.io/github/forks/percburk/pacamara?style=social)
 
 # Pacamara
 
