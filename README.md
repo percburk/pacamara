@@ -20,7 +20,7 @@ particular brew instance.
 Pacamara was created for my Solo Project at Prime Digital Academy. It was a passion project of 
 mine and I'm so glad to see it come to fruition.
 
-To see the fully functional site, please visit [Pacamara](https://quiet-forest-05735.herokuapp.com/)
+To see the fully functional site, please visit ![Pacamara](https://quiet-forest-05735.herokuapp.com/).
 
 ## Screenshots
 
