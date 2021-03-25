@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   HashRouter as Router,
   Route,
@@ -36,44 +36,28 @@ function App() {
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:3000/dashboard will show the Dashboard if the user is logged in.
-            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:3000/user */}
+          {/* For protected routes, the view could show one of several things 
+            on the same route. Visiting localhost:3000/dashboard will show the 
+            Dashboard if the user is logged in. If the user is not logged in, 
+            the ProtectedRoute will show the LandingPage. */}
           <ProtectedRoute exact path="/profile/:id">
             <UpdateProfile />
           </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows Dashboard else shows LoginPage
-            exact
-            path="/dashboard"
-          >
+          <ProtectedRoute exact path="/dashboard">
             <Dashboard />
           </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows CoffeeDetails else shows LoginPage
-            exact
-            path="/details/:id"
-          >
+          <ProtectedRoute exact path="/details/:id">
             <CoffeeDetails />
           </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows AddCoffee else shows LoginPage
-            exact
-            path="/add-coffee/"
-          >
+          <ProtectedRoute exact path="/add-coffee/">
             <AddCoffee />
           </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows AddCoffee else shows LoginPage
-            exact
-            path="/edit-coffee/:id"
-          >
+          <ProtectedRoute exact path="/edit-coffee/:id">
             <EditCoffee />
           </ProtectedRoute>
           {/* When a value is supplied for the authRedirect prop the user will
-            be redirected to the path supplied when logged in, otherwise they will
-            be taken to the component and path supplied. */}
+            be redirected to the path supplied when logged in, otherwise they 
+            will be taken to the component and path supplied. */}
           <ProtectedRoute
             // with authRedirect:
             // - if logged in, redirects to '/dashboard'
