@@ -33,7 +33,6 @@ function App() {
       <CssBaseline />
       <Router>
         <Nav />
-
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
@@ -51,7 +50,6 @@ function App() {
           >
             <Dashboard />
           </ProtectedRoute>
-
           <ProtectedRoute
             // logged in shows CoffeeDetails else shows LoginPage
             exact
@@ -62,18 +60,17 @@ function App() {
           <ProtectedRoute
             // logged in shows AddCoffee else shows LoginPage
             exact
-            path="/addCoffee/"
+            path="/add-coffee/"
           >
             <AddCoffee />
           </ProtectedRoute>
           <ProtectedRoute
             // logged in shows AddCoffee else shows LoginPage
             exact
-            path="/editCoffee/:id"
+            path="/edit-coffee/:id"
           >
             <EditCoffee />
           </ProtectedRoute>
-
           {/* When a value is supplied for the authRedirect prop the user will
             be redirected to the path supplied when logged in, otherwise they will
             be taken to the component and path supplied. */}
@@ -87,13 +84,11 @@ function App() {
           >
             <LandingPage />
           </ProtectedRoute>
-
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
             <h1>404</h1>
           </Route>
         </Switch>
-
         <Footer />
       </Router>
     </ThemeProvider>

@@ -61,6 +61,22 @@ function EditCoffee() {
   const { id } = useParams();
   const flavors = useSelector((store) => store.flavors);
   const oneCoffee = useSelector((store) => store.oneCoffee);
+  const {
+    roaster,
+    roast_date,
+    is_blend,
+    blend_name,
+    country,
+    producer,
+    region,
+    elevation,
+    cultivars,
+    processing,
+    notes,
+    coffee_pic,
+    flavors_array,
+    brewing,
+  } = oneCoffee;
   const [roasterError, setRoasterError] = useState(false);
   const [blendCountryError, setBlendCountryError] = useState(false);
 
@@ -90,11 +106,7 @@ function EditCoffee() {
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
-    if (
-      oneCoffee.roaster &&
-      (oneCoffee.country || oneCoffee.blend_name) &&
-      oneCoffee.flavors_array[0]
-    ) {
+    if (roaster && (country || blend_name) && flavors_array[0]) {
       dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
       dispatch({
         type: 'EDIT_COFFEE',
@@ -102,11 +114,11 @@ function EditCoffee() {
       });
       history.goBack();
     } else {
-      oneCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
-      oneCoffee.country || oneCoffee.blend_name
+      roaster ? setRoasterError(false) : setRoasterError(true);
+      country || blend_name
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      if (!oneCoffee.flavors_array[0]) {
+      if (!flavors_array[0]) {
         dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
       }
     }
@@ -128,7 +140,7 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={oneCoffee.roaster || ''}
+              value={roaster || ''}
               onChange={handleEditInputs('roaster')}
             />
             <Box display="flex">
@@ -136,7 +148,7 @@ function EditCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={oneCoffee.is_blend}
+                    checked={is_blend}
                     onChange={(event) =>
                       dispatch({
                         type: 'EDIT_SWITCH',
@@ -153,7 +165,7 @@ function EditCoffee() {
                 <Grid item>Currently Brewing:</Grid>
                 <Grid item>
                   <Switch
-                    checked={oneCoffee.brewing}
+                    checked={brewing}
                     name="brewing"
                     onChange={(event) =>
                       dispatch({
@@ -171,21 +183,17 @@ function EditCoffee() {
               error={blendCountryError}
               helperText={
                 blendCountryError &&
-                (oneCoffee.is_blend
+                (is_blend
                   ? 'Please enter the blend name.'
                   : 'Please enter the country of origin.')
               }
-              label={oneCoffee.is_blend ? 'Blend Name' : 'Country'}
+              label={is_blend ? 'Blend Name' : 'Country'}
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={
-                oneCoffee.is_blend
-                  ? oneCoffee.blend_name || ''
-                  : oneCoffee.country || ''
-              }
+              value={is_blend ? blend_name || '' : country || ''}
               onChange={
-                oneCoffee.is_blend
+                is_blend
                   ? handleEditInputs('blend_name')
                   : handleEditInputs('country')
               }
@@ -195,8 +203,8 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={oneCoffee.producer || ''}
-              disabled={oneCoffee.is_blend}
+              value={producer || ''}
+              disabled={is_blend}
               onChange={handleEditInputs('producer')}
             />
             <TextField
@@ -204,8 +212,8 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={oneCoffee.region || ''}
-              disabled={oneCoffee.is_blend}
+              value={region || ''}
+              disabled={is_blend}
               onChange={handleEditInputs('region')}
             />
             <TextField
@@ -213,8 +221,8 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={oneCoffee.cultivars || ''}
-              disabled={oneCoffee.is_blend}
+              value={cultivars || ''}
+              disabled={is_blend}
               onChange={handleEditInputs('cultivars')}
             />
             <TextField
@@ -222,8 +230,8 @@ function EditCoffee() {
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={oneCoffee.processing || ''}
-              disabled={oneCoffee.is_blend}
+              value={processing || ''}
+              disabled={is_blend}
               onChange={handleEditInputs('processing')}
             />
             <Box
@@ -235,8 +243,8 @@ function EditCoffee() {
                 label="Elevation"
                 variant="outlined"
                 className={classes.textInputs}
-                value={oneCoffee.elevation || ''}
-                disabled={oneCoffee.is_blend}
+                value={elevation || ''}
+                disabled={is_blend}
                 onChange={handleEditInputs('elevation')}
                 InputProps={{
                   endAdornment: (
@@ -251,7 +259,7 @@ function EditCoffee() {
                   format="MM/dd/yy"
                   margin="normal"
                   label="Roast Date"
-                  value={oneCoffee.roast_date}
+                  value={roast_date}
                   onChange={handleEditDate}
                 />
               </MuiPickersUtilsProvider>
@@ -263,14 +271,12 @@ function EditCoffee() {
               variant="outlined"
               fullWidth
               className={classes.textInputs}
-              value={oneCoffee.coffee_pic || ''}
+              value={coffee_pic || ''}
               onChange={handleEditInputs('coffee_pic')}
             />
             <Box display="flex" paddingBottom={3} paddingTop={1}>
               <S3Uploader setPhoto={handleEditPic} />
-              {oneCoffee.coffee_pic && (
-                <img className={classes.media} src={oneCoffee.coffee_pic} />
-              )}
+              {coffee_pic && <img className={classes.media} src={coffee_pic} />}
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
@@ -280,9 +286,7 @@ function EditCoffee() {
                   key={item.id}
                   label={item.name}
                   color={
-                    oneCoffee.flavors_array?.indexOf(item.id) > -1
-                      ? 'primary'
-                      : 'default'
+                    flavors_array?.indexOf(item.id) > -1 ? 'primary' : 'default'
                   }
                   onClick={() =>
                     dispatch({
@@ -300,7 +304,7 @@ function EditCoffee() {
               fullWidth
               multiline
               rows={6}
-              value={oneCoffee.notes || ''}
+              value={notes || ''}
               onChange={handleEditInputs('notes')}
             />
             <Box

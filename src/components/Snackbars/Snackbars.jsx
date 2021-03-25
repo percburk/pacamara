@@ -6,21 +6,21 @@ import { Alert } from '@material-ui/lab';
 // components. Central location for all Snackbar instances.
 function Snackbars() {
   const dispatch = useDispatch();
-  const snackbars = useSelector((store) => store.snackbars);
+  const { string, open, severity } = useSelector((store) => store.snackbars);
 
   return (
     <Snackbar
-      open={snackbars.open}
+      open={open}
       autoHideDuration={3000}
       onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
     >
-      {snackbars.string && (
+      {string && (
         <Alert
           variant="filled"
-          severity={snackbars.severity}
+          severity={severity}
           onClose={() => dispatch({ type: 'CLEAR_SNACKBARS' })}
         >
-          {snackbars.string}
+          {string}
         </Alert>
       )}
     </Snackbar>

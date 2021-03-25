@@ -135,7 +135,7 @@ function AvatarMenu() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/addCoffee');
+            history.push('/add-coffee');
             setAvatarAnchorEl(null);
           }}
         >

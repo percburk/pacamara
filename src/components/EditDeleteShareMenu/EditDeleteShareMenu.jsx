@@ -46,7 +46,7 @@ function EditDeleteShareMenu({ id, coffeeName, pic }) {
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
-            history.push(`/editCoffee/${id}`);
+            history.push(`/edit-coffee/${id}`);
           }}
         >
           <ListItemIcon>
