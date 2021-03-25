@@ -18,7 +18,7 @@ import AddCoffee from '../AddCoffee/AddCoffee';
 import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
-import MuiTheme from '../MuiTheme/MuiTheme';
+import muiTheme from '../muiTheme/muiTheme';
 import './App.css';
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <ThemeProvider theme={MuiTheme}>
+    <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Router>
         <Nav />
