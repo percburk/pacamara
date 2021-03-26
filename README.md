@@ -107,5 +107,5 @@ Smith, my friends and family, and the awesome Zhu cohort at Prime.
 
 
 ## Support
-
-If you have suggestions or issues, please [email me](kevinmburk@gmail.com)!
+If you have suggestions or issues, please 
+[email me](mailto:kevinmburk@gmail.com)!
