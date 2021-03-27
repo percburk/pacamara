@@ -1,6 +1,6 @@
-![REPO SIZE](https://img.shields.io/github/languages/code-size/percburk/pacamara?style=flat-square)
-![TOP_LANGUAGE](https://img.shields.io/github/languages/top/percburk/pacamara?style=flat-square)
-![FORKS](https://img.shields.io/github/forks/percburk/pacamara?style=social)
+![repo-size](https://img.shields.io/github/languages/code-size/percburk/pacamara?style=flat-square)
+![top-language](https://img.shields.io/github/languages/top/percburk/pacamara?style=flat-square)
+![forks](https://img.shields.io/github/forks/percburk/pacamara?style=social)
 
 
 # Pacamara
@@ -48,7 +48,7 @@ Link to software that is required to install the app (e.g. node).
 ## Installation
 
 You will need the following `env` keys to run Pacamara:
-- `SERVER_SESSION_SECRET` _(some secure string, I recommend 
+- `SERVER_SESSION_SECRET` _(some secure string, I recommend
 [Password Generator](https://passwordsgenerator.net/))_
 
 For photo upload, this project uses AWS S3 with a dropzone uploader. If you do 
