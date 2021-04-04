@@ -77,6 +77,7 @@ function CoffeeDetails() {
   const [addBrew, setAddBrew] = useState(false);
   const [switchChart, setSwitchChart] = useState(false);
   const [oneBrew, setOneBrew] = useState({ x: 0, y: 0, i: 0 });
+  const [accordionOpen, setAccordionOpen] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
@@ -96,6 +97,10 @@ function CoffeeDetails() {
       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
       payload: { id, change },
     });
+  };
+
+  const handleAccordion = (selected) => (event, isOpen) => {
+    setAccordionOpen(isOpen ? selected : false);
   };
 
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
@@ -218,6 +223,8 @@ function CoffeeDetails() {
                   key={instance.id}
                   instance={instance}
                   coffeeId={id}
+                  accordionOpen={accordionOpen}
+                  handleAccordion={handleAccordion}
                 />
               ))
             ) : (
@@ -225,7 +232,8 @@ function CoffeeDetails() {
                 key={brews[oneBrew.i].id}
                 instance={brews[oneBrew.i]}
                 coffeeId={id}
-                open={true}
+                accordionOpen={brews[oneBrew.i].id}
+                handleAccordion={handleAccordion}
               />
             )}
           </Grid>

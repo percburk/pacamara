@@ -43,11 +43,10 @@ const useStyles = makeStyles((theme) => ({
 
 // BrewInstance is the accordion that is displayed on CoffeeDetails for each
 // entry on the 'brews' table
-function BrewInstance({ coffeeId, instance, open }) {
+function BrewInstance({ coffeeId, instance, accordionOpen, handleAccordion }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
-  const [expanded, setExpanded] = useState(open || false);
   const {
     id,
     methods_id,
@@ -65,7 +64,6 @@ function BrewInstance({ coffeeId, instance, open }) {
     time,
     lrr,
   } = instance;
-
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   // Finds the name of the brew method used, searching by ID
   const methodUsed = methods.find((item) => item.id === methods_id)?.name;
@@ -91,8 +89,8 @@ function BrewInstance({ coffeeId, instance, open }) {
   return (
     <Accordion
       elevation={4}
-      expanded={expanded}
-      onChange={() => setExpanded(!expanded)}
+      expanded={accordionOpen === id}
+      onChange={handleAccordion(id)}
     >
       <AccordionSummary expandIcon={<ExpandMore />}>
         <IconButton
@@ -116,9 +114,7 @@ function BrewInstance({ coffeeId, instance, open }) {
         <Typography className={classes.summary}>
           Coffee: {coffee_dose}g
         </Typography>
-        <Typography className={classes.summary}>
-          Grind: #{grind}
-        </Typography>
+        <Typography className={classes.summary}>Grind: #{grind}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Table>
