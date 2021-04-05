@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { Box, Typography, Button, makeStyles } from '@material-ui/core';
+import { Box, Typography, makeStyles } from '@material-ui/core';
 
 // Imported components
 import CoffeeCard from '../CoffeeCard/CoffeeCard';

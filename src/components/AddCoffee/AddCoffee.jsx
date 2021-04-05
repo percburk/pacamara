@@ -301,7 +301,8 @@ function AddCoffee() {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box display="flex" paddingBottom={3} paddingTop={1}>
+            <Typography>Add a Photo:</Typography>
+            <Box display="flex" py={2}>
               <S3Uploader setPhoto={handlePic} />
               {newCoffee.coffee_pic && (
                 <img className={classes.media} src={newCoffee.coffee_pic} />

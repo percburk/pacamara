@@ -267,7 +267,8 @@ function EditCoffee() {
             </Box>
           </Grid>
           <Grid item xs={6} className={classes.gridItem}>
-            <Box display="flex" paddingBottom={3} paddingTop={1}>
+            <Typography>Add a Photo:</Typography>
+            <Box display="flex" py={2}>
               <S3Uploader setPhoto={handleEditPic} />
               {coffee_pic && <img className={classes.media} src={coffee_pic} />}
             </Box>
