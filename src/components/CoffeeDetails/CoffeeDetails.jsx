@@ -94,8 +94,8 @@ function CoffeeDetails() {
   // Toggle fav or brewing status of the coffee
   const handleBrewOrFav = (change) => {
     dispatch({
-      type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
-      payload: { id, change },
+      type: 'SET_BREWING_OR_FAV',
+      payload: { oneCoffeeId: id, change },
     });
   };
   // Only allows one accordion open at a time, for easier ui
@@ -142,7 +142,7 @@ function CoffeeDetails() {
             <Typography variant="subtitle1">By {roaster}</Typography>
             <Box display="flex" alignItems="center" my={1}>
               <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-                <IconButton onClick={() => handleBrewOrFav('is_fav')}>
+                <IconButton onClick={() => handleBrewOrFav('fav')}>
                   {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
                 </IconButton>
               </Tooltip>
@@ -151,7 +151,7 @@ function CoffeeDetails() {
                 enterDelay={900}
                 leaveDelay={100}
               >
-                <IconButton onClick={() => handleBrewOrFav('brewing')}>
+                <IconButton onClick={() => handleBrewOrFav('brew')}>
                   {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (

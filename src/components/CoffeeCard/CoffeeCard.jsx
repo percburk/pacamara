@@ -54,7 +54,6 @@ function CoffeeCard({ coffee }) {
   const history = useHistory();
   const sharingUserList = useSelector((store) => store.sharingUserList);
   const flavors = useSelector((store) => store.flavors);
-  // All the required info needed from Dashboard, sent as props
   const {
     id,
     date,
@@ -106,7 +105,7 @@ function CoffeeCard({ coffee }) {
                 enterDelay={900}
                 leaveDelay={100}
               >
-                <IconButton onClick={() => handleBrewOrFav('brewing')}>
+                <IconButton onClick={() => handleBrewOrFav('brew')}>
                   {brewing ? (
                     <LocalCafe color="primary" />
                   ) : (
@@ -149,7 +148,7 @@ function CoffeeCard({ coffee }) {
             p={1}
           >
             <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-              <IconButton onClick={() => handleBrewOrFav('is_fav')}>
+              <IconButton onClick={() => handleBrewOrFav('fav')}>
                 {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
               </IconButton>
             </Tooltip>

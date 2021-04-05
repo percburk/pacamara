@@ -35,9 +35,10 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 // PUT route to toggle boolean 'fav' or 'brewing' status of a coffee
 router.put('/fav-brew', rejectUnauthenticated, (req, res) => {
   const { change, id } = req.body;
+  const sqlChange = change === 'fav' ? 'is_fav' : 'brewing';
 
   const sqlText = `
-    UPDATE "users_coffees" SET "${change}" = NOT "${change}"
+    UPDATE "users_coffees" SET "${sqlChange}" = NOT "${sqlChange}"
     WHERE "users_id" = $1 AND "coffees_id" = $2;
   `;
 
@@ -56,7 +57,7 @@ router.put('/edit', rejectUnauthenticated, async (req, res) => {
 
   try {
     await connection.query('BEGIN;');
-    
+
     // Query #1
     // Updating the data on 'coffees' table
     const updateCoffeeSqlText = `

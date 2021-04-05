@@ -21,13 +21,17 @@ function* fetchCoffees(action) {
 
 // Toggle boolean 'fav' or 'brewing' status of an individual coffee
 function* setBrewingOrFav(action) {
-  const { id, change, q } = action.payload;
+  const { id, change, q, oneCoffeeId } = action.payload;
+  const fetchWhichCoffee = id
+    ? { type: 'FETCH_COFFEES', payload: q }
+    : { type: 'FETCH_ONE_COFFEE', payload: oneCoffeeId };
+  
   try {
-    yield axios.put('/api/one-coffee/fav-brew/', { id, change });
-    yield put({
-      type: 'FETCH_COFFEES',
-      payload: q,
+    yield axios.put('/api/one-coffee/fav-brew/', {
+      id: id || oneCoffeeId,
+      change,
     });
+    yield put(fetchWhichCoffee);
   } catch (err) {
     console.log('error in setBrewingOrFav', err);
   }
