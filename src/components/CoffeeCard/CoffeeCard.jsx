@@ -54,6 +54,7 @@ function CoffeeCard({ coffee }) {
   const history = useHistory();
   const sharingUserList = useSelector((store) => store.sharingUserList);
   const flavors = useSelector((store) => store.flavors);
+  // All the required info needed from Dashboard, sent as props
   const {
     id,
     date,
@@ -67,26 +68,23 @@ function CoffeeCard({ coffee }) {
     is_fav,
     flavors_array,
     shared_by_id,
-  } = coffee; // All the required info needed from Dashboard, sent as props
-
-  const { textSearch } = queryString.parse(location.search);
+  } = coffee;
+  // Checks to see if there's a search query in the URL
+  const { q } = queryString.parse(location.search);
+  // Format date coffee was created using luxon
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
-
-  // coffeeName is deciding what to render as the title of CoffeeCard
-  // If blend, it will show the blend name.
-  // If single origin, country and producer. This happens throughout the app
+  // Displays either blend name or country/producer based on blend status
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
-
   // If this coffee has been shared by another user, their username is shown
   const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id)
     ?.username;
 
   // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
-  // Makes sure not to change search results displayed
+  // Makes sure not to change search results displayed, if present
   const handleBrewOrFav = (change) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV',
-      payload: { id, change, textSearch },
+      payload: { id, change, q },
     });
   };
 

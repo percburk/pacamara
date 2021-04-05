@@ -35,7 +35,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
 // GET route for search results, called conditionally in coffees.saga
 router.get('/search-results', rejectUnauthenticated, (req, res) => {
-  const { textSearch } = req.query;
+  const { q } = req.query;
 
   const sqlText = `
     SELECT "coffees".*, 
@@ -63,7 +63,7 @@ router.get('/search-results', rejectUnauthenticated, (req, res) => {
   // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
   // Outer single quotes get added when the query is sanitized using $1
   // Also need to remove any '& ' characters already present for to_tsvector
-  const parsedQuery = `"${textSearch.replace('& ', '').replace(/\s/g, '&')}":*`;
+  const parsedQuery = `"${q.replace('& ', '').replace(/\s/g, '&')}":*`;
 
   pool
     .query(sqlText, [parsedQuery, req.user.id])

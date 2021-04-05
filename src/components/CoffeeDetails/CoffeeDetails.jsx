@@ -91,18 +91,18 @@ function CoffeeDetails() {
   const daysOffRoast = DateTime.local()
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
-
+  // Toggle fav or brewing status of the coffee
   const handleBrewOrFav = (change) => {
     dispatch({
       type: 'SET_BREWING_OR_FAV_ONE_COFFEE',
       payload: { id, change },
     });
   };
-
+  // Only allows one accordion open at a time, for easier ui
   const handleAccordion = (selected) => (event, isOpen) => {
     setAccordionOpen(isOpen ? selected : false);
   };
-
+  // Displays either blend name or country/producer based on blend status
   const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (

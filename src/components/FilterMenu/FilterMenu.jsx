@@ -17,7 +17,7 @@ function FilterMenu() {
   const location = useLocation();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { textSearch, filters } = queryString.parse(location.search, {
+  const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   });
 
@@ -29,7 +29,7 @@ function FilterMenu() {
       ? filters.filter((item) => item !== clickedFilter)
       : [...filters, clickedFilter];
     const newString = queryString.stringify(
-      { textSearch, filters: newFiltersArray },
+      { q, filters: newFiltersArray },
       { arrayFormat: 'bracket' }
     );
     history.push(`/dashboard/?${newString}`);
@@ -50,6 +50,15 @@ function FilterMenu() {
           );
         }
       })}
+      {q && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => history.push('/dashboard')}
+        >
+          Go Back
+        </Button>
+      )}
       <Button
         variant="outlined"
         onClick={(event) => setAnchorEl(event.currentTarget)}

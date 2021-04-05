@@ -64,7 +64,7 @@ function Nav() {
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-
+  
   // Checks to see if there is any data currently in the URL
   const { filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
@@ -90,7 +90,7 @@ function Nav() {
     event.preventDefault();
     const newString = queryString.stringify({
       filters,
-      textSearch: searchInput,
+      q: searchInput,
     });
     history.push(`/dashboard/?${newString}`);
   };

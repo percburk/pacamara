@@ -30,14 +30,13 @@ function Dashboard() {
   const { name } = useSelector((store) => store.user);
   const coffees = useSelector((store) => store.coffees);
   const [sort, setSort] = useState('date');
-
   // This local state sees if a user is new, and if so, displays a dialog
   // telling them to create a new profile
   const [newUserDialogOpen, setNewUserDialogOpen] = useState(
     !name ? true : false
   );
-  // Checks to see if there's any search query or filters in the URL
-  const { textSearch, filters } = queryString.parse(location.search, {
+  // Checks to see if there's a search query or filters in the URL
+  const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   });
 
@@ -45,7 +44,7 @@ function Dashboard() {
     // Fetches list of users that is searchable when sending a shared coffee
     dispatch({ type: 'FETCH_SHARING_USER_LIST' });
     // Fetches list of all coffees, or those that match the query in 'q'
-    dispatch({ type: 'FETCH_COFFEES', payload: textSearch || '' });
+    dispatch({ type: 'FETCH_COFFEES', payload: q });
     // Fetch list of flavor palette entries from the database
     dispatch({ type: 'FETCH_FLAVORS' });
     // Checks if the user has any shared coffees to show on AvatarMenu
@@ -92,15 +91,6 @@ function Dashboard() {
           </Typography>
         </Box>
         <Box className={classes.sortFilter}>
-          {textSearch && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => history.push('/dashboard')}
-            >
-              Go Back
-            </Button>
-          )}
           <FilterMenu />
           <SortMenu sort={sort} setSort={setSort} />
         </Box>

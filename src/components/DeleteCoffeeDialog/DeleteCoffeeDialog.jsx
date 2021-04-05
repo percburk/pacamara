@@ -27,14 +27,14 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
   const dispatch = useDispatch();
 
   // Checks to see if there is a search query in the URL
-  const { textSearch } = queryString.parse(location.search);
+  const { q } = queryString.parse(location.search);
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
     setDeleteDialogOpen(false);
     dispatch({
       type: 'DELETE_COFFEE',
-      payload: { id, textSearch },
+      payload: { id, q },
     });
     dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
     dispatch({ type: 'FETCH_SHARED_COFFEES' });

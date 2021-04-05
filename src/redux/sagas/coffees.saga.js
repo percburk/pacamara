@@ -7,7 +7,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 function* fetchCoffees(action) {
   const whichRoute = action.payload
     ? axios.get('api/coffees/search-results', {
-        params: { textSearch: action.payload },
+        params: { q: action.payload },
       })
     : axios.get('/api/coffees/');
 
@@ -21,12 +21,12 @@ function* fetchCoffees(action) {
 
 // Toggle boolean 'fav' or 'brewing' status of an individual coffee
 function* setBrewingOrFav(action) {
-  const { id, change, textSearch } = action.payload;
+  const { id, change, q } = action.payload;
   try {
     yield axios.put('/api/one-coffee/fav-brew/', { id, change });
     yield put({
       type: 'FETCH_COFFEES',
-      payload: textSearch || '',
+      payload: q,
     });
   } catch (err) {
     console.log('error in setBrewingOrFav', err);
@@ -35,12 +35,12 @@ function* setBrewingOrFav(action) {
 
 // Delete a coffee from the database
 function* deleteCoffee(action) {
-  const { id, textSearch } = action.payload;
+  const { id, q } = action.payload;
   try {
     yield axios.delete(`/api/coffees/delete/${id}`);
     yield put({
       type: 'FETCH_COFFEES',
-      payload: textSearch || '',
+      payload: q,
     });
   } catch (err) {
     console.log('error in deleteCoffee', err);
