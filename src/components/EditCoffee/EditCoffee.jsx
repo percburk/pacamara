@@ -52,8 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // EditCoffee contains all the inputs to edit an existing coffee entry
-// All editing is done in Redux so the page can refresh without losing the
-// existing filled data
+// All editing is done in Redux
 function EditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -85,7 +84,7 @@ function EditCoffee() {
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
   }, []);
 
-  // Curried function that handles all text input edits
+  // Handles all text input edits
   const handleEditInputs = (key) => (event) => {
     dispatch({
       type: 'EDIT_INPUTS',
@@ -95,13 +94,27 @@ function EditCoffee() {
 
   // Handles a new pic uploaded from S3Uploader
   const handleEditPic = (newUrl) => {
-    dispatch({ type: 'EDIT_PHOTO', payload: newUrl });
+    dispatch({
+      type: 'EDIT_INPUTS',
+      payload: { key: 'coffee_pic', change: newUrl },
+    });
+  };
+
+  // Toggles the boolean switches of 'is_blend' and 'brewing'
+  const handleBooleans = (key) => {
+    dispatch({
+      type: 'EDIT_INPUTS',
+      payload: { key, change: !oneCoffee[key] },
+    });
   };
 
   // Formats the date using Luxon
   const handleEditDate = (date) => {
     const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
-    dispatch({ type: 'EDIT_ROAST_DATE', payload: formattedDate });
+    dispatch({
+      type: 'EDIT_INPUTS',
+      payload: { key: 'roast_date', change: formattedDate },
+    });
   };
 
   // Submits the edited coffee to the database with input validation
@@ -148,15 +161,9 @@ function EditCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={is_blend}
-                    onChange={(event) =>
-                      dispatch({
-                        type: 'EDIT_SWITCH',
-                        payload: event.target.name,
-                      })
-                    }
+                    checked={is_blend || false}
+                    onChange={() => handleBooleans('is_blend')}
                     color="primary"
-                    name="is_blend"
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -165,14 +172,8 @@ function EditCoffee() {
                 <Grid item>Currently Brewing:</Grid>
                 <Grid item>
                   <Switch
-                    checked={brewing}
-                    name="brewing"
-                    onChange={(event) =>
-                      dispatch({
-                        type: 'EDIT_SWITCH',
-                        payload: event.target.name,
-                      })
-                    }
+                    checked={brewing || false}
+                    onChange={() => handleBooleans('brewing')}
                     color="primary"
                   />
                 </Grid>
@@ -266,14 +267,6 @@ function EditCoffee() {
             </Box>
           </Grid>
           <Grid item xs={6} className={classes.gridItem}>
-            <TextField
-              label="Coffee Photo URL"
-              variant="outlined"
-              fullWidth
-              className={classes.textInputs}
-              value={coffee_pic || ''}
-              onChange={handleEditInputs('coffee_pic')}
-            />
             <Box display="flex" paddingBottom={3} paddingTop={1}>
               <S3Uploader setPhoto={handleEditPic} />
               {coffee_pic && <img className={classes.media} src={coffee_pic} />}

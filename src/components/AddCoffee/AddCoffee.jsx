@@ -60,7 +60,6 @@ function AddCoffee() {
   const [roasterError, setRoasterError] = useState(false);
   const [blendCountryError, setBlendCountryError] = useState(false);
   const [newFlavors, setNewFlavors] = useState([]);
-  const [newPic, setNewPic] = useState('');
   const [newCoffee, setNewCoffee] = useState({
     roaster: '',
     roast_date: new Date(),
@@ -74,11 +73,12 @@ function AddCoffee() {
     cultivars: '',
     processing: '',
     notes: '',
+    coffee_pic: '',
   });
 
   useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
 
-  // Curried function which handles all text inputs, adds to local state object
+  // Handles all text inputs, adds to local state object
   const handleNewCoffee = (key) => (event) => {
     setNewCoffee({ ...newCoffee, [key]: event.target.value });
   };
@@ -89,9 +89,14 @@ function AddCoffee() {
     setNewCoffee({ ...newCoffee, roast_date: formattedDate });
   };
 
+  // Handles setting the coffee pic url if S3Uploader is used
+  const handlePic = (url) => {
+    setNewCoffee({ ...newCoffee, coffee_pic: url });
+  };
+
   // Toggles adding and removing flavors for the coffee in local state array
   const handleNewFlavor = (id) => {
-    newFlavors.indexOf(id) === -1
+    !newFlavors.includes(id)
       ? setNewFlavors([...newFlavors, id])
       : setNewFlavors(newFlavors.filter((index) => index !== id));
   };
@@ -109,7 +114,7 @@ function AddCoffee() {
   };
 
   // Adds the new coffee to the database with input validation
-  const handleNew = () => {
+  const handleSubmit = () => {
     if (
       newCoffee.roaster &&
       (newCoffee.country || newCoffee.blend_name) &&
@@ -121,7 +126,6 @@ function AddCoffee() {
         payload: {
           ...newCoffee,
           flavors_array: newFlavors,
-          coffee_pic: newPic,
         },
       });
       dispatch({ type: 'FETCH_SHARED_COFFEES' });
@@ -297,17 +301,11 @@ function AddCoffee() {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              label="Coffee Photo URL"
-              variant="outlined"
-              className={classes.textInputs}
-              fullWidth
-              onChange={(event) => setNewPic(event.target.value)}
-              value={newPic}
-            />
             <Box display="flex" paddingBottom={3} paddingTop={1}>
-              <S3Uploader setPhoto={setNewPic} />
-              {newPic && <img className={classes.media} src={newPic} />}
+              <S3Uploader setPhoto={handlePic} />
+              {newCoffee.coffee_pic && (
+                <img className={classes.media} src={newCoffee.coffee_pic} />
+              )}
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
@@ -316,9 +314,7 @@ function AddCoffee() {
                   className={classes.chips}
                   key={item.id}
                   label={item.name}
-                  color={
-                    newFlavors.indexOf(item.id) > -1 ? 'primary' : 'default'
-                  }
+                  color={newFlavors.includes(item.id) ? 'primary' : 'default'}
                   onClick={() => handleNewFlavor(item.id)}
                 />
               ))}
@@ -350,7 +346,7 @@ function AddCoffee() {
                 className={classes.buttons}
                 variant="contained"
                 color="primary"
-                onClick={handleNew}
+                onClick={handleSubmit}
               >
                 Add New Coffee
               </Button>
