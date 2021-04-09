@@ -280,7 +280,7 @@ function EditCoffee() {
                   key={item.id}
                   label={item.name}
                   color={
-                    flavors_array?.indexOf(item.id) > -1 ? 'primary' : 'default'
+                    flavors_array?.includes(item.id) ? 'primary' : 'default'
                   }
                   onClick={() =>
                     dispatch({
