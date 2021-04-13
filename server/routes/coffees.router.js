@@ -167,14 +167,20 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
       VALUES ${sqlValues};
     `;
 
-    pool.query(newFlavorsSqlText, [newCoffeeId, ...req.body.flavors_array]);
+    await connection.query(newFlavorsSqlText, [
+      newCoffeeId,
+      ...req.body.flavors_array,
+    ]);
 
     // Complete transaction
     await connection.query('COMMIT;');
     res.sendStatus(201); // Send back success!
   } catch (err) {
     await connection.query('ROLLBACK;');
-    console.log('Error in transaction in coffees.router, rollback: ', err);
+    console.log(
+      'Error in add coffee transaction in coffees.router, rollback: ',
+      err
+    );
     res.sendStatus(500);
   } finally {
     connection.release();
@@ -182,18 +188,44 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
 });
 
 // DELETE route for a coffee from their dashboard
-router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
-  const sqlText = `
-    DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
-  `;
+router.delete('/delete/:id', rejectUnauthenticated, async (req, res) => {
+  const connection = await pool.connect();
 
-  pool
-    .query(sqlText, [req.user.id, req.params.id])
-    .then(() => res.sendStatus(204))
-    .catch((err) => {
-      console.log(`Error in DELETE with query: ${sqlText}`, err);
-      res.sendStatus(500);
-    });
+  try {
+    await connection.query('BEGIN;');
+
+    // Query #1
+    // Delete entry from users_coffees to delete coffee from user's dashboard
+    const deleteUsersCoffeesEntrySqlText = `
+      DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
+    `;
+    await connection.query(deleteUsersCoffeesEntrySqlText, [
+      req.user.id,
+      req.params.id,
+    ]);
+
+    // Query #2
+    // Check to see if this coffee is shared. If not, delete it from db
+    const deleteCoffeeSqlText = `
+      DELETE FROM "coffees"  
+      WHERE NOT EXISTS (SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1)
+      AND "coffees".id = $1;
+    `;
+    await connection.query(deleteCoffeeSqlText, [req.params.id]);
+
+    // Complete transaction
+    await connection.query('COMMIT;');
+    res.sendStatus(204); // Send back success
+  } catch (err) {
+    await connection.query('ROLLBACK;');
+    console.log(
+      'Error in delete coffee transaction in coffees.router, rollback: ',
+      err
+    );
+    res.sendStatus(500);
+  } finally {
+    connection.release();
+  }
 });
 
 module.exports = router;

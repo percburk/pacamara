@@ -24,7 +24,7 @@ CREATE TABLE "users" (
 
 CREATE TABLE "users_methods" (
   "id" SERIAL PRIMARY KEY,
-  "users_id" INT REFERENCES "users",
+  "users_id" INT REFERENCES "users" ON DELETE CASCADE,
   "methods_id" INT REFERENCES "methods"
 );
 
@@ -51,20 +51,20 @@ CREATE TABLE "coffees" (
 
 CREATE TABLE "coffees_flavors" (
   "id" SERIAL PRIMARY KEY,
-  "coffees_id" INT REFERENCES "coffees",
+  "coffees_id" INT REFERENCES "coffees" ON DELETE CASCADE,
   "flavors_id" INT REFERENCES "flavors"
 );
 
 CREATE TABLE "users_coffees" (
   "id" SERIAL PRIMARY KEY,
-  "users_id" INT REFERENCES "users",
+  "users_id" INT REFERENCES "users" ON DELETE CASCADE,
   "coffees_id" INT REFERENCES "coffees",
   "is_fav" BOOLEAN DEFAULT false
 );
 
 CREATE TABLE "brews" (
   "id" SERIAL PRIMARY KEY,
-  "coffees_id" INT REFERENCES "coffees",
+  "coffees_id" INT REFERENCES "coffees" ON DELETE CASCADE,
   "methods_id" INT REFERENCES "methods",
   "is_fav" BOOLEAN DEFAULT false,
   "date" TIMESTAMP DEFAULT NOW() NOT NULL,
