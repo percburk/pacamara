@@ -7,7 +7,7 @@ function* fetchBrews(action) {
     const response = yield axios.get(`/api/brews/${action.payload}`);
     yield put({ type: 'SET_BREWS', payload: response.data });
   } catch (err) {
-    console.log('error in fetchBrews', err);
+    console.log('Error in fetchBrews', err);
   }
 }
 
@@ -18,7 +18,7 @@ function* deleteBrew(action) {
     yield axios.delete(`/api/brews/delete/${brewId}`);
     yield put({ type: 'FETCH_BREWS', payload: coffeeId });
   } catch (err) {
-    console.log('error in deleteBrew', err);
+    console.log('Error in deleteBrew', err);
   }
 }
 
@@ -31,7 +31,7 @@ function* favBrew(action) {
     yield axios.put(`api/brews/like/${brewId}`, { status });
     yield put({ type: 'FETCH_BREWS', payload: coffeeId });
   } catch (err) {
-    console.log('error in favBrew', err);
+    console.log('Error in favBrew', err);
   }
 }
 
@@ -45,11 +45,20 @@ function* addBrew(action) {
   }
 }
 
-function* brewsSaga() {
+// Edits a brew instance
+function* editBrew(action) {
+  try {
+    yield axios.put('/api/brews/edit', action.payload);
+    yield put({ type: 'FETCH_BREWS', payload: action.payload.coffees_id });
+  } catch (err) {
+    console.log('Error in editBrew', err);
+  }
+}
+
+export default function* brewsSaga() {
   yield takeEvery('FETCH_BREWS', fetchBrews);
   yield takeEvery('DELETE_BREW', deleteBrew);
   yield takeEvery('LIKE_BREW', favBrew);
   yield takeEvery('ADD_BREW', addBrew);
+  yield takeEvery('EDIT_BREW', editBrew);
 }
-
-export default brewsSaga;

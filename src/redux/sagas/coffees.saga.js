@@ -25,7 +25,7 @@ function* setBrewingOrFav(action) {
   const fetchWhichCoffee = id
     ? { type: 'FETCH_COFFEES', payload: q }
     : { type: 'FETCH_ONE_COFFEE', payload: oneCoffeeId };
-  
+
   try {
     yield axios.put('/api/one-coffee/fav-brew/', {
       id: id || oneCoffeeId,
@@ -61,11 +61,9 @@ function* addCoffee(action) {
   }
 }
 
-function* coffeesSaga() {
+export default function* coffeesSaga() {
   yield takeEvery('FETCH_COFFEES', fetchCoffees);
   yield takeEvery('SET_BREWING_OR_FAV', setBrewingOrFav);
   yield takeEvery('DELETE_COFFEE', deleteCoffee);
   yield takeEvery('ADD_COFFEE', addCoffee);
 }
-
-export default coffeesSaga;

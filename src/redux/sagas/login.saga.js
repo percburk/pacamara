@@ -52,9 +52,7 @@ function* logoutUser(action) {
   }
 }
 
-function* loginSaga() {
+export default function* loginSaga() {
   yield takeLatest('LOGIN', loginUser);
   yield takeLatest('LOGOUT', logoutUser);
 }
-
-export default loginSaga;

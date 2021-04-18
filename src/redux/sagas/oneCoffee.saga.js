@@ -21,9 +21,7 @@ function* editCoffee(action) {
   }
 }
 
-function* oneCoffeeSaga() {
+export default function* oneCoffeeSaga() {
   yield takeEvery('FETCH_ONE_COFFEE', fetchOneCoffee);
   yield takeEvery('EDIT_COFFEE', editCoffee);
 }
-
-export default oneCoffeeSaga;

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { DateTime } from 'luxon';
 import {
@@ -17,11 +16,12 @@ import {
 } from '@material-ui/core';
 import {
   ExpandMore,
-  Close,
   ThumbUp,
   ThumbDown,
   ThumbsUpDownOutlined,
 } from '@material-ui/icons';
+// Components
+import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,12 @@ const useStyles = makeStyles((theme) => ({
 
 // BrewInstance is the accordion that is displayed on CoffeeDetails for each
 // entry on the 'brews' table
-function BrewInstance({ coffeeId, instance, accordionOpen, handleAccordion }) {
+export default function BrewInstance({
+  coffeeId,
+  instance,
+  accordionOpen,
+  handleAccordion,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
@@ -75,15 +80,6 @@ function BrewInstance({ coffeeId, instance, accordionOpen, handleAccordion }) {
       type: 'LIKE_BREW',
       payload: { coffeeId, brewId: id, change: liked },
     });
-  };
-
-  // Deletes a brew instance from the database
-  const deleteBrew = () => {
-    dispatch({
-      type: 'DELETE_BREW',
-      payload: { coffeeId, brewId: id },
-    });
-    dispatch({ type: 'SNACKBARS_DELETED_BREW' });
   };
 
   return (
@@ -149,13 +145,9 @@ function BrewInstance({ coffeeId, instance, accordionOpen, handleAccordion }) {
           justifyContent="right"
           paddingLeft={2}
         >
-          <IconButton onClick={deleteBrew}>
-            <Close />
-          </IconButton>
+          <EditDeleteBrewMenu instance={instance} />
         </Box>
       </AccordionDetails>
     </Accordion>
   );
 }
-
-export default BrewInstance;

@@ -62,7 +62,7 @@ function* deleteSharedCoffee(action) {
   }
 }
 
-function* shareSaga() {
+export default function* shareSaga() {
   yield takeEvery('FETCH_SHARING_USER_LIST', fetchSharingUserList);
   yield takeEvery('SEND_SHARED_COFFEE', sendSharedCoffee);
   yield takeEvery('FETCH_SHARED_COFFEES', fetchSharedCoffees);
@@ -70,5 +70,3 @@ function* shareSaga() {
   yield takeEvery('DELETE_SHARED_COFFEE', deleteSharedCoffee);
   yield takeEvery('ADD_SHARED_COFFEE_TO_DASHBOARD', addSharedCoffeeToDashboard);
 }
-
-export default shareSaga;

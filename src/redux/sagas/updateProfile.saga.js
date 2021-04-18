@@ -13,8 +13,6 @@ function* updateProfile(action) {
   }
 }
 
-function* updateProfileSaga() {
+export default function* updateProfileSaga() {
   yield takeEvery('UPDATE_PROFILE', updateProfile);
 }
-
-export default updateProfileSaga;

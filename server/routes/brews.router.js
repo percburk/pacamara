@@ -64,6 +64,50 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.put('/edit', rejectUnauthenticated, (req, res) => {
+  const sqlText = `
+    UPDATE "brews" SET
+      "coffees_id" = $1, 
+      "methods_id" = $2, 
+      "water_dose" = $3, 
+      "coffee_dose" = $4, 
+      "grind" = $5, 
+      "moisture" = $6, 
+      "co2" = $7, 
+      "ratio" = $8, 
+      "tds" = $9, 
+      "ext" = $10, 
+      "water_temp" = $11, 
+      "time" = $12, 
+      "lrr" = $13,
+      "date" = NOW()
+    WHERE "id" = $14;
+  `;
+
+  pool
+    .query(sqlText, [
+      req.body.coffees_id,
+      req.body.methods_id,
+      req.body.water_dose,
+      req.body.coffee_dose,
+      req.body.grind,
+      req.body.moisture,
+      req.body.co2,
+      req.body.ratio,
+      req.body.tds,
+      req.body.ext,
+      req.body.water_temp,
+      req.body.time,
+      req.body.lrr,
+      req.body.id,
+    ])
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.log(`Error in PUT with query ${sqlText}`, err);
+      res.sendStatus(500);
+    });
+});
+
 // PUT route to change the status of 'liked' on a brew instance
 // Can be 'yes', 'no', or 'none'
 router.put('/like/:id', (req, res) => {
