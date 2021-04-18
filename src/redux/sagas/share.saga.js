@@ -7,7 +7,7 @@ function* fetchSharingUserList() {
     const response = yield axios.get('/api/share/users');
     yield put({ type: 'SET_SHARE_USER_LIST', payload: response.data });
   } catch (err) {
-    console.log('error in fetchShareUsers', err);
+    console.log('Error in fetchShareUsers', err);
   }
 }
 
@@ -17,7 +17,7 @@ function* fetchSharedCoffees() {
     const response = yield axios.get('/api/share');
     yield put({ type: 'SET_SHARED_COFFEES', payload: response.data });
   } catch (err) {
-    console.log('error in fetchSharedCoffees', err);
+    console.log('Error in fetchSharedCoffees', err);
   }
 }
 
@@ -28,7 +28,7 @@ function* fetchOneSharedCoffee(action) {
     const response = yield axios.get(`/api/share/${action.payload}`);
     yield put({ type: 'SET_ONE_SHARED_COFFEE', payload: response.data[0] });
   } catch (err) {
-    console.log('error in fetchOneSharedCoffee', err);
+    console.log('Error in fetchOneSharedCoffee', err);
   }
 }
 
@@ -37,7 +37,7 @@ function* sendSharedCoffee(action) {
   try {
     yield axios.post('/api/share', action.payload);
   } catch (err) {
-    console.log('error in sendSharedCoffee', err);
+    console.log('Error in sendSharedCoffee', err);
   }
 }
 
@@ -48,7 +48,7 @@ function* addSharedCoffeeToDashboard(action) {
     yield put({ type: 'FETCH_SHARED_COFFEES' });
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
-    console.log('error in addSharedCoffee', err);
+    console.log('Error in addSharedCoffee', err);
   }
 }
 
@@ -58,7 +58,7 @@ function* deleteSharedCoffee(action) {
     axios.delete(`/api/share/delete/${action.payload}`);
     yield put({ type: 'FETCH_SHARED_COFFEES' });
   } catch (err) {
-    console.log('error in deleteSharedCoffee', err);
+    console.log('Error in deleteSharedCoffee', err);
   }
 }
 

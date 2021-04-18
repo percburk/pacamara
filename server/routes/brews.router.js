@@ -64,6 +64,7 @@ router.post('/add', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// PUT route to update a brew instance
 router.put('/edit', rejectUnauthenticated, (req, res) => {
   const sqlText = `
     UPDATE "brews" SET
@@ -111,12 +112,15 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
 // PUT route to change the status of 'liked' on a brew instance
 // Can be 'yes', 'no', or 'none'
 router.put('/like/:id', (req, res) => {
+  const { change } = req.body;
+  const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
+
   const sqlText = `
     UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;
   `;
 
   pool
-    .query(sqlText, [req.body.status, req.params.id])
+    .query(sqlText, [newStatus, req.params.id])
     .then(() => res.sendStatus(201))
     .catch((err) => {
       console.log(`Error in PUT with query: ${sqlText}`, err);

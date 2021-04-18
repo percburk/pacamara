@@ -19,9 +19,9 @@ function* loginUser(action) {
     // After the user has logged in, get the user information from the server
     yield put({ type: 'FETCH_USER' });
   } catch (err) {
-    console.log('error in loginUser', err);
+    console.log('Error in loginUser', err);
     if (err.response.status === 401) {
-      // The 401 is the error status sent from passport if user isn't in the 
+      // The 401 is the error status sent from passport if user isn't in the
       // database or if the username and password don't match in the database
       yield put({ type: 'LOGIN_FAILED' });
     } else {
@@ -33,7 +33,7 @@ function* loginUser(action) {
 }
 
 // Worker Saga: will be fired on "LOGOUT" actions
-function* logoutUser(action) {
+function* logoutUser() {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },
@@ -44,11 +44,11 @@ function* logoutUser(action) {
     // When the server recognizes the user session, it will end the session
     yield axios.post('/api/user/logout', config);
 
-    // Now that the session has ended on the server, remove the client-side 
+    // Now that the session has ended on the server, remove the client-side
     // user object to let the client-side know the user is logged out
     yield put({ type: 'UNSET_USER' });
   } catch (err) {
-    console.log('Error with user logout:', err);
+    console.log('Error in logoutUser', err);
   }
 }
 
@@ -56,3 +56,4 @@ export default function* loginSaga() {
   yield takeLatest('LOGIN', loginUser);
   yield takeLatest('LOGOUT', logoutUser);
 }
+

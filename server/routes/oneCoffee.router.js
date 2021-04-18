@@ -51,7 +51,7 @@ router.put('/fav-brew', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// PUT route to edit an individual coffee, SQL transaction
+// PUT route to edit an individual coffee, transaction
 router.put('/edit', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
 

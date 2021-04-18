@@ -1,12 +1,12 @@
 // searchReducer contains a pared down list of coffee info the user can search
 // through on Nav
-const searchReducer = (state = [], action) => {
+const coffeeSearchListReducer = (state = [], action) => {
   switch (action.type) {
-    case 'SET_SEARCH':
+    case 'SET_COFFEE_SEARCH_LIST':
       return action.payload;
     default:
       return state;
   }
 };
 
-export default searchReducer;
+export default coffeeSearchListReducer;

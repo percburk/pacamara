@@ -15,7 +15,7 @@ function* fetchCoffees(action) {
     const response = yield whichRoute;
     yield put({ type: 'SET_COFFEES', payload: response.data });
   } catch (err) {
-    console.log('error in fetchCoffees', err);
+    console.log('Error in fetchCoffees', err);
   }
 }
 
@@ -33,7 +33,7 @@ function* setBrewingOrFav(action) {
     });
     yield put(fetchWhichCoffee);
   } catch (err) {
-    console.log('error in setBrewingOrFav', err);
+    console.log('Error in setBrewingOrFav', err);
   }
 }
 
@@ -47,7 +47,7 @@ function* deleteCoffee(action) {
       payload: q,
     });
   } catch (err) {
-    console.log('error in deleteCoffee', err);
+    console.log('Error in deleteCoffee', err);
   }
 }
 
@@ -57,7 +57,7 @@ function* addCoffee(action) {
     yield axios.post('/api/coffees/add', action.payload);
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
-    console.log('error in addCoffee', err);
+    console.log('Error in addCoffee', err);
   }
 }
 

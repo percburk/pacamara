@@ -7,7 +7,7 @@ function* fetchOneCoffee(action) {
     const response = yield axios.get(`/api/one-coffee/${action.payload}`);
     yield put({ type: 'SET_ONE_COFFEE', payload: response.data[0] });
   } catch (err) {
-    console.log('error in fetchOneCoffee', err);
+    console.log('Error in fetchOneCoffee', err);
   }
 }
 
@@ -17,7 +17,7 @@ function* editCoffee(action) {
     yield axios.put('/api/one-coffee/edit', action.payload);
     yield put({ type: 'FETCH_COFFEES' });
   } catch (err) {
-    console.log('error in editCoffee', err);
+    console.log('Error in editCoffee', err);
   }
 }
 

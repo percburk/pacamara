@@ -7,7 +7,7 @@ function* fetchMethods() {
     const response = yield axios.get('/api/methods');
     yield put({ type: 'SET_METHODS', payload: response.data });
   } catch (err) {
-    console.log('error in fetchMethods:', err);
+    console.log('Error in fetchMethods:', err);
   }
 }
 

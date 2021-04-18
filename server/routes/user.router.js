@@ -63,7 +63,7 @@ router.post('/logout', (req, res) => {
 });
 
 // PUT route adding all other information to 'users', in creating both a
-// new profile or updating existing profile, SQL transaction
+// new profile or updating existing profile, transaction
 router.put('/update', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
   try {
@@ -71,10 +71,18 @@ router.put('/update', rejectUnauthenticated, async (req, res) => {
 
     // Query #1 - sending all non-array user data
     const updateSqlText = `
-      UPDATE "users" SET "name" = $1, "profile_pic" = $2, 
-      "methods_default_id" = $3, "methods_default_lrr" = $4, "kettle" = $5, 
-      "grinder" = $6, "tds_min" = $7, "tds_max" = $8, "ext_min" = $9, 
-      "ext_max" = $10 WHERE "id" = $11;
+      UPDATE "users" 
+      SET "name" = $1, 
+        "profile_pic" = $2, 
+        "methods_default_id" = $3, 
+        "methods_default_lrr" = $4, 
+        "kettle" = $5, 
+        "grinder" = $6, 
+        "tds_min" = $7, 
+        "tds_max" = $8, 
+        "ext_min" = $9, 
+        "ext_max" = $10 
+      WHERE "id" = $11;
     `;
     await connection.query(updateSqlText, [
       req.body.name,

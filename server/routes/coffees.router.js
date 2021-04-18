@@ -97,7 +97,7 @@ router.get('/search', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// POST route for adding a new coffee, SQL transaction
+// POST route for adding a new coffee, transaction
 router.post('/add', rejectUnauthenticated, async (req, res) => {
   const connection = await pool.connect();
 

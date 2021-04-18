@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 export default function UpdateProfile() {
   const classes = useStyles();
   const history = useHistory();
-  let { user } = useParams();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const {
@@ -95,10 +94,10 @@ export default function UpdateProfile() {
   useEffect(() => dispatch({ type: 'FETCH_METHODS' }), []);
 
   // Handles toggling of methods being added to a user's profile
-  const handleNewMethod = (id) => {
-    newMethods.includes(id)
-      ? setNewMethods([...newMethods, id])
-      : setNewMethods(newMethods.filter((index) => index !== id));
+  const handleNewMethod = (methodId) => {
+    newMethods.includes(methodId)
+      ? setNewMethods(newMethods.filter((index) => index !== methodId))
+      : setNewMethods([...newMethods, methodId]);
   };
 
   // Curried function which handles all text inputs
@@ -126,7 +125,7 @@ export default function UpdateProfile() {
         profile_pic: newPic,
       },
     });
-    user === 'new'
+    !name
       ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
       : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
     clearInputs();
@@ -150,9 +149,7 @@ export default function UpdateProfile() {
       }
     } else {
       !newUpdates.name ? setInputError(true) : setInputError(false);
-      if (!newMethods[0]) {
-        dispatch({ type: 'SNACKBARS_METHODS_ERROR' });
-      }
+      !newMethods[0] && dispatch({ type: 'SNACKBARS_METHODS_ERROR' });
     }
   };
 
@@ -230,9 +227,7 @@ export default function UpdateProfile() {
                   className={classes.chips}
                   key={item.id}
                   label={item.name}
-                  color={
-                    newMethods.indexOf(item.id) > -1 ? 'primary' : 'default'
-                  }
+                  color={newMethods.includes(item.id) ? 'primary' : 'default'}
                   onClick={() => handleNewMethod(item.id)}
                 />
               ))}

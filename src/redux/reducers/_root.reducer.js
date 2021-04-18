@@ -7,7 +7,7 @@ import oneCoffee from './oneCoffee.reducer';
 import flavors from './flavors.reducer';
 import snackbars from './snackbars.reducer';
 import brews from './brews.reducer';
-import search from './search.reducer';
+import coffeeSearchList from './coffeeSearchList.reducer';
 import sharingUserList from './sharingUserList.reducer';
 import sharedCoffees from './sharedCoffees.reducer';
 import oneSharedCoffee from './oneSharedCoffee.reducer';
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
   flavors, // Contains flavors for flavor palette in AddCoffee
   snackbars, // Contains all Snackbar messages that display on Dashboard
   brews, // Contains the brew instances paired to the coffee in oneCoffee
-  search, // Contains smaller list of searchable coffee info for use in Nav
+  coffeeSearchList, // Contains smaller list of searchable coffee info for use in Nav
   sharingUserList, // List of users to search, used in sharing coffees
   sharedCoffees, // Any coffees that have been shared with the current user
   oneSharedCoffee, // All information of the specific coffee shared

@@ -7,7 +7,7 @@ function* fetchFlavors() {
     const response = yield axios.get('/api/flavors');
     yield put({ type: 'SET_FLAVORS', payload: response.data });
   } catch (err) {
-    console.log('error in fetchFlavors', err);
+    console.log('Error in fetchFlavors', err);
   }
 }
 

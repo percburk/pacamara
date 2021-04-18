@@ -15,6 +15,7 @@ import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 // Components
 import AvatarMenu from '../AvatarMenu/AvatarMenu';
+import pacamaraLogo from '../../images/pacamara-logo.png';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +61,7 @@ export default function Nav() {
   const history = useHistory();
   const location = useLocation();
   const { name } = useSelector((store) => store.user);
-  const search = useSelector((store) => store.search);
+  const coffeeSearchList = useSelector((store) => store.coffeeSearchList);
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -101,7 +102,7 @@ export default function Nav() {
         <Box display="flex" alignItems="center" flexGrow={1}>
           <Box paddingRight={3}>
             <img
-              src="/images/pacamara-coffee.png"
+              src={pacamaraLogo}
               className={classes.logo}
               onClick={() => history.push('/dashboard')}
               style={{ cursor: 'pointer' }}
@@ -126,7 +127,7 @@ export default function Nav() {
               fullWidth
               inputValue={searchInput}
               onInputChange={handleSearchBar}
-              options={search.map((item) =>
+              options={coffeeSearchList.map((item) =>
                 item.blend_name
                   ? `${item.roaster} ${item.blend_name}`
                   : `${item.roaster} ${item.country} ${item.producer}`

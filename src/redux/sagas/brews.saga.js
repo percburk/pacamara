@@ -25,10 +25,8 @@ function* deleteBrew(action) {
 // Toggles whether a brew is thumbs up, down, or none
 function* favBrew(action) {
   const { brewId, coffeeId, change } = action.payload;
-  const status = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
-
   try {
-    yield axios.put(`api/brews/like/${brewId}`, { status });
+    yield axios.put(`api/brews/like/${brewId}`, { change });
     yield put({ type: 'FETCH_BREWS', payload: coffeeId });
   } catch (err) {
     console.log('Error in favBrew', err);
@@ -41,7 +39,7 @@ function* addBrew(action) {
     yield axios.post('/api/brews/add', action.payload);
     yield put({ type: 'FETCH_BREWS', payload: action.payload.coffees_id });
   } catch (err) {
-    console.log('error in addBrew', err);
+    console.log('Error in addBrew', err);
   }
 }
 
