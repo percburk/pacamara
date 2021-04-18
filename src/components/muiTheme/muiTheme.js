@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 // Material-UI theme which is constant throughout, imported into App
 // and sent through ThemeProvider
-const MuiTheme = createMuiTheme({
+const muiTheme = createMuiTheme({
   palette: {
     primary: {
       main: '#35baf6',
@@ -50,4 +50,4 @@ const MuiTheme = createMuiTheme({
   },
 });
 
-export default MuiTheme;
+export default muiTheme;

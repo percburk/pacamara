@@ -4,7 +4,7 @@ import { Alert } from '@material-ui/lab';
 
 // Snackbars displays any Snackbar alerts that have been dispatched by other
 // components. Central location for all Snackbar instances.
-function Snackbars() {
+export default function Snackbars() {
   const dispatch = useDispatch();
   const { string, open, severity } = useSelector((store) => store.snackbars);
 
@@ -26,5 +26,3 @@ function Snackbars() {
     </Snackbar>
   );
 }
-
-export default Snackbars;

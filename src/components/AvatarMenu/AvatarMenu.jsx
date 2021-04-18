@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Edit, Add, ViewModule } from '@material-ui/icons';
-// Imported components
+// Components
 import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 
 // Component styling classes
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 // AvatarMenu opens when the user clicks on their avatar in Nav
 // Their home base to edit their profile, add a new coffee, view any shared
 // coffees, navigate back to their dashboard, or log out
-function AvatarMenu() {
+export default function AvatarMenu() {
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -73,7 +73,7 @@ function AvatarMenu() {
         className={classes.menu}
         anchorEl={avatarAnchorEl}
         keepMounted
-        open={Boolean(avatarAnchorEl)}
+        open={!!avatarAnchorEl}
         onClose={() => {
           setAvatarAnchorEl(null);
           setSharedOpen(false);
@@ -153,5 +153,3 @@ function AvatarMenu() {
     </>
   );
 }
-
-export default AvatarMenu;

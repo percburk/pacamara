@@ -22,8 +22,8 @@ import {
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
-// Imported components
-import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
+// Components
+import EditDeleteShareCoffeeMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // CoffeeCard is the individual rendering of each coffee on a user's Dashboard
-function CoffeeCard({ coffee }) {
+export default function CoffeeCard({ coffee }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -88,83 +88,79 @@ function CoffeeCard({ coffee }) {
   };
 
   return (
-    <>
-      <Card className={classes.root} elevation={3}>
-        <CardHeader
-          title={coffeeName}
-          subheader={roaster}
-          action={
-            <Grid container direction="column" alignItems="center">
-              <EditDeleteShareMenu
-                id={id}
-                coffeeName={coffeeName}
-                pic={coffee_pic}
-              />
-              <Tooltip
-                title="Currently Brewing"
-                enterDelay={900}
-                leaveDelay={100}
-              >
-                <IconButton onClick={() => handleBrewOrFav('brew')}>
-                  {brewing ? (
-                    <LocalCafe color="primary" />
-                  ) : (
-                    <LocalCafeOutlined className={classes.mug} />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          }
-        />
-        <CardMedia
-          className={classes.media}
-          image={coffee_pic}
-          title={coffeeName}
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            dispatch({ type: 'CLEAR_SNACKBARS' });
-            history.push(`/details/${id}`);
-          }}
-        />
-        <CardContent>
-          <Box display="flex" justifyContent="center">
-            {flavors.map((item) => {
-              if (flavors_array?.indexOf(item.id) > -1) {
-                return (
-                  <Chip
-                    key={item.id}
-                    className={classes.chip}
-                    variant="outlined"
-                    label={item.name}
-                  />
-                );
-              }
-            })}
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            p={1}
-          >
-            <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
-              <IconButton onClick={() => handleBrewOrFav('fav')}>
-                {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
+    <Card className={classes.root} elevation={3}>
+      <CardHeader
+        title={coffeeName}
+        subheader={roaster}
+        action={
+          <Grid container direction="column" alignItems="center">
+            <EditDeleteShareCoffeeMenu
+              id={id}
+              coffeeName={coffeeName}
+              pic={coffee_pic}
+            />
+            <Tooltip
+              title="Currently Brewing"
+              enterDelay={900}
+              leaveDelay={100}
+            >
+              <IconButton onClick={() => handleBrewOrFav('brew')}>
+                {brewing ? (
+                  <LocalCafe color="primary" />
+                ) : (
+                  <LocalCafeOutlined className={classes.mug} />
+                )}
               </IconButton>
             </Tooltip>
-            <Box>
-              <Typography align="right">{formattedDate}</Typography>
-              {sharedByUser && (
-                <Typography variant="subtitle2" align="right">
-                  From @{sharedByUser}
-                </Typography>
-              )}
-            </Box>
+          </Grid>
+        }
+      />
+      <CardMedia
+        className={classes.media}
+        image={coffee_pic}
+        title={coffeeName}
+        style={{ cursor: 'pointer' }}
+        onClick={() => {
+          dispatch({ type: 'CLEAR_SNACKBARS' });
+          history.push(`/details/${id}`);
+        }}
+      />
+      <CardContent>
+        <Box display="flex" justifyContent="center">
+          {flavors.map((item) => {
+            if (flavors_array?.indexOf(item.id) > -1) {
+              return (
+                <Chip
+                  key={item.id}
+                  className={classes.chip}
+                  variant="outlined"
+                  label={item.name}
+                />
+              );
+            }
+          })}
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          p={1}
+        >
+          <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
+            <IconButton onClick={() => handleBrewOrFav('fav')}>
+              {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
+            </IconButton>
+          </Tooltip>
+          <Box>
+            <Typography align="right">{formattedDate}</Typography>
+            {sharedByUser && (
+              <Typography variant="subtitle2" align="right">
+                From @{sharedByUser}
+              </Typography>
+            )}
           </Box>
-        </CardContent>
-      </Card>
-    </>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
-
-export default CoffeeCard;

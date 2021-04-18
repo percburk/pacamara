@@ -11,7 +11,7 @@ import {
   Chip,
   Slider,
 } from '@material-ui/core';
-// Component imports
+// Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog';
 import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog';
@@ -58,10 +58,10 @@ const useStyles = makeStyles((theme) => ({
 
 // UpdateProfile handles any changes in profile information for new or existing
 // users. Handles all changes in local state.
-function UpdateProfile() {
+export default function UpdateProfile() {
   const classes = useStyles();
   const history = useHistory();
-  let { id } = useParams();
+  let { user } = useParams();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
   const {
@@ -96,7 +96,7 @@ function UpdateProfile() {
 
   // Handles toggling of methods being added to a user's profile
   const handleNewMethod = (id) => {
-    newMethods.indexOf(id) === -1
+    newMethods.includes(id)
       ? setNewMethods([...newMethods, id])
       : setNewMethods(newMethods.filter((index) => index !== id));
   };
@@ -126,7 +126,7 @@ function UpdateProfile() {
         profile_pic: newPic,
       },
     });
-    id === 'new'
+    user === 'new'
       ? dispatch({ type: 'SNACKBARS_CREATED_PROFILE' })
       : dispatch({ type: 'SNACKBARS_UPDATED_PROFILE' });
     clearInputs();
@@ -314,5 +314,3 @@ function UpdateProfile() {
     </>
   );
 }
-
-export default UpdateProfile;

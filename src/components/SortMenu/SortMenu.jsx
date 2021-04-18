@@ -5,7 +5,7 @@ import { Button, Menu, MenuItem } from '@material-ui/core';
 const sortArray = ['Date', 'Country', 'Producer', 'Roaster'];
 
 // Menu that opens on Dashboard providing all sort options
-function SortMenu({ sort, setSort }) {
+export default function SortMenu({ sort, setSort }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   // Sets the Sort in local state on Dashboard
@@ -41,5 +41,3 @@ function SortMenu({ sort, setSort }) {
     </>
   );
 }
-
-export default SortMenu;

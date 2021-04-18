@@ -22,7 +22,7 @@ import {
   Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
-// Imported components
+// Components
 import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteShareMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
 import AddEditBrew from '../AddEditBrew/AddEditBrew';
@@ -87,10 +87,16 @@ export default function CoffeeDetails() {
   }, []);
 
   const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
+  
+  // Displays either blend name or country/producer based on blend status
+  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+
+
   // Uses Luxon to calculate the amount of days post roast for this coffee
   const daysOffRoast = DateTime.local()
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
+
   // Toggle fav or brewing status of the coffee
   const handleBrewOrFav = (change) => {
     dispatch({
@@ -98,12 +104,11 @@ export default function CoffeeDetails() {
       payload: { oneCoffeeId: id, change },
     });
   };
+
   // Only allows one accordion open at a time, for easier ui
   const handleAccordion = (selected) => (event, isOpen) => {
     setAccordionOpen(isOpen ? selected : false);
   };
-  // Displays either blend name or country/producer based on blend status
-  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (
     <>

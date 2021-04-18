@@ -18,7 +18,7 @@ import { Close } from '@material-ui/icons';
 // DefaultMethodDialog opens when a user is creating or editing their profile,
 // asking if they would like to set one of their owned brew methods as their
 // default, is then auto filled when adding new brew instances
-function DefaultMethodDialog({
+export default function DefaultMethodDialog({
   newMethods,
   newUpdates,
   setNewUpdates,
@@ -124,5 +124,3 @@ function DefaultMethodDialog({
     </Dialog>
   );
 }
-
-export default DefaultMethodDialog;

@@ -18,7 +18,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-// Imported components
+// Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // AddCoffee includes all the inputs to add a new coffee to a user's dashboard
-function AddCoffee() {
+export default function AddCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -359,5 +359,3 @@ function AddCoffee() {
     </>
   );
 }
-
-export default AddCoffee;

@@ -8,7 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
-// Imported components
+// Components
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -19,9 +19,10 @@ import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import muiTheme from '../muiTheme/muiTheme';
+// CSS
 import './App.css';
 
-function App() {
+export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function App() {
             on the same route. Visiting localhost:3000/dashboard will show the 
             Dashboard if the user is logged in. If the user is not logged in, 
             the ProtectedRoute will show the LandingPage. */}
-          <ProtectedRoute exact path="/profile/:id">
+          <ProtectedRoute exact path="/profile/:user">
             <UpdateProfile />
           </ProtectedRoute>
           <ProtectedRoute exact path="/dashboard">
@@ -78,5 +79,3 @@ function App() {
     </ThemeProvider>
   );
 }
-
-export default App;

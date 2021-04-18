@@ -7,7 +7,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons';
-// Imported components
+// Components
 import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
 import AddEditBrew from '../AddEditBrew/AddEditBrew';
 
