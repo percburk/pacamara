@@ -19,7 +19,12 @@ const Polygon = ({ data, scale }) => {
 // ExtractionChart shows a scatter chart of all the brew instances of a coffee
 // It's displayed on CoffeeDetails, users can also click on a point to open the
 // corresponding brew instance
-function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
+export default function ExtractionChart({
+  switchChart,
+  setSwitchChart,
+  oneBrew,
+  setOneBrew,
+}) {
   const { ext_min, ext_max, tds_min, tds_max } = useSelector(
     (store) => store.user
   );
@@ -98,5 +103,3 @@ function ExtractionChart({ switchChart, setSwitchChart, oneBrew, setOneBrew }) {
     </ClickAwayListener>
   );
 }
-
-export default ExtractionChart;

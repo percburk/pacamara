@@ -20,7 +20,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Opens to make sure a user wants to delete a coffee from their dashboard
-function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
+export default function DeleteCoffeeBrewDialog({
+  deleteDialogOpen,
+  setDeleteDialogOpen,
+  coffeeId,
+  brewId,
+}) {
   const classes = useStyles();
   const location = useLocation();
   const history = useHistory();
@@ -32,15 +37,23 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
     setDeleteDialogOpen(false);
-    dispatch({
-      type: 'DELETE_COFFEE',
-      payload: { id, q },
-    });
-    dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-    dispatch({ type: 'FETCH_SHARED_COFFEES' });
-    location.search
-      ? history.push(`/dashboard/${location.search}`)
-      : history.push('/dashboard');
+    if (brewId) {
+      dispatch({
+        type: 'DELETE_BREW',
+        payload: { coffeeId, brewId },
+      });
+      dispatch({ type: 'SNACKBARS_DELETED_BREW' });
+    } else {
+      dispatch({
+        type: 'DELETE_COFFEE',
+        payload: { coffeeId, q },
+      });
+      dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
+      dispatch({ type: 'FETCH_SHARED_COFFEES' });
+      location.search
+        ? history.push(`/dashboard/${location.search}`)
+        : history.push('/dashboard');
+    }
   };
 
   return (
@@ -48,7 +61,7 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
       <DialogTitle align="center">Delete Coffee</DialogTitle>
       <DialogContent align="center">
         <DialogContentText>
-          Are you sure you want to delete this coffee?
+          Are you sure you want to delete this {brewId ? 'brew' : 'coffee'}?
         </DialogContentText>
       </DialogContent>
       <Box display="flex" justifyContent="center">
@@ -72,5 +85,3 @@ function DeleteCoffeeDialog({ deleteDialogOpen, setDeleteDialogOpen, id }) {
     </Dialog>
   );
 }
-
-export default DeleteCoffeeDialog;

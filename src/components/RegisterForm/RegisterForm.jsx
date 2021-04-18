@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
 // RegisterForm is displayed on LandingPage, handles registering a new user
-function RegisterForm({ classes }) {
+export default function RegisterForm({ classes }) {
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -59,5 +59,3 @@ function RegisterForm({ classes }) {
     </Box>
   );
 }
-
-export default RegisterForm;

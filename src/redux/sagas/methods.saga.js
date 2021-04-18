@@ -11,8 +11,6 @@ function* fetchMethods() {
   }
 }
 
-function* methodsSaga() {
+export default function* methodsSaga() {
   yield takeEvery('FETCH_METHODS', fetchMethods);
 }
-
-export default methodsSaga;

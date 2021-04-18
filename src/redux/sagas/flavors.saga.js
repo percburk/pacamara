@@ -11,8 +11,6 @@ function* fetchFlavors() {
   }
 }
 
-function* flavorsSaga() {
+export default function* flavorsSaga() {
   yield takeEvery('FETCH_FLAVORS', fetchFlavors);
 }
-
-export default flavorsSaga;

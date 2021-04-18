@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
 // LoginForm is displayed on LandingPage, handles login process
-function LoginForm({ classes }) {
+export default function LoginForm({ classes }) {
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -59,5 +59,3 @@ function LoginForm({ classes }) {
     </Box>
   );
 }
-
-export default LoginForm;

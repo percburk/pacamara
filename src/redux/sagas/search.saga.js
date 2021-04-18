@@ -12,8 +12,6 @@ function* fetchSearch() {
   }
 }
 
-function* searchSaga() {
+export default function* searchSaga() {
   yield takeEvery('FETCH_SEARCH', fetchSearch);
 }
-
-export default searchSaga;

@@ -13,7 +13,7 @@ const filtersArray = [
 
 // FilterMenu opens on the Dashboard, displaying the options for filtering
 // their list of coffees. Filters appear as Chips when clicked, can be deleted
-function FilterMenu() {
+export default function FilterMenu() {
   const location = useLocation();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -84,5 +84,3 @@ function FilterMenu() {
     </>
   );
 }
-
-export default FilterMenu;

@@ -18,7 +18,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-// Imported components
+// Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 // EditCoffee contains all the inputs to edit an existing coffee entry
 // All editing is done in Redux
-function EditCoffee() {
+export default function EditCoffee() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -333,5 +333,3 @@ function EditCoffee() {
     </>
   );
 }
-
-export default EditCoffee;

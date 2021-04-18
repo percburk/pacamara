@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { Box, Typography, makeStyles } from '@material-ui/core';
-
-// Imported components
+// Components
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
 import FilterMenu from '../FilterMenu/FilterMenu';
@@ -22,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
 
 // Dashboard is the user's homepage. It shows all the coffees in the user's
 // collection, displayed as multiple CoffeeCard components
-function Dashboard() {
+export default function Dashboard() {
   const location = useLocation();
-  const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
   const { name } = useSelector((store) => store.user);
@@ -108,5 +106,3 @@ function Dashboard() {
     </>
   );
 }
-
-export default Dashboard;

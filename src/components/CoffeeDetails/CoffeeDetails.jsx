@@ -22,10 +22,10 @@ import {
   Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
-// Imported components
+// Components
 import BrewInstance from '../BrewInstance/BrewInstance';
-import EditDeleteShareMenu from '../EditDeleteShareMenu/EditDeleteShareMenu';
-import AddBrew from '../AddBrew/AddBrew';
+import EditDeleteShareMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
+import AddEditBrew from '../AddEditBrew/AddEditBrew';
 import Snackbars from '../Snackbars/Snackbars';
 import ExtractionChart from '../ExtractionChart/ExtractionChart';
 
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 // CoffeeDetails shows all coffee information, all the brew instances, and
 // the extraction chart that displays TDS and EXT for all brews
-function CoffeeDetails() {
+export default function CoffeeDetails() {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
@@ -74,7 +74,7 @@ function CoffeeDetails() {
   } = useSelector((store) => store.oneCoffee);
   const brews = useSelector((store) => store.brews);
   const flavors = useSelector((store) => store.flavors);
-  const [addBrew, setAddBrew] = useState(false);
+  const [addEditBrewOpen, setAddEditBrewOpen] = useState(false);
   const [switchChart, setSwitchChart] = useState(false);
   const [oneBrew, setOneBrew] = useState({ x: 0, y: 0, i: 0 });
   const [accordionOpen, setAccordionOpen] = useState(false);
@@ -87,10 +87,16 @@ function CoffeeDetails() {
   }, []);
 
   const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
+  
+  // Displays either blend name or country/producer based on blend status
+  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+
+
   // Uses Luxon to calculate the amount of days post roast for this coffee
   const daysOffRoast = DateTime.local()
     .diff(DateTime.fromISO(roast_date), 'days')
     .toFormat('d');
+
   // Toggle fav or brewing status of the coffee
   const handleBrewOrFav = (change) => {
     dispatch({
@@ -98,12 +104,11 @@ function CoffeeDetails() {
       payload: { oneCoffeeId: id, change },
     });
   };
+
   // Only allows one accordion open at a time, for easier ui
   const handleAccordion = (selected) => (event, isOpen) => {
     setAccordionOpen(isOpen ? selected : false);
   };
-  // Displays either blend name or country/producer based on blend status
-  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
 
   return (
     <>
@@ -160,7 +165,7 @@ function CoffeeDetails() {
                 </IconButton>
               </Tooltip>
               {flavors.map((item) => {
-                if (flavors_array?.indexOf(item.id) > -1) {
+                if (flavors_array?.includes(item.id)) {
                   return (
                     <Chip
                       key={item.id}
@@ -211,7 +216,7 @@ function CoffeeDetails() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => setAddBrew(true)}
+                onClick={() => setAddEditBrewOpen(true)}
                 endIcon={<Add />}
               >
                 Add a Brew
@@ -239,15 +244,12 @@ function CoffeeDetails() {
           </Grid>
         </Grid>
       </Box>
-      <AddBrew
-        id={id}
-        nameToDisplay={nameToDisplay}
-        addBrew={addBrew}
-        setAddBrew={setAddBrew}
+      <AddEditBrew
+        coffeeId={id}
+        addEditBrewOpen={addEditBrewOpen}
+        setAddEditBrewOpen={setAddEditBrewOpen}
       />
       <Snackbars />
     </>
   );
 }
-
-export default CoffeeDetails;

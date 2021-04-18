@@ -47,79 +47,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// AddBrew is a Dialog that has all the inputs needed to create a
+// AddEditBrew is a Dialog that has all the inputs needed to create a
 // new brew instance, opens in CoffeeDetails
-function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
+export default function AddEditBrew({
+  coffeeId,
+  addEditBrewOpen,
+  setAddEditBrewOpen,
+  editInstance,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
   const methods = useSelector((store) => store.methods);
+  const {
+    methods_default_id,
+    methods_default_lrr,
+    methods_array,
+  } = useSelector((store) => store.user);
+  const { is_blend, blend_name, country, producer } = useSelector(
+    (store) => store.oneCoffee
+  );
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const [newBrew, setNewBrew] = useState({
-    coffees_id: '',
-    methods_id: user.methods_default_id,
-    water_dose: '',
-    coffee_dose: '',
-    grind: '',
-    moisture: 1.5,
-    co2: 1,
-    tds: '',
-    ext: '',
-    water_temp: 205,
-    time: '',
-    lrr: user.methods_default_lrr,
-  });
-
-  // Curried function to handle all text inputs in local state object
-  const handleNewBrew = (key) => (event) => {
-    setNewBrew({ ...newBrew, [key]: event.target.value });
-  };
-
-  // This is the math to calculate the Extraction %, result is rendered
-  const adjustedCoffeeDose =
-    (newBrew.coffee_dose * (100 - newBrew.moisture - newBrew.co2)) / 100;
-  const bevWater = newBrew.water_dose - adjustedCoffeeDose * newBrew.lrr;
-  const tdsWeight = bevWater / ((100 - newBrew.tds) / 100) - bevWater;
-  const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
-  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
-
-  // This is the math to calculate the brew ratio, result is rendered
-  const ratioCalc =
-    newBrew.coffee_dose && newBrew.water_dose
-      ? Number(newBrew.water_dose / newBrew.coffee_dose).toFixed(2)
-      : '';
-
-  // This adds whatever method was used for the brew into the local state object
-  const handleMethod = (id, i) => {
-    setNewBrew({ ...newBrew, methods_id: id, lrr: methods[i].lrr });
-  };
-
-  // Sends the new brew instance to the database
-  const handleSubmit = () => {
-    if (extCalc && ratioCalc) {
-      dispatch({
-        type: 'ADD_BREW',
-        payload: {
-          ...newBrew,
-          coffees_id: id,
-          ratio: ratioCalc,
-          ext: extCalc,
-        },
-      });
-      dispatch({ type: 'SNACKBARS_ADDED_BREW' });
-      setAddBrew(false);
-      setAdvancedOpen(false);
-      clearInputs();
-    } else {
-      setErrorOpen(true);
-    }
-  };
-
-  const clearInputs = () => {
-    setNewBrew({
+  const [brew, setBrew] = useState(
+    editInstance || {
       coffees_id: '',
-      methods_id: user.methods_default_id,
+      methods_id: methods_default_id,
       water_dose: '',
       coffee_dose: '',
       grind: '',
@@ -129,13 +81,80 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
       ext: '',
       water_temp: 205,
       time: '',
-      lrr: user.methods_default_lrr,
+      lrr: methods_default_lrr,
+    }
+  );
+  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+
+  // Curried function to handle all text inputs in local state object
+  const handleBrew = (key) => (event) => {
+    setBrew({ ...brew, [key]: event.target.value });
+  };
+
+  // This is the math to calculate the Extraction %, result is rendered
+  const adjustedCoffeeDose =
+    (brew.coffee_dose * (100 - brew.moisture - brew.co2)) / 100;
+  const bevWater = brew.water_dose - adjustedCoffeeDose * brew.lrr;
+  const tdsWeight = bevWater / ((100 - brew.tds) / 100) - bevWater;
+  const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
+  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
+
+  // This is the math to calculate the brew ratio, result is rendered
+  const ratioCalc =
+    brew.coffee_dose && brew.water_dose
+      ? Number(brew.water_dose / brew.coffee_dose).toFixed(2)
+      : '';
+
+  // This adds whatever method was used for the brew into the local state object
+  const handleMethod = (id, i) => {
+    setBrew({ ...brew, methods_id: id, lrr: methods[i].lrr });
+  };
+
+  // Sends the new brew instance to the database
+  const handleSubmit = () => {
+    if (extCalc && ratioCalc) {
+      dispatch({
+        type: editInstance ? 'EDIT_BREW' : 'ADD_BREW',
+        payload: {
+          ...brew,
+          coffees_id: editInstance?.coffees_id || coffeeId,
+          ratio: ratioCalc,
+          ext: extCalc,
+        },
+      });
+      dispatch({
+        type: editInstance ? 'SNACKBARS_EDITED_BREW' : 'SNACKBARS_ADDED_BREW',
+      });
+      setAddEditBrewOpen(false);
+      setAdvancedOpen(false);
+      !editInstance && clearInputs();
+    } else {
+      setErrorOpen(true);
+    }
+  };
+
+  const clearInputs = () => {
+    setBrew({
+      coffees_id: '',
+      methods_id: methods_default_id,
+      water_dose: '',
+      coffee_dose: '',
+      grind: '',
+      moisture: 1.5,
+      co2: 1,
+      tds: '',
+      ext: '',
+      water_temp: 205,
+      time: '',
+      lrr: methods_default_lrr,
     });
   };
 
   return (
-    <Dialog open={addBrew} onClose={() => setAddBrew(false)}>
-      <DialogTitle>Add a Brew of {nameToDisplay}</DialogTitle>
+    <Dialog open={addEditBrewOpen} onClose={() => setAddEditBrewOpen(false)}>
+      <DialogTitle>
+        {editInstance ? 'Edit' : 'Add a'} Brew of {nameToDisplay}
+      </DialogTitle>
       <DialogContent>
         <Box display="flex" className={classes.root}>
           <TextField
@@ -145,8 +164,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             InputProps={{
               endAdornment: <InputAdornment position="end">g</InputAdornment>,
             }}
-            value={newBrew.water_dose}
-            onChange={handleNewBrew('water_dose')}
+            value={brew.water_dose}
+            onChange={handleBrew('water_dose')}
           />
           <TextField
             className={classes.formInputs}
@@ -155,8 +174,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             InputProps={{
               endAdornment: <InputAdornment position="end">g</InputAdornment>,
             }}
-            onChange={handleNewBrew('coffee_dose')}
-            value={newBrew.coffee_dose}
+            onChange={handleBrew('coffee_dose')}
+            value={brew.coffee_dose}
           />
           <TextField
             className={classes.formInputs}
@@ -167,8 +186,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
                 <InputAdornment position="start">#</InputAdornment>
               ),
             }}
-            value={newBrew.grind}
-            onChange={handleNewBrew('grind')}
+            value={brew.grind}
+            onChange={handleBrew('grind')}
           />
         </Box>
         <Box display="flex" className={classes.root}>
@@ -176,8 +195,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             className={classes.formInputs}
             label="Time"
             variant="outlined"
-            value={newBrew.time}
-            onChange={handleNewBrew('time')}
+            value={brew.time}
+            onChange={handleBrew('time')}
           />
           <TextField
             className={classes.formInputs}
@@ -186,8 +205,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
             InputProps={{
               endAdornment: <InputAdornment position="end">%</InputAdornment>,
             }}
-            value={newBrew.tds}
-            onChange={handleNewBrew('tds')}
+            value={brew.tds}
+            onChange={handleBrew('tds')}
           />
           <Box className={classes.ratioExtBox}>
             <Typography>{ratioCalc && 'Ratio:'}</Typography>
@@ -205,15 +224,13 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
             {methods.map((item, i) => {
-              if (user.methods_array.indexOf(item.id) > -1) {
+              if (methods_array.includes(item.id)) {
                 return (
                   <Chip
                     className={classes.chips}
                     key={item.id}
                     label={item.name}
-                    color={
-                      item.id === newBrew.methods_id ? 'primary' : 'default'
-                    }
+                    color={item.id === brew.methods_id ? 'primary' : 'default'}
                     onClick={() => handleMethod(item.id, i)}
                   />
                 );
@@ -238,8 +255,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
                   <InputAdornment position="end">&deg;</InputAdornment>
                 ),
               }}
-              value={newBrew.water_temp}
-              onChange={handleNewBrew('water_temp')}
+              value={brew.water_temp}
+              onChange={handleBrew('water_temp')}
             />
             <TextField
               className={classes.advanced}
@@ -248,8 +265,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
               InputProps={{
                 endAdornment: <InputAdornment position="end">%</InputAdornment>,
               }}
-              value={newBrew.moisture}
-              onChange={handleNewBrew('moisture')}
+              value={brew.moisture}
+              onChange={handleBrew('moisture')}
             />
             <TextField
               className={classes.advanced}
@@ -258,15 +275,15 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
               InputProps={{
                 endAdornment: <InputAdornment position="end">%</InputAdornment>,
               }}
-              value={newBrew.co2}
-              onChange={handleNewBrew('co2')}
+              value={brew.co2}
+              onChange={handleBrew('co2')}
             />
             <TextField
               className={classes.advanced}
               label="LRR"
               variant="outlined"
-              value={newBrew.lrr}
-              onChange={handleNewBrew('lrr')}
+              value={brew.lrr}
+              onChange={handleBrew('lrr')}
             />
           </Box>
         </Collapse>
@@ -275,8 +292,8 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
         <Button
           variant="contained"
           onClick={() => {
-            setAddBrew(false);
-            clearInputs();
+            setAddEditBrewOpen(false);
+            !editInstance && clearInputs();
           }}
         >
           Cancel
@@ -287,7 +304,7 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
           endIcon={<Add />}
           onClick={handleSubmit}
         >
-          ADD
+          Add
         </Button>
       </DialogActions>
       <Collapse in={errorOpen}>
@@ -305,5 +322,3 @@ function AddBrew({ id, addBrew, setAddBrew, nameToDisplay }) {
     </Dialog>
   );
 }
-
-export default AddBrew;

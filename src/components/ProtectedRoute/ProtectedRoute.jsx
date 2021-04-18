@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
   and by checking req.user for authorization.
 */
 
-function ProtectedRoute(props) {
+export default function ProtectedRoute(props) {
   const user = useSelector((store) => store.user);
 
   // Using destructuring, this takes ComponentToProtect from component
@@ -59,5 +59,3 @@ function ProtectedRoute(props) {
     </Route>
   );
 }
-
-export default ProtectedRoute;

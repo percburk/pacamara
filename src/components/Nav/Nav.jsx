@@ -13,7 +13,7 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
-// Imported components
+// Components
 import AvatarMenu from '../AvatarMenu/AvatarMenu';
 
 // Component styling classes
@@ -55,7 +55,7 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 // Nav is the top navigation bar which stays constant throughout the app
-function Nav() {
+export default function Nav() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
@@ -64,7 +64,7 @@ function Nav() {
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
   const [autoOpen, setAutoOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-  
+
   // Checks to see if there is any data currently in the URL
   const { filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
@@ -168,5 +168,3 @@ function Nav() {
     </>
   );
 }
-
-export default Nav;

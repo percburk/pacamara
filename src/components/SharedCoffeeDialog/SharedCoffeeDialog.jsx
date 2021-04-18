@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 // SharedCoffeeDialog opens when the user clicks on an item from
 // SharedCoffeeMenu, displays some brief information about the coffee as
 // well as the personal message the sender wrote
-function SharedCoffeeDialog({
+export default function SharedCoffeeDialog({
   dialogOpen,
   setDialogOpen,
   selectedCoffee,
@@ -187,5 +187,3 @@ function SharedCoffeeDialog({
     </Dialog>
   );
 }
-
-export default SharedCoffeeDialog;

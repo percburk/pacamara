@@ -22,7 +22,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // SharedCoffeeMenu displays the list of coffees sent from others users
-function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
+export default function SharedCoffeeMenu({
+  sharedOpen,
+  setSharedOpen,
+  setAvatarAnchorEl,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const sharedCoffees = useSelector((store) => store.sharedCoffees);
@@ -70,5 +74,3 @@ function SharedCoffeeMenu({ sharedOpen, setSharedOpen, setAvatarAnchorEl }) {
     </>
   );
 }
-
-export default SharedCoffeeMenu;

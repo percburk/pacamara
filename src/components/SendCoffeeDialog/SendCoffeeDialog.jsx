@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 // SendCoffeeDialog opens when a user wants to share a coffee with another user
 // Contains a searchable list of users, as well as a field for a message
-function SendCoffeeDialog({
+export default function SendCoffeeDialog({
   sendDialogOpen,
   setSendDialogOpen,
   id,
@@ -178,5 +178,3 @@ function SendCoffeeDialog({
     </Dialog>
   );
 }
-
-export default SendCoffeeDialog;
