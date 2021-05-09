@@ -68,7 +68,7 @@ export default function FilterMenu() {
       <Menu
         anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
         {filtersArray.map((item, i) => (

@@ -25,14 +25,14 @@ export default function SortMenu({ sort, setSort }) {
       <Menu
         anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
         {sortArray.map((item, i) => (
           <MenuItem
             key={i}
             onClick={() => handleSort(item.toLowerCase())}
-            selected={sort === item.toLowerCase() ? true : false}
+            selected={sort === item.toLowerCase()}
           >
             {item}
           </MenuItem>

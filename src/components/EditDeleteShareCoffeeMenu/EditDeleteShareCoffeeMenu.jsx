@@ -34,7 +34,7 @@ export default function EditDeleteShareCoffeeMenu({ id, coffeeName, pic }) {
       <Menu
         anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem onClick={openShare}>

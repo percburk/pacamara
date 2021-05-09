@@ -86,9 +86,10 @@ export default function EditCoffee() {
 
   // Handles all text input edits
   const handleEditInputs = (key) => (event) => {
+    const { value, checked } = event.target;
     dispatch({
       type: 'EDIT_INPUTS',
-      payload: { key, change: event.target.value },
+      payload: { key, change: value || checked },
     });
   };
 
@@ -97,14 +98,6 @@ export default function EditCoffee() {
     dispatch({
       type: 'EDIT_INPUTS',
       payload: { key: 'coffee_pic', change: newUrl },
-    });
-  };
-
-  // Toggles the boolean switches of 'is_blend' and 'brewing'
-  const handleBooleans = (key) => {
-    dispatch({
-      type: 'EDIT_INPUTS',
-      payload: { key, change: !oneCoffee[key] },
     });
   };
 
@@ -121,19 +114,14 @@ export default function EditCoffee() {
   const handleSubmitEdit = () => {
     if (roaster && (country || blend_name) && flavors_array[0]) {
       dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
-      dispatch({
-        type: 'EDIT_COFFEE',
-        payload: oneCoffee,
-      });
+      dispatch({ type: 'EDIT_COFFEE', payload: oneCoffee });
       history.goBack();
     } else {
       roaster ? setRoasterError(false) : setRoasterError(true);
       country || blend_name
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      if (!flavors_array[0]) {
-        dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
-      }
+      !flavors_array[0] && dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
     }
   };
 
@@ -162,7 +150,7 @@ export default function EditCoffee() {
                 <Grid item>
                   <Switch
                     checked={is_blend || false}
-                    onChange={() => handleBooleans('is_blend')}
+                    onChange={handleEditInputs('is_blend')}
                     color="primary"
                   />
                 </Grid>
@@ -173,7 +161,7 @@ export default function EditCoffee() {
                 <Grid item>
                   <Switch
                     checked={brewing || false}
-                    onChange={() => handleBooleans('brewing')}
+                    onChange={handleEditInputs('brewing')}
                     color="primary"
                   />
                 </Grid>

@@ -104,7 +104,7 @@ router.put('/edit', rejectUnauthenticated, (req, res) => {
     ])
     .then(() => res.sendStatus(201))
     .catch((err) => {
-      console.log(`Error in PUT with query ${sqlText}`, err);
+      console.log(`Error in PUT with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

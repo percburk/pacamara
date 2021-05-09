@@ -148,7 +148,7 @@ export default function UpdateProfile() {
         setDefaultDialogOpen(true);
       }
     } else {
-      !newUpdates.name ? setInputError(true) : setInputError(false);
+      setInputError(!newUpdates.name);
       !newMethods[0] && dispatch({ type: 'SNACKBARS_METHODS_ERROR' });
     }
   };
