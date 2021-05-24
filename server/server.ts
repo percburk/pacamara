@@ -1,19 +1,19 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 require('dotenv').config();
-const sessionMiddleware = require('./modules/session.middleware');
-const passport = require('./strategies/user.strategy');
+import sessionMiddleware from './modules/session.middleware';
+import passport from './strategies/user.strategy';
 
 // Route imports
-const userRouter = require('./routes/user.router');
-const methodsRouter = require('./routes/methods.router');
-const coffeesRouter = require('./routes/coffees.router');
-const oneCoffeeRouter = require('./routes/oneCoffee.router');
-const flavorsRouter = require('./routes/flavors.router');
-const brewsRouter = require('./routes/brews.router');
-const shareRouter = require('./routes/share.router');
-const s3Router = require('./routes/s3.router');
+import userRouter from './routes/user.router';
+import methodsRouter from './routes/methods.router';
+import coffeesRouter from './routes/coffees.router';
+import oneCoffeeRouter from './routes/oneCoffee.router';
+import flavorsRouter from './routes/flavors.router';
+import brewsRouter from './routes/brews.router';
+import shareRouter from './routes/share.router';
+import s3Router from './routes/s3.router';
 
 // --- Middleware --- //
 app.use(bodyParser.json());

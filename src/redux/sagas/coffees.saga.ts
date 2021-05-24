@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { put, takeEvery } from 'redux-saga/effects';
+import { ReduxActions } from '../actions/redux.actions';
+import { SagaActions } from '../actions/saga.actions';
 
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router
@@ -21,9 +23,15 @@ function* fetchCoffees(action) {
 
 // Toggle boolean 'fav' or 'brewing' status of an individual coffee
 function* setBrewingOrFav(action) {
-  const { id, change, q, oneCoffeeId } = action.payload;
+  const {
+    id,
+    change,
+    q,
+    oneCoffeeId,
+  }: { id: number; change: string; q: string; oneCoffeeId: number } =
+    action.payload;
   const fetchWhichCoffee = id
-    ? { type: 'FETCH_COFFEES', payload: q }
+    ? { type: SagaActions.FETCH_COFFEES, payload: q }
     : { type: 'FETCH_ONE_COFFEE', payload: oneCoffeeId };
 
   try {
@@ -39,11 +47,11 @@ function* setBrewingOrFav(action) {
 
 // Delete a coffee from the database
 function* deleteCoffee(action) {
-  const { id, q } = action.payload;
+  const { id, q }: { id: number; q: string } = action.payload;
   try {
     yield axios.delete(`/api/coffees/delete/${id}`);
     yield put({
-      type: 'FETCH_COFFEES',
+      type: SagaActions.FETCH_COFFEES,
       payload: q,
     });
   } catch (err) {
@@ -55,15 +63,15 @@ function* deleteCoffee(action) {
 function* addCoffee(action) {
   try {
     yield axios.post('/api/coffees/add', action.payload);
-    yield put({ type: 'FETCH_COFFEES' });
+    yield put({ type: SagaActions.FETCH_COFFEES });
   } catch (err) {
     console.log('Error in addCoffee', err);
   }
 }
 
 export default function* coffeesSaga() {
-  yield takeEvery('FETCH_COFFEES', fetchCoffees);
-  yield takeEvery('SET_BREWING_OR_FAV', setBrewingOrFav);
-  yield takeEvery('DELETE_COFFEE', deleteCoffee);
-  yield takeEvery('ADD_COFFEE', addCoffee);
+  yield takeEvery(SagaActions.FETCH_COFFEES, fetchCoffees);
+  yield takeEvery(SagaActions.SET_BREWING_OR_FAV, setBrewingOrFav);
+  yield takeEvery(SagaActions.DELETE_COFFEE, deleteCoffee);
+  yield takeEvery(SagaActions.ADD_COFFEE, addCoffee);
 }

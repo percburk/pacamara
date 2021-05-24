@@ -1,12 +1,12 @@
-const pg = require('pg');
-const url = require('url');
+import pg from 'pg';
+import url from 'url';
 
-let config = {};
+let config: object = {};
 
 if (process.env.DATABASE_URL) {
   // Heroku gives a url, not a connection object
   // https://github.com/brianc/node-pg-pool
-  const params = url.parse(process.env.DATABASE_URL);
+  const params = url.parse(process.env.DATABASE_URL) as any;
   const auth = params.auth.split(':');
 
   config = {
@@ -30,13 +30,13 @@ if (process.env.DATABASE_URL) {
 }
 
 // this creates the pool that will be shared by all other modules
-const pool = new pg.Pool(config);
+const pool: pg.Pool = new pg.Pool(config);
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
-pool.on('error', (err) => {
+pool.on('error', (err): void => {
   console.log('Unexpected error on idle client', err);
   process.exit(-1);
 });
 
-module.exports = pool;
+export default pool;

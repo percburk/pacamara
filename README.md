@@ -55,31 +55,31 @@ To see the fully functional site, please visit
       - `AWS_S3_REGION` _i.e. us-east-2_
       - `REACT_APP_S3_URL` _bucket url, i.e. https://{bucket-name}.s3.amazonaws.com_
 
-2. Create a database named `pacamara`,
-3. The queries in the `database.sql` file are set up to create all the necessary 
+1. Create a database named `pacamara`,
+1. The queries in the `database.sql` file are set up to create all the necessary 
 tables and populate the needed data to allow the application to run correctly. 
 The project is built on [Postgres](https://www.postgresql.org/download/), so you 
 will need to make sure to have that installed. We recommend using Postico to run 
 those queries as that was used to create the queries, 
-4. Open up your editor of choice and run an `npm install`
-5. Run `npm run server` in your terminal
-6. Run `npm run client` in your terminal
-7. The `npm run client` command will open up a new browser tab for you!
+1. Open up your editor of choice and run an `npm install`
+1. Run `npm run server` in your terminal
+1. Run `npm run client` in your terminal
+1. The `npm run client` command will open up a new browser tab for you!
 
 
 ## Usage
 
 1. Create a new account on Pacamara
-2. Enter information regarding your brewing equipment, along with the brew 
+1. Enter information regarding your brewing equipment, along with the brew 
 methods you own.
-3. Set your desired TDS and Extraction % ranges.
-4. Add a new coffee, entering all origin information, general flavor notes, 
+1. Set your desired TDS and Extraction % ranges.
+1. Add a new coffee, entering all origin information, general flavor notes, 
 and a photo of the bag.
-5. Add a new brew instance, recording the specs you used and whether it was 
+1. Add a new brew instance, recording the specs you used and whether it was 
 successful.
-6. Note your calculated extraction percentage, so you can adjust later brew 
+1. Note your calculated extraction percentage, so you can adjust later brew 
 specs accordingly.
-7. Share a coffee you're excited about with another user of Pacamara.
+1. Share a coffee you're excited about with another user of Pacamara.
 
 
 ## Built With

@@ -1,13 +1,13 @@
-const express = require('express');
-const pool = require('../modules/pool');
+import express, { Request, Response } from 'express';
+import pool from '../modules/pool';
 const router = express.Router();
 
 // GET route for list of methods
-router.get('/', (req, res) => {
-  const sqlText = `
+router.get('/', (req: Request, res: Response): void => {
+  const sqlText: string = `
     SELECT * FROM "methods" ORDER BY "methods".name;
   `;
-  
+
   pool
     .query(sqlText)
     .then((response) => res.send(response.rows))
@@ -17,4 +17,4 @@ router.get('/', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

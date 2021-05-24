@@ -11,6 +11,20 @@ import coffeeSearchList from './coffeeSearchList.reducer';
 import sharingUserList from './sharingUserList.reducer';
 import sharedCoffees from './sharedCoffees.reducer';
 import oneSharedCoffee from './oneSharedCoffee.reducer';
+// Import interfaces for each reducer
+import {
+  CoffeeItem,
+  Flavors,
+  Methods,
+  Brew,
+  Snackbar,
+  User,
+  SharedCoffees,
+  SharingUserList,
+  CoffeeSearchList,
+  OneSharedCoffee,
+  LandingError,
+} from '../models/models';
 
 // rootReducer is the primary reducer for the entire project
 // It bundles up all of the other reducers so the project can use them.

@@ -1,10 +1,10 @@
-const express = require('express');
-const pool = require('../modules/pool');
+import express, { Request, Response } from 'express';
+import pool from '../modules/pool';
 const router = express.Router();
 
 // GET route for list of flavors, displayed as Chips throughout the app
-router.get('/', (req, res) => {
-  const sqlText = `
+router.get('/', (req: Request, res: Response): void => {
+  const sqlText: string = `
     SELECT * FROM "flavors" ORDER BY "flavors".name;
   `;
 
@@ -17,4 +17,4 @@ router.get('/', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

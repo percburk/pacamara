@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Store } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 
 // Imports all reducers, stored in _root.reducer
 import rootReducer from './redux/reducers/_root.reducer';
+// Imports IState interface for Store
+import { IState } from './redux/models/models';
 
 // Imports all sagas, stored in _root.saga
 import rootSaga from './redux/sagas/_root.saga';
@@ -40,5 +42,5 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('react-root')
+  document.getElementById('react-root') as HTMLElement
 );
