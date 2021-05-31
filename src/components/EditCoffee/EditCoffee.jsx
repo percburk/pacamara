@@ -262,18 +262,18 @@ export default function EditCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {flavors.map((item) => (
+              {flavors.map((flavor) => (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
+                  key={flavor.id}
+                  label={flavor.name}
                   color={
-                    flavors_array?.includes(item.id) ? 'primary' : 'default'
+                    flavors_array?.includes(flavor.id) ? 'primary' : 'default'
                   }
                   onClick={() =>
                     dispatch({
                       type: 'EDIT_FLAVORS_ARRAY',
-                      payload: item.id,
+                      payload: flavor.id,
                     })
                   }
                 />

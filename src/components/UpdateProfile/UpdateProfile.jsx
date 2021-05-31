@@ -222,13 +222,13 @@ export default function UpdateProfile() {
               Select Brew Methods*:
             </Typography>
             <Box className={classes.root}>
-              {methods.map((item) => (
+              {methods.map((method) => (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
-                  color={newMethods.includes(item.id) ? 'primary' : 'default'}
-                  onClick={() => handleNewMethod(item.id)}
+                  key={method.id}
+                  label={method.name}
+                  color={newMethods.includes(method.id) ? 'primary' : 'default'}
+                  onClick={() => handleNewMethod(method.id)}
                 />
               ))}
             </Box>

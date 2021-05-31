@@ -58,11 +58,8 @@ export default function AddEditBrew({
   const classes = useStyles();
   const dispatch = useDispatch();
   const methods = useSelector((store) => store.methods);
-  const {
-    methods_default_id,
-    methods_default_lrr,
-    methods_array,
-  } = useSelector((store) => store.user);
+  const { methods_default_id, methods_default_lrr, methods_array } =
+    useSelector((store) => store.user);
   const { is_blend, blend_name, country, producer } = useSelector(
     (store) => store.oneCoffee
   );
@@ -223,15 +220,17 @@ export default function AddEditBrew({
         <Box className={classes.root}>
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
-            {methods.map((item, i) => {
-              if (methods_array.includes(item.id)) {
+            {methods.map((method, i) => {
+              if (methods_array.includes(method.id)) {
                 return (
                   <Chip
                     className={classes.chips}
-                    key={item.id}
-                    label={item.name}
-                    color={item.id === brew.methods_id ? 'primary' : 'default'}
-                    onClick={() => handleMethod(item.id, i)}
+                    key={method.id}
+                    label={method.name}
+                    color={
+                      method.id === brew.methods_id ? 'primary' : 'default'
+                    }
+                    onClick={() => handleMethod(method.id, i)}
                   />
                 );
               }

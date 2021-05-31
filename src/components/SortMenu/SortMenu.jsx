@@ -28,13 +28,13 @@ export default function SortMenu({ sort, setSort }) {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        {sortArray.map((item, i) => (
+        {sortArray.map((option) => (
           <MenuItem
-            key={i}
-            onClick={() => handleSort(item.toLowerCase())}
-            selected={sort === item.toLowerCase()}
+            key={option}
+            onClick={() => handleSort(option.toLowerCase())}
+            selected={sort === option.toLowerCase()}
           >
-            {item}
+            {option}
           </MenuItem>
         ))}
       </Menu>

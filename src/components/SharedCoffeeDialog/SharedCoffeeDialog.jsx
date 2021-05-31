@@ -130,14 +130,14 @@ export default function SharedCoffeeDialog({
             <Typography>By {roaster}</Typography>
             <Box display="flex" my={1.5}>
               {flavors_array &&
-                flavors.map((item) => {
-                  if (flavors_array.indexOf(item.id) > -1) {
+                flavors.map((flavor) => {
+                  if (flavors_array.includes(flavor.id)) {
                     return (
                       <Chip
-                        key={item.id}
+                        key={flavor.id}
                         className={classes.chip}
                         variant="outlined"
-                        label={item.name}
+                        label={flavor.name}
                       />
                     );
                   }

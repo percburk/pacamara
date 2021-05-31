@@ -310,13 +310,13 @@ export default function AddCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {flavors.map((item) => (
+              {flavors.map((flavor) => (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
-                  color={newFlavors.includes(item.id) ? 'primary' : 'default'}
-                  onClick={() => handleNewFlavor(item.id)}
+                  key={flavor.id}
+                  label={flavor.name}
+                  color={newFlavors.includes(flavor.id) ? 'primary' : 'default'}
+                  onClick={() => handleNewFlavor(flavor.id)}
                 />
               ))}
             </Box>

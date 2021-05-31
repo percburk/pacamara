@@ -69,10 +69,10 @@ export default function Dashboard() {
         }
       }
     })
-    .filter((item) => {
+    .filter((coffee) => {
       if (filters) {
-        for (let keyString of filters) {
-          if (!item[keyString]) {
+        for (let dataKey of filters) {
+          if (!coffee[dataKey]) {
             return false;
           }
         }
@@ -94,8 +94,8 @@ export default function Dashboard() {
         </Box>
       </Box>
       <Box display="flex" justifyContent="center" flexWrap="wrap">
-        {displayCoffees.map((item) => (
-          <CoffeeCard key={item.id} coffee={item} />
+        {displayCoffees.map((coffee) => (
+          <CoffeeCard key={coffee.id} coffee={coffee} />
         ))}
       </Box>
       <Snackbars />

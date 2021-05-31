@@ -115,11 +115,11 @@ export default function SendCoffeeDialog({
               inputValue={shareUsername}
               onInputChange={handleShareUsername}
               options={sharingUserList}
-              getOptionLabel={(item) => item.username}
-              renderOption={(item) => (
+              getOptionLabel={(user) => user.username}
+              renderOption={(user) => (
                 <Box display="flex" alignItems="center">
-                  <Avatar className={classes.avatar} src={item.profile_pic} />
-                  {item.username}
+                  <Avatar className={classes.avatar} src={user.profile_pic} />
+                  {user.username}
                 </Box>
               )}
               renderInput={(params) => (

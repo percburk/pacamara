@@ -38,13 +38,13 @@ export default function FilterMenu() {
 
   return (
     <>
-      {filtersArray.map((item, i) => {
-        if (filters?.includes(item.key)) {
+      {filtersArray.map((filter) => {
+        if (filters?.includes(filter.key)) {
           return (
             <Chip
-              key={i}
-              label={item.string}
-              onDelete={() => handleFilters(item.key)}
+              key={filter.key}
+              label={filter.string}
+              onDelete={() => handleFilters(filter.key)}
               color="primary"
             />
           );
@@ -71,13 +71,13 @@ export default function FilterMenu() {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        {filtersArray.map((item, i) => (
+        {filtersArray.map((filter) => (
           <MenuItem
-            key={i}
-            onClick={() => handleFilters(item.key)}
-            selected={filters?.includes(item.key)}
+            key={filter.key}
+            onClick={() => handleFilters(filter.key)}
+            selected={filters?.includes(filter.key)}
           >
-            {item.string}
+            {filter.string}
           </MenuItem>
         ))}
       </Menu>

@@ -75,8 +75,9 @@ export default function CoffeeCard({ coffee }) {
   // Displays either blend name or country/producer based on blend status
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
   // If this coffee has been shared by another user, their username is shown
-  const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id)
-    ?.username;
+  const sharedByUser = sharingUserList.find(
+    (user) => user.id === shared_by_id
+  )?.username;
 
   // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
   // Makes sure not to change search results displayed, if present
@@ -127,14 +128,14 @@ export default function CoffeeCard({ coffee }) {
       />
       <CardContent>
         <Box display="flex" justifyContent="center">
-          {flavors.map((item) => {
-            if (flavors_array?.indexOf(item.id) > -1) {
+          {flavors.map((flavor) => {
+            if (flavors_array?.includes(flavor.id)) {
               return (
                 <Chip
-                  key={item.id}
+                  key={flavor.id}
                   className={classes.chip}
                   variant="outlined"
-                  label={item.name}
+                  label={flavor.name}
                 />
               );
             }

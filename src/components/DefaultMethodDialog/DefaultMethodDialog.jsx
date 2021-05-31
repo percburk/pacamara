@@ -70,18 +70,18 @@ export default function DefaultMethodDialog({
           Would you like to set a brew method as your default?
         </DialogContentText>
         <Box className={classes.root} display="flex" justifyContent="center">
-          {methods.map((item) => {
-            if (newMethods.indexOf(item.id) > -1) {
+          {methods.map((method) => {
+            if (newMethods.includes(method.id)) {
               return (
                 <Chip
-                  key={item.id}
-                  label={item.name}
+                  key={method.id}
+                  label={method.name}
                   color={
-                    item.id === newUpdates.methods_default_id
+                    method.id === newUpdates.methods_default_id
                       ? 'primary'
                       : 'default'
                   }
-                  onClick={() => setDefault(item.id, item.lrr)}
+                  onClick={() => setDefault(method.id, method.lrr)}
                 />
               );
             }
