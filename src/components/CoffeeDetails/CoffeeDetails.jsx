@@ -84,7 +84,7 @@ export default function CoffeeDetails() {
     dispatch({ type: 'FETCH_BREWS', payload: id });
     dispatch({ type: 'FETCH_FLAVORS' });
     dispatch({ type: 'FETCH_METHODS' });
-  }, []);
+  }, [dispatch, id]);
 
   const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
   

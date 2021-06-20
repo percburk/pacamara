@@ -82,7 +82,7 @@ export default function AddCoffee() {
     coffee_pic: '',
   });
 
-  useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
+  useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), [dispatch]);
 
   // Handles all text inputs, adds to local state object
   const handleNewCoffee = (key) => (event) => {

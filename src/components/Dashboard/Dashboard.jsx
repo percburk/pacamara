@@ -49,7 +49,7 @@ export default function Dashboard() {
     dispatch({ type: 'FETCH_SHARED_COFFEES' });
     // Fetches pared down list of coffees that can be searched in bar on Nav
     dispatch({ type: 'FETCH_COFFEE_SEARCH_LIST' });
-  }, []);
+  }, [dispatch, q]);
 
   // Puts coffees array through any sort or filters set in state
   // displayCoffees is then what is rendered on the DOM

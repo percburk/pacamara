@@ -17,7 +17,6 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { blue } from '@material-ui/core/colors';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
@@ -89,7 +88,7 @@ export default function EditCoffee() {
   useEffect(() => {
     dispatch({ type: 'FETCH_FLAVORS' });
     dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
-  }, []);
+  }, [dispatch, id]);
 
   // Handles all text input edits
   const handleEditInputs = (key) => (event) => {
