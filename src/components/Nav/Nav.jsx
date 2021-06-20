@@ -127,11 +127,11 @@ export default function Nav() {
               fullWidth
               inputValue={searchInput}
               onInputChange={handleSearchBar}
-              options={coffeeSearchList.map((item) =>
-                item.blend_name
-                  ? `${item.roaster} ${item.blend_name}`
-                  : `${item.roaster} ${item.country} ${item.producer}`
-              )}
+              options={coffeeSearchList.map((coffee) => {
+                return coffee.blend_name
+                  ? `${coffee.roaster} ${coffee.blend_name}`
+                  : `${coffee.roaster} ${coffee.country} ${coffee.producer}`;
+              })}
               renderInput={(params) => (
                 <TextField
                   {...params}

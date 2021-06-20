@@ -164,14 +164,14 @@ export default function CoffeeDetails() {
                   )}
                 </IconButton>
               </Tooltip>
-              {flavors.map((item) => {
-                if (flavors_array?.includes(item.id)) {
+              {flavors.map((flavor) => {
+                if (flavors_array?.includes(flavor.id)) {
                   return (
                     <Chip
-                      key={item.id}
+                      key={flavor.id}
                       className={classes.chip}
                       variant="outlined"
-                      label={item.name}
+                      label={flavor.name}
                     />
                   );
                 }
@@ -196,7 +196,7 @@ export default function CoffeeDetails() {
                 Roasted by {roaster} on {formattedDate}
               </Typography>
               <Typography variant="subtitle1">
-                {daysOffRoast} day{daysOffRoast == 1 ? '' : 's'} off roast
+                {daysOffRoast} day{daysOffRoast === 1 ? '' : 's'} off roast
               </Typography>
             </Box>
             <Typography variant="subtitle1">Tasting notes: {notes}</Typography>

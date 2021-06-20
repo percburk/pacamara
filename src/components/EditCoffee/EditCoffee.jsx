@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import LuxonUtils from '@date-io/luxon';
 import {
   Box,
@@ -18,6 +17,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import { blue } from '@material-ui/core/colors';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     objectFit: 'cover',
     marginLeft: theme.spacing(5),
+  },
+  singleOriginBlendSwitchBase: {
+    color: theme.palette.primary.main,
+  },
+  singleOriginBlendSwitchTrack: {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.5,
   },
 }));
 
@@ -103,7 +110,8 @@ export default function EditCoffee() {
 
   // Formats the date using Luxon
   const handleEditDate = (date) => {
-    const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
+    const formattedDate = date.toLocaleString();
+    console.log(formattedDate);
     dispatch({
       type: 'EDIT_INPUTS',
       payload: { key: 'roast_date', change: formattedDate },
@@ -112,15 +120,13 @@ export default function EditCoffee() {
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
-    if (roaster && (country || blend_name) && flavors_array[0]) {
+    if (roaster && (is_blend ? blend_name : country) && flavors_array[0]) {
       dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
       dispatch({ type: 'EDIT_COFFEE', payload: oneCoffee });
       history.goBack();
     } else {
-      roaster ? setRoasterError(false) : setRoasterError(true);
-      country || blend_name
-        ? setBlendCountryError(false)
-        : setBlendCountryError(true);
+      setRoasterError(!roaster);
+      setBlendCountryError(is_blend ? !country : !blend_name);
       !flavors_array[0] && dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
     }
   };
@@ -149,9 +155,13 @@ export default function EditCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={is_blend || false}
+                    checked={!!is_blend}
                     onChange={handleEditInputs('is_blend')}
                     color="primary"
+                    classes={{
+                      track: classes.singleOriginBlendSwitchTrack,
+                      switchBase: classes.singleOriginBlendSwitchBase,
+                    }}
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -160,7 +170,7 @@ export default function EditCoffee() {
                 <Grid item>Currently Brewing:</Grid>
                 <Grid item>
                   <Switch
-                    checked={brewing || false}
+                    checked={!!brewing}
                     onChange={handleEditInputs('brewing')}
                     color="primary"
                   />

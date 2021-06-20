@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import LuxonUtils from '@date-io/luxon';
 import {
   Box,
@@ -49,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
     marginLeft: theme.spacing(5),
   },
+  singleOriginBlendSwitchBase: {
+    color: theme.palette.primary.main,
+  },
+  singleOriginBlendSwitchTrack: {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.5,
+  },
 }));
 
 // AddCoffee includes all the inputs to add a new coffee to a user's dashboard
@@ -80,12 +86,13 @@ export default function AddCoffee() {
 
   // Handles all text inputs, adds to local state object
   const handleNewCoffee = (key) => (event) => {
-    setNewCoffee({ ...newCoffee, [key]: event.target.value });
+    const { value, checked } = event.target;
+    setNewCoffee({ ...newCoffee, [key]: value || checked });
   };
 
   // Formats the date chosen from MuiDatePicker using Luxon
   const handleRoastDate = (date) => {
-    const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
+    const formattedDate = date.toLocaleString();
     setNewCoffee({ ...newCoffee, roast_date: formattedDate });
   };
 
@@ -101,23 +108,11 @@ export default function AddCoffee() {
       : setNewFlavors(newFlavors.filter((index) => index !== id));
   };
 
-  // Handles the two switches on the page, for 'is_blend' and 'brewing'
-  const handleSwitch = (event) => {
-    event.target.name === 'is_blend'
-      ? setNewCoffee({
-          ...newCoffee,
-          is_blend: event.target.checked,
-          country: '',
-          blend_name: '',
-        })
-      : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
-  };
-
   // Adds the new coffee to the database with input validation
   const handleSubmit = () => {
     if (
       newCoffee.roaster &&
-      (newCoffee.country || newCoffee.blend_name) &&
+      (newCoffee.is_blend ? newCoffee.blend_name : newCoffee.country) &&
       newFlavors[0]
     ) {
       dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
@@ -132,13 +127,11 @@ export default function AddCoffee() {
       clearInputs();
       history.push('/dashboard');
     } else {
-      newCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
-      newCoffee.country || newCoffee.blend_name
-        ? setBlendCountryError(false)
-        : setBlendCountryError(true);
-      if (!newFlavors[0]) {
-        dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
-      }
+      setRoasterError(!newCoffee.roaster);
+      setBlendCountryError(
+        newCoffee.is_blend ? !newCoffee.blend_name : !newCoffee.country
+      );
+      !newFlavors[0] && dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
     }
   };
 
@@ -193,9 +186,12 @@ export default function AddCoffee() {
                 <Grid item>
                   <Switch
                     checked={newCoffee.is_blend}
-                    onChange={handleSwitch}
+                    onChange={handleNewCoffee('is_blend')}
                     color="primary"
-                    name="is_blend"
+                    classes={{
+                      track: classes.singleOriginBlendSwitchTrack,
+                      switchBase: classes.singleOriginBlendSwitchBase,
+                    }}
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -205,8 +201,7 @@ export default function AddCoffee() {
                 <Grid item>
                   <Switch
                     checked={newCoffee.brewing}
-                    name="brewing"
-                    onChange={handleSwitch}
+                    onChange={handleNewCoffee('brewing')}
                     color="primary"
                   />
                 </Grid>

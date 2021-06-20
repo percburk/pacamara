@@ -120,7 +120,7 @@ export default function AddEditBrew({
         },
       });
       dispatch({
-        type: editInstance ? 'SNACKBARS_EDITED_BREW' : 'SNACKBARS_ADDED_BREW',
+        type: `SNACKBARS_${editInstance ? 'EDITED' : 'ADDED'}_BREW'`,
       });
       setAddEditBrewOpen(false);
       setAdvancedOpen(false);

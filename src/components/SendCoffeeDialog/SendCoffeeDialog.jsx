@@ -73,7 +73,7 @@ export default function SendCoffeeDialog({
   const handleSendShare = () => {
     // Finds the matching ID number of the user that is being sent to
     const match = sharingUserList.find(
-      (item) => item.username === shareUsername
+      (user) => user.username === shareUsername
     )?.id;
 
     if (match) {
@@ -167,7 +167,7 @@ export default function SendCoffeeDialog({
         <Alert
           severity="error"
           action={
-            <IconButton onClick={() => setErrorOpen(false)} size="small">
+            <IconButton size="small" onClick={() => setErrorOpen(false)}>
               <Close fontSize="inherit" />
             </IconButton>
           }

@@ -26,7 +26,7 @@ export default function FilterMenu() {
     const newFiltersArray = !filters
       ? [clickedFilter]
       : filters.includes(clickedFilter)
-      ? filters.filter((item) => item !== clickedFilter)
+      ? filters.filter((option) => option !== clickedFilter)
       : [...filters, clickedFilter];
     const newString = queryString.stringify(
       { q, filters: newFiltersArray },

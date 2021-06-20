@@ -100,7 +100,7 @@ router.post('/add', (req, res) => {
     .query(sqlText, [req.user.id, coffees_id, shared_by_id])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log(`Error in POST with query: ${sqlText}`);
+      console.log(`Error in POST with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

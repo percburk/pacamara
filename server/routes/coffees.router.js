@@ -158,7 +158,7 @@ router.post('/add', rejectUnauthenticated, async (req, res) => {
     // Query #3
     // Adding new flavors to coffees_flavors
     // Build SQL query for each new entry in flavors_array
-    let sqlValues = req.body.flavors_array
+    const sqlValues = req.body.flavors_array
       .reduce((valString, val, i) => (valString += `($1, $${i + 2}),`), '')
       .slice(0, -1); // Takes off last comma
 
