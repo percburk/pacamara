@@ -14,7 +14,7 @@ router.get('/users', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 
   pool
     .query(sqlText, [req.user.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
@@ -47,7 +47,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
   pool
     .query(sqlText, [req.params.id])
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
