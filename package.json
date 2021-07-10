@@ -49,7 +49,7 @@
     "eject": "react-scripts eject",
     "<-- TS for Server -->": "",
     "server": "nodemon -e ts --ignore './dist' -x npm run server:ts",
-    "server:ts": "tsc -p tsconfig.json && node dist/server.js",
+    "server:ts": "tsc -p tsconfig.json && node dist/server/server.js",
     "tsc": "tsc -p tsconfig.json"
   },
   "devDependencies": {

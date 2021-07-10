@@ -3,12 +3,14 @@ import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
 const router = express.Router();
+import { PacamaraUser } from '../models/UserResource';
 
 // GET route for one coffee for CoffeeDetails
 router.get(
   '/:id',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
+    const { id: userId } = req.user as PacamaraUser;
     const sqlText: string = `
     SELECT "coffees".*, 
       "users_coffees".is_fav, 
@@ -26,7 +28,7 @@ router.get(
   `;
 
     pool
-      .query(sqlText, [req.params.id, req.user?.id])
+      .query(sqlText, [req.params.id, userId])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -40,7 +42,8 @@ router.put(
   '/fav-brew',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const { change, id }: { change: string; id: number } = req.body;
+    const { id: userId } = req.user as PacamaraUser;
+    const { change, id: coffeeId }: { change: string; id: number } = req.body;
     const sqlChange: string = change === 'fav' ? 'is_fav' : 'brewing';
 
     const sqlText = `
@@ -49,7 +52,7 @@ router.put(
   `;
 
     pool
-      .query(sqlText, [req.user?.id, id])
+      .query(sqlText, [userId, coffeeId])
       .then(() => res.sendStatus(201))
       .catch((err) => {
         console.log(`Error in PUT with query: ${sqlText}`, err);

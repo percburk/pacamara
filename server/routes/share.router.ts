@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
+import { PacamaraUser } from '../models/UserResource';
 const router = express.Router();
 
 // GET route for user list to share coffees with
@@ -8,13 +9,15 @@ router.get(
   '/users',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
+    const { id: userId } = req.user as PacamaraUser;
+
     const sqlText: string = `
     SELECT "id", "username", "name", "profile_pic" 
     FROM "users" WHERE "id" != $1;
   `;
 
     pool
-      .query(sqlText, [req.user?.id])
+      .query(sqlText, [userId])
       .then((response) => res.send(response.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -25,12 +28,14 @@ router.get(
 
 // GET route for a list of any coffees that have been shared with current user
 router.get('/', (req: Request, res: Response): void => {
+  const { id: userId } = req.user as PacamaraUser;
+
   const sqlText: string = `
     SELECT * FROM "shared_coffees" WHERE "recipient_id" = $1;
   `;
 
   pool
-    .query(sqlText, [req.user?.id])
+    .query(sqlText, [userId])
     .then((response) => res.send(response.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
@@ -64,6 +69,7 @@ router.get(
 
 // POST route to share a coffee with another user
 router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
+  const { id: userId, username, profile_pic } = req.user as PacamaraUser;
   const {
     recipient_id,
     coffees_id,
@@ -91,9 +97,9 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
 
   pool
     .query(sqlText, [
-      req.user?.id,
-      req.user?.username,
-      req.user?.profile_pic,
+      userId,
+      username,
+      profile_pic,
       recipient_id,
       coffees_id,
       coffee_name,
@@ -108,20 +114,22 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
 
 // POST route to add a shared coffee to the user's dashboard
 router.post('/add', (req: Request, res: Response): void => {
+  const { id: userId } = req.user as PacamaraUser;
   const {
     coffees_id,
     shared_by_id,
   }: { coffees_id: number; shared_by_id: number } = req.body;
+
   const sqlText: string = `
     INSERT INTO "users_coffees" ("users_id", "coffees_id", "shared_by_id") 
     VALUES ($1, $2, $3);
   `;
 
   pool
-    .query(sqlText, [req.user?.id, coffees_id, shared_by_id])
+    .query(sqlText, [userId, coffees_id, shared_by_id])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-      console.log(`Error in POST with query: ${sqlText}`);
+      console.log(`Error in POST with query: ${sqlText}`, err);
       res.sendStatus(500);
     });
 });

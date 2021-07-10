@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { PoolClient } from 'pg';
+import { PacamaraUser } from '../models/UserResource';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
 import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
@@ -18,12 +19,14 @@ router.get(
   '/methods',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
+    const { id: userId } = req.user as PacamaraUser;
+
     const sqlText: string = `
     SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
   `;
 
     pool
-      .query(sqlText, [req.user?.id])
+      .query(sqlText, [userId])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -75,7 +78,9 @@ router.put(
   '/update',
   rejectUnauthenticated,
   async (req: Request, res: Response): Promise<void> => {
+    const { id: userId } = req.user as PacamaraUser;
     const connection: PoolClient = await pool.connect();
+
     try {
       await connection.query('BEGIN;');
 
@@ -105,14 +110,14 @@ router.put(
         req.body.tds_max,
         req.body.ext_min,
         req.body.ext_max,
-        req.user?.id,
+        userId,
       ]);
 
       // Query #2 - deleting old entries in users_methods
       const deleteSqlText: string = `
         DELETE FROM "users_methods" WHERE "users_id" = $1;
       `;
-      await connection.query(deleteSqlText, [req.user?.id]);
+      await connection.query(deleteSqlText, [userId]);
 
       // Query #3, go through methods_array to build query to insert
       // into users_methods
@@ -129,7 +134,7 @@ router.put(
       VALUES ${sqlValues};
     `;
       await connection.query(methodsSqlText, [
-        req.user?.id,
+        userId,
         ...req.body.methods_array,
       ]);
 

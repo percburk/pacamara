@@ -2,10 +2,12 @@ import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
+import { PacamaraUser } from '../models/UserResource';
 const router = express.Router();
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
+  const { id: userId } = req.user as PacamaraUser;
   const sqlText: string = `
     SELECT "coffees".*, 
       "users_coffees".is_fav, 
@@ -24,7 +26,7 @@ router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
   `;
 
   pool
-    .query(sqlText, [req.user?.id])
+    .query(sqlText, [userId])
     .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
@@ -38,6 +40,7 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const { q } = req.query as any;
+    const { id: userId } = req.user as PacamaraUser;
 
     const sqlText: string = `
     SELECT "coffees".*, 
@@ -70,7 +73,7 @@ router.get(
       .replace(/\s/g, '&')}":*`;
 
     pool
-      .query(sqlText, [parsedQuery, req.user?.id])
+      .query(sqlText, [parsedQuery, userId])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -84,6 +87,8 @@ router.get(
   '/search',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
+    const { id: userId } = req.user as PacamaraUser;
+
     const sqlText: string = `
     SELECT "coffees".country, 
       "coffees".producer, 
@@ -97,7 +102,7 @@ router.get(
   `;
 
     pool
-      .query(sqlText, [req.user?.id])
+      .query(sqlText, [userId])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -111,6 +116,7 @@ router.post(
   '/add',
   rejectUnauthenticated,
   async (req: Request, res: Response): Promise<void> => {
+    const { id: userId } = req.user as PacamaraUser;
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -163,7 +169,7 @@ router.post(
 
       await connection.query(usersCoffeesSqlText, [
         newCoffeeId,
-        req.user?.id,
+        userId,
         req.body.brewing,
       ]);
 
@@ -209,6 +215,7 @@ router.delete(
   '/delete/:id',
   rejectUnauthenticated,
   async (req: Request, res: Response): Promise<void> => {
+    const { id: userId } = req.user as PacamaraUser;
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -220,7 +227,7 @@ router.delete(
       DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
     `;
       await connection.query(deleteUsersCoffeesEntrySqlText, [
-        req.user?.id,
+        userId,
         req.params.id,
       ]);
 

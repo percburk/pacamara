@@ -1,10 +1,12 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { PacamaraUser } from '../models/UserResource';
 import { comparePassword } from '../modules/encryption';
 import pool from '../modules/pool';
 
 passport.serializeUser((user, done): void => {
-  done(null, user.id);
+  const { id } = user as PacamaraUser
+  done(null, id);
 });
 
 passport.deserializeUser((id: number, done): void => {
