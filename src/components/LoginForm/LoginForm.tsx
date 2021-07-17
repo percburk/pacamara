@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
 
@@ -9,7 +9,7 @@ export default function LoginForm({ classes }) {
   const [password, setPassword] = useState('');
 
   // Sends login info to server to begin login process
-  const handleLogin = (event) => {
+  const handleLogin = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && password) {
       dispatch({

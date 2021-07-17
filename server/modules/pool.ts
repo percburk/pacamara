@@ -1,36 +1,40 @@
-import pg from 'pg';
+import pg, { PoolConfig } from 'pg';
 import url from 'url';
 
-let config: object = {};
-
-if (process.env.DATABASE_URL) {
+const getConfig = (): PoolConfig => {
   // Heroku gives a url, not a connection object
   // https://github.com/brianc/node-pg-pool
-  const params = url.parse(process.env.DATABASE_URL) as any;
-  const auth = params.auth.split(':');
+  if (process.env.DATABASE_URL) {
+    const { hostname, port, pathname, auth } = url.parse(
+      process.env.DATABASE_URL
+    );
+    const authArray = auth?.split(':');
 
-  config = {
-    user: auth[0],
-    password: auth[1],
-    host: params.hostname,
-    port: params.port,
-    database: params.pathname.split('/')[1],
-    ssl: { rejectUnauthorized: false },
-    max: 10, // max number of clients in the pool
-    idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
-  };
-} else {
-  config = {
+    if (authArray) {
+      return {
+        user: authArray[0],
+        password: authArray[1],
+        host: hostname ?? undefined,
+        port: Number(port) ?? undefined,
+        database: pathname?.split('/')[1],
+        ssl: { rejectUnauthorized: false },
+        max: 10, // max number of clients in the pool
+        idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+      };
+    }
+  }
+
+  return {
     host: 'localhost', // Server hosting the postgres database
     port: 5432, // env var: PGPORT
     database: 'pacamara', // Adjusted database name for this particular app
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
   };
-}
+};
 
 // this creates the pool that will be shared by all other modules
-const pool: pg.Pool = new pg.Pool(config);
+const pool: pg.Pool = new pg.Pool(getConfig());
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens

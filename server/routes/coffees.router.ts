@@ -2,12 +2,10 @@ import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
-import { PacamaraUser } from '../models/UserResource';
 const router = express.Router();
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
-  const { id: userId } = req.user as PacamaraUser;
   const sqlText: string = `
     SELECT "coffees".*, 
       "users_coffees".is_fav, 
@@ -26,7 +24,7 @@ router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
   `;
 
   pool
-    .query(sqlText, [userId])
+    .query(sqlText, [req.user?.id])
     .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
@@ -39,41 +37,41 @@ router.get(
   '/search-results',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const { q } = req.query as any;
-    const { id: userId } = req.user as PacamaraUser;
+    const { q } = req.query;
 
     const sqlText: string = `
-    SELECT "coffees".*, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing,
-      "users_coffees".shared_by_id,
-      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
-    FROM "coffees_flavors"
-    RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
-    WHERE to_tsvector(CONCAT_WS(' ', 
-      "coffees".roaster, 
-      "coffees".country, 
-      "coffees".producer, 
-      "coffees".blend_name
-    ))
-    @@ to_tsquery($1) AND "users_coffees".users_id = $2
-    GROUP BY "coffees".id, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing,
-      "users_coffees".shared_by_id
-    ORDER BY "coffees".date DESC;
-  `;
+      SELECT "coffees".*, 
+        "users_coffees".is_fav, 
+        "users_coffees".brewing,
+        "users_coffees".shared_by_id,
+        ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+      FROM "coffees_flavors"
+      RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+      JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
+      WHERE to_tsvector(CONCAT_WS(' ', 
+        "coffees".roaster, 
+        "coffees".country, 
+        "coffees".producer, 
+        "coffees".blend_name
+      ))
+      @@ to_tsquery($1) AND "users_coffees".users_id = $2
+      GROUP BY "coffees".id, 
+        "users_coffees".is_fav, 
+        "users_coffees".brewing,
+        "users_coffees".shared_by_id
+      ORDER BY "coffees".date DESC;
+    `;
 
     // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
     // Outer single quotes get added when the query is sanitized using $1
     // Also need to remove any '& ' characters already present for to_tsvector
-    const parsedQuery: string = `"${q
-      .replace('& ', '')
-      .replace(/\s/g, '&')}":*`;
+    const parsedQuery: string | null =
+      typeof q === 'string'
+        ? `"${q.replace('& ', '').replace(/\s/g, '&')}":*`
+        : null;
 
     pool
-      .query(sqlText, [parsedQuery, userId])
+      .query(sqlText, [parsedQuery, req.user?.id])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -87,22 +85,20 @@ router.get(
   '/search',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const { id: userId } = req.user as PacamaraUser;
-
     const sqlText: string = `
-    SELECT "coffees".country, 
-      "coffees".producer, 
-      "coffees".roaster, 
-      "coffees".blend_name, 
-      "users_coffees".users_id 
-    FROM "coffees"
-    JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
-    WHERE "users_coffees".users_id = $1 
-    ORDER BY "coffees".date DESC;
-  `;
+      SELECT "coffees".country, 
+        "coffees".producer, 
+        "coffees".roaster, 
+        "coffees".blend_name, 
+        "users_coffees".users_id 
+      FROM "coffees"
+      JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
+      WHERE "users_coffees".users_id = $1 
+      ORDER BY "coffees".date DESC;
+    `;
 
     pool
-      .query(sqlText, [userId])
+      .query(sqlText, [req.user?.id])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -116,7 +112,6 @@ router.post(
   '/add',
   rejectUnauthenticated,
   async (req: Request, res: Response): Promise<void> => {
-    const { id: userId } = req.user as PacamaraUser;
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -125,23 +120,23 @@ router.post(
       // Query #1
       // Create new coffee entry in "coffees", return ID for flavors
       const newCoffeeSqlText: string = `
-      INSERT INTO "coffees" (
-        "roaster", 
-        "roast_date", 
-        "is_blend", 
-        "blend_name", 
-        "country", 
-        "producer", 
-        "region", 
-        "elevation", 
-        "cultivars", 
-        "processing", 
-        "notes", 
-        "coffee_pic"
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-      RETURNING "id";
-    `;
+        INSERT INTO "coffees" (
+          "roaster", 
+          "roast_date", 
+          "is_blend", 
+          "blend_name", 
+          "country", 
+          "producer", 
+          "region", 
+          "elevation", 
+          "cultivars", 
+          "processing", 
+          "notes", 
+          "coffee_pic"
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        RETURNING "id";
+      `;
 
       const result = await connection.query(newCoffeeSqlText, [
         req.body.roaster,
@@ -163,20 +158,20 @@ router.post(
       const newCoffeeId: number = result.rows[0].id; // New ID is here
 
       const usersCoffeesSqlText: string = `
-      INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
-      VALUES ($1, $2, $3);
-    `;
+        INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
+        VALUES ($1, $2, $3);
+      `;
 
       await connection.query(usersCoffeesSqlText, [
         newCoffeeId,
-        userId,
+        req.user?.id,
         req.body.brewing,
       ]);
 
       // Query #3
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
-      let sqlValues: string = req.body.flavors_array
+      const sqlValues: string = req.body.flavors_array
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -185,9 +180,9 @@ router.post(
         .slice(0, -1); // Takes off last comma
 
       const newFlavorsSqlText: string = `
-      INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
-      VALUES ${sqlValues};
-    `;
+        INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
+        VALUES ${sqlValues};
+      `;
 
       await connection.query(newFlavorsSqlText, [
         newCoffeeId,
@@ -215,7 +210,6 @@ router.delete(
   '/delete/:id',
   rejectUnauthenticated,
   async (req: Request, res: Response): Promise<void> => {
-    const { id: userId } = req.user as PacamaraUser;
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -224,20 +218,21 @@ router.delete(
       // Query #1
       // Delete entry from users_coffees to delete coffee from user's dashboard
       const deleteUsersCoffeesEntrySqlText: string = `
-      DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
-    `;
+        DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
+      `;
       await connection.query(deleteUsersCoffeesEntrySqlText, [
-        userId,
+        req.user?.id,
         req.params.id,
       ]);
 
       // Query #2
       // Check to see if this coffee is shared. If not, delete it from db
       const deleteCoffeeSqlText: string = `
-      DELETE FROM "coffees"  
-      WHERE NOT EXISTS (SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1)
-      AND "coffees".id = $1;
-    `;
+        DELETE FROM "coffees"  
+        WHERE NOT EXISTS 
+          (SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1)
+        AND "coffees".id = $1;
+      `;
       await connection.query(deleteCoffeeSqlText, [req.params.id]);
 
       // Complete transaction

@@ -2,13 +2,11 @@ export interface Flavors {
   id: number;
   name: string;
 }
-[];
 
 export interface Methods extends Flavors {
   drip_speed: string;
   lrr: number;
 }
-[];
 
 export interface Brew {
   id: number;
@@ -35,7 +33,7 @@ export interface LandingError {
 }
 
 export interface Snackbar extends LandingError {
-  severity: string;
+  severity: 'info' | 'success' | 'error';
 }
 
 export interface User {
@@ -63,7 +61,6 @@ export interface SharedCoffees {
   coffee_name: string;
   username: string;
 }
-[];
 
 export interface SharingUserList {
   id: number;
@@ -71,13 +68,12 @@ export interface SharingUserList {
   name: string;
   profile_pic: string;
 }
-[];
 
 export interface OneSharedCoffee {
   id: number;
-  date: Date;
+  date: string;
   roaster: string;
-  roast_date: Date;
+  roast_date: string;
   is_blend: boolean;
   blend_name?: string;
   country?: string;
@@ -105,18 +101,22 @@ export interface CoffeeSearchList {
   users_id: number;
 }
 
+export interface MethodsArrayAgg {
+  array_agg: number[];
+}
+
 // Redux initial state interface
-export interface IState {
+export interface InitialState {
   coffees: CoffeeItem[];
   oneCoffee: CoffeeItem;
-  flavors: Flavors;
-  methods: Methods;
+  flavors: Flavors[];
+  methods: Methods[];
   brews: Brew[];
   snackbars: Snackbar;
   user: User;
-  sharedCoffees: SharedCoffees;
-  sharingUserList: SharingUserList;
-  coffeeSearchList: CoffeeSearchList;
+  sharedCoffees: SharedCoffees[];
+  sharingUserList: SharingUserList[];
+  coffeeSearchList: CoffeeSearchList[];
   oneSharedCoffee: OneSharedCoffee;
   landingErrors: LandingError;
 }

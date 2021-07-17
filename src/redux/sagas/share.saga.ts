@@ -1,11 +1,28 @@
-import { put, takeEvery } from 'redux-saga/effects';
-import axios from 'axios';
+import { put, takeEvery, call } from 'redux-saga/effects';
+import axios, { AxiosResponse } from 'axios';
+import { SagaDispatch, SagaActions } from '../../models/sagaResource';
+import { ReduxActions } from '../../models/reduxResource';
+import {
+  CoffeeItem,
+  SharedCoffees,
+  SharingUserList,
+} from '../../models/modelResource';
+import {
+  AddSharedCoffeeToDashboardPayload,
+  SendSharedCoffeePayload,
+} from '../../models/payloadResource';
 
 // Gets list of users to search and share coffees with
 function* fetchSharingUserList() {
   try {
-    const response = yield axios.get('/api/share/users');
-    yield put({ type: 'SET_SHARE_USER_LIST', payload: response.data });
+    const response: AxiosResponse<SharingUserList[]> = yield call(
+      axios.get,
+      '/api/share/users'
+    );
+    yield put({
+      type: ReduxActions.SET_SHARE_USER_LIST,
+      payload: response.data,
+    });
   } catch (err) {
     console.log('Error in fetchShareUsers', err);
   }
@@ -14,8 +31,14 @@ function* fetchSharingUserList() {
 // Gets any shared coffees a user may have waiting
 function* fetchSharedCoffees() {
   try {
-    const response = yield axios.get('/api/share');
-    yield put({ type: 'SET_SHARED_COFFEES', payload: response.data });
+    const response: AxiosResponse<SharedCoffees[]> = yield call(
+      axios.get,
+      '/api/share'
+    );
+    yield put({
+      type: ReduxActions.SET_SHARED_COFFEES,
+      payload: response.data,
+    });
   } catch (err) {
     console.log('Error in fetchSharedCoffees', err);
   }
@@ -23,30 +46,38 @@ function* fetchSharedCoffees() {
 
 // When a user clicks on a shared coffee in AvatarMenu, this saga grabs
 // pertinent details of that coffee to display on SharedCoffeeDialog
-function* fetchOneSharedCoffee(action) {
+function* fetchOneSharedCoffee(action: SagaDispatch<number>) {
   try {
-    const response = yield axios.get(`/api/share/${action.payload}`);
-    yield put({ type: 'SET_ONE_SHARED_COFFEE', payload: response.data[0] });
+    const response: AxiosResponse<CoffeeItem[]> = yield call(
+      axios.get,
+      `/api/share/${action.payload}`
+    );
+    yield put({
+      type: ReduxActions.SET_ONE_SHARED_COFFEE,
+      payload: response.data[0],
+    });
   } catch (err) {
     console.log('Error in fetchOneSharedCoffee', err);
   }
 }
 
 // Fires when a user shares a coffee entry with another user
-function* sendSharedCoffee(action) {
+function* sendSharedCoffee(action: SagaDispatch<SendSharedCoffeePayload>) {
   try {
-    yield axios.post('/api/share', action.payload);
+    yield call(axios.post, '/api/share', action.payload);
   } catch (err) {
     console.log('Error in sendSharedCoffee', err);
   }
 }
 
 // POST to add the shared coffee to the current user's dashboard
-function* addSharedCoffeeToDashboard(action) {
+function* addSharedCoffeeToDashboard(
+  action: SagaDispatch<AddSharedCoffeeToDashboardPayload>
+) {
   try {
-    yield axios.post('/api/share/add', action.payload);
-    yield put({ type: 'FETCH_SHARED_COFFEES' });
-    yield put({ type: 'FETCH_COFFEES' });
+    yield call(axios.post, '/api/share/add', action.payload);
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES });
+    yield put({ type: SagaActions.FETCH_COFFEES });
   } catch (err) {
     console.log('Error in addSharedCoffee', err);
   }
@@ -54,20 +85,23 @@ function* addSharedCoffeeToDashboard(action) {
 
 // Deletes the entry if a user declines to add a shared coffee, or adds it to
 // their dashboard, removing it from their shared coffee list
-function* deleteSharedCoffee(action) {
+function* deleteSharedCoffee(action: SagaDispatch<number>) {
   try {
-    yield axios.delete(`/api/share/delete/${action.payload}`);
-    yield put({ type: 'FETCH_SHARED_COFFEES' });
+    yield call(axios.delete, `/api/share/delete/${action.payload}`);
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES });
   } catch (err) {
     console.log('Error in deleteSharedCoffee', err);
   }
 }
 
 export default function* shareSaga() {
-  yield takeEvery('FETCH_SHARING_USER_LIST', fetchSharingUserList);
-  yield takeEvery('SEND_SHARED_COFFEE', sendSharedCoffee);
-  yield takeEvery('FETCH_SHARED_COFFEES', fetchSharedCoffees);
-  yield takeEvery('FETCH_ONE_SHARED_COFFEE', fetchOneSharedCoffee);
-  yield takeEvery('DELETE_SHARED_COFFEE', deleteSharedCoffee);
-  yield takeEvery('ADD_SHARED_COFFEE_TO_DASHBOARD', addSharedCoffeeToDashboard);
+  yield takeEvery(SagaActions.FETCH_SHARING_USER_LIST, fetchSharingUserList);
+  yield takeEvery(SagaActions.SEND_SHARED_COFFEE, sendSharedCoffee);
+  yield takeEvery(SagaActions.FETCH_SHARED_COFFEES, fetchSharedCoffees);
+  yield takeEvery(SagaActions.FETCH_ONE_SHARED_COFFEE, fetchOneSharedCoffee);
+  yield takeEvery(SagaActions.DELETE_SHARED_COFFEE, deleteSharedCoffee);
+  yield takeEvery(
+    SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
+    addSharedCoffeeToDashboard
+  );
 }

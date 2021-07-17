@@ -7,8 +7,12 @@ import logger from 'redux-logger';
 
 // Imports all reducers, stored in _root.reducer
 import rootReducer from './redux/reducers/_root.reducer';
-// Imports IState interface for Store
-import { IState } from './redux/models/models';
+// Imports InitialState interface for Store
+import {
+  InitialState,
+  ReduxDispatch,
+  ReduxDispatchPayloads,
+} from './models/reduxResource';
 
 // Imports all sagas, stored in _root.saga
 import rootSaga from './redux/sagas/_root.saga';
@@ -26,7 +30,10 @@ const middlewareList =
     ? [sagaMiddleware, logger]
     : [sagaMiddleware];
 
-const store = createStore(
+const store: Store<
+  InitialState,
+  ReduxDispatch<ReduxDispatchPayloads>
+> = createStore(
   // Tells the saga middleware to use the rootReducer
   // rootReducer contains all of our other reducers
   rootReducer,

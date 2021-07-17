@@ -1,8 +1,14 @@
+import { CoffeeSearchList } from '../../models/modelResource';
+import { ReduxDispatch, ReduxActions } from '../../models/reduxResource';
+
 // searchReducer contains a pared down list of coffee info the user can search
 // through on Nav
-const coffeeSearchListReducer = (state = [], action) => {
+const coffeeSearchListReducer = (
+  state = [],
+  action: ReduxDispatch<CoffeeSearchList[]>
+) => {
   switch (action.type) {
-    case 'SET_COFFEE_SEARCH_LIST':
+    case ReduxActions.SET_COFFEE_SEARCH_LIST:
       return action.payload;
     default:
       return state;

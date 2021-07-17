@@ -10,7 +10,7 @@ router.get('/', (req: Request, res: Response): void => {
 
   pool
     .query(sqlText)
-    .then((response) => res.send(response.rows))
+    .then((result) => res.send(result.rows))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);

@@ -3,32 +3,30 @@ import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authentication.middleware';
 const router = express.Router();
-import { PacamaraUser } from '../models/UserResource';
 
 // GET route for one coffee for CoffeeDetails
 router.get(
   '/:id',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const { id: userId } = req.user as PacamaraUser;
     const sqlText: string = `
-    SELECT "coffees".*, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing,
-      "users_coffees".shared_by_id,
-      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
-    FROM "coffees_flavors"
-    JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
-    WHERE "coffees".id = $1 AND "users_coffees".users_id = $2
-    GROUP BY "coffees".id, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing,
-      "users_coffees".shared_by_id;
-  `;
+      SELECT "coffees".*, 
+        "users_coffees".is_fav, 
+        "users_coffees".brewing,
+        "users_coffees".shared_by_id,
+        ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
+      FROM "coffees_flavors"
+      JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+      JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
+      WHERE "coffees".id = $1 AND "users_coffees".users_id = $2
+      GROUP BY "coffees".id, 
+        "users_coffees".is_fav, 
+        "users_coffees".brewing,
+        "users_coffees".shared_by_id;
+    `;
 
     pool
-      .query(sqlText, [req.params.id, userId])
+      .query(sqlText, [req.params.id, req.user?.id])
       .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
@@ -42,17 +40,16 @@ router.put(
   '/fav-brew',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const { id: userId } = req.user as PacamaraUser;
     const { change, id: coffeeId }: { change: string; id: number } = req.body;
     const sqlChange: string = change === 'fav' ? 'is_fav' : 'brewing';
 
     const sqlText = `
-    UPDATE "users_coffees" SET "${sqlChange}" = NOT "${sqlChange}"
-    WHERE "users_id" = $1 AND "coffees_id" = $2;
-  `;
+      UPDATE "users_coffees" SET "${sqlChange}" = NOT "${sqlChange}"
+      WHERE "users_id" = $1 AND "coffees_id" = $2;
+    `;
 
     pool
-      .query(sqlText, [userId, coffeeId])
+      .query(sqlText, [req.user?.id, coffeeId])
       .then(() => res.sendStatus(201))
       .catch((err) => {
         console.log(`Error in PUT with query: ${sqlText}`, err);
@@ -74,21 +71,21 @@ router.put(
       // Query #1
       // Updating the data on 'coffees' table
       const updateCoffeeSqlText: string = `
-      UPDATE "coffees" 
-      SET "roaster" = $1, 
-        "roast_date" = $2, 
-        "is_blend" = $3,
-        "blend_name" = $4, 
-        "country" = $5, 
-        "producer" = $6, 
-        "region" = $7,
-        "elevation" = $8, 
-        "cultivars" = $9, 
-        "processing" = $10,
-        "notes" = $11, 
-        "coffee_pic" = $12 
-      WHERE "id" = $13;
-    `;
+        UPDATE "coffees" 
+        SET "roaster" = $1, 
+          "roast_date" = $2, 
+          "is_blend" = $3,
+          "blend_name" = $4, 
+          "country" = $5, 
+          "producer" = $6, 
+          "region" = $7,
+          "elevation" = $8, 
+          "cultivars" = $9, 
+          "processing" = $10,
+          "notes" = $11, 
+          "coffee_pic" = $12 
+        WHERE "id" = $13;
+      `;
 
       await connection.query(updateCoffeeSqlText, [
         req.body.roaster,
@@ -126,9 +123,9 @@ router.put(
         .slice(0, -1); // Takes off last comma
 
       const updateFlavorsSqlText: string = `
-      INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
-      VALUES ${sqlValues};
-    `;
+        INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
+        VALUES ${sqlValues};
+      `;
 
       await connection.query(updateFlavorsSqlText, [
         req.body.id,
@@ -138,9 +135,9 @@ router.put(
       // Query #4
       // Update brewing status of the edited coffee
       const updateBrewingSqlText: string = `
-      UPDATE "users_coffees" SET "brewing" = $1
-      WHERE "coffees_id" = $2;
-    `;
+        UPDATE "users_coffees" SET "brewing" = $1
+        WHERE "coffees_id" = $2;
+      `;
 
       await connection.query(updateBrewingSqlText, [
         req.body.brewing,

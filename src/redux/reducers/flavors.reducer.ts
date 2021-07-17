@@ -1,8 +1,11 @@
-// flavorsReducer contains list of flavors, which are displayed as Chips 
+import { Flavors } from '../../models/modelResource';
+import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+
+// flavorsReducer contains list of flavors, which are displayed as Chips
 // in various places around the app
-const flavorsReducer = (state = [], action) => {
+const flavorsReducer = (state = [], action: ReduxDispatch<Flavors[]>) => {
   switch (action.type) {
-    case 'SET_FLAVORS':
+    case ReduxActions.SET_FLAVORS:
       return action.payload;
     default:
       return state;

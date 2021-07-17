@@ -1,8 +1,11 @@
+import { CoffeeItem } from '../../models/modelResource';
+import { ReduxDispatch, ReduxActions } from '../../models/reduxResource';
+
 // coffeesReducer contains all the coffees displayed on a user's dashboard
 // also contains search results
-const coffeesReducer = (state = [], action) => {
+const coffeesReducer = (state = [], action: ReduxDispatch<CoffeeItem[]>) => {
   switch (action.type) {
-    case 'SET_COFFEES':
+    case ReduxActions.SET_COFFEES:
       return action.payload;
     default:
       return state;

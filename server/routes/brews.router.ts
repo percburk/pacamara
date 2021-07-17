@@ -9,12 +9,12 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText: string = `
-    SELECT * FROM "brews" WHERE "coffees_id" = $1 ORDER BY "date" DESC;
-  `;
+      SELECT * FROM "brews" WHERE "coffees_id" = $1 ORDER BY "date" DESC;
+    `;
 
     pool
       .query(sqlText, [req.params.id])
-      .then((response) => res.send(response.rows))
+      .then((result) => res.send(result.rows))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);
@@ -28,23 +28,23 @@ router.post(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText: string = `
-    INSERT INTO "brews" (
-      "coffees_id", 
-      "methods_id", 
-      "water_dose", 
-      "coffee_dose", 
-      "grind", 
-      "moisture", 
-      "co2", 
-      "ratio", 
-      "tds", 
-      "ext", 
-      "water_temp", 
-      "time", 
-      "lrr"
-    )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
-  `;
+      INSERT INTO "brews" (
+        "coffees_id", 
+        "methods_id", 
+        "water_dose", 
+        "coffee_dose", 
+        "grind", 
+        "moisture", 
+        "co2", 
+        "ratio", 
+        "tds", 
+        "ext", 
+        "water_temp", 
+        "time", 
+        "lrr"
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
+    `;
 
     pool
       .query(sqlText, [
@@ -76,23 +76,23 @@ router.put(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText: string = `
-    UPDATE "brews" SET
-      "coffees_id" = $1, 
-      "methods_id" = $2, 
-      "water_dose" = $3, 
-      "coffee_dose" = $4, 
-      "grind" = $5, 
-      "moisture" = $6, 
-      "co2" = $7, 
-      "ratio" = $8, 
-      "tds" = $9, 
-      "ext" = $10, 
-      "water_temp" = $11, 
-      "time" = $12, 
-      "lrr" = $13,
-      "date" = NOW()
-    WHERE "id" = $14;
-  `;
+      UPDATE "brews" SET
+        "coffees_id" = $1, 
+        "methods_id" = $2, 
+        "water_dose" = $3, 
+        "coffee_dose" = $4, 
+        "grind" = $5, 
+        "moisture" = $6, 
+        "co2" = $7, 
+        "ratio" = $8, 
+        "tds" = $9, 
+        "ext" = $10, 
+        "water_temp" = $11, 
+        "time" = $12, 
+        "lrr" = $13,
+        "date" = NOW()
+      WHERE "id" = $14;
+    `;
 
     pool
       .query(sqlText, [
