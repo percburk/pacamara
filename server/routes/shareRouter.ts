@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
-import { rejectUnauthenticated } from '../modules/authentication.middleware';
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router = express.Router();
 
 // GET route for user list to share coffees with

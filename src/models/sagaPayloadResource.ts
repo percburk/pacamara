@@ -1,5 +1,3 @@
-import { CoffeeItem } from "./modelResource";
-
 export interface BrewCoffeeIdPayload {
   brewId: number;
   coffeeId: number;
@@ -50,9 +48,3 @@ export interface UpdateProfilePayload {
   name: string;
   methods_default_lrr: number;
 }
-
-export interface EditInputsPayload {
-  key: string;
-  change: string;
-}
-export type OneCoffeePayloadTypes = CoffeeItem | number | EditInputsPayload;

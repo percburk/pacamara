@@ -1,4 +1,4 @@
-import oneCoffeeReducer from './oneCoffee.reducer';
+import oneCoffeeReducer from './oneCoffeeReducer';
 
 describe('testing oneCoffeeReducer', () => {
   // EDIT_INPUTS

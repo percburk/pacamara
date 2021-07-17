@@ -1,16 +1,16 @@
-import { CombinedState, combineReducers, Reducer } from 'redux';
-import landingErrors from './landingErrors.reducer';
-import user from './user.reducer';
-import methods from './methods.reducer';
-import coffees from './coffees.reducer';
-import oneCoffee from './oneCoffee.reducer';
-import flavors from './flavors.reducer';
-import snackbars from './snackbars.reducer';
-import brews from './brews.reducer';
-import coffeeSearchList from './coffeeSearchList.reducer';
-import sharingUserList from './sharingUserList.reducer';
-import sharedCoffees from './sharedCoffees.reducer';
-import oneSharedCoffee from './oneSharedCoffee.reducer';
+import { combineReducers } from 'redux';
+import landingErrors from './landingErrorsReducer';
+import user from './userReducer';
+import methods from './methodsReducer';
+import coffees from './coffeesReducer';
+import oneCoffee from './oneCoffeeReducer';
+import flavors from './flavorsReducer';
+import snackbars from './snackbarsReducer';
+import brews from './brewsReducer';
+import coffeeSearchList from './coffeeSearchListReducer';
+import sharingUserList from './sharingUserListReducer';
+import sharedCoffees from './sharedCoffeesReducer';
+import oneSharedCoffee from './oneSharedCoffeeReducer';
 
 // rootReducer is the primary reducer for the entire project
 // It bundles up all of the other reducers so the project can use them.

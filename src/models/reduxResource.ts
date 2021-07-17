@@ -11,7 +11,6 @@ import {
   OneSharedCoffee,
   LandingError,
 } from './modelResource';
-import { EditInputsPayload } from './payloadResource';
 
 export enum ReduxActions {
   SET_BREWS = 'SET_BREWS',
@@ -70,17 +69,3 @@ export interface InitialState {
   oneSharedCoffee: OneSharedCoffee;
   landingErrors: LandingError;
 }
-
-export type ReduxDispatchPayloads =
-  | CoffeeItem[]
-  | CoffeeItem
-  | Flavors[]
-  | Methods[]
-  | Brew[]
-  | User
-  | SharedCoffees[]
-  | CoffeeSearchList[]
-  | SharingUserList[]
-  | OneSharedCoffee
-  | EditInputsPayload
-  | number;

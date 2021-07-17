@@ -1,15 +1,15 @@
 import { all } from 'redux-saga/effects';
-import loginSaga from './login.saga';
-import registrationSaga from './registration.saga';
-import userSaga from './user.saga';
-import methodsSaga from './methods.saga';
-import coffeesSaga from './coffees.saga';
-import oneCoffeeSaga from './oneCoffee.saga';
-import flavorsSaga from './flavors.saga';
-import updateProfileSaga from './updateProfile.saga';
-import brewsSaga from './brews.saga';
-import coffeeSearchListSaga from './coffeeSearchList.saga';
-import shareSaga from './share.saga';
+import loginSaga from './loginSaga';
+import registrationSaga from './registrationSaga';
+import userSaga from './userSaga';
+import methodsSaga from './methodsSaga';
+import coffeesSaga from './coffeesSaga';
+import oneCoffeeSaga from './oneCoffeeSaga';
+import flavorsSaga from './flavorsSaga';
+import updateProfileSaga from './updateProfileSaga';
+import brewsSaga from './brewsSaga';
+import coffeeSearchListSaga from './coffeeSearchListSaga';
+import shareSaga from './shareSaga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so the project can use them.

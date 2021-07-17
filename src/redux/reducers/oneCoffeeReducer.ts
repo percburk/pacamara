@@ -2,7 +2,7 @@ import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
 import {
   EditInputsPayload,
   OneCoffeePayloadTypes,
-} from '../../models/payloadResource';
+} from '../../models/reduxPayloadResource';
 import { CoffeeItem } from '../../models/modelResource';
 
 // oneCoffeeReducer contains the coffee being displayed on CoffeeDetails

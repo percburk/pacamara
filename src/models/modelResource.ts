@@ -104,19 +104,3 @@ export interface CoffeeSearchList {
 export interface MethodsArrayAgg {
   array_agg: number[];
 }
-
-// Redux initial state interface
-export interface InitialState {
-  coffees: CoffeeItem[];
-  oneCoffee: CoffeeItem;
-  flavors: Flavors[];
-  methods: Methods[];
-  brews: Brew[];
-  snackbars: Snackbar;
-  user: User;
-  sharedCoffees: SharedCoffees[];
-  sharingUserList: SharingUserList[];
-  coffeeSearchList: CoffeeSearchList[];
-  oneSharedCoffee: OneSharedCoffee;
-  landingErrors: LandingError;
-}

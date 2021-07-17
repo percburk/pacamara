@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
-import { rejectUnauthenticated } from '../modules/authentication.middleware';
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router = express.Router();
 
 // GET route for one coffee for CoffeeDetails

@@ -1,4 +1,4 @@
-import userReducer from './user.reducer';
+import userReducer from './userReducer';
 
 describe('testing userReducer', () => {
   // SET_USER

@@ -7,7 +7,7 @@ import { Brew } from '../../models/modelResource';
 import {
   BrewCoffeeIdPayload,
   FavBrewPayload,
-} from '../../models/payloadResource';
+} from '../../models/sagaPayloadResource';
 
 // Fetches list of all brews for the coffee displayed in CoffeeDetails
 function* fetchBrews(action: SagaDispatch<number>) {

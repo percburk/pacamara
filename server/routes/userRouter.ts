@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { PoolClient } from 'pg';
-import { rejectUnauthenticated } from '../modules/authentication.middleware';
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
-import userStrategy from '../strategies/user.strategy';
+import userStrategy from '../strategies/userStrategy';
 
 const router: express.Router = express.Router();
 

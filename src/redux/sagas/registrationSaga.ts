@@ -2,7 +2,7 @@ import axios from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { SagaActions, SagaDispatch } from '../../models/sagaResource';
 import { ReduxActions } from '../../models/reduxResource';
-import { LoginRegisterPayload } from '../../models/payloadResource';
+import { LoginRegisterPayload } from '../../models/sagaPayloadResource';
 
 // Worker Saga: will be fired on "REGISTER" actions
 function* registerUser(action: SagaDispatch<LoginRegisterPayload>) {

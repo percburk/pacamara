@@ -2,18 +2,18 @@ import express from 'express';
 const app = express();
 import bodyParser from 'body-parser';
 require('dotenv').config();
-import sessionMiddleware from './modules/session.middleware';
-import passport from './strategies/user.strategy';
+import sessionMiddleware from './modules/sessionMiddleware';
+import passport from './strategies/userStrategy';
 
 // Route imports
-import userRouter from './routes/user.router';
-import methodsRouter from './routes/methods.router';
-import coffeesRouter from './routes/coffees.router';
-import oneCoffeeRouter from './routes/oneCoffee.router';
-import flavorsRouter from './routes/flavors.router';
-import brewsRouter from './routes/brews.router';
-import shareRouter from './routes/share.router';
-import s3Router from './routes/s3.router';
+import userRouter from './routes/userRouter';
+import methodsRouter from './routes/methodsRouter';
+import coffeesRouter from './routes/coffeesRouter';
+import oneCoffeeRouter from './routes/oneCoffeeRouter';
+import flavorsRouter from './routes/flavorsRouter';
+import brewsRouter from './routes/brewsRouter';
+import shareRouter from './routes/shareRouter';
+import s3Router from './routes/s3Router';
 
 // --- Middleware --- //
 app.use(bodyParser.json());

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { LoginRegisterPayload } from '../../models/payloadResource';
+import { LoginRegisterPayload } from '../../models/sagaPayloadResource';
 import { SagaActions, SagaDispatch } from '../../models/sagaResource';
 import { ReduxActions } from '../../models/reduxResource';
 

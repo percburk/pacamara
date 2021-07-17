@@ -10,7 +10,7 @@ import {
 import {
   AddSharedCoffeeToDashboardPayload,
   SendSharedCoffeePayload,
-} from '../../models/payloadResource';
+} from '../../models/sagaPayloadResource';
 
 // Gets list of users to search and share coffees with
 function* fetchSharingUserList() {

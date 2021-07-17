@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, Store } from 'redux';
 import { Provider } from 'react-redux';
@@ -6,16 +5,13 @@ import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 
 // Imports all reducers, stored in _root.reducer
-import rootReducer from './redux/reducers/_root.reducer';
+import rootReducer from './redux/reducers/_rootReducer';
 // Imports InitialState interface for Store
-import {
-  InitialState,
-  ReduxDispatch,
-  ReduxDispatchPayloads,
-} from './models/reduxResource';
+import { InitialState, ReduxDispatch } from './models/reduxResource';
+import { ReduxDispatchPayloadTypes } from './models/reduxPayloadResource';
 
 // Imports all sagas, stored in _root.saga
-import rootSaga from './redux/sagas/_root.saga';
+import rootSaga from './redux/sagas/_rootSaga';
 
 // Imports our App to be rendered by React
 import App from './components/App/App';
@@ -32,7 +28,7 @@ const middlewareList =
 
 const store: Store<
   InitialState,
-  ReduxDispatch<ReduxDispatchPayloads>
+  ReduxDispatch<ReduxDispatchPayloadTypes>
 > = createStore(
   // Tells the saga middleware to use the rootReducer
   // rootReducer contains all of our other reducers

@@ -5,7 +5,7 @@ import { SagaActions, SagaDispatch } from '../../models/sagaResource';
 import {
   BrewingOrFavPayload,
   DeleteCoffeePayload,
-} from '../../models/payloadResource';
+} from '../../models/sagaPayloadResource';
 
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router
