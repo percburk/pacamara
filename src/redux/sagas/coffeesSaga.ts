@@ -5,12 +5,12 @@ import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
+} from '../../models/redux/sagaResource';
 import {
   BrewingOrFavPayload,
   DeleteCoffeePayload,
-} from '../../models/reduxSaga/sagaPayloadResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/sagaPayloadResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router

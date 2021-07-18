@@ -1,7 +1,7 @@
 import {
   ReduxActions,
   ReduxDispatch,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 import { OneSharedCoffee } from '../../models/modelResource';
 
 const initialState = {

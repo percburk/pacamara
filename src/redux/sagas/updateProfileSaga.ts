@@ -4,8 +4,8 @@ import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
-import { UpdateProfilePayload } from '../../models/reduxSaga/sagaPayloadResource';
+} from '../../models/redux/sagaResource';
+import { UpdateProfilePayload } from '../../models/redux/sagaPayloadResource';
 
 // PUT route to update information for both a new and existing user
 // Since registration creates a username and password but nothing else,

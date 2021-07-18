@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { LoginRegisterPayload } from '../../models/reduxSaga/sagaPayloadResource';
+import { LoginRegisterPayload } from '../../models/redux/sagaPayloadResource';
 import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Worker Saga: will be fired on "LOGIN" actions
 function* loginUser(

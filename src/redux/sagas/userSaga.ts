@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { User, MethodsArrayAgg } from '../../models/modelResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 import {
   SagaActions,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
+} from '../../models/redux/sagaResource';
 
 // Worker Saga: will be fired on "FETCH_USER" actions
 function* fetchUser(): SagaGeneratorReturn<User & MethodsArrayAgg[], User> {

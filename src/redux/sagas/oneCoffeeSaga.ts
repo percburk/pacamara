@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { CoffeeItem } from '../../models/modelResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 import {
   SagaDispatch,
   SagaActions,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
+} from '../../models/redux/sagaResource';
 
 // Fetches one coffee to be displayed on CoffeeDetails
 function* fetchOneCoffee(

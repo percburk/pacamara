@@ -2,7 +2,7 @@ import { LandingError } from '../../models/modelResource';
 import {
   ReduxActions,
   ReduxDispatch,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 
 const initialState: LandingError = { string: '', open: false };
 

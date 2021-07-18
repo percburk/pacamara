@@ -2,7 +2,7 @@ import { CoffeeSearchList } from '../../models/modelResource';
 import {
   ReduxDispatch,
   ReduxActions,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 
 // searchReducer contains a pared down list of coffee info the user can search
 // through on Nav

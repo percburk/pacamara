@@ -7,8 +7,8 @@ import logger from 'redux-logger';
 // Imports all reducers, stored in _root.reducer
 import rootReducer from './redux/reducers/_rootReducer';
 // Imports InitialState interface for Store
-import { InitialState, ReduxDispatch, ReduxDispatchNoPayload } from './models/reduxSaga/reduxResource';
-import { ReduxDispatchPayloadTypes } from './models/reduxSaga/reduxPayloadResource';
+import { InitialState, ReduxDispatch, ReduxDispatchNoPayload } from './models/redux/reduxResource';
+import { ReduxDispatchPayloadTypes } from './models/redux/reduxPayloadResource';
 
 // Imports all sagas, stored in _root.saga
 import rootSaga from './redux/sagas/_rootSaga';

@@ -2,7 +2,7 @@ import { User } from '../../models/modelResource';
 import {
   ReduxActions,
   ReduxDispatch,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 
 const initialState = {
   id: 0,

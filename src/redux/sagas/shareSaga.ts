@@ -4,8 +4,8 @@ import {
   SagaDispatch,
   SagaActions,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 import {
   CoffeeItem,
   SharedCoffees,
@@ -14,7 +14,7 @@ import {
 import {
   AddSharedCoffeeToDashboardPayload,
   SendSharedCoffeePayload,
-} from '../../models/reduxSaga/sagaPayloadResource';
+} from '../../models/redux/sagaPayloadResource';
 
 // Gets list of users to search and share coffees with
 function* fetchSharingUserList(): SagaGeneratorReturn<SharingUserList[]> {

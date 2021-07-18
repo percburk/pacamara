@@ -2,7 +2,7 @@ import { Methods } from '../../models/modelResource';
 import {
   ReduxActions,
   ReduxDispatch,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 
 // methodsReducer contains the list of brew methods a user can choose from
 const methodsReducer = (

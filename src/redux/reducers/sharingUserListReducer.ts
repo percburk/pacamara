@@ -2,7 +2,7 @@ import { SharingUserList } from '../../models/modelResource';
 import {
   ReduxActions,
   ReduxDispatch,
-} from '../../models/reduxSaga/reduxResource';
+} from '../../models/redux/reduxResource';
 
 // sharingUserListReducer holds the list of usernames that is searchable by
 // the user, when they're looking to send someone a coffee entry

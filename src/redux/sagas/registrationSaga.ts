@@ -4,9 +4,9 @@ import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/reduxSaga/sagaResource';
-import { ReduxActions } from '../../models/reduxSaga/reduxResource';
-import { LoginRegisterPayload } from '../../models/reduxSaga/sagaPayloadResource';
+} from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
+import { LoginRegisterPayload } from '../../models/redux/sagaPayloadResource';
 
 // Worker Saga: will be fired on "REGISTER" actions
 function* registerUser(
