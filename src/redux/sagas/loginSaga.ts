@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { LoginRegisterPayload } from '../../models/sagaPayloadResource';
-import { SagaActions, SagaDispatch } from '../../models/sagaResource';
+import {
+  SagaActions,
+  SagaDispatch,
+  SagaGeneratorReturn,
+} from '../../models/sagaResource';
 import { ReduxActions } from '../../models/reduxResource';
 
 // Worker Saga: will be fired on "LOGIN" actions
-function* loginUser(action: SagaDispatch<LoginRegisterPayload>) {
+function* loginUser(
+  action: SagaDispatch<LoginRegisterPayload>
+): SagaGeneratorReturn<never> {
   try {
     // Clear any existing error on the login page
     yield put({ type: ReduxActions.CLEAR_LANDING_ERROR });
@@ -36,7 +42,7 @@ function* loginUser(action: SagaDispatch<LoginRegisterPayload>) {
 }
 
 // Worker Saga: will be fired on "LOGOUT" actions
-function* logoutUser() {
+function* logoutUser(): SagaGeneratorReturn<never> {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },

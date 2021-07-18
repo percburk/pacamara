@@ -33,7 +33,7 @@ export interface LandingError {
 }
 
 export interface Snackbar extends LandingError {
-  severity: 'info' | 'success' | 'error';
+  severity: 'info' | 'success' | 'error' | undefined;
 }
 
 export interface User {

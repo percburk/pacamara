@@ -1,10 +1,17 @@
+import { LandingError } from '../../models/modelResource';
 import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+
+const initialState: LandingError = { string: '', open: false };
+
 // This holds the string that will display on login if there's an error
 // along with the status of the Collapse being open to display the message
-const landingErrors = (state = '', action: ReduxDispatch<never>) => {
+const landingErrors = (
+  state: LandingError = initialState,
+  action: ReduxDispatch<never>
+): LandingError => {
   switch (action.type) {
     case ReduxActions.CLEAR_LANDING_ERROR:
-      return { string: '', open: false };
+      return initialState;
     case ReduxActions.LOGIN_INPUT_ERROR:
       return { string: 'Please enter your username and password.', open: true };
     case ReduxActions.LOGIN_FAILED:

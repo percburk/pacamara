@@ -3,7 +3,10 @@ import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
 
 // flavorsReducer contains list of flavors, which are displayed as Chips
 // in various places around the app
-const flavorsReducer = (state = [], action: ReduxDispatch<Flavors[]>) => {
+const flavorsReducer = (
+  state: Flavors[] = [],
+  action: ReduxDispatch<Flavors[]>
+): Flavors[] => {
   switch (action.type) {
     case ReduxActions.SET_FLAVORS:
       return action.payload;

@@ -1,11 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { CoffeeItem } from '../../models/modelResource';
-import { ReduxActions } from '../../models/reduxResource';
-import { SagaDispatch, SagaActions } from '../../models/sagaResource';
+import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  SagaDispatch,
+  SagaActions,
+  SagaGeneratorReturn,
+} from '../../models/sagaResource';
 
 // Fetches one coffee to be displayed on CoffeeDetails
-function* fetchOneCoffee(action: SagaDispatch<number>) {
+function* fetchOneCoffee(
+  action: SagaDispatch<number>
+): SagaGeneratorReturn<CoffeeItem[], CoffeeItem> {
   try {
     const response: AxiosResponse<CoffeeItem[]> = yield call(
       axios.get,
@@ -18,7 +24,9 @@ function* fetchOneCoffee(action: SagaDispatch<number>) {
 }
 
 // Edits information for an individual coffee
-function* editCoffee(action: SagaDispatch<CoffeeItem>) {
+function* editCoffee(
+  action: SagaDispatch<CoffeeItem>
+): SagaGeneratorReturn<never> {
   try {
     yield call(axios.put, '/api/one-coffee/edit', action.payload);
     yield put({ type: SagaActions.FETCH_COFFEES });

@@ -1,7 +1,26 @@
-export interface SagaDispatch<T> {
+import { CallEffect, PutEffect } from '@redux-saga/core/effects';
+import { AxiosResponse } from 'axios';
+import { MethodsArrayAgg, User } from './modelResource';
+import { ReduxDispatch, ReduxDispatchNoPayload } from './reduxResource';
+
+export interface SagaDispatchNoPayload {
   type: SagaActions;
+}
+export interface SagaDispatch<T> extends SagaDispatchNoPayload {
   payload: T;
 }
+
+export type SagaGeneratorReturn<T, U = void> = Generator<
+  | PutEffect<
+      | ReduxDispatch<T | U>
+      | ReduxDispatchNoPayload
+      | SagaDispatch<T>
+      | SagaDispatchNoPayload
+    >
+  | CallEffect<unknown>,
+  void,
+  AxiosResponse<T>
+>;
 
 export enum SagaActions {
   FETCH_BREWS = 'FETCH_BREWS',

@@ -2,11 +2,11 @@ import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { CoffeeSearchList } from '../../models/modelResource';
 import { ReduxActions } from '../../models/reduxResource';
-import { SagaActions } from '../../models/sagaResource';
+import { SagaActions, SagaGeneratorReturn } from '../../models/sagaResource';
 
 // fetchSearch gets a pared down list of coffee info for searching on Nav
 // Populates the Autocomplete menu with the names of coffees to be searched
-function* fetchCoffeeSearchList() {
+function* fetchCoffeeSearchList(): SagaGeneratorReturn<CoffeeSearchList[]> {
   try {
     const response: AxiosResponse<CoffeeSearchList[]> = yield call(
       axios.get,

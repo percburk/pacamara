@@ -1,16 +1,23 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { CoffeeItem } from '../../models/modelResource';
-import { SagaActions, SagaDispatch } from '../../models/sagaResource';
+import {
+  SagaActions,
+  SagaDispatch,
+  SagaGeneratorReturn,
+} from '../../models/sagaResource';
 import {
   BrewingOrFavPayload,
   DeleteCoffeePayload,
 } from '../../models/sagaPayloadResource';
+import { ReduxActions } from '../../models/reduxResource';
 
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router
 // depending on if a search is being executed
-function* fetchCoffees(action: SagaDispatch<string>) {
+function* fetchCoffees(
+  action: SagaDispatch<string>
+): SagaGeneratorReturn<CoffeeItem[]> {
   const whichRoute = action.payload
     ? call(axios.get, 'api/coffees/search-results', {
         params: { q: action.payload },
@@ -19,18 +26,20 @@ function* fetchCoffees(action: SagaDispatch<string>) {
 
   try {
     const response: AxiosResponse<CoffeeItem[]> = yield whichRoute;
-    yield put({ type: 'SET_COFFEES', payload: response.data });
+    yield put({ type: ReduxActions.SET_COFFEES, payload: response.data });
   } catch (err) {
     console.log('Error in fetchCoffees', err);
   }
 }
 
 // Toggle boolean 'fav' or 'brewing' status of an individual coffee
-function* setBrewingOrFav(action: SagaDispatch<BrewingOrFavPayload>) {
+function* setBrewingOrFav(
+  action: SagaDispatch<BrewingOrFavPayload>
+): SagaGeneratorReturn<number | string> {
   const { id, change, q, oneCoffeeId } = action.payload;
   const fetchWhichCoffee = id
     ? { type: SagaActions.FETCH_COFFEES, payload: q }
-    : { type: 'FETCH_ONE_COFFEE', payload: oneCoffeeId };
+    : { type: SagaActions.FETCH_ONE_COFFEE, payload: oneCoffeeId };
 
   try {
     yield call(axios.put, '/api/one-coffee/fav-brew/', {
@@ -44,7 +53,9 @@ function* setBrewingOrFav(action: SagaDispatch<BrewingOrFavPayload>) {
 }
 
 // Delete a coffee from the database
-function* deleteCoffee(action: SagaDispatch<DeleteCoffeePayload>) {
+function* deleteCoffee(
+  action: SagaDispatch<DeleteCoffeePayload>
+): SagaGeneratorReturn<string> {
   const { id, q } = action.payload;
   try {
     yield call(axios.delete, `/api/coffees/delete/${id}`);
@@ -58,7 +69,9 @@ function* deleteCoffee(action: SagaDispatch<DeleteCoffeePayload>) {
 }
 
 // Add a new coffee to the database
-function* addCoffee(action: SagaDispatch<CoffeeItem>) {
+function* addCoffee(
+  action: SagaDispatch<CoffeeItem>
+): SagaGeneratorReturn<never> {
   try {
     yield call(axios.post, '/api/coffees/add', action.payload);
     yield put({ type: SagaActions.FETCH_COFFEES });

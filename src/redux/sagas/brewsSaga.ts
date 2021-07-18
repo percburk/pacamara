@@ -1,8 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { ReduxActions } from '../../models/reduxResource';
-import { SagaActions } from '../../models/sagaResource';
-import { SagaDispatch } from '../../models/sagaResource';
+import {
+  SagaActions,
+  SagaDispatch,
+  SagaGeneratorReturn,
+} from '../../models/sagaResource';
 import { Brew } from '../../models/modelResource';
 import {
   BrewCoffeeIdPayload,
@@ -10,7 +13,9 @@ import {
 } from '../../models/sagaPayloadResource';
 
 // Fetches list of all brews for the coffee displayed in CoffeeDetails
-function* fetchBrews(action: SagaDispatch<number>) {
+function* fetchBrews(
+  action: SagaDispatch<number>
+): SagaGeneratorReturn<Brew[]> {
   try {
     const response: AxiosResponse<Brew[]> = yield call(
       axios.get,
@@ -24,7 +29,9 @@ function* fetchBrews(action: SagaDispatch<number>) {
 }
 
 // Deletes a brew instance
-function* deleteBrew(action: SagaDispatch<BrewCoffeeIdPayload>) {
+function* deleteBrew(
+  action: SagaDispatch<BrewCoffeeIdPayload>
+): SagaGeneratorReturn<number> {
   const { brewId, coffeeId } = action.payload;
   try {
     yield call(axios.delete, `/api/brews/delete/${brewId}`);
@@ -35,7 +42,9 @@ function* deleteBrew(action: SagaDispatch<BrewCoffeeIdPayload>) {
 }
 
 // Toggles whether a brew is thumbs up, down, or none
-function* favBrew(action: SagaDispatch<FavBrewPayload>) {
+function* favBrew(
+  action: SagaDispatch<FavBrewPayload>
+): SagaGeneratorReturn<number> {
   const { brewId, coffeeId, change } = action.payload;
   try {
     yield call(axios.put, `api/brews/like/${brewId}`, { change });
@@ -46,7 +55,7 @@ function* favBrew(action: SagaDispatch<FavBrewPayload>) {
 }
 
 // Adds a new brew instance to the db
-function* addBrew(action: SagaDispatch<Brew>) {
+function* addBrew(action: SagaDispatch<Brew>): SagaGeneratorReturn<number> {
   try {
     yield call(axios.post, '/api/brews/add', action.payload);
     yield put({
@@ -59,7 +68,7 @@ function* addBrew(action: SagaDispatch<Brew>) {
 }
 
 // Edits a brew instance
-function* editBrew(action: SagaDispatch<Brew>) {
+function* editBrew(action: SagaDispatch<Brew>): SagaGeneratorReturn<number> {
   try {
     yield call(axios.put, '/api/brews/edit', action.payload);
     yield put({

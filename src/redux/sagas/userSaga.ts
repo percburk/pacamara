@@ -2,10 +2,13 @@ import axios, { AxiosResponse } from 'axios';
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { User, MethodsArrayAgg } from '../../models/modelResource';
 import { ReduxActions } from '../../models/reduxResource';
-import { SagaActions } from '../../models/sagaResource';
+import {
+  SagaActions,
+  SagaGeneratorReturn,
+} from '../../models/sagaResource';
 
 // Worker Saga: will be fired on "FETCH_USER" actions
-function* fetchUser() {
+function* fetchUser(): SagaGeneratorReturn<User & MethodsArrayAgg[], User> {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },

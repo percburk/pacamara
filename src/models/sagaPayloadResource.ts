@@ -16,7 +16,7 @@ export interface BrewingOrFavPayload {
 
 export interface DeleteCoffeePayload {
   id: number;
-  q?: number;
+  q?: string;
 }
 
 export interface LoginRegisterPayload {

@@ -3,7 +3,10 @@ import { ReduxDispatch, ReduxActions } from '../../models/reduxResource';
 
 // coffeesReducer contains all the coffees displayed on a user's dashboard
 // also contains search results
-const coffeesReducer = (state = [], action: ReduxDispatch<CoffeeItem[]>) => {
+const coffeesReducer = (
+  state: CoffeeItem[] = [],
+  action: ReduxDispatch<CoffeeItem[]>
+): CoffeeItem[] => {
   switch (action.type) {
     case ReduxActions.SET_COFFEES:
       return action.payload;

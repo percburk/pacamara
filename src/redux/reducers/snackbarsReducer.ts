@@ -1,11 +1,14 @@
+import { Snackbar } from '../../models/modelResource';
 import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+
+const initialState: Snackbar = { string: '', open: false, severity: undefined };
 
 // snackbarsReducer contains all the messages and color schemes of Snackbars
 // displayed throughout the app. They're called from multiple components
 const snackbarsReducer = (
-  state = { string: null, open: false, severity: null },
+  state: Snackbar = initialState,
   action: ReduxDispatch<never>
-) => {
+): Snackbar => {
   switch (action.type) {
     case ReduxActions.SNACKBARS_CREATED_PROFILE:
       return { string: 'New Profile Created', open: true, severity: 'success' };
@@ -46,7 +49,7 @@ const snackbarsReducer = (
         severity: 'success',
       };
     case ReduxActions.CLEAR_SNACKBARS:
-      return { string: null, open: false, severity: null };
+      return initialState;
     default:
       return state;
   }

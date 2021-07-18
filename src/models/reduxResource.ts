@@ -25,6 +25,7 @@ export enum ReduxActions {
   REGISTRATION_FAILED = 'REGISTRATION_FAILED',
   SET_METHODS = 'SET_METHODS',
   SET_ONE_COFFEE = 'SET_ONE_COFFEE',
+  CLEAR_ONE_COFFEE = 'CLEAR_ONE_COFFEE',
   EDIT_INPUTS = 'EDIT_INPUTS',
   EDIT_FLAVORS_ARRAY = 'EDIT_FLAVORS_ARRAY',
   SET_ONE_SHARED_COFFEE = 'SET_ONE_SHARED_COFFEE',
@@ -49,8 +50,11 @@ export enum ReduxActions {
   UNSET_USER = 'UNSET_USER',
 }
 
-export interface ReduxDispatch<T> {
+export interface ReduxDispatchNoPayload {
   type: ReduxActions;
+}
+
+export interface ReduxDispatch<T> extends ReduxDispatchNoPayload {
   payload: T;
 }
 
