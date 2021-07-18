@@ -1,5 +1,5 @@
-import express from 'express';
-const app = express();
+import express, { Express } from 'express';
+const app: Express = express();
 import bodyParser from 'body-parser';
 require('dotenv').config();
 import sessionMiddleware from './modules/sessionMiddleware';
@@ -37,6 +37,6 @@ app.use('/s3', s3Router);
 // Serve static files
 app.use(express.static('build'));
 // App set
-const PORT = process.env.PORT || 5000;
+const PORT: string | 5000 = process.env.PORT || 5000;
 // Start server
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

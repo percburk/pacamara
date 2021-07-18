@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router = express.Router();
+const router: Router = express.Router();
 
 // GET route for one coffee for CoffeeDetails
 router.get(

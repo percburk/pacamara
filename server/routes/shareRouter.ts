@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router = express.Router();
+const router: Router = express.Router();
 
 // GET route for user list to share coffees with
 router.get(

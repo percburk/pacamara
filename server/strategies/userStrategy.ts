@@ -2,7 +2,6 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { comparePassword } from '../modules/encryption';
 import pool from '../modules/pool';
-import { Express } from 'express-serve-static-core';
 
 passport.serializeUser((user, done): void => {
   const { id } = user as Express.User;

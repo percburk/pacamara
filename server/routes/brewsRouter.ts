@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router: express.Router = express.Router();
+const router: Router = express.Router();
 
 // GET route to grab all brew instances for a coffee
 router.get(
@@ -123,7 +123,8 @@ router.put(
 // Can be 'yes', 'no', or 'none'
 router.put('/like/:id', (req: Request, res: Response): void => {
   const { change } = req.body;
-  const newStatus: string = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
+  const newStatus: string =
+    change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 
   const sqlText: string = `
     UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;
