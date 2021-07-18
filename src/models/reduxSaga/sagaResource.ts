@@ -1,6 +1,5 @@
 import { CallEffect, PutEffect } from '@redux-saga/core/effects';
 import { AxiosResponse } from 'axios';
-import { MethodsArrayAgg, User } from './modelResource';
 import { ReduxDispatch, ReduxDispatchNoPayload } from './reduxResource';
 
 export interface SagaDispatchNoPayload {

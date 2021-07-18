@@ -10,7 +10,7 @@ import {
   CoffeeSearchList,
   OneSharedCoffee,
   LandingError,
-} from './modelResource';
+} from '../modelResource';
 
 export enum ReduxActions {
   // Set data in reducers

@@ -8,7 +8,7 @@ import {
   CoffeeSearchList,
   SharingUserList,
   OneSharedCoffee,
-} from './modelResource';
+} from '../modelResource';
 
 export interface EditInputsPayload {
   key: string;
