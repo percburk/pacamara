@@ -1,8 +1,11 @@
-import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  ReduxActions,
+  ReduxDispatch,
+} from '../../models/reduxSaga/reduxResource';
 import {
   EditInputsPayload,
   OneCoffeePayloadTypes,
-} from '../../models/reduxPayloadResource';
+} from '../../models/reduxSaga/reduxPayloadResource';
 import { CoffeeItem } from '../../models/modelResource';
 
 const initialState: CoffeeItem = {

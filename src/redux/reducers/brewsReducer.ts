@@ -1,4 +1,4 @@
-import { ReduxDispatch, ReduxActions } from '../../models/reduxResource';
+import { ReduxDispatch, ReduxActions } from '../../models/reduxSaga/reduxResource';
 import { Brew } from '../../models/modelResource';
 
 // brewsReducer contains the list of brew instances for the coffee displayed

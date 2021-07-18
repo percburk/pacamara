@@ -1,5 +1,8 @@
 import { User } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  ReduxActions,
+  ReduxDispatch,
+} from '../../models/reduxSaga/reduxResource';
 
 const initialState = {
   id: 0,

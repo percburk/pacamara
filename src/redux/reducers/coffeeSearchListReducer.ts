@@ -1,5 +1,8 @@
 import { CoffeeSearchList } from '../../models/modelResource';
-import { ReduxDispatch, ReduxActions } from '../../models/reduxResource';
+import {
+  ReduxDispatch,
+  ReduxActions,
+} from '../../models/reduxSaga/reduxResource';
 
 // searchReducer contains a pared down list of coffee info the user can search
 // through on Nav

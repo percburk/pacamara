@@ -1,8 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { Methods } from '../../models/modelResource';
-import { ReduxActions } from '../../models/reduxResource';
-import { SagaActions, SagaGeneratorReturn } from '../../models/sagaResource';
+import { ReduxActions } from '../../models/reduxSaga/reduxResource';
+import {
+  SagaActions,
+  SagaGeneratorReturn,
+} from '../../models/reduxSaga/sagaResource';
 
 // Fetches list of brew methods which are used throughout the app
 function* fetchMethods(): SagaGeneratorReturn<Methods[]> {

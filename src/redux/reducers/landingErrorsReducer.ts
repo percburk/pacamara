@@ -1,5 +1,8 @@
 import { LandingError } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  ReduxActions,
+  ReduxDispatch,
+} from '../../models/reduxSaga/reduxResource';
 
 const initialState: LandingError = { string: '', open: false };
 

@@ -1,7 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
-import { SagaActions, SagaGeneratorReturn } from '../../models/sagaResource';
-import { ReduxActions } from '../../models/reduxResource';
+import {
+  SagaActions,
+  SagaGeneratorReturn,
+} from '../../models/reduxSaga/sagaResource';
+import { ReduxActions } from '../../models/reduxSaga/reduxResource';
 import { Flavors } from '../../models/modelResource';
 
 // Fetches list of broad palette flavors used throughout the app

@@ -1,5 +1,8 @@
 import { SharedCoffees } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  ReduxActions,
+  ReduxDispatch,
+} from '../../models/reduxSaga/reduxResource';
 
 // sharedCoffeesReducer contains any entries of shared coffees
 // sent by other users, this is checked in UseEffect() on Dashboard

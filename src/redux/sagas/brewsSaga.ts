@@ -1,16 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
-import { ReduxActions } from '../../models/reduxResource';
+import { ReduxActions } from '../../models/reduxSaga/reduxResource';
 import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/sagaResource';
+} from '../../models/reduxSaga/sagaResource';
 import { Brew } from '../../models/modelResource';
 import {
   BrewCoffeeIdPayload,
   FavBrewPayload,
-} from '../../models/sagaPayloadResource';
+} from '../../models/reduxSaga/sagaPayloadResource';
 
 // Fetches list of all brews for the coffee displayed in CoffeeDetails
 function* fetchBrews(

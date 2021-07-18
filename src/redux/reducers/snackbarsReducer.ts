@@ -1,5 +1,8 @@
 import { Snackbar } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/reduxResource';
+import {
+  ReduxActions,
+  ReduxDispatch,
+} from '../../models/reduxSaga/reduxResource';
 
 const initialState: Snackbar = { string: '', open: false, severity: undefined };
 
