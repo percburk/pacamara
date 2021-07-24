@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import { useHistory } from 'react-router-dom';
 import {
   Menu,
@@ -15,6 +18,8 @@ import {
 import { Edit, Add, ViewModule } from '@material-ui/icons';
 // Components
 import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -44,17 +49,19 @@ const useStyles = makeStyles((theme) => ({
 // Their home base to edit their profile, add a new coffee, view any shared
 // coffees, navigate back to their dashboard, or log out
 export default function AvatarMenu() {
-  const sharedCoffees = useSelector((store) => store.sharedCoffees);
-  const dispatch = useDispatch();
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const classes = useStyles();
-  const { name, username, profile_pic } = useSelector((store) => store.user);
-  const [avatarAnchorEl, setAvatarAnchorEl] = useState(null);
-  const [sharedOpen, setSharedOpen] = useState(false);
+  const { name, username, profile_pic } = useAppSelector((store) => store.user);
+  const [avatarAnchorEl, setAvatarAnchorEl] = useState<
+    (EventTarget & HTMLDivElement) | null
+  >(null);
+  const [sharedOpen, setSharedOpen] = useState<boolean>(false);
 
   // Logs the user out and sends them to LandingPage
   const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: SagaActions.LOGOUT });
     history.push('/home');
     setAvatarAnchorEl(null);
   };
@@ -112,7 +119,7 @@ export default function AvatarMenu() {
           onClick={() => {
             history.push('/dashboard');
             setAvatarAnchorEl(null);
-            dispatch({ type: 'CLEAR_SNACKBARS' });
+            dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
           }}
         >
           <ListItemIcon>

@@ -1,4 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { MouseEventHandler, ChangeEvent } from 'react';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -22,6 +26,8 @@ import {
 } from '@material-ui/icons';
 // Components
 import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu';
+import { Brew } from '../../models/modelResource';
+import { SagaActions } from '../../models/redux/sagaResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +47,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface Props {
+  coffeeId: number;
+  instance: Brew;
+  accordionOpen: number | boolean;
+  handleAccordion: (
+    id: number
+  ) => (event: ChangeEvent<{}>, expanded: boolean) => void;
+}
+
 // BrewInstance is the accordion that is displayed on CoffeeDetails for each
 // entry on the 'brews' table
 export default function BrewInstance({
@@ -48,10 +63,10 @@ export default function BrewInstance({
   instance,
   accordionOpen,
   handleAccordion,
-}) {
+}: Props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const methods = useSelector((store) => store.methods);
+  const dispatch = useAppDispatch();
+  const methods = useAppSelector((store) => store.methods);
   const {
     id,
     methods_id,
@@ -73,15 +88,6 @@ export default function BrewInstance({
   // Finds the name of the brew method used, searching by ID
   const methodUsed = methods.find((item) => item.id === methods_id)?.name;
 
-  // Toggles the status of 'liked' on the entry between, yes, no, and none
-  const likeBrew = (event) => {
-    event.stopPropagation();
-    dispatch({
-      type: 'LIKE_BREW',
-      payload: { coffeeId, brewId: id, change: liked },
-    });
-  };
-
   return (
     <Accordion
       elevation={4}
@@ -90,7 +96,13 @@ export default function BrewInstance({
     >
       <AccordionSummary expandIcon={<ExpandMore />}>
         <IconButton
-          onClick={likeBrew}
+          onClick={(event) => {
+            event.stopPropagation();
+            dispatch({
+              type: SagaActions.LIKE_BREW,
+              payload: { coffeeId, brewId: id, change: liked },
+            });
+          }}
           onFocus={(event) => event.stopPropagation()}
         >
           {liked === 'yes' ? (

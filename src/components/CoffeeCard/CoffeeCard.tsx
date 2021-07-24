@@ -1,4 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import queryString from 'query-string';
@@ -24,6 +27,9 @@ import {
 } from '@material-ui/icons';
 // Components
 import EditDeleteShareCoffeeMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
+import { CoffeeItem } from '../../models/modelResource';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -47,13 +53,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // CoffeeCard is the individual rendering of each coffee on a user's Dashboard
-export default function CoffeeCard({ coffee }) {
+export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const history = useHistory();
-  const sharingUserList = useSelector((store) => store.sharingUserList);
-  const flavors = useSelector((store) => store.flavors);
+  const sharingUserList = useAppSelector((store) => store.sharingUserList);
+  const flavors = useAppSelector((store) => store.flavors);
   const {
     id,
     date,
@@ -75,14 +81,15 @@ export default function CoffeeCard({ coffee }) {
   // Displays either blend name or country/producer based on blend status
   const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
   // If this coffee has been shared by another user, their username is shown
-  const sharedByUser = sharingUserList.find((item) => item.id === shared_by_id)
-    ?.username;
+  const sharedByUser = sharingUserList.find(
+    (item) => item.id === shared_by_id
+  )?.username;
 
   // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
   // Makes sure not to change search results displayed, if present
-  const handleBrewOrFav = (change) => {
+  const handleBrewOrFav = (change: string) => {
     dispatch({
-      type: 'SET_BREWING_OR_FAV',
+      type: SagaActions.SET_BREWING_OR_FAV,
       payload: { id, change, q },
     });
   };
@@ -121,24 +128,22 @@ export default function CoffeeCard({ coffee }) {
         title={coffeeName}
         style={{ cursor: 'pointer' }}
         onClick={() => {
-          dispatch({ type: 'CLEAR_SNACKBARS' });
+          dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
           history.push(`/details/${id}`);
         }}
       />
       <CardContent>
         <Box display="flex" justifyContent="center">
-          {flavors.map((item) => {
-            if (flavors_array?.indexOf(item.id) > -1) {
-              return (
-                <Chip
-                  key={item.id}
-                  className={classes.chip}
-                  variant="outlined"
-                  label={item.name}
-                />
-              );
-            }
-          })}
+          {flavors.map((item) =>
+            flavors_array?.includes(item.id) ? (
+              <Chip
+                key={item.id}
+                className={classes.chip}
+                variant="outlined"
+                label={item.name}
+              />
+            ) : null
+          )}
         </Box>
         <Box
           display="flex"

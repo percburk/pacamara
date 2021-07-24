@@ -13,8 +13,8 @@ export interface Brew {
   coffees_id: number;
   methods_id: number;
   liked: string;
-  date: Date;
-  water_code: number;
+  date: string;
+  water_dose: number;
   coffee_dose: number;
   grind: number;
   moisture: number;
@@ -49,6 +49,7 @@ export interface User {
   ext_max: number;
   name: string;
   methods_default_lrr: number;
+  methods_array: number[];
 }
 
 export interface SharedCoffees {
@@ -75,15 +76,15 @@ export interface OneSharedCoffee {
   roaster: string;
   roast_date: string;
   is_blend: boolean;
-  blend_name?: string;
-  country?: string;
-  producer?: string;
-  region?: string;
-  elevation?: string;
-  cultivars?: string;
-  processing?: string;
-  notes?: string;
-  coffee_pic?: string;
+  blend_name: string;
+  country: string;
+  producer: string;
+  region: string;
+  elevation: string;
+  cultivars: string;
+  processing: string;
+  notes: string;
+  coffee_pic: string;
   flavors_array: number[];
 }
 

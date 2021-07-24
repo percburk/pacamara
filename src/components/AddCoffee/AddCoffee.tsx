@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect, ChangeEvent } from 'react';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../hooks/useAppDispatchSelector';
+import { AddCoffeeState } from '../../models/stateResource';
 import { useHistory } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import LuxonUtils from '@date-io/luxon';
@@ -17,10 +21,13 @@ import {
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from '@material-ui/pickers/';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -54,15 +61,15 @@ const useStyles = makeStyles((theme) => ({
 // AddCoffee includes all the inputs to add a new coffee to a user's dashboard
 export default function AddCoffee() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const flavors = useSelector((store) => store.flavors);
-  const [roasterError, setRoasterError] = useState(false);
-  const [blendCountryError, setBlendCountryError] = useState(false);
-  const [newFlavors, setNewFlavors] = useState([]);
-  const [newCoffee, setNewCoffee] = useState({
+  const flavors = useAppSelector((store) => store.flavors);
+  const [roasterError, setRoasterError] = useState<boolean>(false);
+  const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
+  const [newFlavors, setNewFlavors] = useState<number[]>([]);
+  const [newCoffee, setNewCoffee] = useState<AddCoffeeState>({
     roaster: '',
-    roast_date: new Date(),
+    roast_date: DateTime.local().toLocaleString(),
     is_blend: false,
     brewing: false,
     blend_name: '',
@@ -74,35 +81,44 @@ export default function AddCoffee() {
     processing: '',
     notes: '',
     coffee_pic: '',
+    flavors_array: [],
   });
 
-  useEffect(() => dispatch({ type: 'FETCH_FLAVORS' }), []);
+  useEffect(() => {
+    dispatch({ type: SagaActions.FETCH_FLAVORS });
+  }, [dispatch]);
 
   // Handles all text inputs, adds to local state object
-  const handleNewCoffee = (key) => (event) => {
-    setNewCoffee({ ...newCoffee, [key]: event.target.value });
-  };
+  const handleNewCoffee =
+    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+      setNewCoffee({ ...newCoffee, [key]: event.target.value });
+    };
 
   // Formats the date chosen from MuiDatePicker using Luxon
-  const handleRoastDate = (date) => {
-    const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
-    setNewCoffee({ ...newCoffee, roast_date: formattedDate });
+  const handleRoastDate = (date: MaterialUiPickersDate) => {
+    setNewCoffee({
+      ...newCoffee,
+      roast_date: date ? date.toLocaleString() : newCoffee.roast_date,
+    });
   };
 
   // Handles setting the coffee pic url if S3Uploader is used
-  const handlePic = (url) => {
+  const handlePic = (url: string) => {
     setNewCoffee({ ...newCoffee, coffee_pic: url });
   };
 
   // Toggles adding and removing flavors for the coffee in local state array
-  const handleNewFlavor = (id) => {
-    !newFlavors.includes(id)
-      ? setNewFlavors([...newFlavors, id])
-      : setNewFlavors(newFlavors.filter((index) => index !== id));
+  const handleNewFlavor = (id: number) => {
+    setNewCoffee({
+      ...newCoffee,
+      flavors_array: !newCoffee.flavors_array.includes(id)
+        ? [...newCoffee.flavors_array, id]
+        : newFlavors.filter((index) => index !== id),
+    });
   };
 
   // Handles the two switches on the page, for 'is_blend' and 'brewing'
-  const handleSwitch = (event) => {
+  const handleSwitch = (event: ChangeEvent<HTMLInputElement>) => {
     event.target.name === 'is_blend'
       ? setNewCoffee({
           ...newCoffee,
@@ -120,15 +136,15 @@ export default function AddCoffee() {
       (newCoffee.country || newCoffee.blend_name) &&
       newFlavors[0]
     ) {
-      dispatch({ type: 'SNACKBARS_ADDED_COFFEE' });
+      dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
       dispatch({
-        type: 'ADD_COFFEE',
+        type: SagaActions.ADD_COFFEE,
         payload: {
           ...newCoffee,
           flavors_array: newFlavors,
         },
       });
-      dispatch({ type: 'FETCH_SHARED_COFFEES' });
+      dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
       clearInputs();
       history.push('/dashboard');
     } else {
@@ -137,14 +153,14 @@ export default function AddCoffee() {
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
       if (!newFlavors[0]) {
-        dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
+        dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
       }
     }
   };
 
   // Clears all local state data and sends user back to their dashboard
   const handleCancel = () => {
-    dispatch({ type: 'CLEAR_SNACKBARS' });
+    dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
     clearInputs();
     history.goBack();
   };
@@ -152,7 +168,7 @@ export default function AddCoffee() {
   const clearInputs = () => {
     setNewCoffee({
       roaster: '',
-      roast_date: new Date(),
+      roast_date: DateTime.local().toLocaleString(),
       is_blend: false,
       brewing: false,
       blend_name: '',
@@ -164,6 +180,7 @@ export default function AddCoffee() {
       processing: '',
       notes: '',
       coffee_pic: '',
+      flavors_array: [],
     });
     setNewFlavors([]);
   };
@@ -310,13 +327,13 @@ export default function AddCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {flavors.map((item) => (
+              {flavors.map((flavor) => (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
-                  color={newFlavors.includes(item.id) ? 'primary' : 'default'}
-                  onClick={() => handleNewFlavor(item.id)}
+                  key={flavor.id}
+                  label={flavor.name}
+                  color={newFlavors.includes(flavor.id) ? 'primary' : 'default'}
+                  onClick={() => handleNewFlavor(flavor.id)}
                 />
               ))}
             </Box>

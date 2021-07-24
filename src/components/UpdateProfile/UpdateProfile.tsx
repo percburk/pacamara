@@ -54,7 +54,12 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
     marginLeft: theme.spacing(5),
   },
+  centerText: {
+    textAlign: 'center',
+  },
 }));
+
+export type UseStylesReturnType = ReturnType<typeof useStyles>;
 
 // UpdateProfile handles any changes in profile information for new or existing
 // users. Handles all changes in local state.

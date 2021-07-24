@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+import { UseStylesReturnType } from '../UpdateProfile/UpdateProfile';
 import {
   Dialog,
   DialogTitle,
@@ -14,6 +15,17 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
+import { UpdateProfileState } from '../../models/stateResource';
+
+interface Props {
+  newMethods: number[];
+  newUpdates: UpdateProfileState;
+  setNewUpdates: (newUpdates: UpdateProfileState) => void;
+  defaultDialogOpen: boolean;
+  setDefaultDialogOpen: (open: boolean) => void;
+  classes: UseStylesReturnType;
+  handleSubmit: () => void;
+}
 
 // DefaultMethodDialog opens when a user is creating or editing their profile,
 // asking if they would like to set one of their owned brew methods as their
@@ -26,17 +38,17 @@ export default function DefaultMethodDialog({
   setDefaultDialogOpen,
   classes,
   handleSubmit,
-}) {
-  const methods = useSelector((store) => store.methods);
-  const [collapseOpen, setCollapseOpen] = useState(false);
+}: Props) {
+  const methods = useAppSelector((store) => store.methods);
+  const [collapseOpen, setCollapseOpen] = useState<boolean>(false);
 
   // Cancels default method choice and brings the user back to UpdateProfile
   const handleCancel = () => {
     setDefaultDialogOpen(false);
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: '',
-      methods_default_lrr: '',
+      methods_default_id: null,
+      methods_default_lrr: null,
     });
   };
 
@@ -44,14 +56,14 @@ export default function DefaultMethodDialog({
   const handleNoDefault = () => {
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: '',
-      methods_default_lrr: '',
+      methods_default_id: null,
+      methods_default_lrr: null,
     });
     handleSubmit();
   };
 
   // Adds the selected default brew method to local state object
-  const setDefault = (id, lrr) => {
+  const setDefault = (id: number, lrr: number) => {
     setNewUpdates({
       ...newUpdates,
       methods_default_id: id,
@@ -64,28 +76,28 @@ export default function DefaultMethodDialog({
       open={defaultDialogOpen}
       onClose={() => setDefaultDialogOpen(false)}
     >
-      <DialogTitle align="center">Default Brew Method</DialogTitle>
+      <DialogTitle className={classes.centerText}>
+        Default Brew Method
+      </DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Would you like to set a brew method as your default?
         </DialogContentText>
         <Box className={classes.root} display="flex" justifyContent="center">
-          {methods.map((item) => {
-            if (newMethods.indexOf(item.id) > -1) {
-              return (
-                <Chip
-                  key={item.id}
-                  label={item.name}
-                  color={
-                    item.id === newUpdates.methods_default_id
-                      ? 'primary'
-                      : 'default'
-                  }
-                  onClick={() => setDefault(item.id, item.lrr)}
-                />
-              );
-            }
-          })}
+          {methods.map((item) =>
+            newMethods.includes(item.id) ? (
+              <Chip
+                key={item.id}
+                label={item.name}
+                color={
+                  item.id === newUpdates.methods_default_id
+                    ? 'primary'
+                    : 'default'
+                }
+                onClick={() => setDefault(item.id, item.lrr)}
+              />
+            ) : null
+          )}
         </Box>
       </DialogContent>
       <Box display="flex" justifyContent="center">
