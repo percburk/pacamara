@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import {
   Collapse,
   MenuItem,
@@ -11,6 +14,8 @@ import {
 } from '@material-ui/core';
 // Imported components
 import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { SharedCoffees } from '../../models/modelResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -21,21 +26,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface Props {
+  sharedOpen: boolean;
+  setSharedOpen: (set: boolean) => void;
+  setAvatarAnchorEl: (set: null) => void;
+}
+
 // SharedCoffeeMenu displays the list of coffees sent from others users
 export default function SharedCoffeeMenu({
   sharedOpen,
   setSharedOpen,
   setAvatarAnchorEl,
-}) {
+}: Props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const sharedCoffees = useSelector((store) => store.sharedCoffees);
+  const dispatch = useAppDispatch();
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedCoffee, setSelectedCoffee] = useState({});
+  const [selectedCoffee, setSelectedCoffee] = useState<SharedCoffees>({
+    id: 0,
+    sender_id: 0,
+    recipient_id: 0,
+    coffees_id: 0,
+    message: '',
+    profile_pic: '',
+    coffee_name: '',
+    username: '',
+  });
 
   // Opens the selected coffee in SharedCoffeeDialog and fetches its details
-  const handleClickCoffee = (id) => {
-    dispatch({ type: 'FETCH_ONE_SHARED_COFFEE', payload: id });
+  const handleClickCoffee = (id: number) => {
+    dispatch({ type: SagaActions.FETCH_ONE_SHARED_COFFEE, payload: id });
     setDialogOpen(true);
   };
 

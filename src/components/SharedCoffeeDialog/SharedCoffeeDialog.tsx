@@ -1,4 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import {
   Box,
   Dialog,
@@ -14,6 +17,9 @@ import {
   Paper,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
+import { SharedCoffees } from '../../models/modelResource';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface Props {
+  dialogOpen: boolean;
+  setDialogOpen: (set: boolean) => void;
+  selectedCoffee: SharedCoffees;
+  setSharedOpen: (open: boolean) => void;
+  setAvatarAnchorEl: (set: null) => void;
+}
+
 // SharedCoffeeDialog opens when the user clicks on an item from
 // SharedCoffeeMenu, displays some brief information about the coffee as
 // well as the personal message the sender wrote
@@ -45,9 +59,9 @@ export default function SharedCoffeeDialog({
   selectedCoffee,
   setAvatarAnchorEl,
   setSharedOpen,
-}) {
+}: Props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     is_blend,
     blend_name,
@@ -61,9 +75,9 @@ export default function SharedCoffeeDialog({
     elevation,
     cultivars,
     processing,
-  } = useSelector((store) => store.oneSharedCoffee);
-  const sharedCoffees = useSelector((store) => store.sharedCoffees);
-  const flavors = useSelector((store) => store.flavors);
+  } = useAppSelector((store) => store.oneSharedCoffee);
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
+  const flavors = useAppSelector((store) => store.flavors);
   const {
     id: selectedId,
     username,
@@ -78,32 +92,32 @@ export default function SharedCoffeeDialog({
   // decline and the message is deleted
   const handleDelete = () => {
     dispatch({
-      type: 'DELETE_SHARED_COFFEE',
+      type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
     });
-    dispatch({ type: 'SNACKBARS_DECLINED_SHARED_COFFEE' });
+    dispatch({ type: ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE });
     handleReset();
   };
 
   // Handles adding this shared coffee to the user's dashboard
   const handleAdd = () => {
     dispatch({
-      type: 'ADD_SHARED_COFFEE_TO_DASHBOARD',
+      type: SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
       payload: { coffees_id: coffeeId, shared_by_id: sender_id },
     });
     dispatch({
-      type: 'DELETE_SHARED_COFFEE',
+      type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
     });
-    dispatch({ type: 'SNACKBARS_ADDED_SHARED_COFFEE' });
+    dispatch({ type: ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE });
     handleReset();
   };
 
   const handleReset = () => {
     setDialogOpen(false);
     if (!sharedCoffees) {
-      dispatch({ type: 'CLEAR_ONE_SHARED_COFFEE' });
-      setAvatarAnchorEl(false);
+      dispatch({ type: ReduxActions.CLEAR_ONE_SHARED_COFFEE });
+      setAvatarAnchorEl(null);
       setSharedOpen(false);
     }
   };
@@ -130,18 +144,16 @@ export default function SharedCoffeeDialog({
             <Typography>By {roaster}</Typography>
             <Box display="flex" my={1.5}>
               {flavors_array &&
-                flavors.map((item) => {
-                  if (flavors_array.indexOf(item.id) > -1) {
-                    return (
-                      <Chip
-                        key={item.id}
-                        className={classes.chip}
-                        variant="outlined"
-                        label={item.name}
-                      />
-                    );
-                  }
-                })}
+                flavors.map((flavor) =>
+                  flavors_array.includes(flavor.id) ? (
+                    <Chip
+                      key={flavor.id}
+                      className={classes.chip}
+                      variant="outlined"
+                      label={flavor.name}
+                    />
+                  ) : null
+                )}
             </Box>
             {!is_blend && (
               <Box my={1}>

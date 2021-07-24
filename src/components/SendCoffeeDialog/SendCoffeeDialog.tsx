@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, ChangeEvent } from 'react';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import {
   Dialog,
   DialogTitle,
@@ -17,6 +20,8 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +41,18 @@ const useStyles = makeStyles((theme) => ({
   inputs: {
     margin: theme.spacing(1),
   },
+  textCenter: {
+    textAlign: 'center',
+  },
 }));
+
+interface Props {
+  sendDialogOpen: boolean;
+  setSendDialogOpen: (open: boolean) => void;
+  id: number;
+  coffeeName: string;
+  pic: string;
+}
 
 // SendCoffeeDialog opens when a user wants to share a coffee with another user
 // Contains a searchable list of users, as well as a field for a message
@@ -46,14 +62,14 @@ export default function SendCoffeeDialog({
   id,
   coffeeName,
   pic,
-}) {
+}: Props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const sharingUserList = useSelector((store) => store.sharingUserList);
-  const [shareUsername, setShareUsername] = useState('');
-  const [shareMessage, setShareMessage] = useState('');
-  const [listOpen, setListOpen] = useState(false);
-  const [errorOpen, setErrorOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const sharingUserList = useAppSelector((store) => store.sharingUserList);
+  const [shareUsername, setShareUsername] = useState<string>('');
+  const [shareMessage, setShareMessage] = useState<string>('');
+  const [listOpen, setListOpen] = useState<boolean>(false);
+  const [errorOpen, setErrorOpen] = useState<boolean>(false);
 
   // Toggles the Autocomplete menu opening only when the user is typing in the
   // TextField
@@ -64,7 +80,7 @@ export default function SendCoffeeDialog({
   };
 
   // Updates the username that the coffee will be sent to in local state
-  const handleShareUsername = (event, newValue) => {
+  const handleShareUsername = (event: ChangeEvent<{}>, newValue: string) => {
     setShareUsername(newValue);
     newValue.length > 0 ? setListOpen(true) : setListOpen(false);
   };
@@ -78,7 +94,7 @@ export default function SendCoffeeDialog({
 
     if (match) {
       dispatch({
-        type: 'SEND_SHARED_COFFEE',
+        type: SagaActions.SEND_SHARED_COFFEE,
         payload: {
           recipient_id: match,
           coffees_id: id,
@@ -86,7 +102,7 @@ export default function SendCoffeeDialog({
           message: shareMessage,
         },
       });
-      dispatch({ type: 'SNACKBARS_SENT_SHARED_COFFEE' });
+      dispatch({ type: ReduxActions.SNACKBARS_SENT_SHARED_COFFEE });
       setShareUsername('');
       setShareMessage('');
       setSendDialogOpen(false);
@@ -97,7 +113,9 @@ export default function SendCoffeeDialog({
 
   return (
     <Dialog open={sendDialogOpen} onClose={() => setSendDialogOpen(false)}>
-      <DialogTitle align="center">Share {coffeeName}</DialogTitle>
+      <DialogTitle className={classes.textCenter}>
+        Share {coffeeName}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Who would you like to share this coffee with?

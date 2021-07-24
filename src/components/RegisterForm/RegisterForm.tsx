@@ -1,24 +1,27 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, ChangeEvent } from 'react';
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
+import { UseStylesType } from '../LandingPage/LandingPage';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // RegisterForm is displayed on LandingPage, handles registering a new user
-export default function RegisterForm({ classes }) {
-  const dispatch = useDispatch();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+export default function RegisterForm({ classes }: { classes: UseStylesType }) {
+  const dispatch = useAppDispatch();
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   // Handles the registration process
-  const handleRegister = (event) => {
+  const handleRegister = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && password) {
       dispatch({
-        type: 'REGISTER',
+        type: SagaActions.REGISTER,
         payload: { username, password },
       });
-      dispatch({ type: 'CLEAR_LANDING_ERROR' });
+      dispatch({ type: ReduxActions.CLEAR_LANDING_ERROR });
     } else {
-      dispatch({ type: 'REGISTRATION_INPUT_ERROR' });
+      dispatch({ type: ReduxActions.REGISTRATION_INPUT_ERROR });
     }
   };
 

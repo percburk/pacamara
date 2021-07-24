@@ -1,8 +1,4 @@
-import {
-  Route,
-  Redirect,
-  RouteProps,
-} from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import LandingPage from '../LandingPage/LandingPage';
 import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 
@@ -24,6 +20,7 @@ interface Props extends RouteProps {
   children: JSX.Element;
 }
 
+// TODO This function could use a bit better typing, this is janky
 export default function ProtectedRoute(props: Props) {
   const user = useAppSelector((store) => store.user);
 
