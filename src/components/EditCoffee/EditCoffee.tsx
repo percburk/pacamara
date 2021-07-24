@@ -4,7 +4,6 @@ import {
   useAppDispatch,
 } from '../../hooks/useAppDispatchSelector';
 import { useHistory, useParams } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import LuxonUtils from '@date-io/luxon';
 import {
@@ -88,7 +87,7 @@ export default function EditCoffee() {
   useEffect(() => {
     dispatch({ type: SagaActions.FETCH_FLAVORS });
     dispatch({ type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId });
-  }, []);
+  }, [dispatch, coffeeId]);
 
   // Handles all text input edits
   const handleEditInputs =
@@ -265,7 +264,13 @@ export default function EditCoffee() {
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader setPhoto={handleEditPic} />
-              {coffee_pic && <img className={classes.media} src={coffee_pic} />}
+              {coffee_pic && (
+                <img
+                  alt="coffee bag"
+                  className={classes.media}
+                  src={coffee_pic}
+                />
+              )}
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>

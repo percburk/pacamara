@@ -1,8 +1,5 @@
 import { User } from '../../models/modelResource';
-import {
-  ReduxActions,
-  ReduxDispatch,
-} from '../../models/redux/reduxResource';
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
 
 const initialState = {
   id: 0,
@@ -17,6 +14,7 @@ const initialState = {
   ext_max: 0,
   name: '',
   methods_default_lrr: 0,
+  methods_array: [],
 };
 
 // userReducer will hold a username, password, and profile information

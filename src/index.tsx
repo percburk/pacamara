@@ -20,10 +20,10 @@ import rootSaga from './redux/sagas/_rootSaga';
 // Imports our App to be rendered by React
 import App from './components/App/App';
 import {
-  SagaActions,
   SagaDispatch,
   SagaDispatchNoPayload,
 } from './models/redux/sagaResource';
+import { SagaDispatchPayloadTypes } from './models/redux/sagaPayloadResource';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -39,7 +39,7 @@ export const store: Store<
   InitialState,
   | ReduxDispatch<ReduxDispatchPayloadTypes>
   | ReduxDispatchNoPayload
-  | SagaDispatch<SagaActions>
+  | SagaDispatch<SagaDispatchPayloadTypes>
   | SagaDispatchNoPayload
 > = createStore(
   // Tells the saga middleware to use the rootReducer

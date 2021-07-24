@@ -124,7 +124,11 @@ export default function CoffeeDetails() {
             <Box display="flex" justifyContent="center">
               <Box>
                 <Paper elevation={4}>
-                  <img src={coffee_pic} className={classes.media} />
+                  <img
+                    alt="coffee bag"
+                    src={coffee_pic}
+                    className={classes.media}
+                  />
                 </Paper>
                 <Button
                   className={classes.backButton}

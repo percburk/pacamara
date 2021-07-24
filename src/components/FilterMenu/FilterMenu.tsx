@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
-import { FilterMenu } from '../../models/stateResource';
+import { FilterMenuOptions } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
-const filtersArray: FilterMenu[] = [
+const filtersArray: FilterMenuOptions[] = [
   { key: 'is_fav', string: 'Favorites' },
   { key: 'brewing', string: 'Currently Brewing' },
   { key: 'is_blend', string: 'Blends' },

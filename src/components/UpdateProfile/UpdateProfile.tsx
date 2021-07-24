@@ -265,7 +265,9 @@ export default function UpdateProfile() {
             </Typography>
             <Box display="flex" paddingBottom={3}>
               <S3Uploader setPhoto={setNewPic} />
-              {newPic && <img className={classes.media} src={newPic} />}
+              {newPic && (
+                <img alt="profile" className={classes.media} src={newPic} />
+              )}
             </Box>
             <Box paddingTop={2} paddingBottom={2}>
               <Typography className={classes.label}>Set TDS Window:</Typography>

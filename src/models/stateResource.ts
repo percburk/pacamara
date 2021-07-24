@@ -40,7 +40,7 @@ export type SortState = 'date' | 'roaster' | 'country' | 'producer';
 
 export type FilterKeys = 'is_fav' | 'brewing' | 'is_blend' | 'shared_by_id';
 
-export interface FilterMenu {
+export interface FilterMenuOptions {
   key: FilterKeys;
   string: string;
 }

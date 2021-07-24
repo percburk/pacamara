@@ -48,3 +48,13 @@ export interface UpdateProfilePayload {
   name: string;
   methods_default_lrr: number;
 }
+
+export type SagaDispatchPayloadTypes =
+  | BrewCoffeeIdPayload
+  | FavBrewPayload
+  | BrewingOrFavPayload
+  | DeleteCoffeePayload
+  | LoginRegisterPayload
+  | SendSharedCoffeePayload
+  | AddSharedCoffeeToDashboardPayload
+  | UpdateProfilePayload;

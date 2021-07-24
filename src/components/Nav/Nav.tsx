@@ -102,6 +102,7 @@ export default function Nav() {
         <Box display="flex" alignItems="center" flexGrow={1}>
           <Box paddingRight={3}>
             <img
+              alt="profile"
               src={pacamaraLogo}
               className={classes.logo}
               onClick={() => history.push('/dashboard')}

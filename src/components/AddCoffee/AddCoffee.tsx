@@ -322,7 +322,11 @@ export default function AddCoffee() {
             <Box display="flex" py={2}>
               <S3Uploader setPhoto={handlePic} />
               {newCoffee.coffee_pic && (
-                <img className={classes.media} src={newCoffee.coffee_pic} />
+                <img
+                  alt="coffee bag"
+                  className={classes.media}
+                  src={newCoffee.coffee_pic}
+                />
               )}
             </Box>
             <Typography>Flavor Palette:</Typography>

@@ -121,7 +121,7 @@ export default function SendCoffeeDialog({
           Who would you like to share this coffee with?
         </DialogContentText>
         <Box display="flex" alignItems="center">
-          {pic && <img src={pic} className={classes.image} />}
+          {pic && <img alt="coffee bag" src={pic} className={classes.image} />}
           <Box>
             <Autocomplete
               className={classes.inputs}

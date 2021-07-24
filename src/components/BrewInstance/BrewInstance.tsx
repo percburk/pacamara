@@ -1,4 +1,4 @@
-import { MouseEventHandler, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import {
   useAppSelector,
   useAppDispatch,

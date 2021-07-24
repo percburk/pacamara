@@ -134,7 +134,11 @@ export default function SharedCoffeeDialog({
             <Box display="flex">
               <Paper elevation={4}>
                 {coffee_pic && (
-                  <img src={coffee_pic} className={classes.image} />
+                  <img
+                    alt="coffee bag"
+                    src={coffee_pic}
+                    className={classes.image}
+                  />
                 )}
               </Paper>
             </Box>

@@ -1,7 +1,4 @@
-import {
-  ReduxActions,
-  ReduxDispatch,
-} from '../../models/redux/reduxResource';
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
 import {
   EditInputsPayload,
   OneCoffeePayloadTypes,
