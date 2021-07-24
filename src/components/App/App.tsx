@@ -5,7 +5,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
 // Components
@@ -21,12 +21,13 @@ import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import muiTheme from '../muiTheme/muiTheme';
 // CSS
 import './App.css';
+import { SagaActions } from '../../models/redux/sagaResource';
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_USER' });
+    dispatch({ type: SagaActions.FETCH_USER });
   }, [dispatch]);
 
   return (

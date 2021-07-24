@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   makeStyles,
+  DialogContentText,
 } from '@material-ui/core';
 
 // Component styling classes
@@ -14,14 +15,22 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  textCenter: {
+    textAlign: 'center',
+  },
 }));
+
+interface Props {
+  newUserDialogOpen: boolean;
+  setNewUserDialogOpen: (set: boolean) => void;
+}
 
 // NewUserDialog opens if the user is logging in for the first time
 // or has not created a profile yet, only redirects to UpdateProfile
 export default function NewUserDialog({
   newUserDialogOpen,
   setNewUserDialogOpen,
-}) {
+}: Props) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -30,9 +39,13 @@ export default function NewUserDialog({
       open={newUserDialogOpen}
       onClose={() => setNewUserDialogOpen(false)}
     >
-      <DialogTitle align="center">Welcome to Pacamara!</DialogTitle>
-      <DialogContent align="center">
-        Let's set you up with a new profile.
+      <DialogTitle className={classes.textCenter}>
+        Welcome to Pacamara!
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText align="center">
+          Let's set you up with a new profile.
+        </DialogContentText>
       </DialogContent>
       <Box display="flex" justifyContent="center">
         <DialogActions>

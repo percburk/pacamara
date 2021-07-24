@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Box } from '@material-ui/core';
 
 // Maintains whitespace on the bottom of the page and displays copyright

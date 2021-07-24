@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import {
@@ -11,13 +11,25 @@ import {
   Box,
   makeStyles,
 } from '@material-ui/core';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  centerText: {
+    textAlign: 'center',
+  },
 }));
+
+interface Props {
+  deleteDialogOpen: boolean;
+  setDeleteDialogOpen: (open: boolean) => void;
+  coffeeId?: number;
+  brewId?: number;
+}
 
 // Opens to make sure a user wants to delete a coffee from their dashboard
 export default function DeleteCoffeeBrewDialog({
@@ -25,11 +37,11 @@ export default function DeleteCoffeeBrewDialog({
   setDeleteDialogOpen,
   coffeeId,
   brewId,
-}) {
+}: Props) {
   const classes = useStyles();
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Checks to see if there is a search query in the URL
   const { q } = queryString.parse(location.search);
@@ -39,17 +51,17 @@ export default function DeleteCoffeeBrewDialog({
     setDeleteDialogOpen(false);
     if (brewId) {
       dispatch({
-        type: 'DELETE_BREW',
+        type: SagaActions.DELETE_BREW,
         payload: { coffeeId, brewId },
       });
-      dispatch({ type: 'SNACKBARS_DELETED_BREW' });
+      dispatch({ type: ReduxActions.SNACKBARS_DELETED_BREW });
     } else {
       dispatch({
-        type: 'DELETE_COFFEE',
+        type: SagaActions.DELETE_COFFEE,
         payload: { coffeeId, q },
       });
-      dispatch({ type: 'SNACKBARS_DELETED_COFFEE' });
-      dispatch({ type: 'FETCH_SHARED_COFFEES' });
+      dispatch({ type: ReduxActions.SNACKBARS_DELETED_COFFEE });
+      dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
       location.search
         ? history.push(`/dashboard/${location.search}`)
         : history.push('/dashboard');
@@ -58,9 +70,9 @@ export default function DeleteCoffeeBrewDialog({
 
   return (
     <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-      <DialogTitle align="center">Delete Coffee</DialogTitle>
-      <DialogContent align="center">
-        <DialogContentText>
+      <DialogTitle className={classes.centerText}>Delete Coffee</DialogTitle>
+      <DialogContent>
+        <DialogContentText align="center">
           Are you sure you want to delete this {brewId ? 'brew' : 'coffee'}?
         </DialogContentText>
       </DialogContent>

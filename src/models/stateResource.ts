@@ -38,10 +38,23 @@ export interface BrewChartState {
 
 export type SortState = 'date' | 'roaster' | 'country' | 'producer';
 
+export type FilterKeys = 'is_fav' | 'brewing' | 'is_blend' | 'shared_by_id';
+
+export interface FilterMenu {
+  key: FilterKeys;
+  string: string;
+}
+
 export interface UpdateProfileState {
   name: string;
   methods_default_id: number | null;
   methods_default_lrr: number | null;
   kettle: string;
   grinder: string;
+}
+
+export interface TabPanelState {
+  children: JSX.Element;
+  tab: number;
+  index: number;
 }

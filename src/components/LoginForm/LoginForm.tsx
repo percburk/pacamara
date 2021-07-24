@@ -1,24 +1,27 @@
 import { useState, ChangeEvent } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
+import { UseStylesType } from '../LandingPage/LandingPage';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // LoginForm is displayed on LandingPage, handles login process
-export default function LoginForm({ classes }) {
-  const dispatch = useDispatch();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+export default function LoginForm({ classes }: { classes: UseStylesType }) {
+  const dispatch = useAppDispatch();
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   // Sends login info to server to begin login process
   const handleLogin = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && password) {
       dispatch({
-        type: 'LOGIN',
+        type: SagaActions.LOGIN,
         payload: { username, password },
       });
-      dispatch({ type: 'CLEAR_LANDING_ERROR' });
+      dispatch({ type: ReduxActions.CLEAR_LANDING_ERROR });
     } else {
-      dispatch({ type: 'LOGIN_INPUT_ERROR' });
+      dispatch({ type: ReduxActions.LOGIN_INPUT_ERROR });
     }
   };
 

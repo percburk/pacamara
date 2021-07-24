@@ -1,7 +1,10 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  RouteProps,
+} from 'react-router-dom';
 import LandingPage from '../LandingPage/LandingPage';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 
 /*
   A Custom Wrapper Component -- This will keep our code DRY.
@@ -15,8 +18,14 @@ import { useSelector } from 'react-redux';
   and by checking req.user for authorization.
 */
 
-export default function ProtectedRoute(props) {
-  const user = useSelector((store) => store.user);
+interface Props extends RouteProps {
+  path: string;
+  authRedirect?: string;
+  children: JSX.Element;
+}
+
+export default function ProtectedRoute(props: Props) {
+  const user = useAppSelector((store) => store.user);
 
   // Using destructuring, this takes ComponentToProtect from component
   // prop and grabs all other props to pass them along to Route
@@ -26,8 +35,8 @@ export default function ProtectedRoute(props) {
     ...otherProps
   } = props;
 
-  // Component may be passed in as as prop, or as a child
-  const ComponentToProtect = props.component || (() => props.children);
+  // Component must ONLY be passed in as a child
+  const ComponentToProtect = () => props.children;
 
   let ComponentToShow;
 

@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { ChangeEvent, useEffect, useState } from 'react';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
 import { useHistory, useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import LuxonUtils from '@date-io/luxon';
 import {
   Box,
@@ -21,6 +25,8 @@ import {
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Component styling classes
 const useStyles = makeStyles((theme) => ({
@@ -55,11 +61,11 @@ const useStyles = makeStyles((theme) => ({
 // All editing is done in Redux
 export default function EditCoffee() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const { id } = useParams();
-  const flavors = useSelector((store) => store.flavors);
-  const oneCoffee = useSelector((store) => store.oneCoffee);
+  const coffeeId = Number(useParams<{ id: string }>().id);
+  const flavors = useAppSelector((store) => store.flavors);
+  const oneCoffee = useAppSelector((store) => store.oneCoffee);
   const {
     roaster,
     roast_date,
@@ -76,52 +82,53 @@ export default function EditCoffee() {
     flavors_array,
     brewing,
   } = oneCoffee;
-  const [roasterError, setRoasterError] = useState(false);
-  const [blendCountryError, setBlendCountryError] = useState(false);
+  const [roasterError, setRoasterError] = useState<boolean>(false);
+  const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_FLAVORS' });
-    dispatch({ type: 'FETCH_ONE_COFFEE', payload: id });
+    dispatch({ type: SagaActions.FETCH_FLAVORS });
+    dispatch({ type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId });
   }, []);
 
   // Handles all text input edits
-  const handleEditInputs = (key) => (event) => {
-    const { value, checked } = event.target;
-    dispatch({
-      type: 'EDIT_INPUTS',
-      payload: { key, change: value || checked },
-    });
-  };
+  const handleEditInputs =
+    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+      const { value, checked } = event.target;
+      dispatch({
+        type: ReduxActions.EDIT_INPUTS,
+        payload: { key, change: value || checked },
+      });
+    };
 
   // Handles a new pic uploaded from S3Uploader
-  const handleEditPic = (newUrl) => {
+  const handleEditPic = (newUrl: string) => {
     dispatch({
-      type: 'EDIT_INPUTS',
+      type: ReduxActions.EDIT_INPUTS,
       payload: { key: 'coffee_pic', change: newUrl },
     });
   };
 
   // Formats the date using Luxon
-  const handleEditDate = (date) => {
-    const formattedDate = DateTime.fromMillis(date.ts).toLocaleString();
+  const handleEditDate = (date: MaterialUiPickersDate) => {
     dispatch({
-      type: 'EDIT_INPUTS',
-      payload: { key: 'roast_date', change: formattedDate },
+      type: ReduxActions.EDIT_INPUTS,
+      payload: { key: 'roast_date', change: date?.toLocaleString() },
     });
   };
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
     if (roaster && (country || blend_name) && flavors_array[0]) {
-      dispatch({ type: 'SNACKBARS_EDITED_COFFEE' });
-      dispatch({ type: 'EDIT_COFFEE', payload: oneCoffee });
+      dispatch({ type: ReduxActions.SNACKBARS_EDITED_COFFEE });
+      dispatch({ type: SagaActions.EDIT_COFFEE, payload: oneCoffee });
       history.goBack();
     } else {
-      roaster ? setRoasterError(false) : setRoasterError(true);
+      setRoasterError(!!!roaster);
       country || blend_name
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      !flavors_array[0] && dispatch({ type: 'SNACKBARS_FLAVORS_ERROR' });
+      !flavors_array[0] &&
+        dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
     }
   };
 
@@ -254,7 +261,7 @@ export default function EditCoffee() {
               </MuiPickersUtilsProvider>
             </Box>
           </Grid>
-          <Grid item xs={6} className={classes.gridItem}>
+          <Grid item xs={6}>
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader setPhoto={handleEditPic} />
@@ -272,7 +279,7 @@ export default function EditCoffee() {
                   }
                   onClick={() =>
                     dispatch({
-                      type: 'EDIT_FLAVORS_ARRAY',
+                      type: ReduxActions.EDIT_FLAVORS_ARRAY,
                       payload: item.id,
                     })
                   }
@@ -299,7 +306,7 @@ export default function EditCoffee() {
                 variant="contained"
                 className={classes.buttons}
                 onClick={() => {
-                  dispatch({ type: 'CLEAR_SNACKBARS' });
+                  dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
                   history.goBack();
                 }}
               >

@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 import {
   VictoryChart,
   VictoryScatter,
@@ -6,15 +6,31 @@ import {
   VictoryLabel,
 } from 'victory';
 import { ClickAwayListener } from '@material-ui/core';
+import { BrewChartState } from '../../models/stateResource';
 
 // Custom component to display the user's TDS/Extraction window on the chart
-const Polygon = ({ data, scale }) => {
+const Polygon = ({
+  data,
+  scale,
+}: {
+  data: { x: number; y: number }[];
+  // TODO: Maybe find a better type check for the supplied scale prop from
+  // VictoryChart
+  scale?: any;
+}) => {
   const points = data.reduce(
     (pointStr, { x, y }) => `${pointStr} ${scale.x(x)},${scale.y(y)}`,
     ''
   );
   return <polygon points={points} style={{ fill: 'grey', opacity: 0.3 }} />;
 };
+
+interface Props {
+  switchChart: boolean;
+  setSwitchChart: (set: boolean) => void;
+  oneBrew: BrewChartState;
+  setOneBrew: (brew: BrewChartState) => void;
+}
 
 // ExtractionChart shows a scatter chart of all the brew instances of a coffee
 // It's displayed on CoffeeDetails, users can also click on a point to open the
@@ -24,11 +40,11 @@ export default function ExtractionChart({
   setSwitchChart,
   oneBrew,
   setOneBrew,
-}) {
-  const { ext_min, ext_max, tds_min, tds_max } = useSelector(
+}: Props) {
+  const { ext_min, ext_max, tds_min, tds_max } = useAppSelector(
     (store) => store.user
   );
-  const brews = useSelector((store) => store.brews);
+  const brews = useAppSelector((store) => store.brews);
   const extractionWindow = [
     { x: ext_min, y: tds_min },
     { x: ext_max, y: tds_min },
@@ -37,7 +53,7 @@ export default function ExtractionChart({
   ];
 
   // Toggles the chart between showing all the brews, and one clicked brew
-  const handleSwitchChart = (x, y, i) => {
+  const handleSwitchChart = ({ x, y, i }: BrewChartState) => {
     console.log(x, y, i);
     setOneBrew({ x, y, i });
     setSwitchChart(!switchChart);
@@ -68,7 +84,11 @@ export default function ExtractionChart({
                 target: 'data',
                 eventHandlers: {
                   onClick: (event, data) =>
-                    handleSwitchChart(data.datum.x, data.datum.y, data.index),
+                    handleSwitchChart({
+                      x: data.datum.x,
+                      y: data.datum.y,
+                      i: data.index,
+                    }),
                 },
               },
             ]}

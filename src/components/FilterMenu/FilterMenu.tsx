@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
+import { FilterMenu } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
-const filtersArray = [
+const filtersArray: FilterMenu[] = [
   { key: 'is_fav', string: 'Favorites' },
   { key: 'brewing', string: 'Currently Brewing' },
   { key: 'is_blend', string: 'Blends' },
@@ -16,17 +17,19 @@ const filtersArray = [
 export default function FilterMenu() {
   const location = useLocation();
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
   const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   });
 
   // Sets the new URL to add/remove entries to the filters array on Dashboard
-  const handleFilters = (clickedFilter) => {
+  const handleFilters = (clickedFilter: string) => {
     const newFiltersArray = !filters
       ? [clickedFilter]
       : filters.includes(clickedFilter)
-      ? filters.filter((item) => item !== clickedFilter)
+      ? (filters as string[]).filter((item) => item !== clickedFilter)
       : [...filters, clickedFilter];
     const newString = queryString.stringify(
       { q, filters: newFiltersArray },
@@ -38,18 +41,16 @@ export default function FilterMenu() {
 
   return (
     <>
-      {filtersArray.map((item, i) => {
-        if (filters?.includes(item.key)) {
-          return (
-            <Chip
-              key={i}
-              label={item.string}
-              onDelete={() => handleFilters(item.key)}
-              color="primary"
-            />
-          );
-        }
-      })}
+      {filtersArray.map((item, i) =>
+        filters?.includes(item.key) ? (
+          <Chip
+            key={i}
+            label={item.string}
+            onDelete={() => handleFilters(item.key)}
+            color="primary"
+          />
+        ) : null
+      )}
       {q && (
         <Button
           variant="contained"

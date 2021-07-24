@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  coffeeId: number;
+  coffeeId?: number;
   addEditBrewOpen: boolean;
   setAddEditBrewOpen: (set: boolean) => void;
   editInstance?: Brew;

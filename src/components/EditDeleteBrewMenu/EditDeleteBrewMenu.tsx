@@ -10,14 +10,17 @@ import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons';
 // Components
 import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
 import AddEditBrew from '../AddEditBrew/AddEditBrew';
+import { Brew } from '../../models/modelResource';
 
 // EditDeleteBrewMenu appears when the 'more' icon is clicked on a BrewInstance
 // accordion
-export default function EditDeleteBrewMenu({ instance }) {
+export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
   const { id: brewId, coffees_id: coffeeId } = instance;
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [addEditBrewOpen, setAddEditBrewOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
 
   return (
     <>

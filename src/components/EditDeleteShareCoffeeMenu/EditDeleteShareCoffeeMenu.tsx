@@ -9,16 +9,28 @@ import {
 } from '@material-ui/core';
 import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons';
 // Imported components
-import DeleteCoffeeDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
+import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
 import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
+
+interface Props {
+  id: number;
+  coffeeName: string;
+  pic: string;
+}
 
 // EditDeleteShareMenu appears when the 'more' icon is clicked on a CoffeeCard
 // or in CoffeeDetails, where users can edit, delete, or share a coffee
-export default function EditDeleteShareCoffeeMenu({ id, coffeeName, pic }) {
+export default function EditDeleteShareCoffeeMenu({
+  id,
+  coffeeName,
+  pic,
+}: Props) {
   const history = useHistory();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [sendDialogOpen, setSendDialogOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [sendDialogOpen, setSendDialogOpen] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
 
   // Opens the send coffee dialog
   const openShare = () => {
@@ -66,7 +78,7 @@ export default function EditDeleteShareCoffeeMenu({ id, coffeeName, pic }) {
           <ListItemText primary="Delete Coffee" />
         </MenuItem>
       </Menu>
-      <DeleteCoffeeDialog
+      <DeleteCoffeeBrewDialog
         deleteDialogOpen={deleteDialogOpen}
         setDeleteDialogOpen={setDeleteDialogOpen}
         coffeeId={id}

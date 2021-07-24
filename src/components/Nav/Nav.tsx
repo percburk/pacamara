@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 import queryString from 'query-string';
 import {
   Typography,
@@ -60,11 +60,11 @@ export default function Nav() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const { name } = useSelector((store) => store.user);
-  const coffeeSearchList = useSelector((store) => store.coffeeSearchList);
-  const sharedCoffees = useSelector((store) => store.sharedCoffees);
-  const [autoOpen, setAutoOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
+  const { name } = useAppSelector((store) => store.user);
+  const coffeeSearchList = useAppSelector((store) => store.coffeeSearchList);
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
+  const [autoOpen, setAutoOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>('');
 
   // Checks to see if there is any data currently in the URL
   const { filters } = queryString.parse(location.search, {
@@ -80,14 +80,14 @@ export default function Nav() {
   };
 
   // Sets the search string in state, toggles the Autocomplete list showing
-  const handleSearchBar = (event, newValue) => {
+  const handleSearchBar = (event: ChangeEvent<{}>, newValue: string) => {
     setSearchInput(newValue);
     newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
   };
 
   // Sends search query, Dashboard picks up the URL change in UseEffect and
   // sends a new GET with 'FETCH_COFFEES' to display search results
-  const handleHistorySearch = (event) => {
+  const handleHistorySearch = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newString = queryString.stringify({
       filters,

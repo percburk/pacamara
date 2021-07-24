@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       opacity: 0.8,
     },
+    cursor: 'pointer',
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -126,7 +127,6 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
         className={classes.media}
         image={coffee_pic}
         title={coffeeName}
-        style={{ cursor: 'pointer' }}
         onClick={() => {
           dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
           history.push(`/details/${id}`);

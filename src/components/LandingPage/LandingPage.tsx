@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../hooks/useAppDispatchSelector';
 import SwipeableViews from 'react-swipeable-views';
 import {
   Box,
@@ -17,9 +20,11 @@ import RegisterForm from '../RegisterForm/RegisterForm';
 import LoginForm from '../LoginForm/LoginForm';
 // CSS
 import './LandingPage.css';
+import { ReduxActions } from '../../models/redux/reduxResource';
+import { TabPanelState } from '../../models/stateResource';
 
 // TabPanel component to create swiping effect with SwipeableViews
-const TabPanel = ({ children, tab, index }) => {
+const TabPanel = ({ children, tab, index }: TabPanelState) => {
   return (
     <div role="tabpanel" hidden={tab !== index} id={`simple-tabpanel-${index}`}>
       {tab === index && <>{children}</>}
@@ -41,13 +46,14 @@ const useStyles = makeStyles((theme) => ({
     width: 120,
   },
 }));
+export type UseStylesType = ReturnType<typeof useStyles>
 
 // LandingPage is the login and registration page
 export default function LandingPage() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { string, open } = useSelector((store) => store.landingErrors);
-  const [tab, setTab] = useState(0);
+  const dispatch = useAppDispatch();
+  const { string, open } = useAppSelector((store) => store.landingErrors);
+  const [tab, setTab] = useState<number>(0);
 
   return (
     <Box
@@ -86,7 +92,9 @@ export default function LandingPage() {
               action={
                 <IconButton
                   size="small"
-                  onClick={() => dispatch({ type: 'CLEAR_LANDING_ERROR' })}
+                  onClick={() =>
+                    dispatch({ type: ReduxActions.CLEAR_LANDING_ERROR })
+                  }
                 >
                   <Close fontSize="inherit" />
                 </IconButton>
