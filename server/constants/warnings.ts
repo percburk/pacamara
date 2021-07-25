@@ -1,4 +1,4 @@
-export const badSecret: string = `
+export const badSecret = `
 ----------------------------
 
 *** WARNING ***
@@ -15,4 +15,4 @@ add or change your SERVER_SESSION_SECRET environment variable!
 
 ----------------------------`;
 
-export const exampleBadSecret: string = 'superDuperSecret';
+export const exampleBadSecret = 'superDuperSecret';

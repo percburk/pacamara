@@ -6,7 +6,7 @@ const router: Router = express.Router();
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
-  const sqlText: string = `
+  const sqlText = `
     SELECT "coffees".*, 
       "users_coffees".is_fav, 
       "users_coffees".brewing, 
@@ -39,7 +39,7 @@ router.get(
   (req: Request, res: Response): void => {
     const { q } = req.query;
 
-    const sqlText: string = `
+    const sqlText = `
       SELECT "coffees".*, 
         "users_coffees".is_fav, 
         "users_coffees".brewing,
@@ -65,7 +65,7 @@ router.get(
     // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
     // Outer single quotes get added when the query is sanitized using $1
     // Also need to remove any '& ' characters already present for to_tsvector
-    const parsedQuery: string | null =
+    const parsedQuery =
       typeof q === 'string'
         ? `"${q.replace('& ', '').replace(/\s/g, '&')}":*`
         : null;
@@ -85,7 +85,7 @@ router.get(
   '/search',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       SELECT "coffees".country, 
         "coffees".producer, 
         "coffees".roaster, 
@@ -119,7 +119,7 @@ router.post(
 
       // Query #1
       // Create new coffee entry in "coffees", return ID for flavors
-      const newCoffeeSqlText: string = `
+      const newCoffeeSqlText = `
         INSERT INTO "coffees" (
           "roaster", 
           "roast_date", 
@@ -157,7 +157,7 @@ router.post(
       // Add entry to "users_coffees" to pair coffee with current user
       const newCoffeeId: number = result.rows[0].id; // New ID is here
 
-      const usersCoffeesSqlText: string = `
+      const usersCoffeesSqlText = `
         INSERT INTO "users_coffees" ("coffees_id", "users_id", "brewing")
         VALUES ($1, $2, $3);
       `;
@@ -171,7 +171,7 @@ router.post(
       // Query #3
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
-      const sqlValues: string = req.body.flavors_array
+      const sqlValues = req.body.flavors_array
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -179,7 +179,7 @@ router.post(
         )
         .slice(0, -1); // Takes off last comma
 
-      const newFlavorsSqlText: string = `
+      const newFlavorsSqlText = `
         INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
         VALUES ${sqlValues};
       `;
@@ -217,7 +217,7 @@ router.delete(
 
       // Query #1
       // Delete entry from users_coffees to delete coffee from user's dashboard
-      const deleteUsersCoffeesEntrySqlText: string = `
+      const deleteUsersCoffeesEntrySqlText = `
         DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
       `;
       await connection.query(deleteUsersCoffeesEntrySqlText, [
@@ -227,7 +227,7 @@ router.delete(
 
       // Query #2
       // Check to see if this coffee is shared. If not, delete it from db
-      const deleteCoffeeSqlText: string = `
+      const deleteCoffeeSqlText = `
         DELETE FROM "coffees"  
         WHERE NOT EXISTS 
           (SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1)

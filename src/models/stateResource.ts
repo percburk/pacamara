@@ -41,8 +41,8 @@ export type SortState = 'date' | 'roaster' | 'country' | 'producer';
 export type FilterKeys = 'is_fav' | 'brewing' | 'is_blend' | 'shared_by_id';
 
 export interface FilterMenuOptions {
-  key: FilterKeys;
-  string: string;
+  filterKey: FilterKeys;
+  display: string;
 }
 
 export interface UpdateProfileState {

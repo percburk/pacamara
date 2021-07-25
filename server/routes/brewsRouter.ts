@@ -8,7 +8,7 @@ router.get(
   '/:id',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       SELECT * FROM "brews" WHERE "coffees_id" = $1 ORDER BY "date" DESC;
     `;
 
@@ -27,7 +27,7 @@ router.post(
   '/add',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       INSERT INTO "brews" (
         "coffees_id", 
         "methods_id", 
@@ -75,7 +75,7 @@ router.put(
   '/edit',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       UPDATE "brews" SET
         "coffees_id" = $1, 
         "methods_id" = $2, 
@@ -123,12 +123,9 @@ router.put(
 // Can be 'yes', 'no', or 'none'
 router.put('/like/:id', (req: Request, res: Response): void => {
   const { change } = req.body;
-  const newStatus: string =
-    change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
+  const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 
-  const sqlText: string = `
-    UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;
-  `;
+  const sqlText = `UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;`;
 
   pool
     .query(sqlText, [newStatus, req.params.id])
@@ -141,7 +138,7 @@ router.put('/like/:id', (req: Request, res: Response): void => {
 
 // DELETE a brew instance
 router.delete('/delete/:id', (req: Request, res: Response): void => {
-  const sqlText: string = `DELETE FROM "brews" WHERE "id" = $1;`;
+  const sqlText = `DELETE FROM "brews" WHERE "id" = $1;`;
 
   pool
     .query(sqlText, [req.params.id])

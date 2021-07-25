@@ -8,7 +8,7 @@ router.get(
   '/users',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       SELECT "id", "username", "name", "profile_pic" 
       FROM "users" WHERE "id" != $1;
     `;
@@ -25,9 +25,7 @@ router.get(
 
 // GET route for a list of any coffees that have been shared with current user
 router.get('/', (req: Request, res: Response): void => {
-  const sqlText: string = `
-    SELECT * FROM "shared_coffees" WHERE "recipient_id" = $1;
-  `;
+  const sqlText = `SELECT * FROM "shared_coffees" WHERE "recipient_id" = $1;`;
 
   pool
     .query(sqlText, [req.user?.id])
@@ -45,7 +43,7 @@ router.get(
   (req: Request, res: Response): void => {
     const sqlText = `
       SELECT "coffees".*, 
-      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
+        ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
       FROM "coffees_flavors"
       JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
       WHERE "coffees".id = $1
@@ -76,7 +74,7 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
     message: string;
   } = req.body;
 
-  const sqlText: string = `
+  const sqlText = `
     INSERT INTO "shared_coffees" (
       "sender_id", 
       "username", 
@@ -113,7 +111,7 @@ router.post('/add', (req: Request, res: Response): void => {
     shared_by_id,
   }: { coffees_id: number; shared_by_id: number } = req.body;
 
-  const sqlText: string = `
+  const sqlText = `
     INSERT INTO "users_coffees" ("users_id", "coffees_id", "shared_by_id") 
     VALUES ($1, $2, $3);
   `;
@@ -130,7 +128,7 @@ router.post('/add', (req: Request, res: Response): void => {
 // DELETE route that deletes the entry from "shared_coffees" when
 // a user declines to add a shared coffee to their dashboard
 router.delete('/delete/:id', (req: Request, res: Response): void => {
-  const sqlText: string = `DELETE FROM "shared_coffees" WHERE "id" = $1;`;
+  const sqlText = `DELETE FROM "shared_coffees" WHERE "id" = $1;`;
 
   pool
     .query(sqlText, [req.params.id])

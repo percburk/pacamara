@@ -75,8 +75,8 @@ export default function Dashboard() {
     })
     .filter((coffee) => {
       if (filters) {
-        for (let keyString of filters) {
-          if (!coffee[keyString as keyof CoffeeItem]) {
+        for (const filterKey of filters) {
+          if (!coffee[filterKey as keyof CoffeeItem]) {
             return false;
           }
         }

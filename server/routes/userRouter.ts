@@ -17,9 +17,9 @@ router.get(
   '/methods',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
-    SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
-  `;
+    const sqlText = `
+      SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
+    `;
 
     pool
       .query(sqlText, [req.user?.id])
@@ -36,7 +36,7 @@ router.post('/register', (req: Request, res: Response): void => {
   const username: string | null = req.body.username;
   const password: string | null = encryptPassword(req.body.password);
 
-  const sqlText: string = `
+  const sqlText = `
     INSERT INTO "users" ("username", "password")
     VALUES ($1, $2) RETURNING "id";
   `;
@@ -80,7 +80,7 @@ router.put(
       await connection.query('BEGIN;');
 
       // Query #1 - sending all non-array user data
-      const updateSqlText: string = `
+      const updateSqlText = `
       UPDATE "users" 
       SET "name" = $1, 
         "profile_pic" = $2, 
@@ -109,14 +109,14 @@ router.put(
       ]);
 
       // Query #2 - deleting old entries in users_methods
-      const deleteSqlText: string = `
+      const deleteSqlText = `
         DELETE FROM "users_methods" WHERE "users_id" = $1;
       `;
       await connection.query(deleteSqlText, [req.user?.id]);
 
       // Query #3, go through methods_array to build query to insert
       // into users_methods
-      let sqlValues: string = req.body.methods_array
+      let sqlValues = req.body.methods_array
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -124,7 +124,7 @@ router.put(
         )
         .slice(0, -1); // Takes off last comma
 
-      const methodsSqlText: string = `
+      const methodsSqlText = `
       INSERT INTO "users_methods" ("users_id", "methods_id")
       VALUES ${sqlValues};
     `;

@@ -6,10 +6,10 @@ import { FilterMenuOptions } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
 const filtersArray: FilterMenuOptions[] = [
-  { key: 'is_fav', string: 'Favorites' },
-  { key: 'brewing', string: 'Currently Brewing' },
-  { key: 'is_blend', string: 'Blends' },
-  { key: 'shared_by_id', string: 'Shared' },
+  { filterKey: 'is_fav', display: 'Favorites' },
+  { filterKey: 'brewing', display: 'Currently Brewing' },
+  { filterKey: 'is_blend', display: 'Blends' },
+  { filterKey: 'shared_by_id', display: 'Shared' },
 ];
 
 // FilterMenu opens on the Dashboard, displaying the options for filtering
@@ -42,11 +42,11 @@ export default function FilterMenu() {
   return (
     <>
       {filtersArray.map((item, i) =>
-        filters?.includes(item.key) ? (
+        filters?.includes(item.filterKey) ? (
           <Chip
             key={i}
-            label={item.string}
-            onDelete={() => handleFilters(item.key)}
+            label={item.display}
+            onDelete={() => handleFilters(item.filterKey)}
             color="primary"
           />
         ) : null
@@ -74,11 +74,11 @@ export default function FilterMenu() {
       >
         {filtersArray.map((filter) => (
           <MenuItem
-            key={filter.key}
-            onClick={() => handleFilters(filter.key)}
-            selected={filters?.includes(filter.key)}
+            key={filter.filterKey}
+            onClick={() => handleFilters(filter.filterKey)}
+            selected={filters?.includes(filter.filterKey)}
           >
-            {filter.string}
+            {filter.display}
           </MenuItem>
         ))}
       </Menu>

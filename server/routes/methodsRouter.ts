@@ -4,9 +4,7 @@ const router: Router = express.Router();
 
 // GET route for list of methods
 router.get('/', (req: Request, res: Response): void => {
-  const sqlText: string = `
-    SELECT * FROM "methods" ORDER BY "methods".name;
-  `;
+  const sqlText = `SELECT * FROM "methods" ORDER BY "methods".name;`;
 
   pool
     .query(sqlText)

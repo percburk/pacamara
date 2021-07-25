@@ -9,7 +9,7 @@ router.get(
   '/:id',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const sqlText: string = `
+    const sqlText = `
       SELECT "coffees".*, 
         "users_coffees".is_fav, 
         "users_coffees".brewing,
@@ -70,7 +70,7 @@ router.put(
 
       // Query #1
       // Updating the data on 'coffees' table
-      const updateCoffeeSqlText: string = `
+      const updateCoffeeSqlText = `
         UPDATE "coffees" 
         SET "roaster" = $1, 
           "roast_date" = $2, 
@@ -105,7 +105,7 @@ router.put(
 
       // Query #2
       // Deleting old entries in coffees_flavors
-      const deleteFlavorsSqlText: string = `
+      const deleteFlavorsSqlText = `
       DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
     `;
 
@@ -114,7 +114,7 @@ router.put(
       // Query #3
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
-      let sqlValues: string = req.body.flavors_array
+      let sqlValues = req.body.flavors_array
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -122,7 +122,7 @@ router.put(
         )
         .slice(0, -1); // Takes off last comma
 
-      const updateFlavorsSqlText: string = `
+      const updateFlavorsSqlText = `
         INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
         VALUES ${sqlValues};
       `;
@@ -134,7 +134,7 @@ router.put(
 
       // Query #4
       // Update brewing status of the edited coffee
-      const updateBrewingSqlText: string = `
+      const updateBrewingSqlText = `
         UPDATE "users_coffees" SET "brewing" = $1
         WHERE "coffees_id" = $2;
       `;
