@@ -75,6 +75,7 @@ function* addCoffee(
   try {
     yield call(axios.post, '/api/coffees/add', action.payload);
     yield put({ type: SagaActions.FETCH_COFFEES });
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES });
   } catch (err) {
     console.log('Error in addCoffee', err);
   }

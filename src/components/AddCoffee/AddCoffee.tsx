@@ -97,7 +97,10 @@ export default function AddCoffee() {
   // Handles all text inputs, adds to local state object
   const handleNewCoffee =
     (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      setNewCoffee({ ...newCoffee, [key]: event.target.value });
+      setNewCoffee({
+        ...newCoffee,
+        [key]: event.target.value || event.target.checked,
+      });
     };
 
   // Formats the date chosen from MuiDatePicker using Luxon
@@ -123,18 +126,6 @@ export default function AddCoffee() {
     });
   };
 
-  // Handles the two switches on the page, for 'is_blend' and 'brewing'
-  const handleSwitch = (event: ChangeEvent<HTMLInputElement>) => {
-    event.target.name === 'is_blend'
-      ? setNewCoffee({
-          ...newCoffee,
-          is_blend: event.target.checked,
-          country: '',
-          blend_name: '',
-        })
-      : setNewCoffee({ ...newCoffee, brewing: event.target.checked });
-  };
-
   // Adds the new coffee to the database with input validation
   const handleSubmit = () => {
     if (
@@ -143,11 +134,7 @@ export default function AddCoffee() {
       newCoffee.flavors_array[0]
     ) {
       dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
-      dispatch({
-        type: SagaActions.ADD_COFFEE,
-        payload: newCoffee,
-      });
-      dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
+      dispatch({ type: SagaActions.ADD_COFFEE, payload: newCoffee });
       clearInputs();
       history.push('/dashboard');
     } else {
