@@ -54,6 +54,13 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
     marginLeft: theme.spacing(5),
   },
+  singleOriginBlendSwitchBase: {
+    color: theme.palette.primary.main,
+  },
+  singleOriginBlendSwitchTrack: {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.5,
+  },
 }));
 
 // EditCoffee contains all the inputs to edit an existing coffee entry
@@ -155,9 +162,13 @@ export default function EditCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={is_blend || false}
+                    checked={!!is_blend}
                     onChange={handleEditInputs('is_blend')}
                     color="primary"
+                    classes={{
+                      track: classes.singleOriginBlendSwitchTrack,
+                      switchBase: classes.singleOriginBlendSwitchBase,
+                    }}
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -166,7 +177,7 @@ export default function EditCoffee() {
                 <Grid item>Currently Brewing:</Grid>
                 <Grid item>
                   <Switch
-                    checked={brewing || false}
+                    checked={!!brewing}
                     onChange={handleEditInputs('brewing')}
                     color="primary"
                   />
@@ -274,18 +285,18 @@ export default function EditCoffee() {
             </Box>
             <Typography>Flavor Palette:</Typography>
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
-              {flavors.map((item) => (
+              {flavors.map((flavor) => (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
+                  key={flavor.id}
+                  label={flavor.name}
                   color={
-                    flavors_array?.includes(item.id) ? 'primary' : 'default'
+                    flavors_array?.includes(flavor.id) ? 'primary' : 'default'
                   }
                   onClick={() =>
                     dispatch({
                       type: ReduxActions.EDIT_FLAVORS_ARRAY,
-                      payload: item.id,
+                      payload: flavor.id,
                     })
                   }
                 />

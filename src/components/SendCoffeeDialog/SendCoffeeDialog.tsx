@@ -89,7 +89,7 @@ export default function SendCoffeeDialog({
   const handleSendShare = () => {
     // Finds the matching ID number of the user that is being sent to
     const match = sharingUserList.find(
-      (item) => item.username === shareUsername
+      (user) => user.username === shareUsername
     )?.id;
 
     if (match) {
@@ -133,11 +133,11 @@ export default function SendCoffeeDialog({
               inputValue={shareUsername}
               onInputChange={handleShareUsername}
               options={sharingUserList}
-              getOptionLabel={(item) => item.username}
-              renderOption={(item) => (
+              getOptionLabel={(user) => user.username}
+              renderOption={(user) => (
                 <Box display="flex" alignItems="center">
-                  <Avatar className={classes.avatar} src={item.profile_pic} />
-                  {item.username}
+                  <Avatar className={classes.avatar} src={user.profile_pic} />
+                  {user.username}
                 </Box>
               )}
               renderInput={(params) => (
@@ -185,7 +185,7 @@ export default function SendCoffeeDialog({
         <Alert
           severity="error"
           action={
-            <IconButton onClick={() => setErrorOpen(false)} size="small">
+            <IconButton size="small" onClick={() => setErrorOpen(false)}>
               <Close fontSize="inherit" />
             </IconButton>
           }

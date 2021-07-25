@@ -86,7 +86,7 @@ export default function BrewInstance({
   } = instance;
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   // Finds the name of the brew method used, searching by ID
-  const methodUsed = methods.find((item) => item.id === methods_id)?.name;
+  const methodUsed = methods.find((method) => method.id === methods_id)?.name;
 
   return (
     <Accordion

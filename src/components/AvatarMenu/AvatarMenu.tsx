@@ -96,12 +96,12 @@ export default function AvatarMenu() {
           <Typography align="center">{username}</Typography>
         </Box>
         <MenuItem
-          disabled={sharedCoffees[0] ? false : true}
+          disabled={!sharedCoffees[0]}
           onClick={() => setSharedOpen(!sharedOpen)}
         >
           <ListItemIcon>
             <Avatar
-              className={sharedCoffees[0] ? classes.smallBlue : classes.small}
+              className={classes[sharedCoffees[0] ? 'smallBlue' : 'small']}
             >
               <Typography variant="subtitle2">
                 {sharedCoffees.length}

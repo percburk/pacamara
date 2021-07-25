@@ -5,7 +5,6 @@ import {
 } from '../../hooks/useAppDispatchSelector';
 import { AddCoffeeState } from '../../models/stateResource';
 import { useHistory } from 'react-router-dom';
-import { DateTime } from 'luxon';
 import LuxonUtils from '@date-io/luxon';
 import {
   Box,
@@ -23,6 +22,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers/';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { DateTime } from 'luxon';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
@@ -55,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     objectFit: 'cover',
     marginLeft: theme.spacing(5),
+  },
+  singleOriginBlendSwitchBase: {
+    color: theme.palette.primary.main,
+  },
+  singleOriginBlendSwitchTrack: {
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0.5,
   },
 }));
 
@@ -205,9 +212,12 @@ export default function AddCoffee() {
                 <Grid item>
                   <Switch
                     checked={newCoffee.is_blend}
-                    onChange={handleSwitch}
+                    onChange={handleNewCoffee('is_blend')}
                     color="primary"
-                    name="is_blend"
+                    classes={{
+                      track: classes.singleOriginBlendSwitchTrack,
+                      switchBase: classes.singleOriginBlendSwitchBase,
+                    }}
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -217,8 +227,7 @@ export default function AddCoffee() {
                 <Grid item>
                   <Switch
                     checked={newCoffee.brewing}
-                    name="brewing"
-                    onChange={handleSwitch}
+                    onChange={handleNewCoffee('brewing')}
                     color="primary"
                   />
                 </Grid>

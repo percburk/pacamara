@@ -63,21 +63,23 @@ export default function SharedCoffeeMenu({
     <>
       <Collapse in={sharedOpen}>
         <Divider />
-        {sharedCoffees.map((item) => {
+        {sharedCoffees.map((shared) => {
           return (
             <MenuItem
-              key={item.id}
+              key={shared.id}
               onClick={() => {
-                handleClickCoffee(item.coffees_id);
-                setSelectedCoffee(item);
+                handleClickCoffee(shared.coffees_id);
+                setSelectedCoffee(shared);
               }}
             >
-              <Avatar className={classes.small} src={item.profile_pic}>
-                {item.username.charAt(0)}
+              <Avatar className={classes.small} src={shared.profile_pic}>
+                {shared.username.charAt(0)}
               </Avatar>
               <Box>
-                <Typography>{item.username}</Typography>
-                <Typography variant="subtitle2">{item.coffee_name}</Typography>
+                <Typography>{shared.username}</Typography>
+                <Typography variant="subtitle2">
+                  {shared.coffee_name}
+                </Typography>
               </Box>
             </MenuItem>
           );
