@@ -18,17 +18,13 @@ export default function Snackbars() {
       autoHideDuration={3000}
       onClose={() => dispatch({ type: ReduxActions.CLEAR_SNACKBARS })}
     >
-      {string ? (
-        <Alert
-          variant="filled"
-          severity={severity}
-          onClose={() => dispatch({ type: ReduxActions.CLEAR_SNACKBARS })}
-        >
-          {string}
-        </Alert>
-      ) : (
-        <></>
-      )}
+      <Alert
+        variant="filled"
+        severity={severity}
+        onClose={() => dispatch({ type: ReduxActions.CLEAR_SNACKBARS })}
+      >
+        {string}
+      </Alert>
     </Snackbar>
   );
 }

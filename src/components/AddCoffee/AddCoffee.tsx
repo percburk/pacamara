@@ -66,7 +66,6 @@ export default function AddCoffee() {
   const flavors = useAppSelector((store) => store.flavors);
   const [roasterError, setRoasterError] = useState<boolean>(false);
   const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
-  const [newFlavors, setNewFlavors] = useState<number[]>([]);
   const [newCoffee, setNewCoffee] = useState<AddCoffeeState>({
     roaster: '',
     roast_date: DateTime.local().toLocaleString(),
@@ -113,7 +112,7 @@ export default function AddCoffee() {
       ...newCoffee,
       flavors_array: !newCoffee.flavors_array.includes(id)
         ? [...newCoffee.flavors_array, id]
-        : newFlavors.filter((index) => index !== id),
+        : newCoffee.flavors_array.filter((index) => index !== id),
     });
   };
 
@@ -134,15 +133,12 @@ export default function AddCoffee() {
     if (
       newCoffee.roaster &&
       (newCoffee.country || newCoffee.blend_name) &&
-      newFlavors[0]
+      newCoffee.flavors_array[0]
     ) {
       dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
       dispatch({
         type: SagaActions.ADD_COFFEE,
-        payload: {
-          ...newCoffee,
-          flavors_array: newFlavors,
-        },
+        payload: newCoffee,
       });
       dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
       clearInputs();
@@ -152,7 +148,7 @@ export default function AddCoffee() {
       newCoffee.country || newCoffee.blend_name
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      if (!newFlavors[0]) {
+      if (!newCoffee.flavors_array[0]) {
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
       }
     }
@@ -182,7 +178,6 @@ export default function AddCoffee() {
       coffee_pic: '',
       flavors_array: [],
     });
-    setNewFlavors([]);
   };
 
   return (
@@ -336,7 +331,11 @@ export default function AddCoffee() {
                   className={classes.chips}
                   key={flavor.id}
                   label={flavor.name}
-                  color={newFlavors.includes(flavor.id) ? 'primary' : 'default'}
+                  color={
+                    newCoffee.flavors_array.includes(flavor.id)
+                      ? 'primary'
+                      : 'default'
+                  }
                   onClick={() => handleNewFlavor(flavor.id)}
                 />
               ))}
