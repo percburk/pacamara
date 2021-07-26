@@ -4,17 +4,17 @@ import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
 const initialState = {
   id: 0,
   username: '',
-  profile_pic: '',
-  methods_default_id: 0,
+  profilePic: '',
+  methodsDefaultId: 0,
   kettle: '',
   grinder: '',
-  tds_min: 0,
-  tds_max: 0,
-  ext_min: 0,
-  ext_max: 0,
+  tdsMin: 0,
+  tdsMax: 0,
+  extMin: 0,
+  extMax: 0,
   name: '',
-  methods_default_lrr: 0,
-  methods_array: [],
+  methodsDefaultLrr: 0,
+  methodsArray: [],
 };
 
 // userReducer will hold a username, password, and profile information

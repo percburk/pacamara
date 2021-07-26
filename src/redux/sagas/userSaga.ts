@@ -35,7 +35,7 @@ function* fetchUser(): SagaGeneratorReturn<User & MethodsArrayAgg[], User> {
       type: ReduxActions.SET_USER,
       payload: {
         ...userResponse.data,
-        methods_array: methodsResponse.data[0].array_agg,
+        methodsArray: methodsResponse.data[0].arrayAgg,
       },
     });
   } catch (err) {

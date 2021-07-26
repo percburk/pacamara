@@ -1,9 +1,9 @@
 export interface AddCoffeeState {
   roaster: string;
-  roast_date: string;
-  is_blend: boolean;
+  roastDate: string;
+  isBlend: boolean;
   brewing: boolean;
-  blend_name: string;
+  blendName: string;
   country: string;
   producer: string;
   region: string;
@@ -11,21 +11,21 @@ export interface AddCoffeeState {
   cultivars: string;
   processing: string;
   notes: string;
-  coffee_pic: string;
-  flavors_array: number[];
+  coffeePic: string;
+  flavorsArray: number[];
 }
 
 export interface BrewState {
-  coffees_id: number;
-  methods_id: number;
-  water_dose: number;
-  coffee_dose: number;
+  coffeesId: number;
+  methodsId: number;
+  waterDose: number;
+  coffeeDose: number;
   grind: number;
   moisture: number;
   co2: number;
   tds: number;
   ext: number;
-  water_temp: number;
+  waterTemp: number;
   time: number;
   lrr: number;
 }
@@ -47,8 +47,8 @@ export interface FilterMenuOptions {
 
 export interface UpdateProfileState {
   name: string;
-  methods_default_id: number | null;
-  methods_default_lrr: number | null;
+  methodsDefaultId: number | null;
+  methodsDefaultLrr: number | null;
   kettle: string;
   grinder: string;
 }

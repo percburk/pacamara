@@ -25,28 +25,28 @@ export interface LoginRegisterPayload {
 }
 
 export interface SendSharedCoffeePayload {
-  recipient_id: number;
-  coffees_id: number;
-  coffee_name: string;
+  recipientId: number;
+  coffeesId: number;
+  coffeeName: string;
   message: string;
 }
 
 export interface AddSharedCoffeeToDashboardPayload {
-  coffees_id: number;
-  shared_by_id: number;
+  coffeesId: number;
+  sharedById: number;
 }
 
 export interface UpdateProfilePayload {
-  profile_pic: string;
-  methods_default_id: number;
+  profilePic: string;
+  methodsDefaultId: number;
   kettle: string;
   grinder: string;
-  tds_min: number;
-  tds_max: number;
-  ext_min: number;
-  ext_max: number;
+  tdsMin: number;
+  tdsMax: number;
+  extMin: number;
+  extMax: number;
   name: string;
-  methods_default_lrr: number;
+  methodsDefaultLrr: number;
 }
 
 export type SagaDispatchPayloadTypes =

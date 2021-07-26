@@ -8,9 +8,9 @@ const initialState = {
   id: 0,
   date: '',
   roaster: '',
-  roast_date: '',
-  is_blend: false,
-  blend_name: '',
+  roastDate: '',
+  isBlend: false,
+  blendName: '',
   country: '',
   producer: '',
   region: '',
@@ -18,8 +18,8 @@ const initialState = {
   cultivars: '',
   processing: '',
   notes: '',
-  coffee_pic: '',
-  flavors_array: [],
+  coffeePic: '',
+  flavorsArray: [],
 };
 
 // Contains list of coffee info displayed on SharedCoffeeDialog, when a user
