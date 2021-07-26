@@ -6,24 +6,23 @@ import logger from 'redux-logger';
 
 // Imports all reducers, stored in _root.reducer
 import rootReducer from './redux/reducers/_rootReducer';
-// Imports InitialState interface for Store
+// Imports all sagas, stored in _root.saga
+import rootSaga from './redux/sagas/_rootSaga';
+// Imports for redux store and sagas
 import {
   InitialState,
   ReduxDispatch,
   ReduxDispatchNoPayload,
 } from './models/redux/reduxResource';
 import { ReduxDispatchPayloadTypes } from './models/redux/reduxPayloadResource';
-
-// Imports all sagas, stored in _root.saga
-import rootSaga from './redux/sagas/_rootSaga';
-
-// Imports our App to be rendered by React
-import App from './components/App/App';
 import {
   SagaDispatch,
   SagaDispatchNoPayload,
 } from './models/redux/sagaResource';
 import { SagaDispatchPayloadTypes } from './models/redux/sagaPayloadResource';
+
+// Imports our App to be rendered by React
+import App from './components/App/App';
 
 const sagaMiddleware = createSagaMiddleware();
 

@@ -3,6 +3,7 @@ import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router: Router = express.Router();
+import camelcaseKeys from 'camelcase-keys';
 
 // GET route for one coffee for CoffeeDetails
 router.get(
@@ -27,7 +28,7 @@ router.get(
 
     pool
       .query(sqlText, [req.params.id, req.user?.id])
-      .then((result) => res.send(result.rows))
+      .then((result) => res.send(camelcaseKeys(result.rows)))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);
@@ -89,9 +90,9 @@ router.put(
 
       await connection.query(updateCoffeeSqlText, [
         req.body.roaster,
-        req.body.roast_date,
-        req.body.is_blend,
-        req.body.blend_name,
+        req.body.roastDate,
+        req.body.isBlend,
+        req.body.blendName,
         req.body.country,
         req.body.producer,
         req.body.region,
@@ -99,7 +100,7 @@ router.put(
         req.body.cultivars,
         req.body.processing,
         req.body.notes,
-        req.body.coffee_pic,
+        req.body.coffeePic,
         req.body.id,
       ]);
 
@@ -114,7 +115,7 @@ router.put(
       // Query #3
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
-      let sqlValues = req.body.flavors_array
+      let sqlValues = req.body.flavorsArray
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -129,7 +130,7 @@ router.put(
 
       await connection.query(updateFlavorsSqlText, [
         req.body.id,
-        ...req.body.flavors_array,
+        ...req.body.flavorsArray,
       ]);
 
       // Query #4

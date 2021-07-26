@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router: Router = express.Router();
+import camelcaseKeys from 'camelcase-keys';
 
 // GET route for user list to share coffees with
 router.get(
@@ -15,7 +16,7 @@ router.get(
 
     pool
       .query(sqlText, [req.user?.id])
-      .then((result) => res.send(result.rows))
+      .then((result) => res.send(camelcaseKeys(result.rows)))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);
@@ -29,7 +30,7 @@ router.get('/', (req: Request, res: Response): void => {
 
   pool
     .query(sqlText, [req.user?.id])
-    .then((result) => res.send(result.rows))
+    .then((result) => res.send(camelcaseKeys(result.rows)))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err);
       res.sendStatus(500);
@@ -52,7 +53,7 @@ router.get(
 
     pool
       .query(sqlText, [req.params.id])
-      .then((result) => res.send(result.rows))
+      .then((result) => res.send(camelcaseKeys(result.rows)))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);

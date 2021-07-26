@@ -5,6 +5,7 @@ import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
 import userStrategy from '../strategies/userStrategy';
 const router: Router = express.Router();
+import camelcaseKeys from 'camelcase-keys';
 
 // GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
@@ -23,7 +24,7 @@ router.get(
 
     pool
       .query(sqlText, [req.user?.id])
-      .then((result) => res.send(result.rows))
+      .then((result) => res.send(camelcaseKeys(result.rows)))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);
@@ -96,15 +97,15 @@ router.put(
     `;
       await connection.query(updateSqlText, [
         req.body.name,
-        req.body.profile_pic,
-        req.body.methods_default_id,
-        req.body.methods_default_lrr,
+        req.body.profilePic,
+        req.body.methodsDefaultId,
+        req.body.methodsDefaultLrr,
         req.body.kettle,
         req.body.grinder,
-        req.body.tds_min,
-        req.body.tds_max,
-        req.body.ext_min,
-        req.body.ext_max,
+        req.body.tdsMin,
+        req.body.tdsMax,
+        req.body.extMin,
+        req.body.extMax,
         req.user?.id,
       ]);
 
@@ -116,7 +117,7 @@ router.put(
 
       // Query #3, go through methods_array to build query to insert
       // into users_methods
-      let sqlValues = req.body.methods_array
+      let sqlValues = req.body.methodsArray
         .reduce(
           (valString: string, val: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
@@ -130,7 +131,7 @@ router.put(
     `;
       await connection.query(methodsSqlText, [
         req.user?.id,
-        ...req.body.methods_array,
+        ...req.body.methodsArray,
       ]);
 
       // Complete transaction

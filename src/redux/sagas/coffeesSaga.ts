@@ -63,6 +63,7 @@ function* deleteCoffee(
       type: SagaActions.FETCH_COFFEES,
       payload: q,
     });
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES });
   } catch (err) {
     console.log('Error in deleteCoffee', err);
   }
