@@ -129,8 +129,8 @@ export default function Nav() {
               inputValue={searchInput}
               onInputChange={handleSearchBar}
               options={coffeeSearchList.map((coffee) => {
-                return coffee.blend_name
-                  ? `${coffee.roaster} ${coffee.blend_name}`
+                return coffee.blendName
+                  ? `${coffee.roaster} ${coffee.blendName}`
                   : `${coffee.roaster} ${coffee.country} ${coffee.producer}`;
               })}
               renderInput={(params) => (

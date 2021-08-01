@@ -7,22 +7,24 @@ import {
 } from 'victory';
 import { ClickAwayListener } from '@material-ui/core';
 import { BrewChartState } from '../../models/stateResource';
+import RangePolygon from './RangePolygon';
 
-// Custom component to display the user's TDS/Extraction window on the chart
-const Polygon = ({
-  data,
-  scale,
-}: {
-  data: { x: number; y: number }[];
-  // TODO: Maybe find a better type check for the supplied scale prop from
-  // VictoryChart
-  scale?: any;
-}) => {
-  const points = data.reduce(
-    (pointStr, { x, y }) => `${pointStr} ${scale.x(x)},${scale.y(y)}`,
-    ''
-  );
-  return <polygon points={points} style={{ fill: 'grey', opacity: 0.3 }} />;
+export const chartStyles = {
+  scatter: {
+    data: {
+      fill: '#35baf6',
+      cursor: 'pointer',
+    },
+  },
+  tooltip: {
+    stroke: '#35baf6',
+    strokeWidth: 1,
+  },
+  labels: [{ fontSize: 16 }],
+  polygon: {
+    fill: 'grey',
+    opacity: 0.3,
+  },
 };
 
 interface Props {
@@ -41,15 +43,15 @@ export default function ExtractionChart({
   oneBrew,
   setOneBrew,
 }: Props) {
-  const { ext_min, ext_max, tds_min, tds_max } = useAppSelector(
+  const { extMin, extMax, tdsMin, tdsMax } = useAppSelector(
     (store) => store.user
   );
   const brews = useAppSelector((store) => store.brews);
   const extractionWindow = [
-    { x: ext_min, y: tds_min },
-    { x: ext_max, y: tds_min },
-    { x: ext_max, y: tds_max },
-    { x: ext_min, y: tds_max },
+    { x: extMin, y: tdsMin },
+    { x: extMax, y: tdsMin },
+    { x: extMax, y: tdsMax },
+    { x: extMin, y: tdsMax },
   ];
 
   // Toggles the chart between showing all the brews, and one clicked brew
@@ -62,23 +64,19 @@ export default function ExtractionChart({
   return (
     <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
       <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.5] }}>
-        <Polygon data={extractionWindow} />
+        <RangePolygon data={extractionWindow} />
         {!switchChart ? (
           <VictoryScatter
-            style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+            style={chartStyles.scatter}
             labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ stroke: '#35baf6', strokeWidth: 1 }}
-              />
+              <VictoryTooltip flyoutStyle={chartStyles.tooltip} />
             }
             size={6}
-            data={brews.map((instance) => {
-              return {
-                x: Number(instance.ext),
-                y: Number(instance.tds),
-                label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
-              };
-            })}
+            data={brews.map((instance) => ({
+              x: Number(instance.ext),
+              y: Number(instance.tds),
+              label: `TDS: ${instance.tds}, EXT: ${instance.ext}%`,
+            }))}
             events={[
               {
                 target: 'data',
@@ -95,9 +93,9 @@ export default function ExtractionChart({
           />
         ) : (
           <VictoryScatter
-            style={{ data: { fill: '#35baf6', cursor: 'pointer' } }}
+            style={chartStyles.scatter}
             labelComponent={
-              <VictoryLabel dy={-20} style={[{ fontSize: 16 }]} />
+              <VictoryLabel dy={-20} style={chartStyles.labels} />
             }
             size={10}
             data={[

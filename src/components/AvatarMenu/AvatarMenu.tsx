@@ -53,7 +53,7 @@ export default function AvatarMenu() {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const classes = useStyles();
-  const { name, username, profile_pic } = useAppSelector((store) => store.user);
+  const { name, username, profilePic } = useAppSelector((store) => store.user);
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<
     (EventTarget & HTMLDivElement) | null
   >(null);
@@ -70,7 +70,7 @@ export default function AvatarMenu() {
     <>
       <Avatar
         className={classes.medium}
-        src={profile_pic}
+        src={profilePic}
         onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
         style={{ cursor: 'pointer' }}
       >
@@ -87,7 +87,7 @@ export default function AvatarMenu() {
         }}
       >
         <Box display="flex" justifyContent="center" py={1}>
-          <Avatar className={classes.large} src={profile_pic}>
+          <Avatar className={classes.large} src={profilePic}>
             {name && name.charAt(0)}
           </Avatar>
         </Box>

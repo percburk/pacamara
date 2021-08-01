@@ -56,7 +56,7 @@ export interface SharedCoffees {
   id: number;
   senderId: number;
   recipientId: number;
-  coffees_id: number;
+  coffeesId: number;
   message: string;
   profilePic: string;
   coffeeName: string;

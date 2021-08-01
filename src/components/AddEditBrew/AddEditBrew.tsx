@@ -72,30 +72,30 @@ export default function AddEditBrew({
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const methods = useAppSelector((store) => store.methods);
-  const { methods_default_id, methods_default_lrr, methods_array } =
+  const { methodsDefaultId, methodsDefaultLrr, methodsArray } =
     useAppSelector((store) => store.user);
-  const { is_blend, blend_name, country, producer } = useAppSelector(
+  const { isBlend, blendName, country, producer } = useAppSelector(
     (store) => store.oneCoffee
   );
   const [advancedOpen, setAdvancedOpen] = useState<boolean>(false);
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
   const [brew, setBrew] = useState<BrewState | Brew>(
     editInstance || {
-      coffees_id: 0,
-      methods_id: methods_default_id,
-      water_dose: 0,
-      coffee_dose: 0,
+      coffeesId: 0,
+      methodsId: methodsDefaultId,
+      waterDose: 0,
+      coffeeDose: 0,
       grind: 0,
       moisture: 1.5,
       co2: 1,
       tds: 0,
       ext: 0,
-      water_temp: 205,
+      waterTemp: 205,
       time: 0,
-      lrr: methods_default_lrr,
+      lrr: methodsDefaultLrr,
     }
   );
-  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
 
   // Curried function to handle all text inputs in local state object
   const handleBrew =
@@ -105,21 +105,21 @@ export default function AddEditBrew({
 
   // This is the math to calculate the Extraction %, result is rendered
   const adjustedCoffeeDose =
-    (brew.coffee_dose * (100 - brew.moisture - brew.co2)) / 100;
-  const bevWater = brew.water_dose - adjustedCoffeeDose * brew.lrr;
+    (brew.coffeeDose * (100 - brew.moisture - brew.co2)) / 100;
+  const bevWater = brew.waterDose - adjustedCoffeeDose * brew.lrr;
   const tdsWeight = bevWater / ((100 - brew.tds) / 100) - bevWater;
   const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
   const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
 
   // This is the math to calculate the brew ratio, result is rendered
   const ratioCalc =
-    brew.coffee_dose && brew.water_dose
-      ? Number(brew.water_dose / brew.coffee_dose).toFixed(2)
+    brew.coffeeDose && brew.waterDose
+      ? Number(brew.waterDose / brew.coffeeDose).toFixed(2)
       : '';
 
   // This adds whatever method was used for the brew into the local state object
   const handleMethod = (id: number, i: number) => {
-    setBrew({ ...brew, methods_id: id, lrr: methods[i].lrr });
+    setBrew({ ...brew, methodsId: id, lrr: methods[i].lrr });
   };
 
   // Sends the new brew instance to the database
@@ -129,7 +129,7 @@ export default function AddEditBrew({
         type: editInstance ? SagaActions.EDIT_BREW : SagaActions.ADD_BREW,
         payload: {
           ...brew,
-          coffees_id: editInstance?.coffees_id || coffeeId,
+          coffeesId: editInstance?.coffeesId || coffeeId,
           ratio: Number(ratioCalc),
           ext: Number(extCalc),
         },
@@ -151,18 +151,18 @@ export default function AddEditBrew({
 
   const clearInputs = () => {
     setBrew({
-      coffees_id: 0,
-      methods_id: methods_default_id,
-      water_dose: 0,
-      coffee_dose: 0,
+      coffeesId: 0,
+      methodsId: methodsDefaultId,
+      waterDose: 0,
+      coffeeDose: 0,
       grind: 0,
       moisture: 1.5,
       co2: 1,
       tds: 0,
       ext: 0,
-      water_temp: 205,
+      waterTemp: 205,
       time: 0,
-      lrr: methods_default_lrr,
+      lrr: methodsDefaultLrr,
     });
   };
 
@@ -180,8 +180,8 @@ export default function AddEditBrew({
             InputProps={{
               endAdornment: <InputAdornment position="end">g</InputAdornment>,
             }}
-            value={checkForZero(brew.water_dose)}
-            onChange={handleBrew('water_dose')}
+            value={checkForZero(brew.waterDose)}
+            onChange={handleBrew('waterDose')}
           />
           <TextField
             className={classes.formInputs}
@@ -190,8 +190,8 @@ export default function AddEditBrew({
             InputProps={{
               endAdornment: <InputAdornment position="end">g</InputAdornment>,
             }}
-            onChange={handleBrew('coffee_dose')}
-            value={checkForZero(brew.coffee_dose)}
+            onChange={handleBrew('coffeeDose')}
+            value={checkForZero(brew.coffeeDose)}
           />
           <TextField
             className={classes.formInputs}
@@ -240,12 +240,12 @@ export default function AddEditBrew({
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
             {methods.map((item, i) =>
-              methods_array.includes(item.id) ? (
+              methodsArray.includes(item.id) ? (
                 <Chip
                   className={classes.chips}
                   key={item.id}
                   label={item.name}
-                  color={item.id === brew.methods_id ? 'primary' : 'default'}
+                  color={item.id === brew.methodsId ? 'primary' : 'default'}
                   onClick={() => handleMethod(item.id, i)}
                 />
               ) : null
@@ -269,8 +269,8 @@ export default function AddEditBrew({
                   <InputAdornment position="end">&deg;</InputAdornment>
                 ),
               }}
-              value={checkForZero(brew.water_temp)}
-              onChange={handleBrew('water_temp')}
+              value={checkForZero(brew.waterTemp)}
+              onChange={handleBrew('waterTemp')}
             />
             <TextField
               className={classes.advanced}

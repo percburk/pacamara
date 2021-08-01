@@ -38,7 +38,7 @@ export interface BrewChartState {
 
 export type SortState = 'date' | 'roaster' | 'country' | 'producer';
 
-export type FilterKeys = 'is_fav' | 'brewing' | 'is_blend' | 'shared_by_id';
+export type FilterKeys = 'isFav' | 'brewing' | 'isBlend' | 'sharedById';
 
 export interface FilterMenuOptions {
   filterKey: FilterKeys;

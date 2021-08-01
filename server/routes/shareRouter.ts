@@ -3,6 +3,7 @@ import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router: Router = express.Router();
 import camelcaseKeys from 'camelcase-keys';
+import { SharedCoffeeRequest } from '../models/requestResource';
 
 // GET route for user list to share coffees with
 router.get(
@@ -63,17 +64,8 @@ router.get(
 
 // POST route to share a coffee with another user
 router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
-  const {
-    recipient_id,
-    coffees_id,
-    coffee_name,
-    message,
-  }: {
-    recipient_id: number;
-    coffees_id: number;
-    coffee_name: string;
-    message: string;
-  } = req.body;
+  const { recipientId, coffeesId, coffeeName, message }: SharedCoffeeRequest =
+    req.body;
 
   const sqlText = `
     INSERT INTO "shared_coffees" (
@@ -92,10 +84,10 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
     .query(sqlText, [
       req.user?.id,
       req.user?.username,
-      req.user?.profile_pic,
-      recipient_id,
-      coffees_id,
-      coffee_name,
+      req.user?.profilePic,
+      recipientId,
+      coffeesId,
+      coffeeName,
       message,
     ])
     .then(() => res.sendStatus(200))

@@ -62,12 +62,12 @@ export default function CoffeeDetails() {
   const coffeeId = Number(useParams<{ id: string }>().id);
   const dispatch = useAppDispatch();
   const {
-    is_fav,
+    isFav,
     brewing,
     roaster,
-    roast_date,
-    is_blend,
-    blend_name,
+    roastDate,
+    isBlend,
+    blendName,
     country,
     producer,
     region,
@@ -75,8 +75,8 @@ export default function CoffeeDetails() {
     cultivars,
     processing,
     notes,
-    coffee_pic,
-    flavors_array,
+    coffeePic,
+    flavorsArray,
   } = useAppSelector((store) => store.oneCoffee);
   const brews = useAppSelector((store) => store.brews);
   const flavors = useAppSelector((store) => store.flavors);
@@ -92,14 +92,14 @@ export default function CoffeeDetails() {
     dispatch({ type: SagaActions.FETCH_METHODS });
   }, [dispatch, coffeeId]);
 
-  const formattedDate = DateTime.fromISO(roast_date).toFormat('LLL d');
+  const formattedDate = DateTime.fromISO(roastDate).toFormat('LLL d');
 
   // Displays either blend name or country/producer based on blend status
-  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
 
   // Uses Luxon to calculate the amount of days post roast for this coffee
   const daysOffRoast = Number(
-    DateTime.local().diff(DateTime.fromISO(roast_date), 'days').toFormat('d')
+    DateTime.local().diff(DateTime.fromISO(roastDate), 'days').toFormat('d')
   );
 
   // Toggle fav or brewing status of the coffee
@@ -126,7 +126,7 @@ export default function CoffeeDetails() {
                 <Paper elevation={4}>
                   <img
                     alt="coffee bag"
-                    src={coffee_pic}
+                    src={coffeePic}
                     className={classes.media}
                   />
                 </Paper>
@@ -150,7 +150,7 @@ export default function CoffeeDetails() {
                 <EditDeleteShareMenu
                   id={coffeeId}
                   coffeeName={nameToDisplay}
-                  pic={coffee_pic}
+                  pic={coffeePic}
                 />
               </Box>
             </Box>
@@ -158,7 +158,7 @@ export default function CoffeeDetails() {
             <Box display="flex" alignItems="center" my={1}>
               <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
                 <IconButton onClick={() => handleBrewOrFav('fav')}>
-                  {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
+                  {isFav ? <Favorite color="primary" /> : <FavoriteBorder />}
                 </IconButton>
               </Tooltip>
               <Tooltip
@@ -175,7 +175,7 @@ export default function CoffeeDetails() {
                 </IconButton>
               </Tooltip>
               {flavors.map((flavor) =>
-                flavors_array?.includes(flavor.id) ? (
+                flavorsArray?.includes(flavor.id) ? (
                   <Chip
                     key={flavor.id}
                     className={classes.chip}
@@ -185,7 +185,7 @@ export default function CoffeeDetails() {
                 ) : null
               )}
             </Box>
-            {!is_blend && (
+            {!isBlend && (
               <Box marginBottom={2}>
                 <Typography variant="subtitle1">Region: {region}</Typography>
                 <Typography variant="subtitle1">

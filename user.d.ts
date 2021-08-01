@@ -5,16 +5,16 @@ declare global {
     interface User {
       id: number;
       username: string;
-      profile_pic?: string;
-      methods_default_id?: number;
+      profilePic?: string;
+      methodsDefaultId?: number;
       kettle?: string;
       grinder?: string;
-      tds_min?: number;
-      tds_max?: number;
-      ext_min?: number;
-      ext_max?: number;
+      tdsMin?: number;
+      tdsMax?: number;
+      extMin?: number;
+      extMax?: number;
       name?: string;
-      methods_default_lrr?: number;
+      methodsDefaultLrr?: number;
     }
   }
 }

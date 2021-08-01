@@ -15,7 +15,7 @@ import { Brew } from '../../models/modelResource';
 // EditDeleteBrewMenu appears when the 'more' icon is clicked on a BrewInstance
 // accordion
 export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
-  const { id: brewId, coffees_id: coffeeId } = instance;
+  const { id: brewId, coffeesId: coffeeId } = instance;
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<
