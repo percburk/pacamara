@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 
 export interface AddCoffeeState {
   roaster: string;
-  roastDate: string | DateTime | Date;
+  roastDate: string | DateTime;
   isBlend: boolean;
   brewing: boolean;
   blendName: string;
@@ -28,7 +28,7 @@ export interface BrewState {
   tds: number;
   ext: number;
   waterTemp: number;
-  time: number;
+  time: string;
   lrr: number;
 }
 

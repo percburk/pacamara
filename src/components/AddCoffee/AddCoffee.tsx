@@ -158,7 +158,7 @@ export default function AddCoffee() {
   const clearInputs = () => {
     setNewCoffee({
       roaster: '',
-      roastDate: DateTime.local(),
+      roastDate: DateTime.now(),
       isBlend: false,
       brewing: false,
       blendName: '',

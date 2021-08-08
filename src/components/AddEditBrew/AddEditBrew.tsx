@@ -72,8 +72,9 @@ export default function AddEditBrew({
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const methods = useAppSelector((store) => store.methods);
-  const { methodsDefaultId, methodsDefaultLrr, methodsArray } =
-    useAppSelector((store) => store.user);
+  const { methodsDefaultId, methodsDefaultLrr, methodsArray } = useAppSelector(
+    (store) => store.user
+  );
   const { isBlend, blendName, country, producer } = useAppSelector(
     (store) => store.oneCoffee
   );
@@ -91,7 +92,7 @@ export default function AddEditBrew({
       tds: 0,
       ext: 0,
       waterTemp: 205,
-      time: 0,
+      time: '',
       lrr: methodsDefaultLrr,
     }
   );
@@ -161,7 +162,7 @@ export default function AddEditBrew({
       tds: 0,
       ext: 0,
       waterTemp: 205,
-      time: 0,
+      time: '',
       lrr: methodsDefaultLrr,
     });
   };
