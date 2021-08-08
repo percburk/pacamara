@@ -69,24 +69,24 @@ export default function BrewInstance({
   const methods = useAppSelector((store) => store.methods);
   const {
     id,
-    methods_id,
+    methodsId,
     liked,
     date,
-    water_dose,
-    coffee_dose,
+    waterDose,
+    coffeeDose,
     grind,
     moisture,
     co2,
     ratio,
     tds,
     ext,
-    water_temp,
+    waterTemp,
     time,
     lrr,
   } = instance;
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   // Finds the name of the brew method used, searching by ID
-  const methodUsed = methods.find((method) => method.id === methods_id)?.name;
+  const methodUsed = methods.find((method) => method.id === methodsId)?.name;
 
   return (
     <Accordion
@@ -117,10 +117,10 @@ export default function BrewInstance({
           {formattedDate} with {methodUsed}
         </Typography>
         <Typography className={classes.summary}>
-          Water: {water_dose}g
+          Water: {waterDose}g
         </Typography>
         <Typography className={classes.summary}>
-          Coffee: {coffee_dose}g
+          Coffee: {coffeeDose}g
         </Typography>
         <Typography className={classes.summary}>Grind: #{grind}</Typography>
       </AccordionSummary>
@@ -147,7 +147,7 @@ export default function BrewInstance({
               <TableCell>{lrr}</TableCell>
               <TableCell>{moisture}%</TableCell>
               <TableCell>{co2}%</TableCell>
-              <TableCell>{water_temp}&deg;</TableCell>
+              <TableCell>{waterTemp}&deg;</TableCell>
             </TableRow>
           </TableBody>
         </Table>

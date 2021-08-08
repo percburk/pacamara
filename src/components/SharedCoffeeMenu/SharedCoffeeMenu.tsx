@@ -44,12 +44,12 @@ export default function SharedCoffeeMenu({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCoffee, setSelectedCoffee] = useState<SharedCoffees>({
     id: 0,
-    sender_id: 0,
-    recipient_id: 0,
-    coffees_id: 0,
+    senderId: 0,
+    recipientId: 0,
+    coffeesId: 0,
     message: '',
-    profile_pic: '',
-    coffee_name: '',
+    profilePic: '',
+    coffeeName: '',
     username: '',
   });
 
@@ -68,17 +68,17 @@ export default function SharedCoffeeMenu({
             <MenuItem
               key={shared.id}
               onClick={() => {
-                handleClickCoffee(shared.coffees_id);
+                handleClickCoffee(shared.coffeesId);
                 setSelectedCoffee(shared);
               }}
             >
-              <Avatar className={classes.small} src={shared.profile_pic}>
+              <Avatar className={classes.small} src={shared.profilePic}>
                 {shared.username.charAt(0)}
               </Avatar>
               <Box>
                 <Typography>{shared.username}</Typography>
                 <Typography variant="subtitle2">
-                  {shared.coffee_name}
+                  {shared.coffeeName}
                 </Typography>
               </Box>
             </MenuItem>

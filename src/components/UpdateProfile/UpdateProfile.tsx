@@ -75,34 +75,34 @@ export default function UpdateProfile() {
   const methods = useAppSelector((store) => store.methods);
   const {
     name,
-    profile_pic,
-    methods_default_id,
-    methods_default_lrr,
+    profilePic,
+    methodsDefaultId,
+    methodsDefaultLrr,
     kettle,
     grinder,
-    tds_min,
-    tds_max,
-    ext_min,
-    ext_max,
-    methods_array,
+    tdsMin,
+    tdsMax,
+    extMin,
+    extMax,
+    methodsArray,
   } = useAppSelector((store) => store.user);
   const [defaultDialogOpen, setDefaultDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [inputError, setInputError] = useState<boolean>(false);
-  const [newMethods, setNewMethods] = useState<number[]>(methods_array || []);
+  const [newMethods, setNewMethods] = useState<number[]>(methodsArray || []);
   const [newTds, setNewTds] = useState<number[]>([
-    tds_min || 1.37,
-    tds_max || 1.43,
+    tdsMin || 1.37,
+    tdsMax || 1.43,
   ]);
   const [newExt, setNewExt] = useState<number[]>([
-    ext_min || 20,
-    ext_max || 23.5,
+    extMin || 20,
+    extMax || 23.5,
   ]);
-  const [newPic, setNewPic] = useState<string>(profile_pic || '');
+  const [newPic, setNewPic] = useState<string>(profilePic || '');
   const [newUpdates, setNewUpdates] = useState<UpdateProfileState>({
     name: name || '',
-    methods_default_id: methods_default_id || null,
-    methods_default_lrr: methods_default_lrr || null,
+    methodsDefaultId: methodsDefaultId || null,
+    methodsDefaultLrr: methodsDefaultLrr || null,
     kettle: kettle || '',
     grinder: grinder || '',
   });
@@ -139,12 +139,12 @@ export default function UpdateProfile() {
       type: SagaActions.UPDATE_PROFILE,
       payload: {
         ...newUpdates,
-        tds_min: newTds[0],
-        tds_max: newTds[1],
-        ext_min: newExt[0],
-        ext_max: newExt[1],
-        methods_array: newMethods,
-        profile_pic: newPic,
+        tdsMin: newTds[0],
+        tdsMax: newTds[1],
+        extMin: newExt[0],
+        extMax: newExt[1],
+        methodsArray: newMethods,
+        profilePic: newPic,
       },
     });
     !name
@@ -165,8 +165,8 @@ export default function UpdateProfile() {
         )?.lrr;
         setNewUpdates({
           ...newUpdates,
-          methods_default_id: newMethods[0],
-          methods_default_lrr: methodLrr ?? null,
+          methodsDefaultId: newMethods[0],
+          methodsDefaultLrr: methodLrr ?? null,
         });
         handleSubmit();
       } else {
@@ -199,8 +199,8 @@ export default function UpdateProfile() {
     setNewPic('');
     setNewUpdates({
       name: '',
-      methods_default_id: null,
-      methods_default_lrr: null,
+      methodsDefaultId: null,
+      methodsDefaultLrr: null,
       kettle: '',
       grinder: '',
     });

@@ -75,10 +75,10 @@ export default function AddCoffee() {
   const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
   const [newCoffee, setNewCoffee] = useState<AddCoffeeState>({
     roaster: '',
-    roast_date: DateTime.local().toLocaleString(),
-    is_blend: false,
+    roastDate: DateTime.now(),
+    isBlend: false,
     brewing: false,
-    blend_name: '',
+    blendName: '',
     country: '',
     producer: '',
     region: '',
@@ -86,8 +86,8 @@ export default function AddCoffee() {
     cultivars: '',
     processing: '',
     notes: '',
-    coffee_pic: '',
-    flavors_array: [],
+    coffeePic: '',
+    flavorsArray: [],
   });
 
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function AddCoffee() {
 
   // Handles all text inputs, adds to local state object
   const handleNewCoffee =
-    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
       setNewCoffee({
         ...newCoffee,
         [key]: event.target.value || event.target.checked,
@@ -107,22 +107,22 @@ export default function AddCoffee() {
   const handleRoastDate = (date: MaterialUiPickersDate) => {
     setNewCoffee({
       ...newCoffee,
-      roast_date: date ? date.toLocaleString() : newCoffee.roast_date,
+      roastDate: date ? date.toLocaleString() : newCoffee.roastDate,
     });
   };
 
   // Handles setting the coffee pic url if S3Uploader is used
   const handlePic = (url: string) => {
-    setNewCoffee({ ...newCoffee, coffee_pic: url });
+    setNewCoffee({ ...newCoffee, coffeePic: url });
   };
 
   // Toggles adding and removing flavors for the coffee in local state array
   const handleNewFlavor = (id: number) => {
     setNewCoffee({
       ...newCoffee,
-      flavors_array: !newCoffee.flavors_array.includes(id)
-        ? [...newCoffee.flavors_array, id]
-        : newCoffee.flavors_array.filter((index) => index !== id),
+      flavorsArray: !newCoffee.flavorsArray.includes(id)
+        ? [...newCoffee.flavorsArray, id]
+        : newCoffee.flavorsArray.filter((index) => index !== id),
     });
   };
 
@@ -130,8 +130,8 @@ export default function AddCoffee() {
   const handleSubmit = () => {
     if (
       newCoffee.roaster &&
-      (newCoffee.country || newCoffee.blend_name) &&
-      newCoffee.flavors_array[0]
+      (newCoffee.country || newCoffee.blendName) &&
+      newCoffee.flavorsArray[0]
     ) {
       dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
       dispatch({ type: SagaActions.ADD_COFFEE, payload: newCoffee });
@@ -139,10 +139,10 @@ export default function AddCoffee() {
       history.push('/dashboard');
     } else {
       newCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
-      newCoffee.country || newCoffee.blend_name
+      newCoffee.country || newCoffee.blendName
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      if (!newCoffee.flavors_array[0]) {
+      if (!newCoffee.flavorsArray[0]) {
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
       }
     }
@@ -158,10 +158,10 @@ export default function AddCoffee() {
   const clearInputs = () => {
     setNewCoffee({
       roaster: '',
-      roast_date: DateTime.local().toLocaleString(),
-      is_blend: false,
+      roastDate: DateTime.now(),
+      isBlend: false,
       brewing: false,
-      blend_name: '',
+      blendName: '',
       country: '',
       producer: '',
       region: '',
@@ -169,8 +169,8 @@ export default function AddCoffee() {
       cultivars: '',
       processing: '',
       notes: '',
-      coffee_pic: '',
-      flavors_array: [],
+      coffeePic: '',
+      flavorsArray: [],
     });
   };
 
@@ -198,8 +198,8 @@ export default function AddCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={newCoffee.is_blend}
-                    onChange={handleNewCoffee('is_blend')}
+                    checked={newCoffee.isBlend}
+                    onChange={handleNewCoffee('isBlend')}
                     color="primary"
                     classes={{
                       track: classes.singleOriginBlendSwitchTrack,
@@ -225,21 +225,21 @@ export default function AddCoffee() {
               error={blendCountryError}
               helperText={
                 blendCountryError &&
-                (newCoffee.is_blend
+                (newCoffee.isBlend
                   ? 'Please enter the blend name.'
                   : 'Please enter the country of origin.')
               }
-              label={newCoffee.is_blend ? 'Blend Name' : 'Country'}
+              label={newCoffee.isBlend ? 'Blend Name' : 'Country'}
               variant="outlined"
               className={classes.textInputs}
               fullWidth
               onChange={
-                newCoffee.is_blend
-                  ? handleNewCoffee('blend_name')
+                newCoffee.isBlend
+                  ? handleNewCoffee('blendName')
                   : handleNewCoffee('country')
               }
               value={
-                newCoffee.is_blend ? newCoffee.blend_name : newCoffee.country
+                newCoffee.isBlend ? newCoffee.blendName : newCoffee.country
               }
             />
             <TextField
@@ -249,7 +249,7 @@ export default function AddCoffee() {
               fullWidth
               onChange={handleNewCoffee('producer')}
               value={newCoffee.producer}
-              disabled={newCoffee.is_blend}
+              disabled={newCoffee.isBlend}
             />
             <TextField
               label="Region"
@@ -258,7 +258,7 @@ export default function AddCoffee() {
               fullWidth
               onChange={handleNewCoffee('region')}
               value={newCoffee.region}
-              disabled={newCoffee.is_blend}
+              disabled={newCoffee.isBlend}
             />
             <TextField
               label="Cultivars"
@@ -267,7 +267,7 @@ export default function AddCoffee() {
               fullWidth
               onChange={handleNewCoffee('cultivars')}
               value={newCoffee.cultivars}
-              disabled={newCoffee.is_blend}
+              disabled={newCoffee.isBlend}
             />
             <TextField
               label="Processing"
@@ -276,7 +276,7 @@ export default function AddCoffee() {
               onChange={handleNewCoffee('processing')}
               className={classes.textInputs}
               value={newCoffee.processing}
-              disabled={newCoffee.is_blend}
+              disabled={newCoffee.isBlend}
             />
             <Box
               display="flex"
@@ -288,7 +288,7 @@ export default function AddCoffee() {
                 variant="outlined"
                 onChange={handleNewCoffee('elevation')}
                 value={newCoffee.elevation}
-                disabled={newCoffee.is_blend}
+                disabled={newCoffee.isBlend}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">meters</InputAdornment>
@@ -302,7 +302,7 @@ export default function AddCoffee() {
                   format="MM/dd/yy"
                   margin="normal"
                   label="Roast Date"
-                  value={newCoffee.roast_date}
+                  value={newCoffee.roastDate}
                   onChange={handleRoastDate}
                 />
               </MuiPickersUtilsProvider>
@@ -312,11 +312,11 @@ export default function AddCoffee() {
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader setPhoto={handlePic} />
-              {newCoffee.coffee_pic && (
+              {newCoffee.coffeePic && (
                 <img
                   alt="coffee bag"
                   className={classes.media}
-                  src={newCoffee.coffee_pic}
+                  src={newCoffee.coffeePic}
                 />
               )}
             </Box>
@@ -328,7 +328,7 @@ export default function AddCoffee() {
                   key={flavor.id}
                   label={flavor.name}
                   color={
-                    newCoffee.flavors_array.includes(flavor.id)
+                    newCoffee.flavorsArray.includes(flavor.id)
                       ? 'primary'
                       : 'default'
                   }

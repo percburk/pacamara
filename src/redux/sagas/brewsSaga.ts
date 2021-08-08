@@ -60,7 +60,7 @@ function* addBrew(action: SagaDispatch<Brew>): SagaGeneratorReturn<number> {
     yield call(axios.post, '/api/brews/add', action.payload);
     yield put({
       type: SagaActions.FETCH_BREWS,
-      payload: action.payload.coffees_id,
+      payload: action.payload.coffeesId,
     });
   } catch (err) {
     console.log('Error in addBrew', err);
@@ -73,7 +73,7 @@ function* editBrew(action: SagaDispatch<Brew>): SagaGeneratorReturn<number> {
     yield call(axios.put, '/api/brews/edit', action.payload);
     yield put({
       type: SagaActions.FETCH_BREWS,
-      payload: action.payload.coffees_id,
+      payload: action.payload.coffeesId,
     });
   } catch (err) {
     console.log('Error in editBrew', err);

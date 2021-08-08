@@ -136,7 +136,7 @@ export default function SendCoffeeDialog({
               getOptionLabel={(user) => user.username}
               renderOption={(user) => (
                 <Box display="flex" alignItems="center">
-                  <Avatar className={classes.avatar} src={user.profile_pic} />
+                  <Avatar className={classes.avatar} src={user.profilePic} />
                   {user.username}
                 </Box>
               )}

@@ -61,7 +61,6 @@ export default function DeleteCoffeeBrewDialog({
         payload: { coffeeId, q },
       });
       dispatch({ type: ReduxActions.SNACKBARS_DELETED_COFFEE });
-      dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
       location.search
         ? history.push(`/dashboard/${location.search}`)
         : history.push('/dashboard');

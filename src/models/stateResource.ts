@@ -1,9 +1,11 @@
+import { DateTime } from "luxon";
+
 export interface AddCoffeeState {
   roaster: string;
-  roast_date: string;
-  is_blend: boolean;
+  roastDate: string | DateTime;
+  isBlend: boolean;
   brewing: boolean;
-  blend_name: string;
+  blendName: string;
   country: string;
   producer: string;
   region: string;
@@ -11,22 +13,22 @@ export interface AddCoffeeState {
   cultivars: string;
   processing: string;
   notes: string;
-  coffee_pic: string;
-  flavors_array: number[];
+  coffeePic: string;
+  flavorsArray: number[];
 }
 
 export interface BrewState {
-  coffees_id: number;
-  methods_id: number;
-  water_dose: number;
-  coffee_dose: number;
+  coffeesId: number;
+  methodsId: number;
+  waterDose: number;
+  coffeeDose: number;
   grind: number;
   moisture: number;
   co2: number;
   tds: number;
   ext: number;
-  water_temp: number;
-  time: number;
+  waterTemp: number;
+  time: string;
   lrr: number;
 }
 
@@ -38,7 +40,7 @@ export interface BrewChartState {
 
 export type SortState = 'date' | 'roaster' | 'country' | 'producer';
 
-export type FilterKeys = 'is_fav' | 'brewing' | 'is_blend' | 'shared_by_id';
+export type FilterKeys = 'isFav' | 'brewing' | 'isBlend' | 'sharedById';
 
 export interface FilterMenuOptions {
   filterKey: FilterKeys;
@@ -47,8 +49,8 @@ export interface FilterMenuOptions {
 
 export interface UpdateProfileState {
   name: string;
-  methods_default_id: number | null;
-  methods_default_lrr: number | null;
+  methodsDefaultId: number | null;
+  methodsDefaultLrr: number | null;
   kettle: string;
   grinder: string;
 }

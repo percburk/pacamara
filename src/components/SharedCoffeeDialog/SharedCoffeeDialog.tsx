@@ -63,14 +63,14 @@ export default function SharedCoffeeDialog({
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const {
-    is_blend,
-    blend_name,
+    isBlend,
+    blendName,
     country,
     producer,
-    coffee_pic,
+    coffeePic,
     id: coffeeId,
     roaster,
-    flavors_array,
+    flavorsArray,
     region,
     elevation,
     cultivars,
@@ -82,11 +82,11 @@ export default function SharedCoffeeDialog({
     id: selectedId,
     username,
     message,
-    sender_id,
-    profile_pic,
+    senderId,
+    profilePic,
   } = selectedCoffee;
 
-  const nameToDisplay = is_blend ? blend_name : `${country} ${producer}`;
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
 
   // If the user doesn't want to add this coffee to their dashboard, they can
   // decline and the message is deleted
@@ -103,7 +103,7 @@ export default function SharedCoffeeDialog({
   const handleAdd = () => {
     dispatch({
       type: SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
-      payload: { coffees_id: coffeeId, shared_by_id: sender_id },
+      payload: { coffees_id: coffeeId, shared_by_id: senderId },
     });
     dispatch({
       type: SagaActions.DELETE_SHARED_COFFEE,
@@ -125,7 +125,7 @@ export default function SharedCoffeeDialog({
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
       <Box display="flex" alignItems="center">
-        <Avatar src={profile_pic} className={classes.avatar} />
+        <Avatar src={profilePic} className={classes.avatar} />
         <DialogTitle>{username} shared a coffee with you:</DialogTitle>
       </Box>
       <DialogContent>
@@ -133,10 +133,10 @@ export default function SharedCoffeeDialog({
           <Grid item xs={6}>
             <Box display="flex">
               <Paper elevation={4}>
-                {coffee_pic && (
+                {coffeePic && (
                   <img
                     alt="coffee bag"
-                    src={coffee_pic}
+                    src={coffeePic}
                     className={classes.image}
                   />
                 )}
@@ -147,9 +147,9 @@ export default function SharedCoffeeDialog({
             <Typography variant="h6">{nameToDisplay}</Typography>
             <Typography>By {roaster}</Typography>
             <Box display="flex" my={1.5}>
-              {flavors_array &&
+              {flavorsArray &&
                 flavors.map((flavor) =>
-                  flavors_array.includes(flavor.id) ? (
+                  flavorsArray.includes(flavor.id) ? (
                     <Chip
                       key={flavor.id}
                       className={classes.chip}
@@ -159,7 +159,7 @@ export default function SharedCoffeeDialog({
                   ) : null
                 )}
             </Box>
-            {!is_blend && (
+            {!isBlend && (
               <Box my={1}>
                 <Typography>Region: {region}</Typography>
                 <Typography>Cultivars: {cultivars}</Typography>

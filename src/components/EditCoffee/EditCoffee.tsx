@@ -74,9 +74,9 @@ export default function EditCoffee() {
   const oneCoffee = useAppSelector((store) => store.oneCoffee);
   const {
     roaster,
-    roast_date,
-    is_blend,
-    blend_name,
+    roastDate,
+    isBlend,
+    blendName,
     country,
     producer,
     region,
@@ -84,8 +84,8 @@ export default function EditCoffee() {
     cultivars,
     processing,
     notes,
-    coffee_pic,
-    flavors_array,
+    coffeePic,
+    flavorsArray,
     brewing,
   } = oneCoffee;
   const [roasterError, setRoasterError] = useState<boolean>(false);
@@ -110,7 +110,7 @@ export default function EditCoffee() {
   const handleEditPic = (newUrl: string) => {
     dispatch({
       type: ReduxActions.EDIT_INPUTS,
-      payload: { key: 'coffee_pic', change: newUrl },
+      payload: { key: 'coffeePic', change: newUrl },
     });
   };
 
@@ -118,22 +118,22 @@ export default function EditCoffee() {
   const handleEditDate = (date: MaterialUiPickersDate) => {
     dispatch({
       type: ReduxActions.EDIT_INPUTS,
-      payload: { key: 'roast_date', change: date?.toLocaleString() },
+      payload: { key: 'roastDate', change: date?.toLocaleString() },
     });
   };
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
-    if (roaster && (country || blend_name) && flavors_array[0]) {
+    if (roaster && (country || blendName) && flavorsArray[0]) {
       dispatch({ type: ReduxActions.SNACKBARS_EDITED_COFFEE });
       dispatch({ type: SagaActions.EDIT_COFFEE, payload: oneCoffee });
       history.goBack();
     } else {
       setRoasterError(!!!roaster);
-      country || blend_name
+      country || blendName
         ? setBlendCountryError(false)
         : setBlendCountryError(true);
-      !flavors_array[0] &&
+      !flavorsArray[0] &&
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
     }
   };
@@ -162,8 +162,8 @@ export default function EditCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={!!is_blend}
-                    onChange={handleEditInputs('is_blend')}
+                    checked={!!isBlend}
+                    onChange={handleEditInputs('isBlend')}
                     color="primary"
                     classes={{
                       track: classes.singleOriginBlendSwitchTrack,
@@ -189,18 +189,18 @@ export default function EditCoffee() {
               error={blendCountryError}
               helperText={
                 blendCountryError &&
-                (is_blend
+                (isBlend
                   ? 'Please enter the blend name.'
                   : 'Please enter the country of origin.')
               }
-              label={is_blend ? 'Blend Name' : 'Country'}
+              label={isBlend ? 'Blend Name' : 'Country'}
               variant="outlined"
               className={classes.textInputs}
               fullWidth
-              value={is_blend ? blend_name || '' : country || ''}
+              value={isBlend ? blendName || '' : country || ''}
               onChange={
-                is_blend
-                  ? handleEditInputs('blend_name')
+                isBlend
+                  ? handleEditInputs('blendName')
                   : handleEditInputs('country')
               }
             />
@@ -210,7 +210,7 @@ export default function EditCoffee() {
               className={classes.textInputs}
               fullWidth
               value={producer || ''}
-              disabled={is_blend}
+              disabled={isBlend}
               onChange={handleEditInputs('producer')}
             />
             <TextField
@@ -219,7 +219,7 @@ export default function EditCoffee() {
               className={classes.textInputs}
               fullWidth
               value={region || ''}
-              disabled={is_blend}
+              disabled={isBlend}
               onChange={handleEditInputs('region')}
             />
             <TextField
@@ -228,7 +228,7 @@ export default function EditCoffee() {
               className={classes.textInputs}
               fullWidth
               value={cultivars || ''}
-              disabled={is_blend}
+              disabled={isBlend}
               onChange={handleEditInputs('cultivars')}
             />
             <TextField
@@ -237,7 +237,7 @@ export default function EditCoffee() {
               className={classes.textInputs}
               fullWidth
               value={processing || ''}
-              disabled={is_blend}
+              disabled={isBlend}
               onChange={handleEditInputs('processing')}
             />
             <Box
@@ -250,7 +250,7 @@ export default function EditCoffee() {
                 variant="outlined"
                 className={classes.textInputs}
                 value={elevation || ''}
-                disabled={is_blend}
+                disabled={isBlend}
                 onChange={handleEditInputs('elevation')}
                 InputProps={{
                   endAdornment: (
@@ -265,7 +265,7 @@ export default function EditCoffee() {
                   format="MM/dd/yy"
                   margin="normal"
                   label="Roast Date"
-                  value={roast_date}
+                  value={roastDate}
                   onChange={handleEditDate}
                 />
               </MuiPickersUtilsProvider>
@@ -275,11 +275,11 @@ export default function EditCoffee() {
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader setPhoto={handleEditPic} />
-              {coffee_pic && (
+              {coffeePic && (
                 <img
                   alt="coffee bag"
                   className={classes.media}
-                  src={coffee_pic}
+                  src={coffeePic}
                 />
               )}
             </Box>
@@ -291,7 +291,7 @@ export default function EditCoffee() {
                   key={flavor.id}
                   label={flavor.name}
                   color={
-                    flavors_array?.includes(flavor.id) ? 'primary' : 'default'
+                    flavorsArray?.includes(flavor.id) ? 'primary' : 'default'
                   }
                   onClick={() =>
                     dispatch({

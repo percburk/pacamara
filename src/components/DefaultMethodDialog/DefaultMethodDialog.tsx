@@ -47,8 +47,8 @@ export default function DefaultMethodDialog({
     setDefaultDialogOpen(false);
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: null,
-      methods_default_lrr: null,
+      methodsDefaultId: null,
+      methodsDefaultLrr: null,
     });
   };
 
@@ -56,8 +56,8 @@ export default function DefaultMethodDialog({
   const handleNoDefault = () => {
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: null,
-      methods_default_lrr: null,
+      methodsDefaultId: null,
+      methodsDefaultLrr: null,
     });
     handleSubmit();
   };
@@ -66,8 +66,8 @@ export default function DefaultMethodDialog({
   const setDefault = (id: number, lrr: number) => {
     setNewUpdates({
       ...newUpdates,
-      methods_default_id: id,
-      methods_default_lrr: lrr,
+      methodsDefaultId: id,
+      methodsDefaultLrr: lrr,
     });
   };
 
@@ -90,7 +90,7 @@ export default function DefaultMethodDialog({
                 key={item.id}
                 label={item.name}
                 color={
-                  item.id === newUpdates.methods_default_id
+                  item.id === newUpdates.methodsDefaultId
                     ? 'primary'
                     : 'default'
                 }
@@ -112,7 +112,7 @@ export default function DefaultMethodDialog({
             variant="contained"
             color="primary"
             onClick={() =>
-              !newUpdates.methods_default_id
+              !newUpdates.methodsDefaultId
                 ? setCollapseOpen(true)
                 : handleSubmit()
             }

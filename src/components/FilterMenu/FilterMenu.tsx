@@ -6,10 +6,10 @@ import { FilterMenuOptions } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
 const filtersArray: FilterMenuOptions[] = [
-  { filterKey: 'is_fav', display: 'Favorites' },
+  { filterKey: 'isFav', display: 'Favorites' },
   { filterKey: 'brewing', display: 'Currently Brewing' },
-  { filterKey: 'is_blend', display: 'Blends' },
-  { filterKey: 'shared_by_id', display: 'Shared' },
+  { filterKey: 'isBlend', display: 'Blends' },
+  { filterKey: 'sharedById', display: 'Shared' },
 ];
 
 // FilterMenu opens on the Dashboard, displaying the options for filtering

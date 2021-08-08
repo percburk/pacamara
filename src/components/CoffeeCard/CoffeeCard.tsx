@@ -65,28 +65,28 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
     id,
     date,
     roaster,
-    is_blend,
-    blend_name,
+    isBlend,
+    blendName,
     country,
     producer,
-    coffee_pic,
+    coffeePic,
     brewing,
-    is_fav,
-    flavors_array,
-    shared_by_id,
+    isFav,
+    flavorsArray,
+    sharedById,
   } = coffee;
   // Checks to see if there's a search query in the URL
   const { q } = queryString.parse(location.search);
   // Format date coffee was created using luxon
   const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   // Displays either blend name or country/producer based on blend status
-  const coffeeName = is_blend ? blend_name : `${country} ${producer}`;
+  const coffeeName = isBlend ? blendName : `${country} ${producer}`;
   // If this coffee has been shared by another user, their username is shown
   const sharedByUser = sharingUserList.find(
-    (item) => item.id === shared_by_id
+    (item) => item.id === sharedById
   )?.username;
 
-  // PUT route to toggle booleans of brewing or is_fav in 'users_coffees'
+  // PUT route to toggle booleans of brewing or isFav in 'users_coffees'
   // Makes sure not to change search results displayed, if present
   const handleBrewOrFav = (change: string) => {
     dispatch({
@@ -105,7 +105,7 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
             <EditDeleteShareCoffeeMenu
               id={id}
               coffeeName={coffeeName}
-              pic={coffee_pic}
+              pic={coffeePic}
             />
             <Tooltip
               title="Currently Brewing"
@@ -125,7 +125,7 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
       />
       <CardMedia
         className={classes.media}
-        image={coffee_pic}
+        image={coffeePic}
         title={coffeeName}
         onClick={() => {
           dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
@@ -135,7 +135,7 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
       <CardContent>
         <Box display="flex" justifyContent="center">
           {flavors.map((item) =>
-            flavors_array?.includes(item.id) ? (
+            flavorsArray?.includes(item.id) ? (
               <Chip
                 key={item.id}
                 className={classes.chip}
@@ -153,7 +153,7 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
         >
           <Tooltip title="Favorite" enterDelay={900} leaveDelay={100}>
             <IconButton onClick={() => handleBrewOrFav('fav')}>
-              {is_fav ? <Favorite color="primary" /> : <FavoriteBorder />}
+              {isFav ? <Favorite color="primary" /> : <FavoriteBorder />}
             </IconButton>
           </Tooltip>
           <Box>

@@ -9,9 +9,9 @@ const initialState: CoffeeItem = {
   id: 0,
   date: '',
   roaster: '',
-  roast_date: '',
-  is_blend: false,
-  blend_name: '',
+  roastDate: '',
+  isBlend: false,
+  blendName: '',
   country: '',
   producer: '',
   region: '',
@@ -19,10 +19,10 @@ const initialState: CoffeeItem = {
   cultivars: '',
   processing: '',
   notes: '',
-  coffee_pic: '',
-  flavors_array: [],
-  is_fav: false,
-  shared_by_id: 0,
+  coffeePic: '',
+  flavorsArray: [],
+  isFav: false,
+  sharedById: 0,
   brewing: false,
 };
 
@@ -40,15 +40,15 @@ const oneCoffeeReducer = (
       return { ...state, [key]: change };
     case ReduxActions.EDIT_FLAVORS_ARRAY:
       const id = action.payload as number;
-      if (!state.flavors_array.includes(id)) {
+      if (!state.flavorsArray.includes(id)) {
         return {
           ...state,
-          flavors_array: [...state.flavors_array, id],
+          flavorsArray: [...state.flavorsArray, id],
         };
       } else {
         return {
           ...state,
-          flavors_array: state.flavors_array.filter((index) => index !== id),
+          flavorsArray: state.flavorsArray.filter((index) => index !== id),
         };
       }
     case ReduxActions.CLEAR_ONE_COFFEE:

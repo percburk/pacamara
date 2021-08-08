@@ -4,25 +4,25 @@ export interface Flavors {
 }
 
 export interface Methods extends Flavors {
-  drip_speed: string;
+  dripSpeed: string;
   lrr: number;
 }
 
 export interface Brew {
   id: number;
-  coffees_id: number;
-  methods_id: number;
+  coffeesId: number;
+  methodsId: number;
   liked: string;
   date: string;
-  water_dose: number;
-  coffee_dose: number;
+  waterDose: number;
+  coffeeDose: number;
   grind: number;
   moisture: number;
   co2: number;
   ratio: number;
   tds: number;
   ext: number;
-  water_temp: number;
+  waterTemp: number;
   time: string;
   lrr: number;
 }
@@ -39,27 +39,27 @@ export interface Snackbar extends LandingError {
 export interface User {
   id: number;
   username: string;
-  profile_pic: string;
-  methods_default_id: number;
+  profilePic: string;
+  methodsDefaultId: number;
   kettle: string;
   grinder: string;
-  tds_min: number;
-  tds_max: number;
-  ext_min: number;
-  ext_max: number;
+  tdsMin: number;
+  tdsMax: number;
+  extMin: number;
+  extMax: number;
   name: string;
-  methods_default_lrr: number;
-  methods_array: number[];
+  methodsDefaultLrr: number;
+  methodsArray: number[];
 }
 
 export interface SharedCoffees {
   id: number;
-  sender_id: number;
-  recipient_id: number;
-  coffees_id: number;
+  senderId: number;
+  recipientId: number;
+  coffeesId: number;
   message: string;
-  profile_pic: string;
-  coffee_name: string;
+  profilePic: string;
+  coffeeName: string;
   username: string;
 }
 
@@ -67,16 +67,16 @@ export interface SharingUserList {
   id: number;
   username: string;
   name: string;
-  profile_pic: string;
+  profilePic: string;
 }
 
 export interface OneSharedCoffee {
   id: number;
   date: string;
   roaster: string;
-  roast_date: string;
-  is_blend: boolean;
-  blend_name: string;
+  roastDate: string;
+  isBlend: boolean;
+  blendName: string;
   country: string;
   producer: string;
   region: string;
@@ -84,24 +84,24 @@ export interface OneSharedCoffee {
   cultivars: string;
   processing: string;
   notes: string;
-  coffee_pic: string;
-  flavors_array: number[];
+  coffeePic: string;
+  flavorsArray: number[];
 }
 
 export interface CoffeeItem extends OneSharedCoffee {
-  is_fav: boolean;
-  shared_by_id?: number;
+  isFav: boolean;
+  sharedById: number | null;
   brewing: boolean;
 }
 
 export interface CoffeeSearchList {
   country?: string;
   producer?: string;
-  blend_name?: string;
+  blendName?: string;
   roaster: string;
-  users_id: number;
+  usersId: number;
 }
 
 export interface MethodsArrayAgg {
-  array_agg: number[];
+  arrayAgg: number[];
 }
