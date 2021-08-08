@@ -249,7 +249,7 @@ export default function UpdateProfile() {
                   key={method.id}
                   label={method.name}
                   color={
-                    newUpdates.methodsArray.includes(method.id)
+                    newUpdates.methodsArray?.includes(method.id)
                       ? 'primary'
                       : 'default'
                   }
@@ -264,8 +264,8 @@ export default function UpdateProfile() {
             </Typography>
             <Box display="flex" paddingBottom={3}>
               <S3Uploader
-                setPhoto={(newPic: string) =>
-                  setNewUpdates({ ...newUpdates, profilePic: newPic })
+                setPhoto={(picUrl: string) =>
+                  setNewUpdates({ ...newUpdates, profilePic: picUrl })
                 }
               />
               {newUpdates.profilePic && (

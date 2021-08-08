@@ -300,8 +300,8 @@ export default function AddCoffee() {
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader
-                setPhoto={(url: string) =>
-                  setNewCoffee({ ...newCoffee, coffeePic: url })
+                setPhoto={(picUrl: string) =>
+                  setNewCoffee({ ...newCoffee, coffeePic: picUrl })
                 }
               />
               {newCoffee.coffeePic && (

@@ -265,10 +265,10 @@ export default function EditCoffee() {
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
               <S3Uploader
-                setPhoto={(newUrl: string) =>
+                setPhoto={(picUrl: string) =>
                   dispatch({
                     type: ReduxActions.EDIT_INPUTS,
-                    payload: { key: 'coffeePic', change: newUrl },
+                    payload: { key: 'coffeePic', change: picUrl },
                   })
                 }
               />
