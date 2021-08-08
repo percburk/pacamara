@@ -18,7 +18,6 @@ import { Close } from '@material-ui/icons';
 import { UpdateProfileState } from '../../models/stateResource';
 
 interface Props {
-  newMethods: number[];
   newUpdates: UpdateProfileState;
   setNewUpdates: (newUpdates: UpdateProfileState) => void;
   defaultDialogOpen: boolean;
@@ -31,7 +30,6 @@ interface Props {
 // asking if they would like to set one of their owned brew methods as their
 // default, is then auto filled when adding new brew instances
 export default function DefaultMethodDialog({
-  newMethods,
   newUpdates,
   setNewUpdates,
   defaultDialogOpen,
@@ -85,7 +83,7 @@ export default function DefaultMethodDialog({
         </DialogContentText>
         <Box className={classes.root} display="flex" justifyContent="center">
           {methods.map((item) =>
-            newMethods.includes(item.id) ? (
+            newUpdates.methodsArray?.includes(item.id) ? (
               <Chip
                 key={item.id}
                 label={item.name}

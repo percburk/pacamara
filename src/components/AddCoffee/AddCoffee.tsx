@@ -97,10 +97,8 @@ export default function AddCoffee() {
   // Handles all text inputs, adds to local state object
   const handleNewCoffee =
     (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
-      setNewCoffee({
-        ...newCoffee,
-        [key]: event.target.value || event.target.checked,
-      });
+      const { value, checked } = event.target;
+      setNewCoffee({ ...newCoffee, [key]: value || checked });
     };
 
   // Formats the date chosen from MuiDatePicker using Luxon
@@ -109,11 +107,6 @@ export default function AddCoffee() {
       ...newCoffee,
       roastDate: date ? date.toLocaleString() : newCoffee.roastDate,
     });
-  };
-
-  // Handles setting the coffee pic url if S3Uploader is used
-  const handlePic = (url: string) => {
-    setNewCoffee({ ...newCoffee, coffeePic: url });
   };
 
   // Toggles adding and removing flavors for the coffee in local state array
@@ -128,21 +121,16 @@ export default function AddCoffee() {
 
   // Adds the new coffee to the database with input validation
   const handleSubmit = () => {
-    if (
-      newCoffee.roaster &&
-      (newCoffee.country || newCoffee.blendName) &&
-      newCoffee.flavorsArray[0]
-    ) {
+    const { roaster, country, blendName, flavorsArray } = newCoffee;
+    if (roaster && (country || blendName) && flavorsArray[0]) {
       dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
       dispatch({ type: SagaActions.ADD_COFFEE, payload: newCoffee });
       clearInputs();
       history.push('/dashboard');
     } else {
-      newCoffee.roaster ? setRoasterError(false) : setRoasterError(true);
-      newCoffee.country || newCoffee.blendName
-        ? setBlendCountryError(false)
-        : setBlendCountryError(true);
-      if (!newCoffee.flavorsArray[0]) {
+      setRoasterError(!!!roaster);
+      setBlendCountryError(!(country || blendName));
+      if (!flavorsArray[0]) {
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
       }
     }
@@ -311,7 +299,11 @@ export default function AddCoffee() {
           <Grid item xs={6}>
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
-              <S3Uploader setPhoto={handlePic} />
+              <S3Uploader
+                setPhoto={(url: string) =>
+                  setNewCoffee({ ...newCoffee, coffeePic: url })
+                }
+              />
               {newCoffee.coffeePic && (
                 <img
                   alt="coffee bag"

@@ -89,22 +89,16 @@ export default function UpdateProfile() {
   const [defaultDialogOpen, setDefaultDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [inputError, setInputError] = useState<boolean>(false);
-  const [newMethods, setNewMethods] = useState<number[]>(methodsArray || []);
-  const [newTds, setNewTds] = useState<number[]>([
-    tdsMin || 1.37,
-    tdsMax || 1.43,
-  ]);
-  const [newExt, setNewExt] = useState<number[]>([
-    extMin || 20,
-    extMax || 23.5,
-  ]);
-  const [newPic, setNewPic] = useState<string>(profilePic || '');
   const [newUpdates, setNewUpdates] = useState<UpdateProfileState>({
     name: name || '',
+    profilePic: profilePic || '',
     methodsDefaultId: methodsDefaultId || null,
     methodsDefaultLrr: methodsDefaultLrr || null,
     kettle: kettle || '',
     grinder: grinder || '',
+    methodsArray: methodsArray ?? [],
+    tdsRange: [tdsMin || 1.37, tdsMax || 1.43],
+    extRange: [extMin || 20, extMax || 23.5],
   });
 
   useEffect(() => {
@@ -113,23 +107,26 @@ export default function UpdateProfile() {
 
   // Handles toggling of methods being added to a user's profile
   const handleNewMethod = (methodId: number) => {
-    newMethods.includes(methodId)
-      ? setNewMethods(newMethods.filter((index) => index !== methodId))
-      : setNewMethods([...newMethods, methodId]);
+    setNewUpdates({
+      ...newUpdates,
+      methodsArray: newUpdates.methodsArray.includes(methodId)
+        ? newUpdates.methodsArray.filter((index) => index !== methodId)
+        : [...newUpdates.methodsArray, methodId],
+    });
   };
 
   // Curried function which handles all text inputs
   const handleNewUpdates =
-    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof UpdateProfileState) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
       setNewUpdates({ ...newUpdates, [key]: event.target.value });
     };
 
   // Curried function which handles both sliders on the page, tds and ext
   const handleSliders =
-    (moved: string) => (event: ChangeEvent<{}>, newVal: number[] | number) => {
-      moved === 'tds'
-        ? setNewTds(newVal as number[])
-        : setNewExt(newVal as number[]);
+    (moved: 'tdsRange' | 'extRange') =>
+    (event: ChangeEvent<{}>, newVal: number[] | number) => {
+      setNewUpdates({ ...newUpdates, [moved]: newVal as number[] });
     };
 
   // Submits any profile updates. This is a PUT route for both a new and
@@ -139,12 +136,10 @@ export default function UpdateProfile() {
       type: SagaActions.UPDATE_PROFILE,
       payload: {
         ...newUpdates,
-        tdsMin: newTds[0],
-        tdsMax: newTds[1],
-        extMin: newExt[0],
-        extMax: newExt[1],
-        methodsArray: newMethods,
-        profilePic: newPic,
+        tdsMin: newUpdates.tdsRange[0],
+        tdsMax: newUpdates.tdsRange[1],
+        extMin: newUpdates.extRange[0],
+        extMax: newUpdates.extRange[1],
       },
     });
     !name
@@ -158,14 +153,14 @@ export default function UpdateProfile() {
   // only one method which becomes their default, or get an error for not
   // entering the minimum amount of required info
   const handleDoneButton = () => {
-    if (newUpdates.name && newMethods[0]) {
-      if (newMethods.length === 1) {
+    if (newUpdates.name && newUpdates.methodsArray[0]) {
+      if (newUpdates.methodsArray.length === 1) {
         const methodLrr = methods.find(
-          (method) => method.id === newMethods[0]
+          (method) => method.id === newUpdates.methodsArray[0]
         )?.lrr;
         setNewUpdates({
           ...newUpdates,
-          methodsDefaultId: newMethods[0],
+          methodsDefaultId: newUpdates.methodsArray[0],
           methodsDefaultLrr: methodLrr ?? null,
         });
         handleSubmit();
@@ -174,7 +169,7 @@ export default function UpdateProfile() {
       }
     } else {
       setInputError(!newUpdates.name);
-      !newMethods[0] &&
+      !newUpdates.methodsArray[0] &&
         dispatch({ type: ReduxActions.SNACKBARS_METHODS_ERROR });
     }
   };
@@ -193,16 +188,16 @@ export default function UpdateProfile() {
   const clearInputs = () => {
     setDefaultDialogOpen(false);
     setCancelDialogOpen(false);
-    setNewTds([1.37, 1.43]);
-    setNewExt([20, 23]);
-    setNewMethods([]);
-    setNewPic('');
     setNewUpdates({
       name: '',
+      profilePic: '',
       methodsDefaultId: null,
       methodsDefaultLrr: null,
       kettle: '',
       grinder: '',
+      methodsArray: [],
+      tdsRange: [],
+      extRange: [],
     });
   };
 
@@ -253,7 +248,11 @@ export default function UpdateProfile() {
                   className={classes.chips}
                   key={method.id}
                   label={method.name}
-                  color={newMethods.includes(method.id) ? 'primary' : 'default'}
+                  color={
+                    newUpdates.methodsArray.includes(method.id)
+                      ? 'primary'
+                      : 'default'
+                  }
                   onClick={() => handleNewMethod(method.id)}
                 />
               ))}
@@ -264,17 +263,25 @@ export default function UpdateProfile() {
               Upload Profile photo:
             </Typography>
             <Box display="flex" paddingBottom={3}>
-              <S3Uploader setPhoto={setNewPic} />
-              {newPic && (
-                <img alt="profile" className={classes.media} src={newPic} />
+              <S3Uploader
+                setPhoto={(newPic: string) =>
+                  setNewUpdates({ ...newUpdates, profilePic: newPic })
+                }
+              />
+              {newUpdates.profilePic && (
+                <img
+                  alt="profile"
+                  className={classes.media}
+                  src={newUpdates.profilePic}
+                />
               )}
             </Box>
             <Box paddingTop={2} paddingBottom={2}>
               <Typography className={classes.label}>Set TDS Window:</Typography>
               <Slider
-                onChange={handleSliders('tds')}
+                onChange={handleSliders('tdsRange')}
                 valueLabelDisplay="on"
-                value={newTds}
+                value={newUpdates.tdsRange}
                 step={0.01}
                 min={1.3}
                 max={1.55}
@@ -285,9 +292,9 @@ export default function UpdateProfile() {
                 Set Extraction Window:
               </Typography>
               <Slider
-                onChange={handleSliders('ext')}
+                onChange={handleSliders('extRange')}
                 valueLabelDisplay="on"
-                value={newExt}
+                value={newUpdates.extRange}
                 step={0.1}
                 min={17}
                 max={25}
@@ -319,7 +326,6 @@ export default function UpdateProfile() {
         </Grid>
       </Box>
       <DefaultMethodDialog
-        newMethods={newMethods}
         newUpdates={newUpdates}
         setNewUpdates={setNewUpdates}
         defaultDialogOpen={defaultDialogOpen}

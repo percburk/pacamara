@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 
 export interface AddCoffeeState {
   roaster: string;
@@ -49,10 +49,14 @@ export interface FilterMenuOptions {
 
 export interface UpdateProfileState {
   name: string;
+  profilePic: string;
   methodsDefaultId: number | null;
   methodsDefaultLrr: number | null;
   kettle: string;
   grinder: string;
+  methodsArray: number[];
+  tdsRange: number[];
+  extRange: number[];
 }
 
 export interface TabPanelState {

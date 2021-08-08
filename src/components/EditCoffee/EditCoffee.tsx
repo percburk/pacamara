@@ -106,14 +106,6 @@ export default function EditCoffee() {
       });
     };
 
-  // Handles a new pic uploaded from S3Uploader
-  const handleEditPic = (newUrl: string) => {
-    dispatch({
-      type: ReduxActions.EDIT_INPUTS,
-      payload: { key: 'coffeePic', change: newUrl },
-    });
-  };
-
   // Formats the date using Luxon
   const handleEditDate = (date: MaterialUiPickersDate) => {
     dispatch({
@@ -130,9 +122,7 @@ export default function EditCoffee() {
       history.goBack();
     } else {
       setRoasterError(!!!roaster);
-      country || blendName
-        ? setBlendCountryError(false)
-        : setBlendCountryError(true);
+      setBlendCountryError(!(country || blendName));
       !flavorsArray[0] &&
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
     }
@@ -274,7 +264,14 @@ export default function EditCoffee() {
           <Grid item xs={6}>
             <Typography>Add a Photo:</Typography>
             <Box display="flex" py={2}>
-              <S3Uploader setPhoto={handleEditPic} />
+              <S3Uploader
+                setPhoto={(newUrl: string) =>
+                  dispatch({
+                    type: ReduxActions.EDIT_INPUTS,
+                    payload: { key: 'coffeePic', change: newUrl },
+                  })
+                }
+              />
               {coffeePic && (
                 <img
                   alt="coffee bag"

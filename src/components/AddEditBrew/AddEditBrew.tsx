@@ -100,7 +100,7 @@ export default function AddEditBrew({
 
   // Curried function to handle all text inputs in local state object
   const handleBrew =
-    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
       setBrew({ ...brew, [key]: event.target.value });
     };
 
