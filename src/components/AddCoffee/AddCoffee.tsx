@@ -75,7 +75,7 @@ export default function AddCoffee() {
   const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
   const [newCoffee, setNewCoffee] = useState<AddCoffeeState>({
     roaster: '',
-    roastDate: DateTime.local().toLocaleString(),
+    roastDate: DateTime.now(),
     isBlend: false,
     brewing: false,
     blendName: '',
@@ -158,7 +158,7 @@ export default function AddCoffee() {
   const clearInputs = () => {
     setNewCoffee({
       roaster: '',
-      roastDate: DateTime.local().toLocaleString(),
+      roastDate: DateTime.local(),
       isBlend: false,
       brewing: false,
       blendName: '',

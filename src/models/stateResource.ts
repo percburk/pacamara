@@ -1,6 +1,8 @@
+import { DateTime } from "luxon";
+
 export interface AddCoffeeState {
   roaster: string;
-  roastDate: string;
+  roastDate: string | DateTime | Date;
   isBlend: boolean;
   brewing: boolean;
   blendName: string;
