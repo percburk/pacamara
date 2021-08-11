@@ -1,10 +1,7 @@
 import express, { Express } from 'express';
-const app: Express = express();
 import bodyParser from 'body-parser';
-require('dotenv').config();
 import sessionMiddleware from './modules/sessionMiddleware';
 import passport from './strategies/userStrategy';
-
 // Route imports
 import userRouter from './routes/userRouter';
 import methodsRouter from './routes/methodsRouter';
@@ -14,6 +11,10 @@ import flavorsRouter from './routes/flavorsRouter';
 import brewsRouter from './routes/brewsRouter';
 import shareRouter from './routes/shareRouter';
 import s3Router from './routes/s3Router';
+// dotenv
+require('dotenv').config();
+// App instance
+const app: Express = express();
 
 // --- Middleware --- //
 app.use(bodyParser.json());

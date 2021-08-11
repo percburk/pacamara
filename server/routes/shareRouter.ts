@@ -1,9 +1,9 @@
+import camelcaseKeys from 'camelcase-keys';
 import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router: Router = express.Router();
-import camelcaseKeys from 'camelcase-keys';
 import { SharedCoffeeRequest } from '../models/requestResource';
+const router: Router = express.Router();
 
 // GET route for user list to share coffees with
 router.get(

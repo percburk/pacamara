@@ -1,8 +1,8 @@
+import camelcaseKeys from 'camelcase-keys';
 import express, { Request, Response, Router } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 const router: Router = express.Router();
-import camelcaseKeys from 'camelcase-keys';
 
 // GET route to grab all brew instances for a coffee
 router.get(

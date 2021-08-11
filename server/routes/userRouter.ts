@@ -1,11 +1,11 @@
-import express, { Express, Request, Response, Router } from 'express';
+import camelcaseKeys from 'camelcase-keys';
+import express, { Request, Response, Router } from 'express';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
 import userStrategy from '../strategies/userStrategy';
 const router: Router = express.Router();
-import camelcaseKeys from 'camelcase-keys';
 
 // GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
