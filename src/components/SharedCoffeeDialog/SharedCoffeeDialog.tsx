@@ -1,8 +1,4 @@
 import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
-import {
   Box,
   Dialog,
   DialogTitle,
@@ -17,11 +13,17 @@ import {
   Paper,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { SharedCoffees } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   avatar: {
     marginTop: theme.spacing(3),

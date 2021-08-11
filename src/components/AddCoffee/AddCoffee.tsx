@@ -1,9 +1,4 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
-import { AddCoffeeState } from '../../models/stateResource';
 import { useHistory } from 'react-router-dom';
 import LuxonUtils from '@date-io/luxon';
 import {
@@ -21,15 +16,22 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers/';
+// Hooks
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { AddCoffeeState } from '../../models/stateResource';
 import { DateTime } from 'luxon';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import Snackbars from '../Snackbars/Snackbars';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {

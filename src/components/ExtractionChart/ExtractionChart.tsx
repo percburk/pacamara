@@ -1,4 +1,3 @@
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 import {
   VictoryChart,
   VictoryScatter,
@@ -6,9 +5,14 @@ import {
   VictoryLabel,
 } from 'victory';
 import { ClickAwayListener } from '@material-ui/core';
+// Hooks
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+// Models
 import { BrewChartState } from '../../models/stateResource';
+// Components
 import RangePolygon from './RangePolygon';
 
+// Styling
 export const chartStyles = {
   scatter: {
     data: {

@@ -1,4 +1,6 @@
+// Models
 import { PolygonProps } from '../../models/customPropsResource';
+// Styling import
 import { chartStyles } from './ExtractionChart';
 
 // Custom component to display the user's TDS/Extraction window on the chart

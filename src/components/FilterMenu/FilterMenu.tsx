@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
+// Models
 import { FilterMenuOptions } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options

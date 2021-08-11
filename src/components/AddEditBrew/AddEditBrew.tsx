@@ -1,9 +1,5 @@
 import { useState, ChangeEvent } from 'react';
 import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
-import {
   Box,
   Dialog,
   DialogTitle,
@@ -20,12 +16,18 @@ import {
 } from '@material-ui/core';
 import { Add, ExpandLess, ExpandMore, Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { BrewState } from '../../models/stateResource';
 import { Brew } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {

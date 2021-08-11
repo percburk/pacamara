@@ -1,9 +1,11 @@
 import { useState, ChangeEvent } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
-import { UseStylesType } from '../LandingPage/LandingPage';
+// Hooks
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+// Models
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
+import { UseStylesType } from '../LandingPage/LandingPage';
 
 // LoginForm is displayed on LandingPage, handles login process
 export default function LoginForm({ classes }: { classes: UseStylesType }) {

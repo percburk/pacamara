@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
 import { useHistory } from 'react-router-dom';
 import {
   Menu,
@@ -16,12 +12,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Edit, Add, ViewModule } from '@material-ui/icons';
-// Components
-import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
+// Components
+import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   menu: {
     width: 300,

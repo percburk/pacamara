@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Menu, MenuItem } from '@material-ui/core';
+// Models
 import { SortState } from '../../models/stateResource';
 
 // Array of sort options

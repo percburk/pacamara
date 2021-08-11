@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 import { UseStylesReturnType } from '../UpdateProfile/UpdateProfile';
 import {
   Dialog,
@@ -15,6 +14,9 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
+// Hooks
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+// Models
 import { UpdateProfileState } from '../../models/stateResource';
 
 interface Props {

@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
-import {
   Collapse,
   MenuItem,
   Avatar,
@@ -12,12 +8,18 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
-// Imported components
-import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { SagaActions } from '../../models/redux/sagaResource';
 import { SharedCoffees } from '../../models/modelResource';
+// Components
+import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   small: {
     width: theme.spacing(3),

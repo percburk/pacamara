@@ -1,9 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -25,17 +21,23 @@ import {
   Add,
 } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
+import { BrewChartState } from '../../models/stateResource';
 // Components
 import BrewInstance from '../BrewInstance/BrewInstance';
 import EditDeleteShareMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
 import AddEditBrew from '../AddEditBrew/AddEditBrew';
 import Snackbars from '../Snackbars/Snackbars';
 import ExtractionChart from '../ExtractionChart/ExtractionChart';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
-import { BrewChartState } from '../../models/stateResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   media: {
     height: 350,

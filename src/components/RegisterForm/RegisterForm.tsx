@@ -1,6 +1,8 @@
 import { useState, ChangeEvent } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { Box, Typography, TextField, Button } from '@material-ui/core';
+// Hooks
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+// Models
 import { UseStylesType } from '../LandingPage/LandingPage';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';

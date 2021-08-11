@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
 import SwipeableViews from 'react-swipeable-views';
 import {
   Box,
@@ -15,24 +11,21 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+// Hooks
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../hooks/useAppDispatchSelector';
+// Models
+import { ReduxActions } from '../../models/redux/reduxResource';
+// CSS
+import './LandingPage.css';
 // Components
 import RegisterForm from '../RegisterForm/RegisterForm';
 import LoginForm from '../LoginForm/LoginForm';
-// CSS
-import './LandingPage.css';
-import { ReduxActions } from '../../models/redux/reduxResource';
-import { TabPanelState } from '../../models/stateResource';
+import TabPanel from './TabPanel';
 
-// TabPanel component to create swiping effect with SwipeableViews
-const TabPanel = ({ children, tab, index }: TabPanelState) => {
-  return (
-    <div role="tabpanel" hidden={tab !== index} id={`simple-tabpanel-${index}`}>
-      {tab === index && <>{children}</>}
-    </div>
-  );
-};
-
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 400,
@@ -46,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     width: 120,
   },
 }));
-export type UseStylesType = ReturnType<typeof useStyles>
+export type UseStylesType = ReturnType<typeof useStyles>;
 
 // LandingPage is the login and registration page
 export default function LandingPage() {

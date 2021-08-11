@@ -1,10 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
-import {
   Box,
   Typography,
   TextField,
@@ -14,16 +10,22 @@ import {
   Chip,
   Slider,
 } from '@material-ui/core';
+// Hooks
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../hooks/useAppDispatchSelector';
+// Models
+import { UpdateProfileState } from '../../models/stateResource';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader';
 import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog';
 import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog';
 import Snackbars from '../Snackbars/Snackbars';
-import { UpdateProfileState } from '../../models/stateResource';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {

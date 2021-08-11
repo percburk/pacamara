@@ -1,7 +1,3 @@
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import queryString from 'query-string';
@@ -25,13 +21,19 @@ import {
   LocalCafe,
   LocalCafeOutlined,
 } from '@material-ui/icons';
-// Components
-import EditDeleteShareCoffeeMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { CoffeeItem } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
+// Components
+import EditDeleteShareCoffeeMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 260,

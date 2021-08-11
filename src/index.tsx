@@ -8,7 +8,7 @@ import logger from 'redux-logger';
 import rootReducer from './redux/reducers/_rootReducer';
 // Imports all sagas, stored in _root.saga
 import rootSaga from './redux/sagas/_rootSaga';
-// Imports for redux store and sagas
+// Models
 import {
   InitialState,
   ReduxDispatch,

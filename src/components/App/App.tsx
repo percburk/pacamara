@@ -5,9 +5,13 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
-
+// Hooks
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+// Models
+import { SagaActions } from '../../models/redux/sagaResource';
+// CSS
+import './App.css';
 // Components
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
@@ -19,9 +23,6 @@ import EditCoffee from '../EditCoffee/EditCoffee';
 import LandingPage from '../LandingPage/LandingPage';
 import UpdateProfile from '../UpdateProfile/UpdateProfile';
 import muiTheme from '../muiTheme/muiTheme';
-// CSS
-import './App.css';
-import { SagaActions } from '../../models/redux/sagaResource';
 
 export default function App() {
   const dispatch = useAppDispatch();

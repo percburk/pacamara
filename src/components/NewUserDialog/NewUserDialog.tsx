@@ -10,7 +10,7 @@ import {
   DialogContentText,
 } from '@material-ui/core';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),

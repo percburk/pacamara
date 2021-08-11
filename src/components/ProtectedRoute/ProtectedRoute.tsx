@@ -1,6 +1,8 @@
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import LandingPage from '../LandingPage/LandingPage';
+// Hooks
 import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+// Components
+import LandingPage from '../LandingPage/LandingPage';
 
 /*
   A Custom Wrapper Component -- This will keep our code DRY.

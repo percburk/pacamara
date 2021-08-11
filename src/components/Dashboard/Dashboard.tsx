@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import { Box, Typography, makeStyles } from '@material-ui/core';
+// Hooks
 import {
   useAppSelector,
   useAppDispatch,
 } from '../../hooks/useAppDispatchSelector';
-import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import { Box, Typography, makeStyles } from '@material-ui/core';
+// Models
+import { SagaActions } from '../../models/redux/sagaResource';
+import { CoffeeItem } from '../../models/modelResource';
+import { SortState } from '../../models/stateResource';
 // Components
 import CoffeeCard from '../CoffeeCard/CoffeeCard';
 import Snackbars from '../Snackbars/Snackbars';
 import FilterMenu from '../FilterMenu/FilterMenu';
 import SortMenu from '../SortMenu/SortMenu';
 import NewUserDialog from '../NewUserDialog/NewUserDialog';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { CoffeeItem } from '../../models/modelResource';
-import { SortState } from '../../models/stateResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   sortFilter: {
     '& > *': {

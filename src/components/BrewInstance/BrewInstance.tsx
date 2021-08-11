@@ -1,8 +1,4 @@
 import { ChangeEvent } from 'react';
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
 import { DateTime } from 'luxon';
 import {
   Box,
@@ -24,12 +20,18 @@ import {
   ThumbDown,
   ThumbsUpDownOutlined,
 } from '@material-ui/icons';
-// Components
-import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { Brew } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
+// Components
+import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',

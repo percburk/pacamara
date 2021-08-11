@@ -1,4 +1,3 @@
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
 import { useHistory } from 'react-router-dom';
 import {
   Dialog,
@@ -9,9 +8,12 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
+// Hooks
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+// Models
 import { SagaActions } from '../../models/redux/sagaResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),

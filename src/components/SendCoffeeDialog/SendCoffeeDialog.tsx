@@ -1,9 +1,5 @@
 import { useState, ChangeEvent } from 'react';
 import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
-import {
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,10 +16,16 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 import { Close } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
+// Hooks
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../../hooks/useAppDispatchSelector';
+// Models
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),

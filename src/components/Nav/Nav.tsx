@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 import queryString from 'query-string';
 import {
   Typography,
@@ -13,11 +12,13 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
+// Hooks
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 // Components
 import AvatarMenu from '../AvatarMenu/AvatarMenu';
 import pacamaraLogo from '../../images/pacamara-logo.png';
 
-// Component styling classes
+// Styling
 const useStyles = makeStyles((theme) => ({
   logo: {
     width: 70,

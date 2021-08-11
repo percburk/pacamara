@@ -1,9 +1,11 @@
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+// Hooks
 import {
   useAppSelector,
   useAppDispatch,
 } from '../../hooks/useAppDispatchSelector';
-import { Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+// Models
 import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Snackbars displays any Snackbar alerts that have been dispatched by other

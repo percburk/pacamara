@@ -7,10 +7,11 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons';
+// Models
+import { Brew } from '../../models/modelResource';
 // Components
 import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
 import AddEditBrew from '../AddEditBrew/AddEditBrew';
-import { Brew } from '../../models/modelResource';
 
 // EditDeleteBrewMenu appears when the 'more' icon is clicked on a BrewInstance
 // accordion
