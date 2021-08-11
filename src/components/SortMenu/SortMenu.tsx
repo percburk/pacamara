@@ -3,7 +3,7 @@ import { Button, Menu, MenuItem } from '@material-ui/core';
 import { SortState } from '../../models/stateResource';
 
 // Array of sort options
-const sortArray = ['Date', 'Country', 'Producer', 'Roaster'];
+const sortOptions: SortState[] = ['date', 'country', 'producer', 'roaster'];
 
 interface Props {
   sort: SortState;
@@ -15,6 +15,10 @@ export default function SortMenu({ sort, setSort }: Props) {
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
   >(null);
+
+  // Capitalize sort option to display on menu
+  const uppercaseFirstLetter = (word: string) =>
+    word.slice(0, 1).toUpperCase() + word.slice(1);
 
   // Sets the Sort in local state on Dashboard
   const handleSort = (howToSort: SortState) => {
@@ -36,13 +40,13 @@ export default function SortMenu({ sort, setSort }: Props) {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        {sortArray.map((option) => (
+        {sortOptions.map((option) => (
           <MenuItem
             key={option}
-            onClick={() => handleSort(option.toLowerCase() as SortState)}
-            selected={sort === option.toLowerCase()}
+            onClick={() => handleSort(option)}
+            selected={sort === option}
           >
-            {option}
+            {uppercaseFirstLetter(option)}
           </MenuItem>
         ))}
       </Menu>

@@ -5,7 +5,7 @@ import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
 import { FilterMenuOptions } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
-const filtersArray: FilterMenuOptions[] = [
+const filterOptions: FilterMenuOptions[] = [
   { filterKey: 'isFav', display: 'Favorites' },
   { filterKey: 'brewing', display: 'Currently Brewing' },
   { filterKey: 'isBlend', display: 'Blends' },
@@ -41,12 +41,12 @@ export default function FilterMenu() {
 
   return (
     <>
-      {filtersArray.map((item, i) =>
-        filters?.includes(item.filterKey) ? (
+      {filterOptions.map((option) =>
+        filters?.includes(option.filterKey) ? (
           <Chip
-            key={i}
-            label={item.display}
-            onDelete={() => handleFilters(item.filterKey)}
+            key={option.filterKey}
+            label={option.display}
+            onDelete={() => handleFilters(option.filterKey)}
             color="primary"
           />
         ) : null
@@ -72,7 +72,7 @@ export default function FilterMenu() {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        {filtersArray.map((filter) => (
+        {filterOptions.map((filter) => (
           <MenuItem
             key={filter.filterKey}
             onClick={() => handleFilters(filter.filterKey)}
