@@ -106,7 +106,7 @@ export default function CoffeeDetails() {
   );
 
   // Toggle fav or brewing status of the coffee
-  const handleBrewOrFav = (change: string) => {
+  const handleBrewOrFav = (change: 'brew' | 'fav') => {
     dispatch({
       type: SagaActions.SET_BREWING_OR_FAV,
       payload: { oneCoffeeId: coffeeId, change },
