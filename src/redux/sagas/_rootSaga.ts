@@ -10,6 +10,7 @@ import updateProfileSaga from './updateProfileSaga';
 import brewsSaga from './brewsSaga';
 import coffeeSearchListSaga from './coffeeSearchListSaga';
 import shareSaga from './shareSaga';
+import dashboardSaga from './dashboardSaga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so the project can use them.
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     brewsSaga(), // Handles GET, PUT, and DELETE routes for brew instances
     coffeeSearchListSaga(), // Gets the list of pared down searchable info for coffees
     shareSaga(), // Handles all coffee-sharing related routes
+    dashboardSaga(), // Handles GET of all data the dashboard requires on login
   ]);
 }
 

@@ -45,16 +45,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    // Fetches list of users that is searchable when sending a shared coffee
-    dispatch({ type: SagaActions.FETCH_SHARING_USER_LIST });
-    // Fetches list of all coffees, or those that match the query in 'q'
-    dispatch({ type: SagaActions.FETCH_COFFEES, payload: q });
-    // Fetch list of flavor palette entries from the database
-    dispatch({ type: SagaActions.FETCH_FLAVORS });
-    // Checks if the user has any shared coffees to show on AvatarMenu
-    dispatch({ type: SagaActions.FETCH_SHARED_COFFEES });
-    // Fetches pared down list of coffees that can be searched in bar on Nav
-    dispatch({ type: SagaActions.FETCH_COFFEE_SEARCH_LIST });
+    dispatch({ type: SagaActions.FETCH_DASHBOARD, payload: q });
   }, [dispatch, q]);
 
   // Puts coffees array through any sort or filters set in state

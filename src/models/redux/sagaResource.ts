@@ -22,6 +22,8 @@ export type SagaGeneratorReturn<T, U = void> = Generator<
 >;
 
 export enum SagaActions {
+  // Data for dashboard
+  FETCH_DASHBOARD = 'FETCH_DASHBOARD',
   // Brews
   FETCH_BREWS = 'FETCH_BREWS',
   DELETE_BREW = 'DELETE_BREW',
