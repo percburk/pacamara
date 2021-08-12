@@ -11,8 +11,6 @@ import flavorsRouter from './routes/flavorsRouter';
 import brewsRouter from './routes/brewsRouter';
 import shareRouter from './routes/shareRouter';
 import s3Router from './routes/s3Router';
-// dotenv
-require('dotenv').config();
 // App instance
 const app: Express = express();
 

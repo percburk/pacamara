@@ -33,7 +33,7 @@
   },
   "scripts": {
     "<-- Deployment -->": "",
-    "start": "node server/server.ts",
+    "start": "node -r dotenv/config server/server.ts",
     "<-- React Client-Side -->": "",
     "client": "react-scripts start",
     "build": "react-scripts build",
@@ -41,8 +41,8 @@
     "eject": "react-scripts eject",
     "<-- TS for Server -->": "",
     "server": "nodemon -e ts --ignore './dist' -x npm run server:ts",
-    "server:ts": "tsc -p tsconfig.json && node dist/server/server.js",
-    "tsc": "tsc -p tsconfig.json"
+    "server:ts": "tsc -p base.tsconfig.json && node -r dotenv/config dist/server/server.js",
+    "tsc": "tsc -p base.tsconfig.json"
   },
   "devDependencies": {
     "@date-io/luxon": "^1.3.13",
