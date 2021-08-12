@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
 // Models
-import { FilterMenuOptions } from '../../models/stateResource';
+import { FilterMenuOptions, FilterKeys } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
 const filterOptions: FilterMenuOptions[] = [
@@ -26,7 +26,7 @@ export default function FilterMenu() {
   });
 
   // Sets the new URL to add/remove entries to the filters array on Dashboard
-  const handleFilters = (clickedFilter: string) => {
+  const handleFilters = (clickedFilter: FilterKeys) => {
     const newFiltersArray = !filters
       ? [clickedFilter]
       : filters.includes(clickedFilter)

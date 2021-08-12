@@ -1,4 +1,5 @@
 {
+  "<-- Overrides CRA rewrite of tsconfig.json -->": "",
   "extends": "./tsconfig",
   "compilerOptions": {
     "module": "commonJs",
