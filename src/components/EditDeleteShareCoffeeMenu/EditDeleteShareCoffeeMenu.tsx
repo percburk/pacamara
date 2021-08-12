@@ -11,6 +11,8 @@ import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons';
 // Components
 import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
 import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 interface Props {
   id: number;
@@ -25,6 +27,7 @@ export default function EditDeleteShareCoffeeMenu({
   coffeeName,
   pic,
 }: Props) {
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [sendDialogOpen, setSendDialogOpen] = useState<boolean>(false);
@@ -59,6 +62,7 @@ export default function EditDeleteShareCoffeeMenu({
           onClick={() => {
             setAnchorEl(null);
             history.push(`/edit-coffee/${id}`);
+            dispatch({ type: ReduxActions.CLEAR_ONE_COFFEE });
           }}
         >
           <ListItemIcon>

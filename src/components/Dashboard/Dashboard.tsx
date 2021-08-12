@@ -9,6 +9,7 @@ import {
 } from '../../hooks/useAppDispatchSelector';
 // Models
 import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 import { CoffeeItem } from '../../models/modelResource';
 import { SortState } from '../../models/stateResource';
 // Components
@@ -46,6 +47,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch({ type: SagaActions.FETCH_DASHBOARD, payload: q });
+    dispatch({ type: ReduxActions.CLEAR_ONE_COFFEE });
   }, [dispatch, q]);
 
   // Puts coffees array through any sort or filters set in state
