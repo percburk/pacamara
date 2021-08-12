@@ -60,7 +60,6 @@ export default function ExtractionChart({
 
   // Toggles the chart between showing all the brews, and one clicked brew
   const handleSwitchChart = ({ x, y, i }: BrewChartState) => {
-    console.log(x, y, i);
     setOneBrew({ x, y, i });
     setSwitchChart(!switchChart);
   };
