@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import sessionMiddleware from './modules/sessionMiddleware';
 import passport from './strategies/userStrategy';
@@ -12,7 +12,7 @@ import brewsRouter from './routes/brewsRouter';
 import shareRouter from './routes/shareRouter';
 import s3Router from './routes/s3Router';
 // App instance
-const app: Express = express();
+const app = express();
 
 // --- Middleware --- //
 app.use(bodyParser.json());

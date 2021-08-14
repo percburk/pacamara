@@ -100,14 +100,14 @@ export default function AddCoffee() {
   const handleNewCoffee =
     (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
-      setNewCoffee({ ...newCoffee, [key]: value || checked });
+      setNewCoffee({ ...newCoffee, [key]: value ?? checked });
     };
 
   // Formats the date chosen from MuiDatePicker using Luxon
   const handleRoastDate = (date: MaterialUiPickersDate) => {
     setNewCoffee({
       ...newCoffee,
-      roastDate: date ? date.toLocaleString() : newCoffee.roastDate,
+      roastDate: (date as DateTime).toLocaleString(),
     });
   };
 
@@ -173,13 +173,13 @@ export default function AddCoffee() {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <TextField
+              className={classes.textInputs}
               required
+              fullWidth
               error={roasterError}
               helperText={roasterError && 'Please enter a roaster.'}
               label="Roaster"
               variant="outlined"
-              className={classes.textInputs}
-              fullWidth
               onChange={handleNewCoffee('roaster')}
               value={newCoffee.roaster}
             />
@@ -188,13 +188,13 @@ export default function AddCoffee() {
                 <Grid item>Single Origin</Grid>
                 <Grid item>
                   <Switch
-                    checked={newCoffee.isBlend}
-                    onChange={handleNewCoffee('isBlend')}
-                    color="primary"
                     classes={{
                       track: classes.singleOriginBlendSwitchTrack,
                       switchBase: classes.singleOriginBlendSwitchBase,
                     }}
+                    checked={newCoffee.isBlend}
+                    onChange={handleNewCoffee('isBlend')}
+                    color="primary"
                   />
                 </Grid>
                 <Grid item>Blend</Grid>
@@ -211,8 +211,11 @@ export default function AddCoffee() {
               </Grid>
             </Box>
             <TextField
+              className={classes.textInputs}
               required
+              fullWidth
               error={blendCountryError}
+              variant="outlined"
               helperText={
                 blendCountryError &&
                 (newCoffee.isBlend
@@ -220,9 +223,6 @@ export default function AddCoffee() {
                   : 'Please enter the country of origin.')
               }
               label={newCoffee.isBlend ? 'Blend Name' : 'Country'}
-              variant="outlined"
-              className={classes.textInputs}
-              fullWidth
               onChange={
                 newCoffee.isBlend
                   ? handleNewCoffee('blendName')
@@ -233,38 +233,38 @@ export default function AddCoffee() {
               }
             />
             <TextField
+              className={classes.textInputs}
               label="Producer"
               variant="outlined"
-              className={classes.textInputs}
               fullWidth
               onChange={handleNewCoffee('producer')}
               value={newCoffee.producer}
               disabled={newCoffee.isBlend}
             />
             <TextField
+              className={classes.textInputs}
               label="Region"
               variant="outlined"
-              className={classes.textInputs}
               fullWidth
               onChange={handleNewCoffee('region')}
               value={newCoffee.region}
               disabled={newCoffee.isBlend}
             />
             <TextField
+              className={classes.textInputs}
               label="Cultivars"
               variant="outlined"
-              className={classes.textInputs}
               fullWidth
               onChange={handleNewCoffee('cultivars')}
               value={newCoffee.cultivars}
               disabled={newCoffee.isBlend}
             />
             <TextField
+              className={classes.textInputs}
               label="Processing"
               variant="outlined"
               fullWidth
               onChange={handleNewCoffee('processing')}
-              className={classes.textInputs}
               value={newCoffee.processing}
               disabled={newCoffee.isBlend}
             />
@@ -318,8 +318,8 @@ export default function AddCoffee() {
             <Box className={classes.root} display="flex" flexWrap="wrap" py={2}>
               {flavors.map((flavor) => (
                 <Chip
-                  className={classes.chips}
                   key={flavor.id}
+                  className={classes.chips}
                   label={flavor.name}
                   color={
                     newCoffee.flavorsArray.includes(flavor.id)
@@ -331,19 +331,19 @@ export default function AddCoffee() {
               ))}
             </Box>
             <TextField
+              className={classes.textInputs}
               label="Tasting Notes"
               variant="outlined"
               fullWidth
-              className={classes.textInputs}
               multiline
               rows={6}
               onChange={handleNewCoffee('notes')}
               value={newCoffee.notes}
             />
             <Box
+              className={classes.root}
               display="flex"
               justifyContent="center"
-              className={classes.root}
               py={2}
             >
               <Button
