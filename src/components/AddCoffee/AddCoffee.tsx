@@ -138,7 +138,7 @@ export default function AddCoffee() {
     }
   };
 
-  // Clears all local state data and sends user back to their dashboard
+  // Clears all local state data and sends user back to the previous page
   const handleCancel = () => {
     dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
     clearInputs();

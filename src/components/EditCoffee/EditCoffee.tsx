@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import LuxonUtils from '@date-io/luxon';
 import {
   Box,
@@ -23,6 +22,7 @@ import {
   useAppDispatch,
 } from '../../hooks/useAppDispatchSelector';
 // Models
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 // Components
@@ -104,7 +104,7 @@ export default function EditCoffee() {
       const { value, checked } = event.target;
       dispatch({
         type: ReduxActions.EDIT_INPUTS,
-        payload: { key, change: value || checked },
+        payload: { key, change: value ?? checked },
       });
     };
 

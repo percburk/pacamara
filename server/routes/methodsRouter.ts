@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET route for list of methods
 router.get('/', (req: Request, res: Response): void => {

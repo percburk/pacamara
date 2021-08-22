@@ -1,9 +1,9 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 import camelcaseKeys from 'camelcase-keys';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
@@ -66,10 +66,9 @@ router.get(
     // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
     // Outer single quotes get added when the query is sanitized using $1
     // Also need to remove any '& ' characters already present for to_tsvector
-    const parsedQuery =
-      typeof q === 'string'
-        ? `"${q.replace('& ', '').replace(/\s/g, '&')}":*`
-        : null;
+    const parsedQuery = `"${(q as string)
+      .replace('& ', '')
+      .replace(/\s/g, '&')}":*`;
 
     pool
       .query(sqlText, [parsedQuery, req.user?.id])
@@ -100,7 +99,7 @@ router.get(
 
     pool
       .query(sqlText, [req.user?.id])
-      .then((result) => res.send(camelcaseKeys(result.rows, { deep: true })))
+      .then((result) => res.send(camelcaseKeys(result.rows)))
       .catch((err) => {
         console.log(`Error in GET with query: ${sqlText}`, err);
         res.sendStatus(500);
@@ -174,7 +173,7 @@ router.post(
       // Build SQL query for each new entry in flavors_array
       const sqlValues = req.body.flavorsArray
         .reduce(
-          (valString: string, val: number, i: number) =>
+          (valString: string, _: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
           ''
         )

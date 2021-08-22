@@ -1,8 +1,8 @@
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET route to grab all brew instances for a coffee
 router.get(
@@ -42,9 +42,10 @@ router.post(
         "ext", 
         "water_temp", 
         "time", 
-        "lrr"
+        "lrr".
+        "date"
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW());
     `;
 
     pool
@@ -90,8 +91,7 @@ router.put(
         "ext" = $10, 
         "water_temp" = $11, 
         "time" = $12, 
-        "lrr" = $13,
-        "date" = NOW()
+        "lrr" = $13
       WHERE "id" = $14;
     `;
 

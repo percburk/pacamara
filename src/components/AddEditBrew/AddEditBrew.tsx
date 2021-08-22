@@ -23,7 +23,7 @@ import {
 } from '../../hooks/useAppDispatchSelector';
 // Models
 import { BrewState } from '../../models/stateResource';
-import { Brew } from '../../models/modelResource';
+import { Brew, Methods } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 
@@ -121,8 +121,8 @@ export default function AddEditBrew({
       : '';
 
   // This adds whatever method was used for the brew into the local state object
-  const handleMethod = (id: number, i: number) => {
-    setBrew({ ...brew, methodsId: id, lrr: methods[i].lrr });
+  const handleMethod = (method: Methods) => {
+    setBrew({ ...brew, methodsId: method.id, lrr: method.lrr });
   };
 
   // Sends the new brew instance to the database
@@ -242,14 +242,14 @@ export default function AddEditBrew({
         <Box className={classes.root}>
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
-            {methods.map((item, i) =>
-              methodsArray.includes(item.id) ? (
+            {methods.map((method) =>
+              methodsArray.includes(method.id) ? (
                 <Chip
                   className={classes.chips}
-                  key={item.id}
-                  label={item.name}
-                  color={item.id === brew.methodsId ? 'primary' : 'default'}
-                  onClick={() => handleMethod(item.id, i)}
+                  key={method.id}
+                  label={method.name}
+                  color={method.id === brew.methodsId ? 'primary' : 'default'}
+                  onClick={() => handleMethod(method)}
                 />
               ) : null
             )}

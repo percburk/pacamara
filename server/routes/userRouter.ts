@@ -1,11 +1,11 @@
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
 import userStrategy from '../strategies/userStrategy';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
@@ -119,7 +119,7 @@ router.put(
       // into users_methods
       let sqlValues = req.body.methodsArray
         .reduce(
-          (valString: string, val: number, i: number) =>
+          (valString: string, _: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
           ''
         )

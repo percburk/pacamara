@@ -1,9 +1,9 @@
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET route for one coffee for CoffeeDetails
 router.get(
@@ -107,8 +107,8 @@ router.put(
       // Query #2
       // Deleting old entries in coffees_flavors
       const deleteFlavorsSqlText = `
-      DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
-    `;
+        DELETE FROM "coffees_flavors" WHERE "coffees_id" = $1;
+      `;
 
       await connection.query(deleteFlavorsSqlText, [req.body.id]);
 
@@ -117,7 +117,7 @@ router.put(
       // Build SQL query for each new entry in flavors_array
       let sqlValues = req.body.flavorsArray
         .reduce(
-          (valString: string, val: number, i: number) =>
+          (valString: string, _: number, i: number) =>
             (valString += `($1, $${i + 2}),`),
           ''
         )

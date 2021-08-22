@@ -1,6 +1,6 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
-const router: Router = express.Router();
+const router = express.Router();
 
 // GET route for list of flavors, displayed as Chips throughout the app
 router.get('/', (req: Request, res: Response): void => {
