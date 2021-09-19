@@ -144,9 +144,11 @@ export default function UpdateProfile() {
         extMax: newUpdates.extRange[1],
       },
     });
-    !name
-      ? dispatch({ type: ReduxActions.SNACKBARS_CREATED_PROFILE })
-      : dispatch({ type: ReduxActions.SNACKBARS_UPDATED_PROFILE });
+    dispatch({
+      type: !name
+        ? ReduxActions.SNACKBARS_CREATED_PROFILE
+        : ReduxActions.SNACKBARS_UPDATED_PROFILE,
+    });
     clearInputs();
     history.push('/dashboard');
   };

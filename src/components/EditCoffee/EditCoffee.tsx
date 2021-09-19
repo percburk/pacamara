@@ -23,6 +23,7 @@ import {
 } from '../../hooks/useAppDispatchSelector';
 // Models
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { CoffeeItem } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
 // Components
@@ -100,7 +101,7 @@ export default function EditCoffee() {
 
   // Handles all text input edits
   const handleEditInputs =
-    (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof CoffeeItem) => (event: ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
       dispatch({
         type: ReduxActions.EDIT_INPUTS,
