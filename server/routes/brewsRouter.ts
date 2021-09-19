@@ -42,7 +42,7 @@ router.post(
         "ext", 
         "water_temp", 
         "time", 
-        "lrr".
+        "lrr",
         "date"
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW());
@@ -122,7 +122,7 @@ router.put(
 
 // PUT route to change the status of 'liked' on a brew instance
 // Can be 'yes', 'no', or 'none'
-router.put('/like/:id', (req: Request, res: Response): void => {
+router.patch('/like/:id', (req: Request, res: Response): void => {
   const { change } = req.body;
   const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 

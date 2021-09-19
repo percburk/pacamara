@@ -83,7 +83,7 @@ export default function Nav() {
   // Sets the search string in state, toggles the Autocomplete list showing
   const handleSearchBar = (event: ChangeEvent<{}>, newValue: string) => {
     setSearchInput(newValue);
-    newValue.length > 0 ? setAutoOpen(true) : setAutoOpen(false);
+    setAutoOpen(newValue.length > 0);
   };
 
   // Sends search query, Dashboard picks up the URL change in UseEffect and
