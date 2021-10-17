@@ -100,7 +100,12 @@ export default function AddCoffee() {
   const handleNewCoffee =
     (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
       const { value, checked } = event.target;
-      setNewCoffee({ ...newCoffee, [key]: value ?? checked });
+      const switchKeys = ['isBlend', 'brewing'];
+
+      setNewCoffee({
+        ...newCoffee,
+        [key]: switchKeys.includes(key) ? checked : value,
+      });
     };
 
   // Formats the date chosen from MuiDatePicker using Luxon

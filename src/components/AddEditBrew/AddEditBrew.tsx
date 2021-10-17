@@ -103,7 +103,8 @@ export default function AddEditBrew({
   // Curried function to handle all text inputs in local state object
   const handleBrew =
     (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
-      setBrew({ ...brew, [key]: event.target.value });
+      const { value } = event.target;
+      setBrew({ ...brew, [key]: key === 'time' ? value : Number(value) });
     };
 
   // This is the math to calculate the Extraction %, result is rendered
