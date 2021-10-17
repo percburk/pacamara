@@ -1,8 +1,5 @@
 import { Snackbar } from '../../models/modelResource';
-import {
-  ReduxActions,
-  ReduxDispatch,
-} from '../../models/redux/reduxResource';
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
 
 const initialState: Snackbar = { string: '', open: false, severity: undefined };
 
@@ -14,9 +11,17 @@ const snackbarsReducer = (
 ): Snackbar => {
   switch (action.type) {
     case ReduxActions.SNACKBARS_CREATED_PROFILE:
-      return { string: 'New Profile Created', open: true, severity: 'success' };
-    case 'SNACKBARS_UPDATED_PROFILE':
-      return { string: 'Profile Updated', open: true, severity: 'info' };
+      return {
+        string: 'New Profile Created',
+        open: true,
+        severity: 'success',
+      };
+    case ReduxActions.SNACKBARS_UPDATED_PROFILE:
+      return {
+        string: 'Profile Updated',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_METHODS_ERROR:
       return {
         string: 'Please select at least one brew method',
@@ -30,21 +35,53 @@ const snackbarsReducer = (
         severity: 'error',
       };
     case ReduxActions.SNACKBARS_ADDED_COFFEE:
-      return { string: 'New Coffee Added', open: true, severity: 'success' };
+      return {
+        string: 'New Coffee Added',
+        open: true,
+        severity: 'success',
+      };
     case ReduxActions.SNACKBARS_EDITED_COFFEE:
-      return { string: 'Coffee Updated', open: true, severity: 'info' };
+      return {
+        string: 'Coffee Updated',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_DELETED_COFFEE:
-      return { string: 'Coffee Deleted', open: true, severity: 'info' };
+      return {
+        string: 'Coffee Deleted',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_ADDED_BREW:
-      return { string: 'New Brew Added', open: true, severity: 'success' };
+      return {
+        string: 'New Brew Added',
+        open: true,
+        severity: 'success',
+      };
     case ReduxActions.SNACKBARS_EDITED_BREW:
-      return { string: 'Brew Edited', open: true, severity: 'info' };
+      return {
+        string: 'Brew Edited',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_DELETED_BREW:
-      return { string: 'Brew Deleted', open: true, severity: 'info' };
+      return {
+        string: 'Brew Deleted',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_SENT_SHARED_COFFEE:
-      return { string: 'Coffee Sent', open: true, severity: 'success' };
+      return {
+        string: 'Coffee Sent',
+        open: true,
+        severity: 'success',
+      };
     case ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE:
-      return { string: 'Shared Coffee Declined', open: true, severity: 'info' };
+      return {
+        string: 'Shared Coffee Declined',
+        open: true,
+        severity: 'info',
+      };
     case ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE:
       return {
         string: 'Coffee Added to your Dashboard',

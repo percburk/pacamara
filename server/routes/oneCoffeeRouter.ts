@@ -136,8 +136,7 @@ router.put(
       // Query #4
       // Update brewing status of the edited coffee
       const updateBrewingSqlText = `
-        UPDATE "users_coffees" SET "brewing" = $1
-        WHERE "coffees_id" = $2;
+        UPDATE "users_coffees" SET "brewing" = $1 WHERE "coffees_id" = $2;
       `;
 
       await connection.query(updateBrewingSqlText, [

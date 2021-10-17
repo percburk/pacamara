@@ -229,9 +229,10 @@ router.delete(
       // Check to see if this coffee is shared. If not, delete it from db
       const deleteCoffeeSqlText = `
         DELETE FROM "coffees"  
-        WHERE NOT EXISTS 
-          (SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1)
-        AND "coffees".id = $1;
+        WHERE NOT EXISTS (
+          SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1
+          ) 
+          AND "coffees".id = $1;
       `;
       await connection.query(deleteCoffeeSqlText, [req.params.id]);
 
