@@ -58,9 +58,3 @@ export interface UpdateProfileState {
   tdsRange: number[];
   extRange: number[];
 }
-
-export interface TabPanelState {
-  children: JSX.Element;
-  tab: number;
-  index: number;
-}

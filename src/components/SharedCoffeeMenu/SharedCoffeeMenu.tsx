@@ -75,7 +75,7 @@ export default function SharedCoffeeMenu({
               }}
             >
               <Avatar className={classes.small} src={shared.profilePic}>
-                {shared.username.charAt(0)}
+                {shared.username?.[0]}
               </Avatar>
               <Box>
                 <Typography>{shared.username}</Typography>

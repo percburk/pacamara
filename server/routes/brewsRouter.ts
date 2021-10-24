@@ -78,8 +78,8 @@ router.put(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      UPDATE "brews" SET
-        "coffees_id" = $1, 
+      UPDATE "brews" 
+      SET "coffees_id" = $1, 
         "methods_id" = $2, 
         "water_dose" = $3, 
         "coffee_dose" = $4, 

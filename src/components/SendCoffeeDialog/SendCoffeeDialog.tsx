@@ -98,9 +98,9 @@ export default function SendCoffeeDialog({
       dispatch({
         type: SagaActions.SEND_SHARED_COFFEE,
         payload: {
-          recipient_id: match,
-          coffees_id: id,
-          coffee_name: coffeeName,
+          recipientId: match,
+          coffeesId: id,
+          coffeeName: coffeeName,
           message: shareMessage,
         },
       });

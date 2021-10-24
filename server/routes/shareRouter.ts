@@ -2,7 +2,6 @@ import camelcaseKeys from 'camelcase-keys';
 import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-import { SharedCoffeeRequest } from '../models/requestResource';
 const router = express.Router();
 
 // GET route for user list to share coffees with
@@ -64,8 +63,7 @@ router.get(
 
 // POST route to share a coffee with another user
 router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
-  const { recipientId, coffeesId, coffeeName, message }: SharedCoffeeRequest =
-    req.body;
+  const { recipientId, coffeesId, coffeeName, message } = req.body;
 
   const sqlText = `
     INSERT INTO "shared_coffees" (
@@ -79,6 +77,15 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7);
   `;
+  console.log(
+    req.user?.id,
+    req.user?.username,
+    req.user?.profilePic,
+    recipientId,
+    coffeesId,
+    coffeeName,
+    message
+  );
 
   pool
     .query(sqlText, [
@@ -99,10 +106,7 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
 
 // POST route to add a shared coffee to the user's dashboard
 router.post('/add', (req: Request, res: Response): void => {
-  const {
-    coffees_id,
-    shared_by_id,
-  }: { coffees_id: number; shared_by_id: number } = req.body;
+  const { coffees_id, shared_by_id } = req.body;
 
   const sqlText = `
     INSERT INTO "users_coffees" ("users_id", "coffees_id", "shared_by_id") 
