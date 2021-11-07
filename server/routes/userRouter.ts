@@ -19,7 +19,9 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      SELECT ARRAY_AGG("methods_id") FROM "users_methods" WHERE "users_id" = $1;
+      SELECT ARRAY_AGG("methods_id") 
+      FROM "users_methods" 
+      WHERE "users_id" = $1;
     `;
 
     pool
@@ -84,15 +86,15 @@ router.put(
       const updateSqlText = `
       UPDATE "users" 
       SET "name" = $1, 
-        "profile_pic" = $2, 
-        "methods_default_id" = $3, 
-        "methods_default_lrr" = $4, 
-        "kettle" = $5, 
-        "grinder" = $6, 
-        "tds_min" = $7, 
-        "tds_max" = $8, 
-        "ext_min" = $9, 
-        "ext_max" = $10 
+          "profile_pic" = $2, 
+          "methods_default_id" = $3, 
+          "methods_default_lrr" = $4, 
+          "kettle" = $5, 
+          "grinder" = $6, 
+          "tds_min" = $7, 
+          "tds_max" = $8, 
+          "ext_min" = $9, 
+          "ext_max" = $10 
       WHERE "id" = $11;
     `;
       await connection.query(updateSqlText, [
@@ -111,7 +113,8 @@ router.put(
 
       // Query #2 - deleting old entries in users_methods
       const deleteSqlText = `
-        DELETE FROM "users_methods" WHERE "users_id" = $1;
+        DELETE FROM "users_methods" 
+        WHERE "users_id" = $1;
       `;
       await connection.query(deleteSqlText, [req.user?.id]);
 
@@ -126,9 +129,9 @@ router.put(
         .slice(0, -1); // Takes off last comma
 
       const methodsSqlText = `
-      INSERT INTO "users_methods" ("users_id", "methods_id")
-      VALUES ${sqlValues};
-    `;
+        INSERT INTO "users_methods" ("users_id", "methods_id")
+        VALUES ${sqlValues};
+      `;
       await connection.query(methodsSqlText, [
         req.user?.id,
         ...req.body.methodsArray,

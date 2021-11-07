@@ -9,18 +9,18 @@ const router = express.Router();
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
   const sqlText = `
     SELECT "coffees".*, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing, 
-      "users_coffees".shared_by_id,
-      ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+           "users_coffees".is_fav, 
+           "users_coffees".brewing, 
+           "users_coffees".shared_by_id,
+           ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
     FROM "coffees_flavors"
-    RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-    JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
+        RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+        JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
     WHERE "users_coffees".users_id = $1
     GROUP BY "coffees".id, 
-      "users_coffees".is_fav, 
-      "users_coffees".brewing,
-      "users_coffees".shared_by_id
+             "users_coffees".is_fav, 
+             "users_coffees".brewing,
+             "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `;
 
@@ -42,24 +42,26 @@ router.get(
 
     const sqlText = `
       SELECT "coffees".*, 
-        "users_coffees".is_fav, 
-        "users_coffees".brewing,
-        "users_coffees".shared_by_id,
-        ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
+             "users_coffees".is_fav, 
+             "users_coffees".brewing,
+             "users_coffees".shared_by_id,
+             ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array" 
       FROM "coffees_flavors"
-      RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-      JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
-      WHERE to_tsvector(CONCAT_WS(' ', 
-        "coffees".roaster, 
-        "coffees".country, 
-        "coffees".producer, 
-        "coffees".blend_name
-      ))
-      @@ to_tsquery($1) AND "users_coffees".users_id = $2
+          RIGHT JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+          JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id 
+      WHERE to_tsvector(CONCAT_WS(
+              ' ', 
+              "coffees".roaster, 
+              "coffees".country, 
+              "coffees".producer, 
+              "coffees".blend_name
+          ))
+          @@ to_tsquery($1) 
+          AND "users_coffees".users_id = $2
       GROUP BY "coffees".id, 
-        "users_coffees".is_fav, 
-        "users_coffees".brewing,
-        "users_coffees".shared_by_id
+               "users_coffees".is_fav, 
+               "users_coffees".brewing,
+               "users_coffees".shared_by_id
       ORDER BY "coffees".date DESC;
     `;
 
@@ -87,12 +89,12 @@ router.get(
   (req: Request, res: Response): void => {
     const sqlText = `
       SELECT "coffees".country, 
-        "coffees".producer, 
-        "coffees".roaster, 
-        "coffees".blend_name, 
-        "users_coffees".users_id 
+             "coffees".producer, 
+             "coffees".roaster, 
+             "coffees".blend_name, 
+             "users_coffees".users_id 
       FROM "coffees"
-      JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
+          JOIN "users_coffees" ON "users_coffees".coffees_id = "coffees".id
       WHERE "users_coffees".users_id = $1 
       ORDER BY "coffees".date DESC;
     `;
@@ -121,18 +123,18 @@ router.post(
       // Create new coffee entry in "coffees", return ID for flavors
       const newCoffeeSqlText = `
         INSERT INTO "coffees" (
-          "roaster", 
-          "roast_date", 
-          "is_blend", 
-          "blend_name", 
-          "country", 
-          "producer", 
-          "region", 
-          "elevation", 
-          "cultivars", 
-          "processing", 
-          "notes", 
-          "coffee_pic"
+            "roaster", 
+            "roast_date", 
+            "is_blend", 
+            "blend_name", 
+            "country", 
+            "producer", 
+            "region", 
+            "elevation", 
+            "cultivars", 
+            "processing", 
+            "notes", 
+            "coffee_pic"
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         RETURNING "id";
@@ -218,7 +220,8 @@ router.delete(
       // Query #1
       // Delete entry from users_coffees to delete coffee from user's dashboard
       const deleteUsersCoffeesEntrySqlText = `
-        DELETE FROM "users_coffees" WHERE "users_id" = $1 AND "coffees_id" = $2;
+        DELETE FROM "users_coffees" 
+        WHERE "users_id" = $1 AND "coffees_id" = $2;
       `;
       await connection.query(deleteUsersCoffeesEntrySqlText, [
         req.user?.id,
@@ -230,9 +233,9 @@ router.delete(
       const deleteCoffeeSqlText = `
         DELETE FROM "coffees"  
         WHERE NOT EXISTS (
-          SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1
-          ) 
-          AND "coffees".id = $1;
+                SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1
+            ) 
+            AND "coffees".id = $1;
       `;
       await connection.query(deleteCoffeeSqlText, [req.params.id]);
 

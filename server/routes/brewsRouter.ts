@@ -10,7 +10,9 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      SELECT * FROM "brews" WHERE "coffees_id" = $1 ORDER BY "date" DESC;
+      SELECT * FROM "brews" 
+      WHERE "coffees_id" = $1 
+      ORDER BY "date" DESC;
     `;
 
     pool
@@ -30,20 +32,20 @@ router.post(
   (req: Request, res: Response): void => {
     const sqlText = `
       INSERT INTO "brews" (
-        "coffees_id", 
-        "methods_id", 
-        "water_dose", 
-        "coffee_dose", 
-        "grind", 
-        "moisture", 
-        "co2", 
-        "ratio", 
-        "tds", 
-        "ext", 
-        "water_temp", 
-        "time", 
-        "lrr",
-        "date"
+          "coffees_id", 
+          "methods_id", 
+          "water_dose", 
+          "coffee_dose", 
+          "grind", 
+          "moisture", 
+          "co2", 
+          "ratio", 
+          "tds", 
+          "ext", 
+          "water_temp", 
+          "time", 
+          "lrr",
+          "date"
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW());
     `;
@@ -80,18 +82,18 @@ router.put(
     const sqlText = `
       UPDATE "brews" 
       SET "coffees_id" = $1, 
-        "methods_id" = $2, 
-        "water_dose" = $3, 
-        "coffee_dose" = $4, 
-        "grind" = $5, 
-        "moisture" = $6, 
-        "co2" = $7, 
-        "ratio" = $8, 
-        "tds" = $9, 
-        "ext" = $10, 
-        "water_temp" = $11, 
-        "time" = $12, 
-        "lrr" = $13
+          "methods_id" = $2, 
+          "water_dose" = $3, 
+          "coffee_dose" = $4, 
+          "grind" = $5, 
+          "moisture" = $6, 
+          "co2" = $7, 
+          "ratio" = $8, 
+          "tds" = $9, 
+          "ext" = $10, 
+          "water_temp" = $11, 
+          "time" = $12, 
+          "lrr" = $13
       WHERE "id" = $14;
     `;
 
@@ -126,7 +128,11 @@ router.patch('/like/:id', (req: Request, res: Response): void => {
   const { change } = req.body;
   const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 
-  const sqlText = `UPDATE "brews" SET "liked" = $1 WHERE "id" = $2;`;
+  const sqlText = `
+    UPDATE "brews" 
+    SET "liked" = $1 
+    WHERE "id" = $2;
+  `;
 
   pool
     .query(sqlText, [newStatus, req.params.id])
@@ -139,7 +145,10 @@ router.patch('/like/:id', (req: Request, res: Response): void => {
 
 // DELETE a brew instance
 router.delete('/delete/:id', (req: Request, res: Response): void => {
-  const sqlText = `DELETE FROM "brews" WHERE "id" = $1;`;
+  const sqlText = `
+    DELETE FROM "brews" 
+    WHERE "id" = $1;
+  `;
 
   pool
     .query(sqlText, [req.params.id])
