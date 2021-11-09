@@ -1,8 +1,10 @@
+import { Router, Request, Response } from 'express';
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response } from 'express';
 import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router = express.Router();
+import { TypedRequest } from '../models/expressResource';
+import { Brew, BrewLikeStatus } from '../models/modelResource';
+const router = Router();
 
 // GET route to grab all brew instances for a coffee
 router.get(
@@ -29,7 +31,7 @@ router.get(
 router.post(
   '/add',
   rejectUnauthenticated,
-  (req: Request, res: Response): void => {
+  (req: TypedRequest<Brew>, res: Response): void => {
     const sqlText = `
       INSERT INTO brews (
           coffees_id, 
@@ -78,7 +80,7 @@ router.post(
 router.put(
   '/edit',
   rejectUnauthenticated,
-  (req: Request, res: Response): void => {
+  (req: TypedRequest<Brew>, res: Response): void => {
     const sqlText = `
       UPDATE brews 
       SET coffees_id = $1, 
@@ -124,24 +126,28 @@ router.put(
 
 // PUT route to change the status of 'liked' on a brew instance
 // Can be 'yes', 'no', or 'none'
-router.patch('/like/:id', (req: Request, res: Response): void => {
-  const { change } = req.body;
-  const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
+router.patch(
+  '/like/:id',
+  (req: TypedRequest<BrewLikeStatus>, res: Response): void => {
+    const { change } = req.body;
+    const newStatus =
+      change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 
-  const sqlText = `
+    const sqlText = `
     UPDATE brews 
     SET liked = $1 
     WHERE id = $2;
   `;
 
-  pool
-    .query(sqlText, [newStatus, req.params.id])
-    .then(() => res.sendStatus(201))
-    .catch((err) => {
-      console.log(`Error in PUT with query: ${sqlText}`, err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(sqlText, [newStatus, req.params.id])
+      .then(() => res.sendStatus(201))
+      .catch((err) => {
+        console.log(`Error in PUT with query: ${sqlText}`, err);
+        res.sendStatus(500);
+      });
+  }
+);
 
 // DELETE a brew instance
 router.delete('/delete/:id', (req: Request, res: Response): void => {

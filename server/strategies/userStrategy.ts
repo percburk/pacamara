@@ -10,11 +10,16 @@ passport.serializeUser((user, done): void => {
 });
 
 passport.deserializeUser((id: number, done): void => {
+  const sqlText = `
+    SELECT * FROM users 
+    WHERE id = $1;
+  `;
+  
   pool
-    .query(`SELECT * FROM "users" WHERE id = $1`, [id])
+    .query(sqlText, [id])
     .then((result) => {
       // Handle Errors
-      const user = result && result.rows && result.rows[0];
+      const user = result?.rows?.[0];
 
       if (user) {
         // user found
@@ -40,10 +45,16 @@ passport.deserializeUser((id: number, done): void => {
 passport.use(
   'local',
   new LocalStrategy((username: string, password: string, done): void => {
+    const sqlText = `
+      SELECT * FROM users 
+      WHERE username = $1;
+    `;
+    
     pool
-      .query(`SELECT * FROM "users" WHERE username = $1`, [username])
+      .query(sqlText, [username])
       .then((result) => {
-        const user = result && result.rows && result.rows[0];
+        const user = result?.rows?.[0];
+
         if (user && comparePassword(password, user.password)) {
           // All good! Passwords match!
           // done takes an error (null in this case) and a user

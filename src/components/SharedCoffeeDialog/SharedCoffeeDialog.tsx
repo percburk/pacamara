@@ -105,7 +105,7 @@ export default function SharedCoffeeDialog({
   const handleAdd = () => {
     dispatch({
       type: SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
-      payload: { coffees_id: coffeeId, shared_by_id: senderId },
+      payload: { coffeesId: coffeeId, sharedById: senderId },
     });
     dispatch({
       type: SagaActions.DELETE_SHARED_COFFEE,

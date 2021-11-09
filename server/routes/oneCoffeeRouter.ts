@@ -1,9 +1,11 @@
+import { Router, Request, Response } from 'express';
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response } from 'express';
-import pool from '../modules/pool';
 import { PoolClient } from 'pg';
+import pool from '../modules/pool';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
-const router = express.Router();
+import { TypedRequest } from '../models/expressResource';
+import { FavBrewCoffee, CoffeeItem } from '../models/modelResource';
+const router = Router();
 
 // GET route for one coffee for CoffeeDetails
 router.get(
@@ -40,9 +42,9 @@ router.get(
 router.put(
   '/fav-brew',
   rejectUnauthenticated,
-  (req: Request, res: Response): void => {
-    const { change, id: coffeeId }: { change: string; id: number } = req.body;
-    const sqlChange: string = change === 'fav' ? 'is_fav' : 'brewing';
+  (req: TypedRequest<FavBrewCoffee>, res: Response): void => {
+    const { change, id: coffeeId } = req.body;
+    const sqlChange = change === 'fav' ? 'is_fav' : 'brewing';
 
     const sqlText = `
       UPDATE users_coffees 
@@ -64,7 +66,7 @@ router.put(
 router.put(
   '/edit',
   rejectUnauthenticated,
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: TypedRequest<CoffeeItem>, res: Response): Promise<void> => {
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -117,13 +119,9 @@ router.put(
       // Query #3
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
-      let sqlValues = req.body.flavorsArray
-        .reduce(
-          (valString: string, _: number, i: number) =>
-            (valString += `($1, $${i + 2}),`),
-          ''
-        )
-        .slice(0, -1); // Takes off last comma
+      const sqlValues = req.body.flavorsArray
+        .map((_: number, i: number) => `($1, $${i + 2})`)
+        .join(', ');
 
       const updateFlavorsSqlText = `
         INSERT INTO coffees_flavors (coffees_id, flavors_id)

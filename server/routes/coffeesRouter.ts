@@ -1,9 +1,11 @@
-import express, { Request, Response } from 'express';
-import pool from '../modules/pool';
-import { PoolClient } from 'pg';
-import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
+import { Router, Request, Response } from 'express';
 import camelcaseKeys from 'camelcase-keys';
-const router = express.Router();
+import { PoolClient } from 'pg';
+import pool from '../modules/pool';
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
+import { TypedRequest } from '../models/expressResource';
+import { CoffeeItem } from '../../src/models/modelResource';
+const router = Router();
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
@@ -113,7 +115,7 @@ router.get(
 router.post(
   '/add',
   rejectUnauthenticated,
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: TypedRequest<CoffeeItem>, res: Response): Promise<void> => {
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -174,12 +176,8 @@ router.post(
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
       const sqlValues = req.body.flavorsArray
-        .reduce(
-          (valString: string, _: number, i: number) =>
-            (valString += `($1, $${i + 2}),`),
-          ''
-        )
-        .slice(0, -1); // Takes off last comma
+        .map((_: number, i: number) => `($1, $${i + 2})`)
+        .join(', ');
 
       const newFlavorsSqlText = `
         INSERT INTO coffees_flavors (coffees_id, flavors_id)

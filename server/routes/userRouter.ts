@@ -1,11 +1,13 @@
+import { Router, Request, Response } from 'express';
 import camelcaseKeys from 'camelcase-keys';
-import express, { Request, Response } from 'express';
 import { PoolClient } from 'pg';
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware';
 import { encryptPassword } from '../modules/encryption';
 import pool from '../modules/pool';
 import userStrategy from '../strategies/userStrategy';
-const router = express.Router();
+import { TypedRequest } from '../models/expressResource';
+import { RegisterRequest, User } from '../models/modelResource';
+const router = Router();
 
 // GET request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
@@ -35,24 +37,27 @@ router.get(
 );
 
 // Handles POST request with new user data, the password gets encrypted
-router.post('/register', (req: Request, res: Response): void => {
-  const username: string | null = req.body.username;
-  const password: string | null = encryptPassword(req.body.password);
+router.post(
+  '/register',
+  (req: TypedRequest<RegisterRequest>, res: Response): void => {
+    const { username, password } = req.body;
+    const encryptedPassword = encryptPassword(password);
 
-  const sqlText = `
-    INSERT INTO users (username, password)
-    VALUES ($1, $2) 
-    RETURNING id;
-  `;
+    const sqlText = `
+      INSERT INTO users (username, password)
+      VALUES ($1, $2) 
+      RETURNING id;
+    `;
 
-  pool
-    .query(sqlText, [username, password])
-    .then(() => res.sendStatus(200))
-    .catch((err) => {
-      console.log('Error in POST in user registration: ', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(sqlText, [username, encryptedPassword])
+      .then(() => res.sendStatus(200))
+      .catch((err) => {
+        console.log('Error in POST in user registration: ', err);
+        res.sendStatus(500);
+      });
+  }
+);
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
@@ -60,7 +65,7 @@ router.post('/register', (req: Request, res: Response): void => {
 router.post(
   '/login',
   userStrategy.authenticate('local'),
-  (req: Request, res: Response): void => {
+  (_: Request, res: Response): void => {
     res.sendStatus(200);
   }
 );
@@ -77,7 +82,7 @@ router.post('/logout', (req: Request, res: Response): void => {
 router.put(
   '/update',
   rejectUnauthenticated,
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: TypedRequest<User>, res: Response): Promise<void> => {
     const connection: PoolClient = await pool.connect();
 
     try {
@@ -85,19 +90,19 @@ router.put(
 
       // Query #1 - sending all non-array user data
       const updateSqlText = `
-      UPDATE users 
-      SET name = $1, 
-          profile_pic = $2, 
-          methods_default_id = $3, 
-          methods_default_lrr = $4, 
-          kettle = $5, 
-          grinder = $6, 
-          tds_min = $7, 
-          tds_max = $8, 
-          ext_min = $9, 
-          ext_max = $10 
-      WHERE id = $11;
-    `;
+        UPDATE users 
+        SET name = $1, 
+            profile_pic = $2, 
+            methods_default_id = $3, 
+            methods_default_lrr = $4, 
+            kettle = $5, 
+            grinder = $6, 
+            tds_min = $7, 
+            tds_max = $8, 
+            ext_min = $9, 
+            ext_max = $10 
+        WHERE id = $11;
+      `;
       await connection.query(updateSqlText, [
         req.body.name,
         req.body.profilePic,
@@ -121,13 +126,9 @@ router.put(
 
       // Query #3, go through methods_array to build query to insert
       // into users_methods
-      let sqlValues = req.body.methodsArray
-        .reduce(
-          (valString: string, _: number, i: number) =>
-            (valString += `($1, $${i + 2}),`),
-          ''
-        )
-        .slice(0, -1); // Takes off last comma
+      const sqlValues = (req.body.methodsArray as number[])
+        .map((_: number, i: number) => `($1, $${i + 2})`)
+        .join(', ');
 
       const methodsSqlText = `
         INSERT INTO users_methods (users_id, methods_id)
