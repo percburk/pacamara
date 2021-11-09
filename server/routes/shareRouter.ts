@@ -10,12 +10,12 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      SELECT "id", 
-             "username", 
-             "name", 
-             "profile_pic" 
-      FROM "users" 
-      WHERE "id" != $1;
+      SELECT id, 
+             username, 
+             name, 
+             profile_pic 
+      FROM users 
+      WHERE id != $1;
     `;
 
     pool
@@ -31,8 +31,8 @@ router.get(
 // GET route for a list of any coffees that have been shared with current user
 router.get('/', (req: Request, res: Response): void => {
   const sqlText = `
-    SELECT * FROM "shared_coffees" 
-    WHERE "recipient_id" = $1;
+    SELECT * FROM shared_coffees 
+    WHERE recipient_id = $1;
   `;
 
   pool
@@ -50,12 +50,12 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      SELECT "coffees".*, 
-             ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
-      FROM "coffees_flavors"
-          JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
-      WHERE "coffees".id = $1
-      GROUP BY "coffees".id;
+      SELECT coffees.*, 
+             ARRAY_AGG(coffees_flavors.flavors_id) AS flavors_array
+      FROM coffees_flavors
+          JOIN coffees ON coffees_flavors.coffees_id = coffees.id
+      WHERE coffees.id = $1
+      GROUP BY coffees.id;
     `;
 
     pool
@@ -73,14 +73,14 @@ router.post('/', rejectUnauthenticated, (req: Request, res: Response): void => {
   const { recipientId, coffeesId, coffeeName, message } = req.body;
 
   const sqlText = `
-    INSERT INTO "shared_coffees" (
-        "sender_id", 
-        "username", 
-        "profile_pic", 
-        "recipient_id", 
-        "coffees_id", 
-        "coffee_name", 
-        "message"
+    INSERT INTO shared_coffees (
+        sender_id, 
+        username, 
+        profile_pic, 
+        recipient_id, 
+        coffees_id, 
+        coffee_name, 
+        message
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7);
   `;
@@ -107,10 +107,10 @@ router.post('/add', (req: Request, res: Response): void => {
   const { coffees_id, shared_by_id } = req.body;
 
   const sqlText = `
-    INSERT INTO "users_coffees" (
-        "users_id", 
-        "coffees_id", 
-        "shared_by_id"
+    INSERT INTO users_coffees (
+        users_id, 
+        coffees_id, 
+        shared_by_id
     ) 
     VALUES ($1, $2, $3);
   `;
@@ -128,8 +128,8 @@ router.post('/add', (req: Request, res: Response): void => {
 // a user declines to add a shared coffee to their dashboard
 router.delete('/delete/:id', (req: Request, res: Response): void => {
   const sqlText = `
-    DELETE FROM "shared_coffees" 
-    WHERE "id" = $1;
+    DELETE FROM shared_coffees 
+    WHERE id = $1;
   `;
 
   pool

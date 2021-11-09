@@ -5,8 +5,8 @@ const router = express.Router();
 // GET route for list of flavors, displayed as Chips throughout the app
 router.get('/', (req: Request, res: Response): void => {
   const sqlText = `
-    SELECT * FROM "flavors" 
-    ORDER BY "flavors".name;
+    SELECT * FROM flavors
+    ORDER BY flavors.name;
   `;
 
   pool
