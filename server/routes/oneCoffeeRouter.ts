@@ -13,19 +13,19 @@ router.get(
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
     const sqlText = `
-      SELECT coffees.*, 
-             users_coffees.is_fav, 
-             users_coffees.brewing,
-             users_coffees.shared_by_id,
-             ARRAY_AGG(coffees_flavors.flavors_id) AS flavors_array
-      FROM coffees_flavors
-        JOIN coffees ON coffees_flavors.coffees_id = coffees.id
-        JOIN users_coffees ON coffees.id = users_coffees.coffees_id
-      WHERE coffees.id = $1 AND users_coffees.users_id = $2
-      GROUP BY coffees.id, 
-               users_coffees.is_fav, 
-               users_coffees.brewing,
-               users_coffees.shared_by_id;
+      SELECT "coffees".*, 
+             "users_coffees".is_fav, 
+             "users_coffees".brewing,
+             "users_coffees".shared_by_id,
+             ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
+      FROM "coffees_flavors"
+        JOIN "coffees" ON "coffees_flavors".coffees_id = "coffees".id
+        JOIN "users_coffees" ON "coffees".id = "users_coffees".coffees_id
+      WHERE "coffees".id = $1 AND "users_coffees".users_id = $2
+      GROUP BY "coffees".id, 
+               "users_coffees".is_fav, 
+               "users_coffees".brewing,
+               "users_coffees".shared_by_id;
     `;
 
     pool
@@ -47,9 +47,9 @@ router.put(
     const sqlChange = change === 'fav' ? 'is_fav' : 'brewing';
 
     const sqlText = `
-      UPDATE users_coffees 
+      UPDATE "users_coffees" 
       SET ${sqlChange} = NOT ${sqlChange}
-      WHERE users_id = $1 AND coffees_id = $2;
+      WHERE "users_id" = $1 AND "coffees_id" = $2;
     `;
 
     pool
@@ -75,20 +75,20 @@ router.put(
       // Query #1
       // Updating the data on 'coffees' table
       const updateCoffeeSqlText = `
-        UPDATE coffees 
-        SET roaster = $1, 
-            roast_date = $2, 
-            is_blend = $3,
-            blend_name = $4, 
-            country = $5, 
-            producer = $6, 
-            region = $7,
-            elevation = $8, 
-            cultivars = $9, 
-            processing = $10,
-            notes = $11, 
-            coffee_pic = $12 
-        WHERE id = $13;
+        UPDATE "coffees" 
+        SET "roaster" = $1, 
+            "roast_date" = $2, 
+            "is_blend" = $3,
+            "blend_name" = $4, 
+            "country" = $5, 
+            "producer" = $6, 
+            "region" = $7,
+            "elevation" = $8, 
+            "cultivars" = $9, 
+            "processing" = $10,
+            "notes" = $11, 
+            "coffee_pic" = $12 
+        WHERE "id" = $13;
       `;
 
       await connection.query(updateCoffeeSqlText, [
@@ -110,8 +110,8 @@ router.put(
       // Query #2
       // Deleting old entries in coffees_flavors
       const deleteFlavorsSqlText = `
-        DELETE FROM coffees_flavors 
-        WHERE coffees_id = $1;
+        DELETE FROM "coffees_flavors" 
+        WHERE "coffees_id" = $1;
       `;
 
       await connection.query(deleteFlavorsSqlText, [req.body.id]);
@@ -124,7 +124,7 @@ router.put(
         .join(', ');
 
       const updateFlavorsSqlText = `
-        INSERT INTO coffees_flavors (coffees_id, flavors_id)
+        INSERT INTO "coffees_flavors" ("coffees_id", "flavors_id")
         VALUES ${sqlValues};
       `;
 
@@ -136,9 +136,9 @@ router.put(
       // Query #4
       // Update brewing status of the edited coffee
       const updateBrewingSqlText = `
-        UPDATE users_coffees 
-        SET brewing = $1 
-        WHERE coffees_id = $2;
+        UPDATE "users_coffees" 
+        SET "brewing" = $1 
+        WHERE "coffees_id" = $2;
       `;
 
       await connection.query(updateBrewingSqlText, [

@@ -11,8 +11,8 @@ passport.serializeUser((user, done): void => {
 
 passport.deserializeUser((id: number, done): void => {
   const sqlText = `
-    SELECT * FROM users 
-    WHERE id = $1;
+    SELECT * FROM "users" 
+    WHERE "id" = $1;
   `;
   
   pool
@@ -46,8 +46,8 @@ passport.use(
   'local',
   new LocalStrategy((username: string, password: string, done): void => {
     const sqlText = `
-      SELECT * FROM users 
-      WHERE username = $1;
+      SELECT * FROM "users" 
+      WHERE "username" = $1;
     `;
     
     pool
