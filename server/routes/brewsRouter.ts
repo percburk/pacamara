@@ -34,20 +34,20 @@ router.post(
   (req: TypedRequest<Brew>, res: Response): void => {
     const sqlText = `
       INSERT INTO brews (
-          coffees_id, 
-          methods_id, 
-          water_dose, 
-          coffee_dose, 
-          grind, 
-          moisture, 
-          co2, 
-          ratio, 
-          tds, 
-          ext, 
-          water_temp, 
-          time, 
-          lrr,
-          date
+        coffees_id, 
+        methods_id, 
+        water_dose, 
+        coffee_dose, 
+        grind, 
+        moisture, 
+        co2, 
+        ratio, 
+        tds, 
+        ext, 
+        water_temp, 
+        time, 
+        lrr,
+        date
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW());
     `;
@@ -134,10 +134,10 @@ router.patch(
       change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes';
 
     const sqlText = `
-    UPDATE brews 
-    SET liked = $1 
-    WHERE id = $2;
-  `;
+      UPDATE brews 
+      SET liked = $1 
+      WHERE id = $2;
+    `;
 
     pool
       .query(sqlText, [newStatus, req.params.id])

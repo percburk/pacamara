@@ -58,7 +58,7 @@ router.get(
       SELECT coffees.*, 
              ARRAY_AGG(coffees_flavors.flavors_id) AS flavors_array
       FROM coffees_flavors
-          JOIN coffees ON coffees_flavors.coffees_id = coffees.id
+        JOIN coffees ON coffees_flavors.coffees_id = coffees.id
       WHERE coffees.id = $1
       GROUP BY coffees.id;
     `;
@@ -82,13 +82,13 @@ router.post(
 
     const sqlText = `
     INSERT INTO shared_coffees (
-        sender_id, 
-        username, 
-        profile_pic, 
-        recipient_id, 
-        coffees_id, 
-        coffee_name, 
-        message
+      sender_id, 
+      username, 
+      profile_pic, 
+      recipient_id, 
+      coffees_id, 
+      coffee_name, 
+      message
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7);
   `;
@@ -122,9 +122,9 @@ router.post(
 
     const sqlText = `
     INSERT INTO users_coffees (
-        users_id, 
-        coffees_id, 
-        shared_by_id
+      users_id, 
+      coffees_id, 
+      shared_by_id
     ) 
     VALUES ($1, $2, $3);
   `;
