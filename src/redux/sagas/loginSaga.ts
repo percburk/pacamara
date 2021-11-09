@@ -29,7 +29,7 @@ function* loginUser(
     yield put({ type: SagaActions.FETCH_USER });
   } catch (err) {
     console.log('Error in loginUser', err);
-    if (err.response.status === 401) {
+    if ((err as any).response.status === 401) {
       // The 401 is the error status sent from passport if user isn't in the
       // database or if the username and password don't match in the database
       yield put({ type: ReduxActions.LOGIN_FAILED });
