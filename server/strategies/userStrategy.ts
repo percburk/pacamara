@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import camelcaseKeys from 'camelcase-keys';
 import { comparePassword } from '../modules/encryption';
 import pool from '../modules/pool';
 
@@ -19,7 +20,7 @@ passport.deserializeUser((id: number, done): void => {
         // user found
         delete user.password; // remove password so it doesn't get sent
         // done takes an error (null in this case) and a user
-        done(null, user);
+        done(null, camelcaseKeys(user));
       } else {
         // user not found
         // done takes an error (null in this case) and a user (also null in this case)

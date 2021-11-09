@@ -1,20 +1,14 @@
 import { ChangeEvent, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import queryString from 'query-string';
-import {
-  Typography,
-  Box,
-  makeStyles,
-  withStyles,
-  TextField,
-  Badge,
-} from '@material-ui/core';
+import { Typography, Box, makeStyles, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { Search } from '@material-ui/icons';
 import { grey } from '@material-ui/core/colors';
 // Hooks
 import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 // Components
+import AvatarBadge from './AvatarBadge';
 import AvatarMenu from '../AvatarMenu/AvatarMenu';
 import pacamaraLogo from '../../images/pacamara-logo.png';
 
@@ -34,27 +28,11 @@ const useStyles = makeStyles((theme) => ({
     color: grey[600],
     marginRight: theme.spacing(1),
   },
-}));
-
-// Custom component for displaying a badge on a user's avatar if they have
-// shared coffees on their profile
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-    backgroundColor: '#35baf6',
-    color: '#35baf6',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '1px solid currentColor',
-      content: '""',
-    },
+  headerLink: {
+    color: 'black',
+    textDecoration: 'none',
   },
-}))(Badge);
+}));
 
 // Nav is the top navigation bar which stays constant throughout the app
 export default function Nav() {
@@ -110,13 +88,9 @@ export default function Nav() {
               style={{ cursor: 'pointer' }}
             />
           </Box>
-          <Typography
-            variant="h3"
-            onClick={() => history.push('/dashboard')}
-            style={{ cursor: 'pointer' }}
-          >
-            PACAMARA
-          </Typography>
+          <Link to="/dashboard" className={classes.headerLink}>
+            <Typography variant="h3">PACAMARA</Typography>
+          </Link>
         </Box>
         {name && (
           <form onSubmit={handleHistorySearch} className={classes.searchBar}>
@@ -152,7 +126,7 @@ export default function Nav() {
         ) : (
           <Box display="flex" alignItems="center">
             {sharedCoffees[0] ? (
-              <StyledBadge
+              <AvatarBadge
                 overlap="circle"
                 anchorOrigin={{
                   vertical: 'bottom',
@@ -161,7 +135,7 @@ export default function Nav() {
                 variant="dot"
               >
                 <AvatarMenu />
-              </StyledBadge>
+              </AvatarBadge>
             ) : (
               <AvatarMenu />
             )}
