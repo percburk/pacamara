@@ -151,7 +151,10 @@ router.put(
       res.sendStatus(201); // Send back success!
     } catch (err) {
       await connection.query('ROLLBACK;');
-      console.log('Error in transaction in oneCoffee.router, rollback: ', err);
+      console.log(
+        'Error in PUT to edit coffee in oneCoffeeRouter, rollback: ',
+        err
+      );
       res.sendStatus(500);
     } finally {
       connection.release();

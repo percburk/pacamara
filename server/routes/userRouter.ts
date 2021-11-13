@@ -144,7 +144,10 @@ router.put(
       res.sendStatus(201); // Send back success!
     } catch (err) {
       await connection.query('ROLLBACK;');
-      console.log('Error in PUT transaction in user.router, rollback: ', err);
+      console.log(
+        'Error in PUT to add/edit user profile in userRouter, rollback: ',
+        err
+      );
       res.sendStatus(500);
     } finally {
       connection.release();

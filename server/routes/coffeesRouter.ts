@@ -195,7 +195,7 @@ router.post(
     } catch (err) {
       await connection.query('ROLLBACK;');
       console.log(
-        'Error in add coffee transaction in coffees.router, rollback: ',
+        'Error in add coffee POST in coffeesRouter, rollback: ',
         err
       );
       res.sendStatus(500);
@@ -243,7 +243,7 @@ router.delete(
     } catch (err) {
       await connection.query('ROLLBACK;');
       console.log(
-        'Error in delete coffee transaction in coffees.router, rollback: ',
+        'Error in delete coffee DELETE in coffeesRouter, rollback: ',
         err
       );
       res.sendStatus(500);
