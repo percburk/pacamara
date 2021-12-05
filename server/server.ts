@@ -36,6 +36,6 @@ app.use('/s3', s3Router)
 // Serve static files
 app.use(express.static('build'))
 // App set
-const PORT: string | 5000 = process.env.PORT || 5000
+const PORT: string | 5050 = process.env.PORT || 5050
 // Start server
 app.listen(PORT, () => console.log('Listening on port:', PORT))
