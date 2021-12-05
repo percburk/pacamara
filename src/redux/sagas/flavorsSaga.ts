@@ -1,11 +1,11 @@
-import axios, { AxiosResponse } from 'axios'
-import { put, takeEvery, call } from 'redux-saga/effects'
+import axios, { AxiosResponse } from 'axios';
+import { put, takeEvery, call } from 'redux-saga/effects';
 import {
   SagaActions,
   SagaGeneratorReturn,
-} from '../../models/redux/sagaResource'
-import { ReduxActions } from '../../models/redux/reduxResource'
-import { Flavors } from '../../models/modelResource'
+} from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
+import { Flavors } from '../../models/modelResource';
 
 // Fetches list of broad palette flavors used throughout the app
 function* fetchFlavors(): SagaGeneratorReturn<Flavors[]> {
@@ -13,13 +13,13 @@ function* fetchFlavors(): SagaGeneratorReturn<Flavors[]> {
     const response: AxiosResponse<Flavors[]> = yield call(
       axios.get,
       '/api/flavors'
-    )
-    yield put({ type: ReduxActions.SET_FLAVORS, payload: response.data })
+    );
+    yield put({ type: ReduxActions.SET_FLAVORS, payload: response.data });
   } catch (err) {
-    console.log('Error in fetchFlavors', err)
+    console.log('Error in fetchFlavors', err);
   }
 }
 
 export default function* flavorsSaga() {
-  yield takeEvery(SagaActions.FETCH_FLAVORS, fetchFlavors)
+  yield takeEvery(SagaActions.FETCH_FLAVORS, fetchFlavors);
 }

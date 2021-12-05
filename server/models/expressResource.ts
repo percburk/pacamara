@@ -1,5 +1,5 @@
-import { Request } from 'express'
-import { ParamsDictionary } from 'express-serve-static-core'
+import { Request } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
 
 export type TypedRequest<T> = Request<
   ParamsDictionary,
@@ -7,4 +7,4 @@ export type TypedRequest<T> = Request<
   T,
   qs.ParsedQs,
   Record<string, any>
->
+>;

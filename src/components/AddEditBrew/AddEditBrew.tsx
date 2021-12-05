@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react';
 import {
   Box,
   Dialog,
@@ -13,19 +13,19 @@ import {
   InputAdornment,
   Collapse,
   IconButton,
-} from '@material-ui/core'
-import { Add, ExpandLess, ExpandMore, Close } from '@material-ui/icons'
-import { Alert } from '@material-ui/lab'
+} from '@material-ui/core';
+import { Add, ExpandLess, ExpandMore, Close } from '@material-ui/icons';
+import { Alert } from '@material-ui/lab';
 // Hooks
 import {
   useAppSelector,
   useAppDispatch,
-} from '../../hooks/useAppDispatchSelector'
+} from '../../hooks/useAppDispatchSelector';
 // Models
-import { BrewState } from '../../models/stateResource'
-import { Brew, Methods } from '../../models/modelResource'
-import { SagaActions } from '../../models/redux/sagaResource'
-import { ReduxActions } from '../../models/redux/reduxResource'
+import { BrewState } from '../../models/stateResource';
+import { Brew, Methods } from '../../models/modelResource';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -54,13 +54,13 @@ const useStyles = makeStyles((theme) => ({
     width: '18ch',
     alignSelf: 'center',
   },
-}))
+}));
 
 interface Props {
-  coffeeId?: number
-  addEditBrewOpen: boolean
-  setAddEditBrewOpen: (set: boolean) => void
-  editInstance?: Brew
+  coffeeId?: number;
+  addEditBrewOpen: boolean;
+  setAddEditBrewOpen: (set: boolean) => void;
+  editInstance?: Brew;
 }
 
 // AddEditBrew is a Dialog that has all the inputs needed to create a
@@ -71,17 +71,17 @@ export default function AddEditBrew({
   setAddEditBrewOpen,
   editInstance,
 }: Props) {
-  const classes = useStyles()
-  const dispatch = useAppDispatch()
-  const methods = useAppSelector((store) => store.methods)
+  const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const methods = useAppSelector((store) => store.methods);
   const { methodsDefaultId, methodsDefaultLrr, methodsArray } = useAppSelector(
     (store) => store.user
-  )
+  );
   const { isBlend, blendName, country, producer } = useAppSelector(
     (store) => store.oneCoffee
-  )
-  const [advancedOpen, setAdvancedOpen] = useState<boolean>(false)
-  const [errorOpen, setErrorOpen] = useState<boolean>(false)
+  );
+  const [advancedOpen, setAdvancedOpen] = useState<boolean>(false);
+  const [errorOpen, setErrorOpen] = useState<boolean>(false);
   const [brew, setBrew] = useState<BrewState | Brew>(
     editInstance || {
       coffeesId: 0,
@@ -97,34 +97,34 @@ export default function AddEditBrew({
       time: '',
       lrr: methodsDefaultLrr,
     }
-  )
-  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
+  );
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
 
   // Curried function to handle all text inputs in local state object
   const handleBrew =
     (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target
-      setBrew({ ...brew, [key]: key === 'time' ? value : Number(value) })
-    }
+      const { value } = event.target;
+      setBrew({ ...brew, [key]: key === 'time' ? value : Number(value) });
+    };
 
   // This is the math to calculate the Extraction %, result is rendered
   const adjustedCoffeeDose =
-    (brew.coffeeDose * (100 - brew.moisture - brew.co2)) / 100
-  const bevWater = brew.waterDose - adjustedCoffeeDose * brew.lrr
-  const tdsWeight = bevWater / ((100 - brew.tds) / 100) - bevWater
-  const ext = Number((tdsWeight / adjustedCoffeeDose) * 100)
-  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : ''
+    (brew.coffeeDose * (100 - brew.moisture - brew.co2)) / 100;
+  const bevWater = brew.waterDose - adjustedCoffeeDose * brew.lrr;
+  const tdsWeight = bevWater / ((100 - brew.tds) / 100) - bevWater;
+  const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
+  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
 
   // This is the math to calculate the brew ratio, result is rendered
   const ratioCalc =
     brew.coffeeDose && brew.waterDose
       ? Number(brew.waterDose / brew.coffeeDose).toFixed(2)
-      : ''
+      : '';
 
   // This adds whatever method was used for the brew into the local state object
   const handleMethod = (method: Methods) => {
-    setBrew({ ...brew, methodsId: method.id, lrr: method.lrr })
-  }
+    setBrew({ ...brew, methodsId: method.id, lrr: method.lrr });
+  };
 
   // Sends the new brew instance to the database
   const handleSubmit = () => {
@@ -137,21 +137,21 @@ export default function AddEditBrew({
           ratio: Number(ratioCalc),
           ext: Number(extCalc),
         },
-      })
+      });
       dispatch({
         type: editInstance
           ? ReduxActions.SNACKBARS_EDITED_BREW
           : ReduxActions.SNACKBARS_ADDED_BREW,
-      })
-      setAddEditBrewOpen(false)
-      setAdvancedOpen(false)
-      !editInstance && clearInputs()
+      });
+      setAddEditBrewOpen(false);
+      setAdvancedOpen(false);
+      !editInstance && clearInputs();
     } else {
-      setErrorOpen(true)
+      setErrorOpen(true);
     }
-  }
+  };
 
-  const checkForZero = (val: number) => (val === 0 ? '' : val)
+  const checkForZero = (val: number) => (val === 0 ? '' : val);
 
   const clearInputs = () => {
     setBrew({
@@ -167,8 +167,8 @@ export default function AddEditBrew({
       waterTemp: 205,
       time: '',
       lrr: methodsDefaultLrr,
-    })
-  }
+    });
+  };
 
   return (
     <Dialog open={addEditBrewOpen} onClose={() => setAddEditBrewOpen(false)}>
@@ -310,8 +310,8 @@ export default function AddEditBrew({
         <Button
           variant="contained"
           onClick={() => {
-            setAddEditBrewOpen(false)
-            !editInstance && clearInputs()
+            setAddEditBrewOpen(false);
+            !editInstance && clearInputs();
           }}
         >
           Cancel
@@ -338,5 +338,5 @@ export default function AddEditBrew({
         </Alert>
       </Collapse>
     </Dialog>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
-import queryString from 'query-string'
-import { Button, Menu, MenuItem, Chip } from '@material-ui/core'
+import { useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import queryString from 'query-string';
+import { Button, Menu, MenuItem, Chip } from '@material-ui/core';
 // Models
-import { FilterMenuOptions, FilterKeys } from '../../models/stateResource'
+import { FilterMenuOptions, FilterKeys } from '../../models/stateResource';
 
 // Contains all the possible Dashboard filter options
 const filterOptions: FilterMenuOptions[] = [
@@ -11,19 +11,19 @@ const filterOptions: FilterMenuOptions[] = [
   { filterKey: 'brewing', display: 'Currently Brewing' },
   { filterKey: 'isBlend', display: 'Blends' },
   { filterKey: 'sharedById', display: 'Shared' },
-]
+];
 
 // FilterMenu opens on the Dashboard, displaying the options for filtering
 // their list of coffees. Filters appear as Chips when clicked, can be deleted
 export default function FilterMenu() {
-  const location = useLocation()
-  const history = useHistory()
+  const location = useLocation();
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
-  >(null)
+  >(null);
   const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
-  })
+  });
 
   // Sets the new URL to add/remove entries to the filters array on Dashboard
   const handleFilters = (clickedFilter: FilterKeys) => {
@@ -31,14 +31,14 @@ export default function FilterMenu() {
       ? [clickedFilter]
       : filters.includes(clickedFilter)
       ? (filters as string[]).filter((item) => item !== clickedFilter)
-      : [...filters, clickedFilter]
+      : [...filters, clickedFilter];
     const newString = queryString.stringify(
       { q, filters: newFiltersArray },
       { arrayFormat: 'bracket' }
-    )
-    history.push(`/dashboard/?${newString}`)
-    setAnchorEl(null)
-  }
+    );
+    history.push(`/dashboard/?${newString}`);
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -84,5 +84,5 @@ export default function FilterMenu() {
         ))}
       </Menu>
     </>
-  )
+  );
 }

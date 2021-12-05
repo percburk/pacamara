@@ -1,5 +1,5 @@
-import { useState, useEffect, ChangeEvent } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useState, useEffect, ChangeEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -9,21 +9,21 @@ import {
   Button,
   Chip,
   Slider,
-} from '@material-ui/core'
+} from '@material-ui/core';
 // Hooks
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../hooks/useAppDispatchSelector'
+} from '../../hooks/useAppDispatchSelector';
 // Models
-import { UpdateProfileState } from '../../models/stateResource'
-import { SagaActions } from '../../models/redux/sagaResource'
-import { ReduxActions } from '../../models/redux/reduxResource'
+import { UpdateProfileState } from '../../models/stateResource';
+import { SagaActions } from '../../models/redux/sagaResource';
+import { ReduxActions } from '../../models/redux/reduxResource';
 // Components
-import S3Uploader from '../S3Uploader/S3Uploader'
-import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog'
-import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog'
-import Snackbars from '../Snackbars/Snackbars'
+import S3Uploader from '../S3Uploader/S3Uploader';
+import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog';
+import DefaultMethodDialog from '../DefaultMethodDialog/DefaultMethodDialog';
+import Snackbars from '../Snackbars/Snackbars';
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -65,16 +65,16 @@ const useStyles = makeStyles((theme) => ({
   centerText: {
     textAlign: 'center',
   },
-}))
-export type UseStylesReturnType = ReturnType<typeof useStyles>
+}));
+export type UseStylesReturnType = ReturnType<typeof useStyles>;
 
 // UpdateProfile handles any changes in profile information for new or existing
 // users. Handles all changes in local state.
 export default function UpdateProfile() {
-  const classes = useStyles()
-  const history = useHistory()
-  const dispatch = useAppDispatch()
-  const methods = useAppSelector((store) => store.methods)
+  const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const methods = useAppSelector((store) => store.methods);
   const {
     name,
     profilePic,
@@ -87,10 +87,10 @@ export default function UpdateProfile() {
     extMin,
     extMax,
     methodsArray,
-  } = useAppSelector((store) => store.user)
-  const [defaultDialogOpen, setDefaultDialogOpen] = useState<boolean>(false)
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false)
-  const [inputError, setInputError] = useState<boolean>(false)
+  } = useAppSelector((store) => store.user);
+  const [defaultDialogOpen, setDefaultDialogOpen] = useState<boolean>(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [inputError, setInputError] = useState<boolean>(false);
   const [newUpdates, setNewUpdates] = useState<UpdateProfileState>({
     name: name || '',
     profilePic: profilePic || '',
@@ -101,11 +101,11 @@ export default function UpdateProfile() {
     methodsArray: methodsArray ?? [],
     tdsRange: [tdsMin || 1.37, tdsMax || 1.43],
     extRange: [extMin || 20, extMax || 23.5],
-  })
+  });
 
   useEffect(() => {
-    dispatch({ type: SagaActions.FETCH_METHODS })
-  }, [dispatch])
+    dispatch({ type: SagaActions.FETCH_METHODS });
+  }, [dispatch]);
 
   // Handles toggling of methods being added to a user's profile
   const handleNewMethod = (methodId: number) => {
@@ -114,22 +114,22 @@ export default function UpdateProfile() {
       methodsArray: newUpdates.methodsArray.includes(methodId)
         ? newUpdates.methodsArray.filter((index) => index !== methodId)
         : [...newUpdates.methodsArray, methodId],
-    })
-  }
+    });
+  };
 
   // Curried function which handles all text inputs
   const handleNewUpdates =
     (key: keyof UpdateProfileState) =>
     (event: ChangeEvent<HTMLInputElement>) => {
-      setNewUpdates({ ...newUpdates, [key]: event.target.value })
-    }
+      setNewUpdates({ ...newUpdates, [key]: event.target.value });
+    };
 
   // Curried function which handles both sliders on the page, tds and ext
   const handleSliders =
     (moved: 'tdsRange' | 'extRange') =>
     (event: ChangeEvent<{}>, newVal: number[] | number) => {
-      setNewUpdates({ ...newUpdates, [moved]: newVal as number[] })
-    }
+      setNewUpdates({ ...newUpdates, [moved]: newVal as number[] });
+    };
 
   // Submits any profile updates. This is a PUT route for both a new and
   // existing user, since the username and password is made first
@@ -143,15 +143,15 @@ export default function UpdateProfile() {
         extMin: newUpdates.extRange[0],
         extMax: newUpdates.extRange[1],
       },
-    })
+    });
     dispatch({
       type: !name
         ? ReduxActions.SNACKBARS_CREATED_PROFILE
         : ReduxActions.SNACKBARS_UPDATED_PROFILE,
-    })
-    clearInputs()
-    history.push('/dashboard')
-  }
+    });
+    clearInputs();
+    history.push('/dashboard');
+  };
 
   // Handles whether the user continues to choose a default method, submits
   // only one method which becomes their default, or get an error for not
@@ -161,37 +161,37 @@ export default function UpdateProfile() {
       if (newUpdates.methodsArray.length === 1) {
         const methodLrr = methods.find(
           (method) => method.id === newUpdates.methodsArray[0]
-        )?.lrr
+        )?.lrr;
         setNewUpdates({
           ...newUpdates,
           methodsDefaultId: newUpdates.methodsArray[0],
           methodsDefaultLrr: methodLrr ?? null,
-        })
-        handleSubmit()
+        });
+        handleSubmit();
       } else {
-        setDefaultDialogOpen(true)
+        setDefaultDialogOpen(true);
       }
     } else {
-      setInputError(!newUpdates.name)
+      setInputError(!newUpdates.name);
       !newUpdates.methodsArray[0] &&
-        dispatch({ type: ReduxActions.SNACKBARS_METHODS_ERROR })
+        dispatch({ type: ReduxActions.SNACKBARS_METHODS_ERROR });
     }
-  }
+  };
 
   // Cancels any updates and sends the user to the previous page
   const handleCancel = () => {
-    dispatch({ type: ReduxActions.CLEAR_SNACKBARS })
+    dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
     if (name) {
-      history.goBack()
-      clearInputs()
+      history.goBack();
+      clearInputs();
     } else {
-      setCancelDialogOpen(true)
+      setCancelDialogOpen(true);
     }
-  }
+  };
 
   const clearInputs = () => {
-    setDefaultDialogOpen(false)
-    setCancelDialogOpen(false)
+    setDefaultDialogOpen(false);
+    setCancelDialogOpen(false);
     setNewUpdates({
       name: '',
       profilePic: '',
@@ -202,8 +202,8 @@ export default function UpdateProfile() {
       methodsArray: [],
       tdsRange: [],
       extRange: [],
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -343,5 +343,5 @@ export default function UpdateProfile() {
       />
       <Snackbars />
     </>
-  )
+  );
 }

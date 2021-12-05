@@ -1,31 +1,31 @@
-import { useState } from 'react'
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { useState } from 'react';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 // Models
-import { SortState } from '../../models/stateResource'
+import { SortState } from '../../models/stateResource';
 
 // Array of sort options
-const sortOptions: SortState[] = ['date', 'country', 'producer', 'roaster']
+const sortOptions: SortState[] = ['date', 'country', 'producer', 'roaster'];
 
 interface Props {
-  sort: SortState
-  setSort: (sort: SortState) => void
+  sort: SortState;
+  setSort: (sort: SortState) => void;
 }
 
 // Menu that opens on Dashboard providing all sort options
 export default function SortMenu({ sort, setSort }: Props) {
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
-  >(null)
+  >(null);
 
   // Capitalize sort option to display on menu
   const uppercaseFirstLetter = (word: string) =>
-    word.slice(0, 1).toUpperCase() + word.slice(1)
+    word.slice(0, 1).toUpperCase() + word.slice(1);
 
   // Sets the Sort in local state on Dashboard
   const handleSort = (howToSort: SortState) => {
-    setSort(howToSort)
-    setAnchorEl(null)
-  }
+    setSort(howToSort);
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -52,5 +52,5 @@ export default function SortMenu({ sort, setSort }: Props) {
         ))}
       </Menu>
     </>
-  )
+  );
 }

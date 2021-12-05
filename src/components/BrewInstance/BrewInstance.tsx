@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react'
-import { DateTime } from 'luxon'
+import { ChangeEvent } from 'react';
+import { DateTime } from 'luxon';
 import {
   Box,
   Table,
@@ -13,23 +13,23 @@ import {
   Typography,
   IconButton,
   makeStyles,
-} from '@material-ui/core'
+} from '@material-ui/core';
 import {
   ExpandMore,
   ThumbUp,
   ThumbDown,
   ThumbsUpDownOutlined,
-} from '@material-ui/icons'
+} from '@material-ui/icons';
 // Hooks
 import {
   useAppSelector,
   useAppDispatch,
-} from '../../hooks/useAppDispatchSelector'
+} from '../../hooks/useAppDispatchSelector';
 // Models
-import { Brew } from '../../models/modelResource'
-import { SagaActions } from '../../models/redux/sagaResource'
+import { Brew } from '../../models/modelResource';
+import { SagaActions } from '../../models/redux/sagaResource';
 // Components
-import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu'
+import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu';
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -47,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
     alignSelf: 'center',
   },
-}))
+}));
 
 interface Props {
-  coffeeId: number
-  instance: Brew
-  accordionOpen: number | boolean
+  coffeeId: number;
+  instance: Brew;
+  accordionOpen: number | boolean;
   handleAccordion: (
     id: number
-  ) => (event: ChangeEvent<{}>, expanded: boolean) => void
+  ) => (event: ChangeEvent<{}>, expanded: boolean) => void;
 }
 
 // BrewInstance is the accordion that is displayed on CoffeeDetails for each
@@ -66,9 +66,9 @@ export default function BrewInstance({
   accordionOpen,
   handleAccordion,
 }: Props) {
-  const classes = useStyles()
-  const dispatch = useAppDispatch()
-  const methods = useAppSelector((store) => store.methods)
+  const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const methods = useAppSelector((store) => store.methods);
   const {
     id,
     methodsId,
@@ -85,10 +85,10 @@ export default function BrewInstance({
     waterTemp,
     time,
     lrr,
-  } = instance
-  const formattedDate = DateTime.fromISO(date).toFormat('LLL d')
+  } = instance;
+  const formattedDate = DateTime.fromISO(date).toFormat('LLL d');
   // Finds the name of the brew method used, searching by ID
-  const methodUsed = methods.find((method) => method.id === methodsId)?.name
+  const methodUsed = methods.find((method) => method.id === methodsId)?.name;
 
   return (
     <Accordion
@@ -99,11 +99,11 @@ export default function BrewInstance({
       <AccordionSummary expandIcon={<ExpandMore />}>
         <IconButton
           onClick={(event) => {
-            event.stopPropagation()
+            event.stopPropagation();
             dispatch({
               type: SagaActions.LIKE_BREW,
               payload: { coffeeId, brewId: id, change: liked },
-            })
+            });
           }}
           onFocus={(event) => event.stopPropagation()}
         >
@@ -161,5 +161,5 @@ export default function BrewInstance({
         </Box>
       </AccordionDetails>
     </Accordion>
-  )
+  );
 }

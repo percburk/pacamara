@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { UseStylesReturnType } from '../UpdateProfile/UpdateProfile'
+import { useState } from 'react';
+import { UseStylesReturnType } from '../UpdateProfile/UpdateProfile';
 import {
   Dialog,
   DialogTitle,
@@ -11,21 +11,21 @@ import {
   Collapse,
   IconButton,
   Chip,
-} from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { Close } from '@material-ui/icons'
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { Close } from '@material-ui/icons';
 // Hooks
-import { useAppSelector } from '../../hooks/useAppDispatchSelector'
+import { useAppSelector } from '../../hooks/useAppDispatchSelector';
 // Models
-import { UpdateProfileState } from '../../models/stateResource'
+import { UpdateProfileState } from '../../models/stateResource';
 
 interface Props {
-  newUpdates: UpdateProfileState
-  setNewUpdates: (newUpdates: UpdateProfileState) => void
-  defaultDialogOpen: boolean
-  setDefaultDialogOpen: (open: boolean) => void
-  classes: UseStylesReturnType
-  handleSubmit: () => void
+  newUpdates: UpdateProfileState;
+  setNewUpdates: (newUpdates: UpdateProfileState) => void;
+  defaultDialogOpen: boolean;
+  setDefaultDialogOpen: (open: boolean) => void;
+  classes: UseStylesReturnType;
+  handleSubmit: () => void;
 }
 
 // DefaultMethodDialog opens when a user is creating or editing their profile,
@@ -39,18 +39,18 @@ export default function DefaultMethodDialog({
   classes,
   handleSubmit,
 }: Props) {
-  const methods = useAppSelector((store) => store.methods)
-  const [collapseOpen, setCollapseOpen] = useState<boolean>(false)
+  const methods = useAppSelector((store) => store.methods);
+  const [collapseOpen, setCollapseOpen] = useState<boolean>(false);
 
   // Cancels default method choice and brings the user back to UpdateProfile
   const handleCancel = () => {
-    setDefaultDialogOpen(false)
+    setDefaultDialogOpen(false);
     setNewUpdates({
       ...newUpdates,
       methodsDefaultId: null,
       methodsDefaultLrr: null,
-    })
-  }
+    });
+  };
 
   // Submits the user's information without a default brew method
   const handleNoDefault = () => {
@@ -58,9 +58,9 @@ export default function DefaultMethodDialog({
       ...newUpdates,
       methodsDefaultId: null,
       methodsDefaultLrr: null,
-    })
-    handleSubmit()
-  }
+    });
+    handleSubmit();
+  };
 
   // Adds the selected default brew method to local state object
   const setDefault = (id: number, lrr: number) => {
@@ -68,8 +68,8 @@ export default function DefaultMethodDialog({
       ...newUpdates,
       methodsDefaultId: id,
       methodsDefaultLrr: lrr,
-    })
-  }
+    });
+  };
 
   return (
     <Dialog
@@ -134,5 +134,5 @@ export default function DefaultMethodDialog({
         </Alert>
       </Collapse>
     </Dialog>
-  )
+  );
 }

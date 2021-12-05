@@ -1,9 +1,9 @@
-import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
 import {
   EditInputsPayload,
   OneCoffeePayloadTypes,
-} from '../../models/redux/reduxPayloadResource'
-import { CoffeeItem } from '../../models/modelResource'
+} from '../../models/redux/reduxPayloadResource';
+import { CoffeeItem } from '../../models/modelResource';
 
 const initialState: CoffeeItem = {
   id: 0,
@@ -24,7 +24,7 @@ const initialState: CoffeeItem = {
   isFav: false,
   sharedById: 0,
   brewing: false,
-}
+};
 
 // oneCoffeeReducer contains the coffee being displayed on CoffeeDetails
 // It is also edited in EditCoffee through dispatches
@@ -34,28 +34,28 @@ const oneCoffeeReducer = (
 ): CoffeeItem => {
   switch (action.type) {
     case ReduxActions.SET_ONE_COFFEE:
-      return action.payload as CoffeeItem
+      return action.payload as CoffeeItem;
     case ReduxActions.EDIT_INPUTS:
-      const { key, change } = action.payload as EditInputsPayload
-      return { ...state, [key]: change }
+      const { key, change } = action.payload as EditInputsPayload;
+      return { ...state, [key]: change };
     case ReduxActions.EDIT_FLAVORS_ARRAY:
-      const id = action.payload as number
+      const id = action.payload as number;
       if (!state.flavorsArray.includes(id)) {
         return {
           ...state,
           flavorsArray: [...state.flavorsArray, id],
-        }
+        };
       } else {
         return {
           ...state,
           flavorsArray: state.flavorsArray.filter((index) => index !== id),
-        }
+        };
       }
     case ReduxActions.CLEAR_ONE_COFFEE:
-      return initialState
+      return initialState;
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default oneCoffeeReducer
+export default oneCoffeeReducer;
