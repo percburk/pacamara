@@ -124,7 +124,7 @@ export default function EditCoffee() {
       dispatch({ type: SagaActions.EDIT_COFFEE, payload: oneCoffee });
       history.goBack();
     } else {
-      setRoasterError(!!!roaster);
+      setRoasterError(!roaster);
       setBlendCountryError(!(country || blendName));
       !flavorsArray[0] &&
         dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
