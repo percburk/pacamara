@@ -10,10 +10,10 @@ import oneCoffeeRouter from './routes/oneCoffeeRouter'
 import flavorsRouter from './routes/flavorsRouter'
 import brewsRouter from './routes/brewsRouter'
 import shareRouter from './routes/shareRouter'
+import s3Router from './routes/s3Router'
 // App instance
 const app = express()
 
-import s3Router from './routes/s3Router'
 // --- Middleware --- //
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
