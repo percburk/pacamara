@@ -1,6 +1,6 @@
-import { put, takeEvery, all } from 'redux-saga/effects';
+import { put, takeEvery, all } from 'redux-saga/effects'
 // Models
-import { SagaActions, SagaDispatch } from '../../models/redux/sagaResource';
+import { SagaActions, SagaDispatch } from '../../models/redux/sagaResource'
 
 // Fetches all data needed to display on dashboard upon user login
 function* fetchDashboard(action: SagaDispatch<{ q: string }>) {
@@ -16,12 +16,12 @@ function* fetchDashboard(action: SagaDispatch<{ q: string }>) {
       put({ type: SagaActions.FETCH_SHARED_COFFEES }),
       // Fetches pared down list of coffees that can be searched in bar on Nav
       put({ type: SagaActions.FETCH_COFFEE_SEARCH_LIST }),
-    ]);
+    ])
   } catch (err) {
-    console.log('Error in fetchDashboard', err);
+    console.log('Error in fetchDashboard', err)
   }
 }
 
 export default function* dashboardSaga() {
-  yield takeEvery(SagaActions.FETCH_DASHBOARD, fetchDashboard);
+  yield takeEvery(SagaActions.FETCH_DASHBOARD, fetchDashboard)
 }

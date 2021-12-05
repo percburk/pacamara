@@ -1,8 +1,5 @@
-import { Flavors } from '../../models/modelResource';
-import {
-  ReduxActions,
-  ReduxDispatch,
-} from '../../models/redux/reduxResource';
+import { Flavors } from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 
 // flavorsReducer contains list of flavors, which are displayed as Chips
 // in various places around the app
@@ -12,10 +9,10 @@ const flavorsReducer = (
 ): Flavors[] => {
   switch (action.type) {
     case ReduxActions.SET_FLAVORS:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default flavorsReducer;
+export default flavorsReducer

@@ -1,5 +1,5 @@
-import { User } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
+import { User } from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 
 const initialState = {
   id: 0,
@@ -15,7 +15,7 @@ const initialState = {
   name: '',
   methodsDefaultLrr: 0,
   methodsArray: [],
-};
+}
 
 // userReducer will hold a username, password, and profile information
 // if someone is logged in
@@ -25,12 +25,12 @@ const userReducer = (
 ): User => {
   switch (action.type) {
     case ReduxActions.SET_USER:
-      return action.payload;
+      return action.payload
     case ReduxActions.UNSET_USER:
-      return initialState;
+      return initialState
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default userReducer;
+export default userReducer

@@ -1,12 +1,12 @@
-import { CallEffect, PutEffect } from '@redux-saga/core/effects';
-import { AxiosResponse } from 'axios';
-import { ReduxDispatch, ReduxDispatchNoPayload } from './reduxResource';
+import { CallEffect, PutEffect } from '@redux-saga/core/effects'
+import { AxiosResponse } from 'axios'
+import { ReduxDispatch, ReduxDispatchNoPayload } from './reduxResource'
 
 export interface SagaDispatchNoPayload {
-  type: SagaActions;
+  type: SagaActions
 }
 export interface SagaDispatch<T> extends SagaDispatchNoPayload {
-  payload: T;
+  payload: T
 }
 
 export type SagaGeneratorReturn<T, U = void> = Generator<
@@ -19,7 +19,7 @@ export type SagaGeneratorReturn<T, U = void> = Generator<
   | CallEffect<unknown>,
   void,
   AxiosResponse<T>
->;
+>
 
 export enum SagaActions {
   // Data for dashboard

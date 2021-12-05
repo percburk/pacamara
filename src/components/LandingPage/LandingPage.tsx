@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import SwipeableViews from 'react-swipeable-views';
+import { useState } from 'react'
+import SwipeableViews from 'react-swipeable-views'
 import {
   Box,
   Paper,
@@ -8,22 +8,22 @@ import {
   IconButton,
   Collapse,
   makeStyles,
-} from '@material-ui/core';
-import { Close } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+} from '@material-ui/core'
+import { Close } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 // Hooks
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
+} from '../../hooks/useAppDispatchSelector'
 // Models
-import { ReduxActions } from '../../models/redux/reduxResource';
+import { ReduxActions } from '../../models/redux/reduxResource'
 // CSS
-import './LandingPage.css';
+import './LandingPage.css'
 // Components
-import RegisterForm from '../RegisterForm/RegisterForm';
-import LoginForm from '../LoginForm/LoginForm';
-import TabPanel from './TabPanel';
+import RegisterForm from '../RegisterForm/RegisterForm'
+import LoginForm from '../LoginForm/LoginForm'
+import TabPanel from './TabPanel'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -38,15 +38,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     width: 120,
   },
-}));
-export type UseStylesType = ReturnType<typeof useStyles>;
+}))
+export type UseStylesType = ReturnType<typeof useStyles>
 
 // LandingPage is the login and registration page
 export default function LandingPage() {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const { string, open } = useAppSelector((store) => store.landingErrors);
-  const [tab, setTab] = useState<number>(0);
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const { string, open } = useAppSelector((store) => store.landingErrors)
+  const [tab, setTab] = useState<number>(0)
 
   return (
     <Box
@@ -99,5 +99,5 @@ export default function LandingPage() {
         </Paper>
       </Box>
     </Box>
-  );
+  )
 }

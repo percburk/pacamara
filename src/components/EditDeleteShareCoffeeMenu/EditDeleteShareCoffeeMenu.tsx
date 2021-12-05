@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
   IconButton,
-} from '@material-ui/core';
-import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons';
+} from '@material-ui/core'
+import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons'
 // Components
-import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
-import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog';
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog'
+import SendCoffeeDialog from '../SendCoffeeDialog/SendCoffeeDialog'
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 interface Props {
-  id: number;
-  coffeeName: string;
-  pic: string;
+  id: number
+  coffeeName: string
+  pic: string
 }
 
 // EditDeleteShareMenu appears when the 'more' icon is clicked on a CoffeeCard
@@ -27,19 +27,19 @@ export default function EditDeleteShareCoffeeMenu({
   coffeeName,
   pic,
 }: Props) {
-  const dispatch = useAppDispatch();
-  const history = useHistory();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  const [sendDialogOpen, setSendDialogOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch()
+  const history = useHistory()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
+  const [sendDialogOpen, setSendDialogOpen] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
-  >(null);
+  >(null)
 
   // Opens the send coffee dialog
   const openShare = () => {
-    setSendDialogOpen(true);
-    setAnchorEl(null);
-  };
+    setSendDialogOpen(true)
+    setAnchorEl(null)
+  }
 
   return (
     <>
@@ -60,9 +60,9 @@ export default function EditDeleteShareCoffeeMenu({
         </MenuItem>
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            history.push(`/edit-coffee/${id}`);
-            dispatch({ type: ReduxActions.CLEAR_ONE_COFFEE });
+            setAnchorEl(null)
+            history.push(`/edit-coffee/${id}`)
+            dispatch({ type: ReduxActions.CLEAR_ONE_COFFEE })
           }}
         >
           <ListItemIcon>
@@ -72,8 +72,8 @@ export default function EditDeleteShareCoffeeMenu({
         </MenuItem>
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            setDeleteDialogOpen(true);
+            setAnchorEl(null)
+            setDeleteDialogOpen(true)
           }}
         >
           <ListItemIcon>
@@ -95,5 +95,5 @@ export default function EditDeleteShareCoffeeMenu({
         pic={pic}
       />
     </>
-  );
+  )
 }

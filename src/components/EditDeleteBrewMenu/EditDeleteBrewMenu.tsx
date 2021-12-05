@@ -1,27 +1,27 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
   IconButton,
-} from '@material-ui/core';
-import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons';
+} from '@material-ui/core'
+import { DeleteOutline, MoreVert, Edit } from '@material-ui/icons'
 // Models
-import { Brew } from '../../models/modelResource';
+import { Brew } from '../../models/modelResource'
 // Components
-import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog';
-import AddEditBrew from '../AddEditBrew/AddEditBrew';
+import DeleteCoffeeBrewDialog from '../DeleteCoffeeBrewDialog/DeleteCoffeeBrewDialog'
+import AddEditBrew from '../AddEditBrew/AddEditBrew'
 
 // EditDeleteBrewMenu appears when the 'more' icon is clicked on a BrewInstance
 // accordion
 export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
-  const { id: brewId, coffeesId: coffeeId } = instance;
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false);
+  const { id: brewId, coffeesId: coffeeId } = instance
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
+  const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
-  >(null);
+  >(null)
 
   return (
     <>
@@ -36,8 +36,8 @@ export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
       >
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            setAddEditBrewOpen(true);
+            setAnchorEl(null)
+            setAddEditBrewOpen(true)
           }}
         >
           <ListItemIcon>
@@ -47,8 +47,8 @@ export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
-            setDeleteDialogOpen(true);
+            setAnchorEl(null)
+            setDeleteDialogOpen(true)
           }}
         >
           <ListItemIcon>
@@ -69,5 +69,5 @@ export default function EditDeleteBrewMenu({ instance }: { instance: Brew }) {
         coffeeId={coffeeId}
       />
     </>
-  );
+  )
 }

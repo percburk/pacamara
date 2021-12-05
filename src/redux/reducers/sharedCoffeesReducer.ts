@@ -1,8 +1,5 @@
-import { SharedCoffees } from '../../models/modelResource';
-import {
-  ReduxActions,
-  ReduxDispatch,
-} from '../../models/redux/reduxResource';
+import { SharedCoffees } from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 
 // sharedCoffeesReducer contains any entries of shared coffees
 // sent by other users, this is checked in UseEffect() on Dashboard
@@ -12,10 +9,10 @@ const sharedCoffeesReducer = (
 ): SharedCoffees[] => {
   switch (action.type) {
     case ReduxActions.SET_SHARED_COFFEES:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default sharedCoffeesReducer;
+export default sharedCoffeesReducer

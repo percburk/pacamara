@@ -1,16 +1,16 @@
-import { combineReducers } from 'redux';
-import landingErrors from './landingErrorsReducer';
-import user from './userReducer';
-import methods from './methodsReducer';
-import coffees from './coffeesReducer';
-import oneCoffee from './oneCoffeeReducer';
-import flavors from './flavorsReducer';
-import snackbars from './snackbarsReducer';
-import brews from './brewsReducer';
-import coffeeSearchList from './coffeeSearchListReducer';
-import sharingUserList from './sharingUserListReducer';
-import sharedCoffees from './sharedCoffeesReducer';
-import oneSharedCoffee from './oneSharedCoffeeReducer';
+import { combineReducers } from 'redux'
+import landingErrors from './landingErrorsReducer'
+import user from './userReducer'
+import methods from './methodsReducer'
+import coffees from './coffeesReducer'
+import oneCoffee from './oneCoffeeReducer'
+import flavors from './flavorsReducer'
+import snackbars from './snackbarsReducer'
+import brews from './brewsReducer'
+import coffeeSearchList from './coffeeSearchListReducer'
+import sharingUserList from './sharingUserListReducer'
+import sharedCoffees from './sharedCoffeesReducer'
+import oneSharedCoffee from './oneSharedCoffeeReducer'
 
 // rootReducer is the primary reducer for the entire project
 // It bundles up all of the other reducers so the project can use them.
@@ -30,6 +30,6 @@ const rootReducer = combineReducers({
   sharingUserList, // List of users to search, used in sharing coffees
   sharedCoffees, // Any coffees that have been shared with the current user
   oneSharedCoffee, // All information of the specific coffee shared
-});
+})
 
-export default rootReducer;
+export default rootReducer

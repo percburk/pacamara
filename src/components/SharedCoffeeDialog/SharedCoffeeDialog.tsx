@@ -11,17 +11,17 @@ import {
   Button,
   Grid,
   Paper,
-} from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+} from '@material-ui/core'
+import { Add } from '@material-ui/icons'
 // Hooks
 import {
   useAppSelector,
   useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
+} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SharedCoffees } from '../../models/modelResource';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import { SharedCoffees } from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -42,14 +42,14 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
-}));
+}))
 
 interface Props {
-  dialogOpen: boolean;
-  setDialogOpen: (set: boolean) => void;
-  selectedCoffee: SharedCoffees;
-  setSharedOpen: (open: boolean) => void;
-  setAvatarAnchorEl: (set: null) => void;
+  dialogOpen: boolean
+  setDialogOpen: (set: boolean) => void
+  selectedCoffee: SharedCoffees
+  setSharedOpen: (open: boolean) => void
+  setAvatarAnchorEl: (set: null) => void
 }
 
 // SharedCoffeeDialog opens when the user clicks on an item from
@@ -62,8 +62,8 @@ export default function SharedCoffeeDialog({
   setAvatarAnchorEl,
   setSharedOpen,
 }: Props) {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
   const {
     isBlend,
     blendName,
@@ -77,18 +77,18 @@ export default function SharedCoffeeDialog({
     elevation,
     cultivars,
     processing,
-  } = useAppSelector((store) => store.oneSharedCoffee);
-  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
-  const flavors = useAppSelector((store) => store.flavors);
+  } = useAppSelector((store) => store.oneSharedCoffee)
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
+  const flavors = useAppSelector((store) => store.flavors)
   const {
     id: selectedId,
     username,
     message,
     senderId,
     profilePic,
-  } = selectedCoffee;
+  } = selectedCoffee
 
-  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
 
   // If the user doesn't want to add this coffee to their dashboard, they can
   // decline and the message is deleted
@@ -96,33 +96,33 @@ export default function SharedCoffeeDialog({
     dispatch({
       type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
-    });
-    dispatch({ type: ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE });
-    handleReset();
-  };
+    })
+    dispatch({ type: ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE })
+    handleReset()
+  }
 
   // Handles adding this shared coffee to the user's dashboard
   const handleAdd = () => {
     dispatch({
       type: SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
       payload: { coffeesId: coffeeId, sharedById: senderId },
-    });
+    })
     dispatch({
       type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
-    });
-    dispatch({ type: ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE });
-    handleReset();
-  };
+    })
+    dispatch({ type: ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE })
+    handleReset()
+  }
 
   const handleReset = () => {
-    setDialogOpen(false);
+    setDialogOpen(false)
     if (!sharedCoffees) {
-      dispatch({ type: ReduxActions.CLEAR_ONE_SHARED_COFFEE });
-      setAvatarAnchorEl(null);
-      setSharedOpen(false);
+      dispatch({ type: ReduxActions.CLEAR_ONE_SHARED_COFFEE })
+      setAvatarAnchorEl(null)
+      setSharedOpen(false)
     }
-  };
+  }
 
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -203,5 +203,5 @@ export default function SharedCoffeeDialog({
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  )
 }

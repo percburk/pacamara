@@ -1,5 +1,5 @@
-import pg, { PoolConfig } from 'pg';
-import url from 'url';
+import pg, { PoolConfig } from 'pg'
+import url from 'url'
 
 const getConfig = (): PoolConfig => {
   // Heroku gives a url, not a connection object
@@ -7,8 +7,8 @@ const getConfig = (): PoolConfig => {
   if (process.env.DATABASE_URL) {
     const { hostname, port, pathname, auth } = url.parse(
       process.env.DATABASE_URL
-    );
-    const authArray = auth?.split(':');
+    )
+    const authArray = auth?.split(':')
 
     if (authArray) {
       return {
@@ -20,7 +20,7 @@ const getConfig = (): PoolConfig => {
         ssl: { rejectUnauthorized: false },
         max: 10, // max number of clients in the pool
         idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
-      };
+      }
     }
   }
 
@@ -30,17 +30,17 @@ const getConfig = (): PoolConfig => {
     database: 'pacamara', // Adjusted database name for this particular app
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
-  };
-};
+  }
+}
 
 // this creates the pool that will be shared by all other modules
-const pool: pg.Pool = new pg.Pool(getConfig());
+const pool: pg.Pool = new pg.Pool(getConfig())
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
 pool.on('error', (err): void => {
-  console.log('Unexpected error on idle client', err);
-  process.exit(-1);
-});
+  console.log('Unexpected error on idle client', err)
+  process.exit(-1)
+})
 
-export default pool;
+export default pool

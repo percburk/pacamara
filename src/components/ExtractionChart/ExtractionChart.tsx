@@ -3,14 +3,14 @@ import {
   VictoryScatter,
   VictoryTooltip,
   VictoryLabel,
-} from 'victory';
-import { ClickAwayListener } from '@material-ui/core';
+} from 'victory'
+import { ClickAwayListener } from '@material-ui/core'
 // Hooks
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+import { useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import { BrewChartState } from '../../models/stateResource';
+import { BrewChartState } from '../../models/stateResource'
 // Components
-import RangePolygon from './RangePolygon';
+import RangePolygon from './RangePolygon'
 
 // Styling
 export const chartStyles = {
@@ -29,13 +29,13 @@ export const chartStyles = {
     fill: 'grey',
     opacity: 0.3,
   },
-};
+}
 
 interface Props {
-  switchChart: boolean;
-  setSwitchChart: (set: boolean) => void;
-  oneBrew: BrewChartState;
-  setOneBrew: (brew: BrewChartState) => void;
+  switchChart: boolean
+  setSwitchChart: (set: boolean) => void
+  oneBrew: BrewChartState
+  setOneBrew: (brew: BrewChartState) => void
 }
 
 // ExtractionChart shows a scatter chart of all the brew instances of a coffee
@@ -49,20 +49,20 @@ export default function ExtractionChart({
 }: Props) {
   const { extMin, extMax, tdsMin, tdsMax } = useAppSelector(
     (store) => store.user
-  );
-  const brews = useAppSelector((store) => store.brews);
+  )
+  const brews = useAppSelector((store) => store.brews)
   const extractionWindow = [
     { x: extMin, y: tdsMin },
     { x: extMax, y: tdsMin },
     { x: extMax, y: tdsMax },
     { x: extMin, y: tdsMax },
-  ];
+  ]
 
   // Toggles the chart between showing all the brews, and one clicked brew
   const handleSwitchChart = ({ x, y, i }: BrewChartState) => {
-    setOneBrew({ x, y, i });
-    setSwitchChart(!switchChart);
-  };
+    setOneBrew({ x, y, i })
+    setSwitchChart(!switchChart)
+  }
 
   return (
     <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
@@ -122,5 +122,5 @@ export default function ExtractionChart({
         )}
       </VictoryChart>
     </ClickAwayListener>
-  );
+  )
 }

@@ -5,4 +5,4 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
-echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..." && npx tsc -p base.tsconfig.json && echo "${GREEN}Success! Pushing commit...${NO_COLOR}"
+echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..." && npx tsc -p base.tsconfig.json && echo "${GREEN}Success!${NO_COLOR} Pushing commit..."

@@ -1,8 +1,5 @@
-import { CoffeeSearchList } from '../../models/modelResource';
-import {
-  ReduxDispatch,
-  ReduxActions,
-} from '../../models/redux/reduxResource';
+import { CoffeeSearchList } from '../../models/modelResource'
+import { ReduxDispatch, ReduxActions } from '../../models/redux/reduxResource'
 
 // searchReducer contains a pared down list of coffee info the user can search
 // through on Nav
@@ -12,10 +9,10 @@ const coffeeSearchListReducer = (
 ): CoffeeSearchList[] => {
   switch (action.type) {
     case ReduxActions.SET_COFFEE_SEARCH_LIST:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default coffeeSearchListReducer;
+export default coffeeSearchListReducer
