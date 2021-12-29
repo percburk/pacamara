@@ -31,4 +31,3 @@ export default function* rootSaga() {
     dashboardSaga(), // Handles GET of all data the dashboard requires on login
   ]);
 }
-

@@ -194,10 +194,7 @@ router.post(
       res.sendStatus(201); // Send back success!
     } catch (err) {
       await connection.query('ROLLBACK;');
-      console.log(
-        'Error in add coffee POST in coffeesRouter, rollback: ',
-        err
-      );
+      console.log('Error in add coffee POST in coffeesRouter, rollback: ', err);
       res.sendStatus(500);
     } finally {
       connection.release();

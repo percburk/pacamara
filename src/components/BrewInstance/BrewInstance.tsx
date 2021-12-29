@@ -118,9 +118,7 @@ export default function BrewInstance({
         <Typography className={classes.dateMethod}>
           {formattedDate} with {methodUsed}
         </Typography>
-        <Typography className={classes.summary}>
-          Water: {waterDose}g
-        </Typography>
+        <Typography className={classes.summary}>Water: {waterDose}g</Typography>
         <Typography className={classes.summary}>
           Coffee: {coffeeDose}g
         </Typography>

@@ -1,0 +1,9 @@
+# build
+/build
+/dist
+
+# dependencies
+package-lock.json
+
+# testing
+/coverage
