@@ -37,18 +37,18 @@
     "victory-core": "^36.2.0"
   },
   "scripts": {
-    "<-- Deployment -->": "",
+    "// Deployment": "",
     "start": "node -r dotenv/config server/server.ts",
-    "<-- React Client-Side -->": "",
+    "// React Client-Side": "",
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "<-- TS for Server -->": "",
+    "// TS for Server": "",
     "server": "nodemon -e ts --ignore './dist' -x npm run server:ts",
     "server:ts": "tsc -p base.tsconfig.json && node -r dotenv/config dist/server/server.js",
     "tsc": "tsc -p base.tsconfig.json",
-    "<-- Linting and Formatting -->": "",
+    "// Linting and Formatting": "",
     "prettier": "prettier --write --ignore-unknown .",
     "eslint": "eslint --fix src/**/*.{ts,tsx}"
   },
