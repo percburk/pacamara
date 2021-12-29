@@ -8,5 +8,5 @@ NO_COLOR='\033[0m'
 echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..."
 npx tsc -p base.tsconfig.json
 echo "${CYAN}→${NO_COLOR} Running Jest unit tests..."
-npm run test
+npx jest
 echo "${GREEN}Success!${NO_COLOR}"
