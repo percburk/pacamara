@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 
 // Material-UI theme which is constant throughout, imported into App
 // and sent through ThemeProvider
-const muiTheme = createMuiTheme({
+const muiTheme = createTheme({
   palette: {
     primary: {
       main: '#35baf6',
@@ -45,7 +45,7 @@ const muiTheme = createMuiTheme({
       fontFamily: 'Lato',
       fontWeight: 300,
       fontSize: '1.1rem',
-      lineHeight: 1.5
+      lineHeight: 1.5,
     },
   },
 });

@@ -14,7 +14,7 @@ passport.deserializeUser((id: number, done): void => {
     SELECT * FROM "users" 
     WHERE "id" = $1;
   `;
-  
+
   pool
     .query(sqlText, [id])
     .then((result) => {
@@ -49,7 +49,7 @@ passport.use(
       SELECT * FROM "users" 
       WHERE "username" = $1;
     `;
-    
+
     pool
       .query(sqlText, [username])
       .then((result) => {

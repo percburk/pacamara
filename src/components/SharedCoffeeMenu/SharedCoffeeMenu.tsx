@@ -79,9 +79,7 @@ export default function SharedCoffeeMenu({
               </Avatar>
               <Box>
                 <Typography>{shared.username}</Typography>
-                <Typography variant="subtitle2">
-                  {shared.coffeeName}
-                </Typography>
+                <Typography variant="subtitle2">{shared.coffeeName}</Typography>
               </Box>
             </MenuItem>
           );
