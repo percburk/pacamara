@@ -26,6 +26,7 @@ import { BrewState } from '../../models/stateResource';
 import { Brew, Methods } from '../../models/modelResource';
 import { SagaActions } from '../../models/redux/sagaResource';
 import { ReduxActions } from '../../models/redux/reduxResource';
+import { validateNumberInput, validateSubmit } from './inputValidationUtils';
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +57,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export const initialBrewState: BrewState = {
+  coffeesId: 0,
+  methodsId: 0,
+  waterDose: 0,
+  coffeeDose: 0,
+  grind: 0,
+  moisture: 1.5,
+  co2: 1,
+  tds: 0,
+  ext: 0,
+  waterTemp: 205,
+  time: '',
+  lrr: 0,
+};
+
 interface Props {
   coffeeId?: number;
   addEditBrewOpen: boolean;
@@ -84,17 +100,8 @@ export default function AddEditBrew({
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
   const [brew, setBrew] = useState<BrewState | Brew>(
     editInstance || {
-      coffeesId: 0,
+      ...initialBrewState,
       methodsId: methodsDefaultId,
-      waterDose: 0,
-      coffeeDose: 0,
-      grind: 0,
-      moisture: 1.5,
-      co2: 1,
-      tds: 0,
-      ext: 0,
-      waterTemp: 205,
-      time: '',
       lrr: methodsDefaultLrr,
     }
   );
@@ -104,7 +111,12 @@ export default function AddEditBrew({
   const handleBrew =
     (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
-      setBrew({ ...brew, [key]: key === 'time' ? value : Number(value) });
+      const validatedInput =
+        key !== 'time' ? validateNumberInput(value, key) : value;
+
+      if (validatedInput !== undefined) {
+        setBrew({ ...brew, [key]: key === 'time' ? value : validatedInput });
+      }
     };
 
   // This is the math to calculate the Extraction %, result is rendered
@@ -113,12 +125,12 @@ export default function AddEditBrew({
   const bevWater = brew.waterDose - adjustedCoffeeDose * brew.lrr;
   const tdsWeight = bevWater / ((100 - brew.tds) / 100) - bevWater;
   const ext = Number((tdsWeight / adjustedCoffeeDose) * 100);
-  const extCalc = ext !== 0 && isFinite(ext) ? ext.toFixed(1) : '';
+  const extCalc = ext !== 0 && isFinite(ext) ? Number(ext.toFixed(1)) : '';
 
   // This is the math to calculate the brew ratio, result is rendered
   const ratioCalc =
     brew.coffeeDose && brew.waterDose
-      ? Number(brew.waterDose / brew.coffeeDose).toFixed(2)
+      ? Number((brew.waterDose / brew.coffeeDose).toFixed(2))
       : '';
 
   // This adds whatever method was used for the brew into the local state object
@@ -133,9 +145,9 @@ export default function AddEditBrew({
         type: editInstance ? SagaActions.EDIT_BREW : SagaActions.ADD_BREW,
         payload: {
           ...brew,
-          coffeesId: editInstance?.coffeesId || coffeeId,
-          ratio: Number(ratioCalc),
-          ext: Number(extCalc),
+          coffeesId: editInstance?.coffeesId ?? coffeeId,
+          ratio: ratioCalc,
+          ext: extCalc,
         },
       });
       dispatch({
@@ -155,17 +167,8 @@ export default function AddEditBrew({
 
   const clearInputs = () => {
     setBrew({
-      coffeesId: 0,
+      ...initialBrewState,
       methodsId: methodsDefaultId,
-      waterDose: 0,
-      coffeeDose: 0,
-      grind: 0,
-      moisture: 1.5,
-      co2: 1,
-      tds: 0,
-      ext: 0,
-      waterTemp: 205,
-      time: '',
       lrr: methodsDefaultLrr,
     });
   };
@@ -243,8 +246,9 @@ export default function AddEditBrew({
         <Box className={classes.root}>
           <Typography>Brew Method Used:</Typography>
           <Box className={classes.root}>
-            {methods.map((method) =>
-              methodsArray.includes(method.id) ? (
+            {methods
+              .filter((method) => methodsArray.includes(method.id))
+              .map((method) => (
                 <Chip
                   className={classes.chips}
                   key={method.id}
@@ -252,8 +256,7 @@ export default function AddEditBrew({
                   color={method.id === brew.methodsId ? 'primary' : 'default'}
                   onClick={() => handleMethod(method)}
                 />
-              ) : null
-            )}
+              ))}
           </Box>
         </Box>
         <Box display="flex" className={classes.root} alignItems="center">
