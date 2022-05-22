@@ -16,32 +16,32 @@ describe('testing oneCoffeeReducer', () => {
 
   // EDIT_SWITCH
   test('action EDIT_SWITCH', () => {
-    const state = { is_blend: true, brewing: false };
+    const state = { isBlend: true, brewing: false };
     const action = {
-      type: 'EDIT_SWITCH',
-      payload: 'is_blend',
+      type: 'EDIT_INPUTS',
+      payload: { key: 'isBlend', change: false },
     };
     expect(oneCoffeeReducer(state, action)).toEqual({
-      is_blend: false,
+      isBlend: false,
       brewing: false,
     });
   });
 
   // EDIT_FLAVORS_ARRAY
   test('action EDIT_FLAVORS_ARRAY', () => {
-    const state = { flavors_array: [1, 3, 4, 6] };
+    const state = { flavorsArray: [1, 3, 4, 6] };
     const action = { type: 'EDIT_FLAVORS_ARRAY', payload: 6 };
     expect(oneCoffeeReducer(state, action)).toEqual({
-      flavors_array: [1, 3, 4],
+      flavorsArray: [1, 3, 4],
     });
   });
 
   // EDIT_FLAVORS_ARRAY
   test('action opposite EDIT_FLAVORS_ARRAY', () => {
-    const state = { flavors_array: [1, 3, 4, 6] };
+    const state = { flavorsArray: [1, 3, 4, 6] };
     const action = { type: 'EDIT_FLAVORS_ARRAY', payload: 8 };
     expect(oneCoffeeReducer(state, action)).toEqual({
-      flavors_array: [1, 3, 4, 6, 8],
+      flavorsArray: [1, 3, 4, 6, 8],
     });
   });
 });

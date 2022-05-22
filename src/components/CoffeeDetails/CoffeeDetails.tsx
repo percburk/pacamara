@@ -246,24 +246,18 @@ export default function CoffeeDetails() {
                 Add a Brew
               </Button>
             </Box>
-            {!switchChart ? (
-              brews.map((instance) => (
+            {(!switchChart ? brews : brews.slice(oneBrew.i, oneBrew.i + 1)).map(
+              (instance) => (
                 <BrewInstance
                   key={instance.id}
                   instance={instance}
                   coffeeId={coffeeId}
-                  accordionOpen={accordionOpen}
+                  accordionOpen={
+                    !switchChart ? accordionOpen : brews[oneBrew.i].id
+                  }
                   handleAccordion={handleAccordion}
                 />
-              ))
-            ) : (
-              <BrewInstance
-                key={brews[oneBrew.i].id}
-                instance={brews[oneBrew.i]}
-                coffeeId={coffeeId}
-                accordionOpen={brews[oneBrew.i].id}
-                handleAccordion={handleAccordion}
-              />
+              )
             )}
           </Grid>
         </Grid>

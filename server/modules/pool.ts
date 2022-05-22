@@ -1,4 +1,4 @@
-import pg, { PoolConfig } from 'pg';
+import { PoolConfig, Pool } from 'pg';
 import url from 'url';
 
 const getConfig = (): PoolConfig => {
@@ -34,7 +34,7 @@ const getConfig = (): PoolConfig => {
 };
 
 // this creates the pool that will be shared by all other modules
-const pool: pg.Pool = new pg.Pool(getConfig());
+const pool = new Pool(getConfig());
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens

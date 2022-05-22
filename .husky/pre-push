@@ -6,5 +6,7 @@ GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
 echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..."
-npx tsc -p base.tsconfig.json
+npx tsc -p base.tsconfig.json --noEmit
+echo "${CYAN}→${NO_COLOR} Running Jest unit tests..."
+npx react-scripts test --env=jsdom --watchAll=false --bail
 echo "${GREEN}Success!${NO_COLOR}"
