@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom'
 import {
   Dialog,
   DialogTitle,
@@ -8,7 +8,7 @@ import {
   Box,
   makeStyles,
   DialogContentText,
-} from '@material-ui/core';
+} from '@material-ui/core'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -18,30 +18,22 @@ const useStyles = makeStyles((theme) => ({
   textCenter: {
     textAlign: 'center',
   },
-}));
+}))
 
 interface Props {
-  newUserDialogOpen: boolean;
-  setNewUserDialogOpen: (set: boolean) => void;
+  newUserDialogOpen: boolean
+  setNewUserDialogOpen: (set: boolean) => void
 }
 
 // NewUserDialog opens if the user is logging in for the first time
 // or has not created a profile yet, only redirects to UpdateProfile
-export default function NewUserDialog({
-  newUserDialogOpen,
-  setNewUserDialogOpen,
-}: Props) {
-  const classes = useStyles();
-  const history = useHistory();
+export default function NewUserDialog({newUserDialogOpen, setNewUserDialogOpen}: Props) {
+  const classes = useStyles()
+  const history = useHistory()
 
   return (
-    <Dialog
-      open={newUserDialogOpen}
-      onClose={() => setNewUserDialogOpen(false)}
-    >
-      <DialogTitle className={classes.textCenter}>
-        Welcome to Pacamara!
-      </DialogTitle>
+    <Dialog open={newUserDialogOpen} onClose={() => setNewUserDialogOpen(false)}>
+      <DialogTitle className={classes.textCenter}>Welcome to Pacamara!</DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Let's set you up with a new profile.
@@ -60,5 +52,5 @@ export default function NewUserDialog({
         </DialogActions>
       </Box>
     </Dialog>
-  );
+  )
 }

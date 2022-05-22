@@ -1,6 +1,6 @@
-import { useState, useEffect, ChangeEvent } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { DateTime } from 'luxon';
+import {useState, useEffect, ChangeEvent} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
+import {DateTime} from 'luxon'
 import {
   Box,
   Typography,
@@ -12,7 +12,7 @@ import {
   Button,
   Tooltip,
   CircularProgress,
-} from '@material-ui/core';
+} from '@material-ui/core'
 import {
   Favorite,
   FavoriteBorder,
@@ -20,23 +20,20 @@ import {
   LocalCafeOutlined,
   ArrowBackIos,
   Add,
-} from '@material-ui/icons';
-import { grey } from '@material-ui/core/colors';
+} from '@material-ui/icons'
+import {grey} from '@material-ui/core/colors'
 // Hooks
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
-import { BrewChartState } from '../../models/stateResource';
+import {SagaActions} from '../../models/redux/sagaResource'
+import {ReduxActions} from '../../models/redux/reduxResource'
+import {BrewChartState} from '../../models/stateResource'
 // Components
-import BrewInstance from '../BrewInstance/BrewInstance';
-import EditDeleteShareMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu';
-import AddEditBrew from '../AddEditBrew/AddEditBrew';
-import Snackbars from '../Snackbars/Snackbars';
-import ExtractionChart from '../ExtractionChart/ExtractionChart';
+import BrewInstance from '../BrewInstance/BrewInstance'
+import EditDeleteShareMenu from '../EditDeleteShareCoffeeMenu/EditDeleteShareCoffeeMenu'
+import AddEditBrew from '../AddEditBrew/AddEditBrew'
+import Snackbars from '../Snackbars/Snackbars'
+import ExtractionChart from '../ExtractionChart/ExtractionChart'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -55,15 +52,15 @@ const useStyles = makeStyles((theme) => ({
   backButton: {
     marginTop: theme.spacing(2),
   },
-}));
+}))
 
 // CoffeeDetails shows all coffee information, all the brew instances, and
 // the extraction chart that displays TDS and EXT for all brews
 export default function CoffeeDetails() {
-  const classes = useStyles();
-  const history = useHistory();
-  const coffeeId = Number(useParams<{ id: string }>().id);
-  const dispatch = useAppDispatch();
+  const classes = useStyles()
+  const history = useHistory()
+  const coffeeId = Number(useParams<{id: string}>().id)
+  const dispatch = useAppDispatch()
   const {
     isFav,
     brewing,
@@ -80,56 +77,51 @@ export default function CoffeeDetails() {
     notes,
     coffeePic,
     flavorsArray,
-  } = useAppSelector((store) => store.oneCoffee);
-  const brews = useAppSelector((store) => store.brews);
-  const flavors = useAppSelector((store) => store.flavors);
-  const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false);
-  const [switchChart, setSwitchChart] = useState<boolean>(false);
-  const [oneBrew, setOneBrew] = useState<BrewChartState>({ x: 0, y: 0, i: 0 });
-  const [accordionOpen, setAccordionOpen] = useState<boolean | number>(false);
+  } = useAppSelector((store) => store.oneCoffee)
+  const brews = useAppSelector((store) => store.brews)
+  const flavors = useAppSelector((store) => store.flavors)
+  const [addEditBrewOpen, setAddEditBrewOpen] = useState<boolean>(false)
+  const [switchChart, setSwitchChart] = useState<boolean>(false)
+  const [oneBrew, setOneBrew] = useState<BrewChartState>({x: 0, y: 0, i: 0})
+  const [accordionOpen, setAccordionOpen] = useState<boolean | number>(false)
 
   useEffect(() => {
-    dispatch({ type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId });
-    dispatch({ type: SagaActions.FETCH_BREWS, payload: coffeeId });
-    dispatch({ type: SagaActions.FETCH_FLAVORS });
-    dispatch({ type: SagaActions.FETCH_METHODS });
-  }, [dispatch, coffeeId]);
+    dispatch({type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId})
+    dispatch({type: SagaActions.FETCH_BREWS, payload: coffeeId})
+    dispatch({type: SagaActions.FETCH_FLAVORS})
+    dispatch({type: SagaActions.FETCH_METHODS})
+  }, [dispatch, coffeeId])
 
-  const formattedDate = DateTime.fromISO(roastDate).toFormat('LLL d');
+  const formattedDate = DateTime.fromISO(roastDate).toFormat('LLL d')
 
   // Displays either blend name or country/producer based on blend status
-  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`;
+  const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
 
   // Uses Luxon to calculate the amount of days post roast for this coffee
   const daysOffRoast = Number(
     DateTime.local().diff(DateTime.fromISO(roastDate), 'days').toFormat('d')
-  );
+  )
 
   // Toggle fav or brewing status of the coffee
   const handleBrewOrFav = (change: 'brew' | 'fav') => {
     dispatch({
       type: SagaActions.SET_BREWING_OR_FAV,
-      payload: { oneCoffeeId: coffeeId, change },
-    });
-  };
+      payload: {oneCoffeeId: coffeeId, change},
+    })
+  }
 
   // Only allows one accordion open at a time, for easier ui
   const handleAccordion =
     (selected: number) => (event: ChangeEvent<{}>, isOpen: boolean) => {
-      setAccordionOpen(isOpen ? selected : false);
-    };
+      setAccordionOpen(isOpen ? selected : false)
+    }
 
   if (!coffeePic) {
     return (
-      <Box
-        height="90vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box height="90vh" display="flex" justifyContent="center" alignItems="center">
         <CircularProgress color="primary" />
       </Box>
-    );
+    )
   }
 
   return (
@@ -140,18 +132,14 @@ export default function CoffeeDetails() {
             <Box display="flex" justifyContent="center">
               <Box>
                 <Paper elevation={4}>
-                  <img
-                    alt="coffee bag"
-                    src={coffeePic}
-                    className={classes.media}
-                  />
+                  <img alt="coffee bag" src={coffeePic} className={classes.media} />
                 </Paper>
                 <Button
                   className={classes.backButton}
                   startIcon={<ArrowBackIos />}
                   onClick={() => {
-                    dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
-                    history.goBack();
+                    dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+                    history.goBack()
                   }}
                 >
                   Go Back
@@ -177,11 +165,7 @@ export default function CoffeeDetails() {
                   {isFav ? <Favorite color="primary" /> : <FavoriteBorder />}
                 </IconButton>
               </Tooltip>
-              <Tooltip
-                title="Currently Brewing"
-                enterDelay={900}
-                leaveDelay={100}
-              >
+              <Tooltip title="Currently Brewing" enterDelay={900} leaveDelay={100}>
                 <IconButton onClick={() => handleBrewOrFav('brew')}>
                   {brewing ? (
                     <LocalCafe color="primary" />
@@ -204,15 +188,9 @@ export default function CoffeeDetails() {
             {!isBlend && (
               <Box marginBottom={2}>
                 <Typography variant="subtitle1">Region: {region}</Typography>
-                <Typography variant="subtitle1">
-                  Elevation: {elevation} meters
-                </Typography>
-                <Typography variant="subtitle1">
-                  Cultivars: {cultivars}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Processing: {processing}
-                </Typography>
+                <Typography variant="subtitle1">Elevation: {elevation} meters</Typography>
+                <Typography variant="subtitle1">Cultivars: {cultivars}</Typography>
+                <Typography variant="subtitle1">Processing: {processing}</Typography>
               </Box>
             )}
             <Box marginBottom={2}>
@@ -252,9 +230,7 @@ export default function CoffeeDetails() {
                   key={instance.id}
                   instance={instance}
                   coffeeId={coffeeId}
-                  accordionOpen={
-                    !switchChart ? accordionOpen : brews[oneBrew.i].id
-                  }
+                  accordionOpen={!switchChart ? accordionOpen : brews[oneBrew.i].id}
                   handleAccordion={handleAccordion}
                 />
               )
@@ -269,5 +245,5 @@ export default function CoffeeDetails() {
       />
       <Snackbars />
     </>
-  );
+  )
 }

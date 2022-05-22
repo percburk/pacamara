@@ -10,7 +10,7 @@ import {
   CoffeeSearchList,
   OneSharedCoffee,
   LandingError,
-} from '../modelResource';
+} from '../modelResource'
 
 export enum ReduxActions {
   // Set data in reducers
@@ -57,25 +57,25 @@ export enum ReduxActions {
 }
 
 export interface ReduxDispatchNoPayload {
-  type: ReduxActions;
+  type: ReduxActions
 }
 
 export interface ReduxDispatch<T> extends ReduxDispatchNoPayload {
-  payload: T;
+  payload: T
 }
 
 // Redux initial state interface
 export interface InitialState {
-  coffees: CoffeeItem[];
-  oneCoffee: CoffeeItem;
-  flavors: Flavors[];
-  methods: Methods[];
-  brews: Brew[];
-  snackbars: Snackbar;
-  user: User;
-  sharedCoffees: SharedCoffees[];
-  sharingUserList: SharingUserList[];
-  coffeeSearchList: CoffeeSearchList[];
-  oneSharedCoffee: OneSharedCoffee;
-  landingErrors: LandingError;
+  coffees: CoffeeItem[]
+  oneCoffee: CoffeeItem
+  flavors: Flavors[]
+  methods: Methods[]
+  brews: Brew[]
+  snackbars: Snackbar
+  user: User
+  sharedCoffees: SharedCoffees[]
+  sharingUserList: SharingUserList[]
+  coffeeSearchList: CoffeeSearchList[]
+  oneSharedCoffee: OneSharedCoffee
+  landingErrors: LandingError
 }

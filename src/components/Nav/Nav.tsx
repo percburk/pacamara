@@ -1,16 +1,16 @@
-import { ChangeEvent, useState } from 'react';
-import { useHistory, useLocation, Link } from 'react-router-dom';
-import queryString from 'query-string';
-import { Typography, Box, makeStyles, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import { Search } from '@material-ui/icons';
-import { grey } from '@material-ui/core/colors';
+import {ChangeEvent, useState} from 'react'
+import {useHistory, useLocation, Link} from 'react-router-dom'
+import queryString from 'query-string'
+import {Typography, Box, makeStyles, TextField} from '@material-ui/core'
+import {Autocomplete} from '@material-ui/lab'
+import {Search} from '@material-ui/icons'
+import {grey} from '@material-ui/core/colors'
 // Hooks
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+import {useAppSelector} from '../../hooks/useAppDispatchSelector'
 // Components
-import AvatarBadge from './AvatarBadge';
-import AvatarMenu from '../AvatarMenu/AvatarMenu';
-import pacamaraLogo from '../../images/pacamara-logo.png';
+import AvatarBadge from './AvatarBadge'
+import AvatarMenu from '../AvatarMenu/AvatarMenu'
+import pacamaraLogo from '../../images/pacamara-logo.png'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -32,48 +32,48 @@ const useStyles = makeStyles((theme) => ({
     color: 'black',
     textDecoration: 'none',
   },
-}));
+}))
 
 // Nav is the top navigation bar which stays constant throughout the app
 export default function Nav() {
-  const classes = useStyles();
-  const history = useHistory();
-  const location = useLocation();
-  const { name } = useAppSelector((store) => store.user);
-  const coffeeSearchList = useAppSelector((store) => store.coffeeSearchList);
-  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
-  const [autoOpen, setAutoOpen] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>('');
+  const classes = useStyles()
+  const history = useHistory()
+  const location = useLocation()
+  const {name} = useAppSelector((store) => store.user)
+  const coffeeSearchList = useAppSelector((store) => store.coffeeSearchList)
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
+  const [autoOpen, setAutoOpen] = useState<boolean>(false)
+  const [searchInput, setSearchInput] = useState<string>('')
 
   // Checks to see if there is any data currently in the URL
-  const { filters } = queryString.parse(location.search, {
+  const {filters} = queryString.parse(location.search, {
     arrayFormat: 'bracket',
-  });
+  })
 
   // Keeps the Autocomplete list closed until the user starts typing in the
   // search TextField
   const handleAutoOpen = () => {
     if (searchInput.length > 0) {
-      setAutoOpen(true);
+      setAutoOpen(true)
     }
-  };
+  }
 
   // Sets the search string in state, toggles the Autocomplete list showing
   const handleSearchBar = (event: ChangeEvent<{}>, newValue: string) => {
-    setSearchInput(newValue);
-    setAutoOpen(newValue.length > 0);
-  };
+    setSearchInput(newValue)
+    setAutoOpen(newValue.length > 0)
+  }
 
   // Sends search query, Dashboard picks up the URL change in UseEffect and
   // sends a new GET with 'FETCH_COFFEES' to display search results
   const handleHistorySearch = (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     const newString = queryString.stringify({
       filters,
       q: searchInput,
-    });
-    history.push(`/dashboard/?${newString}`);
-  };
+    })
+    history.push(`/dashboard/?${newString}`)
+  }
 
   return (
     <>
@@ -85,7 +85,7 @@ export default function Nav() {
               src={pacamaraLogo}
               className={classes.logo}
               onClick={() => history.push('/dashboard')}
-              style={{ cursor: 'pointer' }}
+              style={{cursor: 'pointer'}}
             />
           </Box>
           <Link to="/dashboard" className={classes.headerLink}>
@@ -106,7 +106,7 @@ export default function Nav() {
               options={coffeeSearchList.map((coffee) => {
                 return coffee.blendName
                   ? `${coffee.roaster} ${coffee.blendName}`
-                  : `${coffee.roaster} ${coffee.country} ${coffee.producer}`;
+                  : `${coffee.roaster} ${coffee.country} ${coffee.producer}`
               })}
               renderInput={(params) => (
                 <TextField
@@ -143,5 +143,5 @@ export default function Nav() {
         )}
       </Box>
     </>
-  );
+  )
 }

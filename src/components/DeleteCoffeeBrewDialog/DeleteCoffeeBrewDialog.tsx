@@ -1,5 +1,5 @@
-import { useHistory, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
+import {useHistory, useLocation} from 'react-router-dom'
+import queryString from 'query-string'
 import {
   Dialog,
   DialogTitle,
@@ -9,12 +9,12 @@ import {
   Button,
   Box,
   makeStyles,
-} from '@material-ui/core';
+} from '@material-ui/core'
 // Hooks
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import {SagaActions} from '../../models/redux/sagaResource'
+import {ReduxActions} from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
   centerText: {
     textAlign: 'center',
   },
-}));
+}))
 
 interface Props {
-  deleteDialogOpen: boolean;
-  setDeleteDialogOpen: (open: boolean) => void;
-  coffeeId?: number;
-  brewId?: number;
+  deleteDialogOpen: boolean
+  setDeleteDialogOpen: (open: boolean) => void
+  coffeeId?: number
+  brewId?: number
 }
 
 // Opens to make sure a user wants to delete a coffee from their dashboard
@@ -40,34 +40,34 @@ export default function DeleteCoffeeBrewDialog({
   coffeeId,
   brewId,
 }: Props) {
-  const classes = useStyles();
-  const location = useLocation();
-  const history = useHistory();
-  const dispatch = useAppDispatch();
+  const classes = useStyles()
+  const location = useLocation()
+  const history = useHistory()
+  const dispatch = useAppDispatch()
 
   // Checks to see if there is a search query in the URL
-  const { q } = queryString.parse(location.search);
+  const {q} = queryString.parse(location.search)
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
-    setDeleteDialogOpen(false);
+    setDeleteDialogOpen(false)
     if (brewId) {
       dispatch({
         type: SagaActions.DELETE_BREW,
-        payload: { coffeeId, brewId },
-      });
-      dispatch({ type: ReduxActions.SNACKBARS_DELETED_BREW });
+        payload: {coffeeId, brewId},
+      })
+      dispatch({type: ReduxActions.SNACKBARS_DELETED_BREW})
     } else {
       dispatch({
         type: SagaActions.DELETE_COFFEE,
-        payload: { coffeeId, q },
-      });
-      dispatch({ type: ReduxActions.SNACKBARS_DELETED_COFFEE });
+        payload: {coffeeId, q},
+      })
+      dispatch({type: ReduxActions.SNACKBARS_DELETED_COFFEE})
       location.search
         ? history.push(`/dashboard/${location.search}`)
-        : history.push('/dashboard');
+        : history.push('/dashboard')
     }
-  };
+  }
 
   return (
     <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
@@ -86,15 +86,11 @@ export default function DeleteCoffeeBrewDialog({
           >
             No
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleDelete}
-            className={classes.button}
-          >
+          <Button variant="contained" onClick={handleDelete} className={classes.button}>
             Yes
           </Button>
         </DialogActions>
       </Box>
     </Dialog>
-  );
+  )
 }

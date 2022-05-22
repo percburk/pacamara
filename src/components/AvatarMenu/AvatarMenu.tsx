@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import {useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import {
   Menu,
   Box,
@@ -10,18 +10,15 @@ import {
   Avatar,
   makeStyles,
   Typography,
-} from '@material-ui/core';
-import { Edit, Add, ViewModule } from '@material-ui/icons';
+} from '@material-ui/core'
+import {Edit, Add, ViewModule} from '@material-ui/icons'
 // Hooks
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import {SagaActions} from '../../models/redux/sagaResource'
+import {ReduxActions} from '../../models/redux/reduxResource'
 // Components
-import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu';
+import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -45,28 +42,28 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(9),
     height: theme.spacing(9),
   },
-}));
+}))
 
 // AvatarMenu opens when the user clicks on their avatar in Nav
 // Their home base to edit their profile, add a new coffee, view any shared
 // coffees, navigate back to their dashboard, or log out
 export default function AvatarMenu() {
-  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
-  const dispatch = useAppDispatch();
-  const history = useHistory();
-  const classes = useStyles();
-  const { name, username, profilePic } = useAppSelector((store) => store.user);
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
+  const dispatch = useAppDispatch()
+  const history = useHistory()
+  const classes = useStyles()
+  const {name, username, profilePic} = useAppSelector((store) => store.user)
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<
     (EventTarget & HTMLDivElement) | null
-  >(null);
-  const [sharedOpen, setSharedOpen] = useState<boolean>(false);
+  >(null)
+  const [sharedOpen, setSharedOpen] = useState<boolean>(false)
 
   // Logs the user out and sends them to LandingPage
   const handleLogout = () => {
-    dispatch({ type: SagaActions.LOGOUT });
-    history.push('/home');
-    setAvatarAnchorEl(null);
-  };
+    dispatch({type: SagaActions.LOGOUT})
+    history.push('/home')
+    setAvatarAnchorEl(null)
+  }
 
   return (
     <>
@@ -74,7 +71,7 @@ export default function AvatarMenu() {
         className={classes.medium}
         src={profilePic}
         onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
-        style={{ cursor: 'pointer' }}
+        style={{cursor: 'pointer'}}
       >
         {name && name.charAt(0)}
       </Avatar>
@@ -84,8 +81,8 @@ export default function AvatarMenu() {
         keepMounted
         open={!!avatarAnchorEl}
         onClose={() => {
-          setAvatarAnchorEl(null);
-          setSharedOpen(false);
+          setAvatarAnchorEl(null)
+          setSharedOpen(false)
         }}
       >
         <Box display="flex" justifyContent="center" py={1}>
@@ -97,17 +94,10 @@ export default function AvatarMenu() {
           <Typography align="center">{name}</Typography>
           <Typography align="center">{username}</Typography>
         </Box>
-        <MenuItem
-          disabled={!sharedCoffees[0]}
-          onClick={() => setSharedOpen(!sharedOpen)}
-        >
+        <MenuItem disabled={!sharedCoffees[0]} onClick={() => setSharedOpen(!sharedOpen)}>
           <ListItemIcon>
-            <Avatar
-              className={classes[sharedCoffees[0] ? 'smallBlue' : 'small']}
-            >
-              <Typography variant="subtitle2">
-                {sharedCoffees.length}
-              </Typography>
+            <Avatar className={classes[sharedCoffees[0] ? 'smallBlue' : 'small']}>
+              <Typography variant="subtitle2">{sharedCoffees.length}</Typography>
             </Avatar>
           </ListItemIcon>
           <ListItemText primary="Shared Coffees" />
@@ -119,9 +109,9 @@ export default function AvatarMenu() {
         />
         <MenuItem
           onClick={() => {
-            history.push('/dashboard');
-            setAvatarAnchorEl(null);
-            dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
+            history.push('/dashboard')
+            setAvatarAnchorEl(null)
+            dispatch({type: ReduxActions.CLEAR_SNACKBARS})
           }}
         >
           <ListItemIcon>
@@ -131,21 +121,19 @@ export default function AvatarMenu() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/profile/update');
-            setAvatarAnchorEl(null);
+            history.push('/profile/update')
+            setAvatarAnchorEl(null)
           }}
         >
           <ListItemIcon>
             <Edit />
           </ListItemIcon>
-          <ListItemText
-            primary={name ? 'Edit Profile' : 'Create New Profile'}
-          />
+          <ListItemText primary={name ? 'Edit Profile' : 'Create New Profile'} />
         </MenuItem>
         <MenuItem
           onClick={() => {
-            history.push('/add-coffee');
-            setAvatarAnchorEl(null);
+            history.push('/add-coffee')
+            setAvatarAnchorEl(null)
           }}
         >
           <ListItemIcon>
@@ -160,5 +148,5 @@ export default function AvatarMenu() {
         </Box>
       </Menu>
     </>
-  );
+  )
 }

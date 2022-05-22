@@ -8,14 +8,14 @@ import {
   CoffeeSearchList,
   SharingUserList,
   OneSharedCoffee,
-} from '../modelResource';
+} from '../modelResource'
 
 export interface EditInputsPayload {
-  key: string;
-  change: string;
+  key: string
+  change: string
 }
 
-export type OneCoffeePayloadTypes = CoffeeItem | number | EditInputsPayload;
+export type OneCoffeePayloadTypes = CoffeeItem | number | EditInputsPayload
 
 export type ReduxDispatchPayloadTypes =
   | CoffeeItem[]
@@ -29,4 +29,4 @@ export type ReduxDispatchPayloadTypes =
   | SharingUserList[]
   | OneSharedCoffee
   | EditInputsPayload
-  | number;
+  | number

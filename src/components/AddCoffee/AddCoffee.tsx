@@ -1,6 +1,6 @@
-import { useState, useEffect, ChangeEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import LuxonUtils from '@date-io/luxon';
+import {useState, useEffect, ChangeEvent} from 'react'
+import {useHistory} from 'react-router-dom'
+import LuxonUtils from '@date-io/luxon'
 import {
   Box,
   makeStyles,
@@ -11,25 +11,19 @@ import {
   Chip,
   Button,
   InputAdornment,
-} from '@material-ui/core';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers/';
+} from '@material-ui/core'
+import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers/'
 // Hooks
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatchSelector'
 // Models
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { AddCoffeeState } from '../../models/stateResource';
-import { DateTime } from 'luxon';
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date'
+import {AddCoffeeState} from '../../models/stateResource'
+import {DateTime} from 'luxon'
+import {SagaActions} from '../../models/redux/sagaResource'
+import {ReduxActions} from '../../models/redux/reduxResource'
 // Components
-import S3Uploader from '../S3Uploader/S3Uploader';
-import Snackbars from '../Snackbars/Snackbars';
+import S3Uploader from '../S3Uploader/S3Uploader'
+import Snackbars from '../Snackbars/Snackbars'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -65,16 +59,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     opacity: 0.5,
   },
-}));
+}))
 
 // AddCoffee includes all the inputs to add a new coffee to a user's dashboard
 export default function AddCoffee() {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const history = useHistory();
-  const flavors = useAppSelector((store) => store.flavors);
-  const [roasterError, setRoasterError] = useState<boolean>(false);
-  const [blendCountryError, setBlendCountryError] = useState<boolean>(false);
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const history = useHistory()
+  const flavors = useAppSelector((store) => store.flavors)
+  const [roasterError, setRoasterError] = useState<boolean>(false)
+  const [blendCountryError, setBlendCountryError] = useState<boolean>(false)
   const [newCoffee, setNewCoffee] = useState<AddCoffeeState>({
     roaster: '',
     roastDate: DateTime.now(),
@@ -90,31 +84,31 @@ export default function AddCoffee() {
     notes: '',
     coffeePic: '',
     flavorsArray: [],
-  });
+  })
 
   useEffect(() => {
-    dispatch({ type: SagaActions.FETCH_FLAVORS });
-  }, [dispatch]);
+    dispatch({type: SagaActions.FETCH_FLAVORS})
+  }, [dispatch])
 
   // Handles all text inputs, adds to local state object
   const handleNewCoffee =
     (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
-      const { value, checked } = event.target;
-      const switchKeys = ['isBlend', 'brewing'];
+      const {value, checked} = event.target
+      const switchKeys = ['isBlend', 'brewing']
 
       setNewCoffee({
         ...newCoffee,
         [key]: switchKeys.includes(key) ? checked : value,
-      });
-    };
+      })
+    }
 
   // Formats the date chosen from MuiDatePicker using Luxon
   const handleRoastDate = (date: MaterialUiPickersDate) => {
     setNewCoffee({
       ...newCoffee,
       roastDate: (date as DateTime).toLocaleString(),
-    });
-  };
+    })
+  }
 
   // Toggles adding and removing flavors for the coffee in local state array
   const handleNewFlavor = (id: number) => {
@@ -123,32 +117,32 @@ export default function AddCoffee() {
       flavorsArray: !newCoffee.flavorsArray.includes(id)
         ? [...newCoffee.flavorsArray, id]
         : newCoffee.flavorsArray.filter((index) => index !== id),
-    });
-  };
+    })
+  }
 
   // Adds the new coffee to the database with input validation
   const handleSubmit = () => {
-    const { roaster, country, blendName, flavorsArray } = newCoffee;
+    const {roaster, country, blendName, flavorsArray} = newCoffee
     if (roaster && (country || blendName) && flavorsArray[0]) {
-      dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE });
-      dispatch({ type: SagaActions.ADD_COFFEE, payload: newCoffee });
-      clearInputs();
-      history.push('/dashboard');
+      dispatch({type: ReduxActions.SNACKBARS_ADDED_COFFEE})
+      dispatch({type: SagaActions.ADD_COFFEE, payload: newCoffee})
+      clearInputs()
+      history.push('/dashboard')
     } else {
-      setRoasterError(!!!roaster);
-      setBlendCountryError(!(country || blendName));
+      setRoasterError(!!!roaster)
+      setBlendCountryError(!(country || blendName))
       if (!flavorsArray[0]) {
-        dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR });
+        dispatch({type: ReduxActions.SNACKBARS_FLAVORS_ERROR})
       }
     }
-  };
+  }
 
   // Clears all local state data and sends user back to the previous page
   const handleCancel = () => {
-    dispatch({ type: ReduxActions.CLEAR_SNACKBARS });
-    clearInputs();
-    history.goBack();
-  };
+    dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+    clearInputs()
+    history.goBack()
+  }
 
   const clearInputs = () => {
     setNewCoffee({
@@ -166,8 +160,8 @@ export default function AddCoffee() {
       notes: '',
       coffeePic: '',
       flavorsArray: [],
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -233,9 +227,7 @@ export default function AddCoffee() {
                   ? handleNewCoffee('blendName')
                   : handleNewCoffee('country')
               }
-              value={
-                newCoffee.isBlend ? newCoffee.blendName : newCoffee.country
-              }
+              value={newCoffee.isBlend ? newCoffee.blendName : newCoffee.country}
             />
             <TextField
               className={classes.textInputs}
@@ -273,11 +265,7 @@ export default function AddCoffee() {
               value={newCoffee.processing}
               disabled={newCoffee.isBlend}
             />
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
+            <Box display="flex" justifyContent="space-between" alignItems="center">
               <TextField
                 label="Elevation"
                 variant="outlined"
@@ -285,9 +273,7 @@ export default function AddCoffee() {
                 value={newCoffee.elevation}
                 disabled={newCoffee.isBlend}
                 InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">meters</InputAdornment>
-                  ),
+                  endAdornment: <InputAdornment position="end">meters</InputAdornment>,
                 }}
               />
               <MuiPickersUtilsProvider utils={LuxonUtils}>
@@ -308,7 +294,7 @@ export default function AddCoffee() {
             <Box display="flex" py={2}>
               <S3Uploader
                 setPhoto={(picUrl: string) =>
-                  setNewCoffee({ ...newCoffee, coffeePic: picUrl })
+                  setNewCoffee({...newCoffee, coffeePic: picUrl})
                 }
               />
               {newCoffee.coffeePic && (
@@ -327,9 +313,7 @@ export default function AddCoffee() {
                   className={classes.chips}
                   label={flavor.name}
                   color={
-                    newCoffee.flavorsArray.includes(flavor.id)
-                      ? 'primary'
-                      : 'default'
+                    newCoffee.flavorsArray.includes(flavor.id) ? 'primary' : 'default'
                   }
                   onClick={() => handleNewFlavor(flavor.id)}
                 />
@@ -345,12 +329,7 @@ export default function AddCoffee() {
               onChange={handleNewCoffee('notes')}
               value={newCoffee.notes}
             />
-            <Box
-              className={classes.root}
-              display="flex"
-              justifyContent="center"
-              py={2}
-            >
+            <Box className={classes.root} display="flex" justifyContent="center" py={2}>
               <Button
                 className={classes.buttons}
                 variant="contained"
@@ -372,5 +351,5 @@ export default function AddCoffee() {
       </Box>
       <Snackbars />
     </>
-  );
+  )
 }
