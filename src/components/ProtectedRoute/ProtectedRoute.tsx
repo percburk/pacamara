@@ -1,8 +1,8 @@
-import { Route, Redirect, RouteProps } from 'react-router-dom';
+import {Route, Redirect, RouteProps} from 'react-router-dom'
 // Hooks
-import { useAppSelector } from '../../hooks/useAppDispatchSelector';
+import {useAppSelector} from '../../hooks/useAppDispatchSelector'
 // Components
-import LandingPage from '../LandingPage/LandingPage';
+import LandingPage from '../LandingPage/LandingPage'
 
 /*
   A Custom Wrapper Component -- This will keep our code DRY.
@@ -17,14 +17,14 @@ import LandingPage from '../LandingPage/LandingPage';
 */
 
 interface Props extends RouteProps {
-  path: string;
-  authRedirect?: string;
-  children: JSX.Element;
+  path: string
+  authRedirect?: string
+  children: JSX.Element
 }
 
 // TODO This function could use a bit better typing, this is janky
 export default function ProtectedRoute(props: Props) {
-  const user = useAppSelector((store) => store.user);
+  const user = useAppSelector((store) => store.user)
 
   // Using destructuring, this takes ComponentToProtect from component
   // prop and grabs all other props to pass them along to Route
@@ -32,28 +32,28 @@ export default function ProtectedRoute(props: Props) {
     // Redirect path to be used if the user is authorized
     authRedirect,
     ...otherProps
-  } = props;
+  } = props
 
   // Component must ONLY be passed in as a child
-  const ComponentToProtect = () => props.children;
+  const ComponentToProtect = () => props.children
 
-  let ComponentToShow;
+  let ComponentToShow
 
   if (user.id) {
     // If the user is logged in (only logged in users have ids),
     // show the component that is protected
-    ComponentToShow = ComponentToProtect;
+    ComponentToShow = ComponentToProtect
   } else {
     // If they are not logged in, check the loginMode on Redux State
     // If the mode is 'login', show the LoginPage
-    ComponentToShow = LandingPage;
+    ComponentToShow = LandingPage
   }
 
   // Redirect a logged in user if an authRedirect prop has been provided
   if (user.id && authRedirect != null) {
-    return <Redirect exact from={otherProps.path} to={authRedirect} />;
+    return <Redirect exact from={otherProps.path} to={authRedirect} />
   } else if (!user.id && authRedirect != null) {
-    ComponentToShow = ComponentToProtect;
+    ComponentToShow = ComponentToProtect
   }
 
   // We return a Route component that gets added to our list of routes
@@ -65,5 +65,5 @@ export default function ProtectedRoute(props: Props) {
     >
       <ComponentToShow />
     </Route>
-  );
+  )
 }

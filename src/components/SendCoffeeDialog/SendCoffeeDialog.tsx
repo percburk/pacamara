@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import {useState, ChangeEvent} from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -12,18 +12,15 @@ import {
   makeStyles,
   Collapse,
   IconButton,
-} from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import { Close } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+} from '@material-ui/core'
+import {Autocomplete} from '@material-ui/lab'
+import {Close} from '@material-ui/icons'
+import {Alert} from '@material-ui/lab'
 // Hooks
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-import { ReduxActions } from '../../models/redux/reduxResource';
+import {SagaActions} from '../../models/redux/sagaResource'
+import {ReduxActions} from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -46,14 +43,14 @@ const useStyles = makeStyles((theme) => ({
   textCenter: {
     textAlign: 'center',
   },
-}));
+}))
 
 interface Props {
-  sendDialogOpen: boolean;
-  setSendDialogOpen: (open: boolean) => void;
-  id: number;
-  coffeeName: string;
-  pic: string;
+  sendDialogOpen: boolean
+  setSendDialogOpen: (open: boolean) => void
+  id: number
+  coffeeName: string
+  pic: string
 }
 
 // SendCoffeeDialog opens when a user wants to share a coffee with another user
@@ -65,34 +62,32 @@ export default function SendCoffeeDialog({
   coffeeName,
   pic,
 }: Props) {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const sharingUserList = useAppSelector((store) => store.sharingUserList);
-  const [shareUsername, setShareUsername] = useState<string>('');
-  const [shareMessage, setShareMessage] = useState<string>('');
-  const [listOpen, setListOpen] = useState<boolean>(false);
-  const [errorOpen, setErrorOpen] = useState<boolean>(false);
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const sharingUserList = useAppSelector((store) => store.sharingUserList)
+  const [shareUsername, setShareUsername] = useState<string>('')
+  const [shareMessage, setShareMessage] = useState<string>('')
+  const [listOpen, setListOpen] = useState<boolean>(false)
+  const [errorOpen, setErrorOpen] = useState<boolean>(false)
 
   // Toggles the Autocomplete menu opening only when the user is typing in the
   // TextField
   const handleListOpen = () => {
     if (shareUsername.length > 0) {
-      setListOpen(true);
+      setListOpen(true)
     }
-  };
+  }
 
   // Updates the username that the coffee will be sent to in local state
   const handleShareUsername = (event: ChangeEvent<{}>, newValue: string) => {
-    setShareUsername(newValue);
-    newValue.length > 0 ? setListOpen(true) : setListOpen(false);
-  };
+    setShareUsername(newValue)
+    newValue.length > 0 ? setListOpen(true) : setListOpen(false)
+  }
 
   // Handles sending this coffee to another selected user
   const handleSendShare = () => {
     // Finds the matching ID number of the user that is being sent to
-    const match = sharingUserList.find(
-      (user) => user.username === shareUsername
-    )?.id;
+    const match = sharingUserList.find((user) => user.username === shareUsername)?.id
 
     if (match) {
       dispatch({
@@ -103,21 +98,19 @@ export default function SendCoffeeDialog({
           coffeeName: coffeeName,
           message: shareMessage,
         },
-      });
-      dispatch({ type: ReduxActions.SNACKBARS_SENT_SHARED_COFFEE });
-      setShareUsername('');
-      setShareMessage('');
-      setSendDialogOpen(false);
+      })
+      dispatch({type: ReduxActions.SNACKBARS_SENT_SHARED_COFFEE})
+      setShareUsername('')
+      setShareMessage('')
+      setSendDialogOpen(false)
     } else {
-      setErrorOpen(true);
+      setErrorOpen(true)
     }
-  };
+  }
 
   return (
     <Dialog open={sendDialogOpen} onClose={() => setSendDialogOpen(false)}>
-      <DialogTitle className={classes.textCenter}>
-        Share {coffeeName}
-      </DialogTitle>
+      <DialogTitle className={classes.textCenter}>Share {coffeeName}</DialogTitle>
       <DialogContent>
         <DialogContentText align="center">
           Who would you like to share this coffee with?
@@ -196,5 +189,5 @@ export default function SendCoffeeDialog({
         </Alert>
       </Collapse>
     </Dialog>
-  );
+  )
 }

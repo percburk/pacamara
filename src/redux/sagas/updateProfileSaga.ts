@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { put, takeEvery, call } from 'redux-saga/effects';
+import axios from 'axios'
+import {put, takeEvery, call} from 'redux-saga/effects'
 import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
-} from '../../models/redux/sagaResource';
-import { UpdateProfilePayload } from '../../models/redux/sagaPayloadResource';
+} from '../../models/redux/sagaResource'
+import {UpdateProfilePayload} from '../../models/redux/sagaPayloadResource'
 
 // PUT route to update information for both a new and existing user
 // Since registration creates a username and password but nothing else,
@@ -14,13 +14,13 @@ function* updateProfile(
   action: SagaDispatch<UpdateProfilePayload>
 ): SagaGeneratorReturn<never> {
   try {
-    yield call(axios.put, '/api/user/update', action.payload);
-    yield put({ type: SagaActions.FETCH_USER });
+    yield call(axios.put, '/api/user/update', action.payload)
+    yield put({type: SagaActions.FETCH_USER})
   } catch (err) {
-    console.log('error in updateProfile', err);
+    console.log('error in updateProfile', err)
   }
 }
 
 export default function* updateProfileSaga() {
-  yield takeEvery(SagaActions.UPDATE_PROFILE, updateProfile);
+  yield takeEvery(SagaActions.UPDATE_PROFILE, updateProfile)
 }

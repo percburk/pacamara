@@ -1,29 +1,18 @@
-import { useState } from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import {
-  Box,
-  Paper,
-  Tabs,
-  Tab,
-  IconButton,
-  Collapse,
-  makeStyles,
-} from '@material-ui/core';
-import { Close } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+import {useState} from 'react'
+import SwipeableViews from 'react-swipeable-views'
+import {Box, Paper, Tabs, Tab, IconButton, Collapse, makeStyles} from '@material-ui/core'
+import {Close} from '@material-ui/icons'
+import {Alert} from '@material-ui/lab'
 // Hooks
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatchSelector'
 // Models
-import { ReduxActions } from '../../models/redux/reduxResource';
+import {ReduxActions} from '../../models/redux/reduxResource'
 // CSS
-import './LandingPage.css';
+import './LandingPage.css'
 // Components
-import RegisterForm from '../RegisterForm/RegisterForm';
-import LoginForm from '../LoginForm/LoginForm';
-import TabPanel from './TabPanel';
+import RegisterForm from '../RegisterForm/RegisterForm'
+import LoginForm from '../LoginForm/LoginForm'
+import TabPanel from './TabPanel'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -38,15 +27,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     width: 120,
   },
-}));
-export type UseStylesType = ReturnType<typeof useStyles>;
+}))
+export type UseStylesType = ReturnType<typeof useStyles>
 
 // LandingPage is the login and registration page
 export default function LandingPage() {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const { string, open } = useAppSelector((store) => store.landingErrors);
-  const [tab, setTab] = useState<number>(0);
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const {string, open} = useAppSelector((store) => store.landingErrors)
+  const [tab, setTab] = useState<number>(0)
 
   return (
     <Box
@@ -68,10 +57,7 @@ export default function LandingPage() {
             <Tab label="Login" />
             <Tab label="Register" />
           </Tabs>
-          <SwipeableViews
-            index={tab}
-            onChangeIndex={(event, value) => setTab(value)}
-          >
+          <SwipeableViews index={tab} onChangeIndex={(event, value) => setTab(value)}>
             <TabPanel tab={tab} index={0}>
               <LoginForm classes={classes} />
             </TabPanel>
@@ -85,9 +71,7 @@ export default function LandingPage() {
               action={
                 <IconButton
                   size="small"
-                  onClick={() =>
-                    dispatch({ type: ReduxActions.CLEAR_LANDING_ERROR })
-                  }
+                  onClick={() => dispatch({type: ReduxActions.CLEAR_LANDING_ERROR})}
                 >
                   <Close fontSize="inherit" />
                 </IconButton>
@@ -99,5 +83,5 @@ export default function LandingPage() {
         </Paper>
       </Box>
     </Box>
-  );
+  )
 }

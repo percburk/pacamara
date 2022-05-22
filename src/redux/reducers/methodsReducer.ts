@@ -1,5 +1,5 @@
-import { Methods } from '../../models/modelResource';
-import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource';
+import {Methods} from '../../models/modelResource'
+import {ReduxActions, ReduxDispatch} from '../../models/redux/reduxResource'
 
 // methodsReducer contains the list of brew methods a user can choose from
 const methodsReducer = (
@@ -8,10 +8,10 @@ const methodsReducer = (
 ): Methods[] => {
   switch (action.type) {
     case ReduxActions.SET_METHODS:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default methodsReducer;
+export default methodsReducer

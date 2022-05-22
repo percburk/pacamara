@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react'
 import {
   Collapse,
   MenuItem,
@@ -7,17 +7,14 @@ import {
   Divider,
   Typography,
   Box,
-} from '@material-ui/core';
+} from '@material-ui/core'
 // Hooks
-import {
-  useAppSelector,
-  useAppDispatch,
-} from '../../hooks/useAppDispatchSelector';
+import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-import { SharedCoffees } from '../../models/modelResource';
+import {SagaActions} from '../../models/redux/sagaResource'
+import {SharedCoffees} from '../../models/modelResource'
 // Components
-import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog';
+import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -26,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(3),
     marginRight: theme.spacing(2),
   },
-}));
+}))
 
 interface Props {
-  sharedOpen: boolean;
-  setSharedOpen: (set: boolean) => void;
-  setAvatarAnchorEl: (set: null) => void;
+  sharedOpen: boolean
+  setSharedOpen: (set: boolean) => void
+  setAvatarAnchorEl: (set: null) => void
 }
 
 // SharedCoffeeMenu displays the list of coffees sent from others users
@@ -40,10 +37,10 @@ export default function SharedCoffeeMenu({
   setSharedOpen,
   setAvatarAnchorEl,
 }: Props) {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const sharedCoffees = useAppSelector((store) => store.sharedCoffees);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
+  const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedCoffee, setSelectedCoffee] = useState<SharedCoffees>({
     id: 0,
     senderId: 0,
@@ -53,13 +50,13 @@ export default function SharedCoffeeMenu({
     profilePic: '',
     coffeeName: '',
     username: '',
-  });
+  })
 
   // Opens the selected coffee in SharedCoffeeDialog and fetches its details
   const handleClickCoffee = (id: number) => {
-    dispatch({ type: SagaActions.FETCH_ONE_SHARED_COFFEE, payload: id });
-    setDialogOpen(true);
-  };
+    dispatch({type: SagaActions.FETCH_ONE_SHARED_COFFEE, payload: id})
+    setDialogOpen(true)
+  }
 
   return (
     <>
@@ -70,8 +67,8 @@ export default function SharedCoffeeMenu({
             <MenuItem
               key={shared.id}
               onClick={() => {
-                handleClickCoffee(shared.coffeesId);
-                setSelectedCoffee(shared);
+                handleClickCoffee(shared.coffeesId)
+                setSelectedCoffee(shared)
               }}
             >
               <Avatar className={classes.small} src={shared.profilePic}>
@@ -82,7 +79,7 @@ export default function SharedCoffeeMenu({
                 <Typography variant="subtitle2">{shared.coffeeName}</Typography>
               </Box>
             </MenuItem>
-          );
+          )
         })}
         <Divider />
       </Collapse>
@@ -94,5 +91,5 @@ export default function SharedCoffeeMenu({
         setSharedOpen={setSharedOpen}
       />
     </>
-  );
+  )
 }

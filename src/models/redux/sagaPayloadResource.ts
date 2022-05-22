@@ -1,52 +1,52 @@
 export interface BrewCoffeeIdPayload {
-  brewId: number;
-  coffeeId: number;
+  brewId: number
+  coffeeId: number
 }
 
 export interface FavBrewPayload extends BrewCoffeeIdPayload {
-  change: string;
+  change: string
 }
 
 export interface BrewingOrFavPayload {
-  id?: number;
-  change: string;
-  q?: string;
-  oneCoffeeId?: number;
+  id?: number
+  change: string
+  q?: string
+  oneCoffeeId?: number
 }
 
 export interface DeleteCoffeePayload {
-  id: number;
-  q?: string;
+  id: number
+  q?: string
 }
 
 export interface LoginRegisterPayload {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 export interface SendSharedCoffeePayload {
-  recipientId: number;
-  coffeesId: number;
-  coffeeName: string;
-  message: string;
+  recipientId: number
+  coffeesId: number
+  coffeeName: string
+  message: string
 }
 
 export interface AddSharedCoffeeToDashboardPayload {
-  coffeesId: number;
-  sharedById: number;
+  coffeesId: number
+  sharedById: number
 }
 
 export interface UpdateProfilePayload {
-  profilePic: string;
-  methodsDefaultId: number;
-  kettle: string;
-  grinder: string;
-  tdsMin: number;
-  tdsMax: number;
-  extMin: number;
-  extMax: number;
-  name: string;
-  methodsDefaultLrr: number;
+  profilePic: string
+  methodsDefaultId: number
+  kettle: string
+  grinder: string
+  tdsMin: number
+  tdsMax: number
+  extMin: number
+  extMax: number
+  name: string
+  methodsDefaultLrr: number
 }
 
 export type SagaDispatchPayloadTypes =
@@ -57,4 +57,4 @@ export type SagaDispatchPayloadTypes =
   | LoginRegisterPayload
   | SendSharedCoffeePayload
   | AddSharedCoffeeToDashboardPayload
-  | UpdateProfilePayload;
+  | UpdateProfilePayload

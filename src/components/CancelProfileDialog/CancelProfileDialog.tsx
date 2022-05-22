@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom'
 import {
   Dialog,
   DialogTitle,
@@ -7,11 +7,11 @@ import {
   Box,
   Button,
   makeStyles,
-} from '@material-ui/core';
+} from '@material-ui/core'
 // Hooks
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
+import {SagaActions} from '../../models/redux/sagaResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
   centerText: {
     textAlign: 'center',
   },
-}));
+}))
 
 interface Props {
-  cancelDialogOpen: boolean;
-  setCancelDialogOpen: (open: boolean) => void;
+  cancelDialogOpen: boolean
+  setCancelDialogOpen: (open: boolean) => void
 }
 
 // CancelProfileDialog opens for a brand new user, if they would rather not
@@ -35,9 +35,9 @@ export default function CancelProfileDialog({
   cancelDialogOpen,
   setCancelDialogOpen,
 }: Props) {
-  const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const history = useHistory();
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const history = useHistory()
 
   return (
     <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)}>
@@ -56,8 +56,8 @@ export default function CancelProfileDialog({
             className={classes.button}
             variant="contained"
             onClick={() => {
-              dispatch({ type: SagaActions.LOGOUT });
-              history.push('/home');
+              dispatch({type: SagaActions.LOGOUT})
+              history.push('/home')
             }}
           >
             Yes
@@ -65,5 +65,5 @@ export default function CancelProfileDialog({
         </DialogActions>
       </Box>
     </Dialog>
-  );
+  )
 }

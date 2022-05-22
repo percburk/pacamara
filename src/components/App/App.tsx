@@ -1,35 +1,30 @@
-import { useEffect } from 'react';
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
-import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import {useEffect} from 'react'
+import {HashRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
+import {ThemeProvider, CssBaseline} from '@material-ui/core'
 // Hooks
-import { useAppDispatch } from '../../hooks/useAppDispatchSelector';
+import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
 // Models
-import { SagaActions } from '../../models/redux/sagaResource';
-// CSS
-import './App.css';
+import {SagaActions} from '../../models/redux/sagaResource'
 // Components
-import Nav from '../Nav/Nav';
-import Footer from '../Footer/Footer';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Dashboard from '../Dashboard/Dashboard';
-import CoffeeDetails from '../CoffeeDetails/CoffeeDetails';
-import AddCoffee from '../AddCoffee/AddCoffee';
-import EditCoffee from '../EditCoffee/EditCoffee';
-import LandingPage from '../LandingPage/LandingPage';
-import UpdateProfile from '../UpdateProfile/UpdateProfile';
-import muiTheme from '../muiTheme/muiTheme';
+import Nav from '../Nav/Nav'
+import Footer from '../Footer/Footer'
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
+import Dashboard from '../Dashboard/Dashboard'
+import CoffeeDetails from '../CoffeeDetails/CoffeeDetails'
+import AddCoffee from '../AddCoffee/AddCoffee'
+import EditCoffee from '../EditCoffee/EditCoffee'
+import LandingPage from '../LandingPage/LandingPage'
+import UpdateProfile from '../UpdateProfile/UpdateProfile'
+import muiTheme from '../muiTheme/muiTheme'
+// CSS
+import './App.css'
 
 export default function App() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch({ type: SagaActions.FETCH_USER });
-  }, [dispatch]);
+    dispatch({type: SagaActions.FETCH_USER})
+  }, [dispatch])
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -79,5 +74,5 @@ export default function App() {
         <Footer />
       </Router>
     </ThemeProvider>
-  );
+  )
 }
