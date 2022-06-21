@@ -1,4 +1,4 @@
-import {useHistory, useLocation} from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import queryString from 'query-string'
 import {
   Dialog,
@@ -11,10 +11,10 @@ import {
   makeStyles,
 } from '@material-ui/core'
 // Hooks
-import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +46,7 @@ export default function DeleteCoffeeBrewDialog({
   const dispatch = useAppDispatch()
 
   // Checks to see if there is a search query in the URL
-  const {q} = queryString.parse(location.search)
+  const { q } = queryString.parse(location.search)
 
   // Deletes the coffee from the user's dashboard
   const handleDelete = () => {
@@ -54,15 +54,15 @@ export default function DeleteCoffeeBrewDialog({
     if (brewId) {
       dispatch({
         type: SagaActions.DELETE_BREW,
-        payload: {coffeeId, brewId},
+        payload: { coffeeId, brewId },
       })
-      dispatch({type: ReduxActions.SNACKBARS_DELETED_BREW})
+      dispatch({ type: ReduxActions.SNACKBARS_DELETED_BREW })
     } else {
       dispatch({
         type: SagaActions.DELETE_COFFEE,
-        payload: {coffeeId, q},
+        payload: { coffeeId, q },
       })
-      dispatch({type: ReduxActions.SNACKBARS_DELETED_COFFEE})
+      dispatch({ type: ReduxActions.SNACKBARS_DELETED_COFFEE })
       location.search
         ? history.push(`/dashboard/${location.search}`)
         : history.push('/dashboard')

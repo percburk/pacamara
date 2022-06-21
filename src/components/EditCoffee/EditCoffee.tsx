@@ -1,5 +1,5 @@
-import {ChangeEvent, useEffect, useState} from 'react'
-import {useHistory, useParams} from 'react-router-dom'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import LuxonUtils from '@date-io/luxon'
 import {
   Box,
@@ -12,14 +12,14 @@ import {
   Button,
   InputAdornment,
 } from '@material-ui/core'
-import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date'
-import {CoffeeItem} from '../../models/modelResource'
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+import { CoffeeItem } from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader'
 import Snackbars from '../Snackbars/Snackbars'
@@ -66,7 +66,7 @@ export default function EditCoffee() {
   const classes = useStyles()
   const dispatch = useAppDispatch()
   const history = useHistory()
-  const coffeeId = Number(useParams<{id: string}>().id)
+  const coffeeId = Number(useParams<{ id: string }>().id)
   const flavors = useAppSelector((store) => store.flavors)
   const oneCoffee = useAppSelector((store) => store.oneCoffee)
   const {
@@ -89,17 +89,17 @@ export default function EditCoffee() {
   const [blendCountryError, setBlendCountryError] = useState<boolean>(false)
 
   useEffect(() => {
-    dispatch({type: SagaActions.FETCH_FLAVORS})
-    dispatch({type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId})
+    dispatch({ type: SagaActions.FETCH_FLAVORS })
+    dispatch({ type: SagaActions.FETCH_ONE_COFFEE, payload: coffeeId })
   }, [dispatch, coffeeId])
 
   // Handles all text input edits
   const handleEditInputs =
     (key: keyof CoffeeItem) => (event: ChangeEvent<HTMLInputElement>) => {
-      const {value, checked} = event.target
+      const { value, checked } = event.target
       dispatch({
         type: ReduxActions.EDIT_INPUTS,
-        payload: {key, change: value ?? checked},
+        payload: { key, change: value ?? checked },
       })
     }
 
@@ -107,20 +107,20 @@ export default function EditCoffee() {
   const handleEditDate = (date: MaterialUiPickersDate) => {
     dispatch({
       type: ReduxActions.EDIT_INPUTS,
-      payload: {key: 'roastDate', change: date?.toLocaleString()},
+      payload: { key: 'roastDate', change: date?.toLocaleString() },
     })
   }
 
   // Submits the edited coffee to the database with input validation
   const handleSubmitEdit = () => {
     if (roaster && (country || blendName) && flavorsArray[0]) {
-      dispatch({type: ReduxActions.SNACKBARS_EDITED_COFFEE})
-      dispatch({type: SagaActions.EDIT_COFFEE, payload: oneCoffee})
+      dispatch({ type: ReduxActions.SNACKBARS_EDITED_COFFEE })
+      dispatch({ type: SagaActions.EDIT_COFFEE, payload: oneCoffee })
       history.goBack()
     } else {
       setRoasterError(!roaster)
       setBlendCountryError(!(country || blendName))
-      !flavorsArray[0] && dispatch({type: ReduxActions.SNACKBARS_FLAVORS_ERROR})
+      !flavorsArray[0] && dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR })
     }
   }
 
@@ -256,7 +256,7 @@ export default function EditCoffee() {
                 setPhoto={(picUrl: string) =>
                   dispatch({
                     type: ReduxActions.EDIT_INPUTS,
-                    payload: {key: 'coffeePic', change: picUrl},
+                    payload: { key: 'coffeePic', change: picUrl },
                   })
                 }
               />
@@ -296,7 +296,7 @@ export default function EditCoffee() {
                 variant="contained"
                 className={classes.buttons}
                 onClick={() => {
-                  dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+                  dispatch({ type: ReduxActions.CLEAR_SNACKBARS })
                   history.goBack()
                 }}
               >

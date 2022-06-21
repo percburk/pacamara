@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   makeStyles,
 } from '@material-ui/core'
 // Hooks
-import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
+import { SagaActions } from '../../models/redux/sagaResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +56,7 @@ export default function CancelProfileDialog({
             className={classes.button}
             variant="contained"
             onClick={() => {
-              dispatch({type: SagaActions.LOGOUT})
+              dispatch({ type: SagaActions.LOGOUT })
               history.push('/home')
             }}
           >

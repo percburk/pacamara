@@ -1,9 +1,9 @@
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import camelcaseKeys from 'camelcase-keys'
 import pool from '../modules/pool'
-import {rejectUnauthenticated} from '../modules/authenticationMiddleware'
-import {TypedRequest} from '../models/expressResource'
-import {Brew, BrewLikeStatus} from '../models/modelResource'
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
+import { TypedRequest } from '../models/expressResource'
+import { Brew, BrewLikeStatus } from '../models/modelResource'
 const router = Router()
 
 // GET route to grab all brew instances for a coffee
@@ -123,7 +123,7 @@ router.put(
 // PUT route to change the status of 'liked' on a brew instance
 // Can be 'yes', 'no', or 'none'
 router.patch('/like/:id', (req: TypedRequest<BrewLikeStatus>, res: Response): void => {
-  const {change} = req.body
+  const { change } = req.body
   const newStatus = change === 'yes' ? 'no' : change === 'no' ? 'none' : 'yes'
 
   const sqlText = `

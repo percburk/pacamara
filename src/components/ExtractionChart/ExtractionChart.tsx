@@ -1,9 +1,9 @@
-import {VictoryChart, VictoryScatter, VictoryTooltip, VictoryLabel} from 'victory'
-import {ClickAwayListener} from '@material-ui/core'
+import { VictoryChart, VictoryScatter, VictoryTooltip, VictoryLabel } from 'victory'
+import { ClickAwayListener } from '@material-ui/core'
 // Hooks
-import {useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import {BrewChartState} from '../../models/stateResource'
+import { BrewChartState } from '../../models/stateResource'
 // Components
 import RangePolygon from './RangePolygon'
 
@@ -19,7 +19,7 @@ export const chartStyles = {
     stroke: '#35baf6',
     strokeWidth: 1,
   },
-  labels: [{fontSize: 16}],
+  labels: [{ fontSize: 16 }],
   polygon: {
     fill: 'grey',
     opacity: 0.3,
@@ -42,24 +42,24 @@ export default function ExtractionChart({
   oneBrew,
   setOneBrew,
 }: Props) {
-  const {extMin, extMax, tdsMin, tdsMax} = useAppSelector((store) => store.user)
+  const { extMin, extMax, tdsMin, tdsMax } = useAppSelector((store) => store.user)
   const brews = useAppSelector((store) => store.brews)
   const extractionWindow = [
-    {x: extMin, y: tdsMin},
-    {x: extMax, y: tdsMin},
-    {x: extMax, y: tdsMax},
-    {x: extMin, y: tdsMax},
+    { x: extMin, y: tdsMin },
+    { x: extMax, y: tdsMin },
+    { x: extMax, y: tdsMax },
+    { x: extMin, y: tdsMax },
   ]
 
   // Toggles the chart between showing all the brews, and one clicked brew
-  const handleSwitchChart = ({x, y, i}: BrewChartState) => {
-    setOneBrew({x, y, i})
+  const handleSwitchChart = ({ x, y, i }: BrewChartState) => {
+    setOneBrew({ x, y, i })
     setSwitchChart(!switchChart)
   }
 
   return (
     <ClickAwayListener onClickAway={() => setSwitchChart(false)}>
-      <VictoryChart domain={{x: [16, 25], y: [1.2, 1.5]}}>
+      <VictoryChart domain={{ x: [16, 25], y: [1.2, 1.5] }}>
         <RangePolygon data={extractionWindow} />
         {!switchChart ? (
           <VictoryScatter

@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
-import {createStore, applyMiddleware, Store} from 'redux'
-import {Provider} from 'react-redux'
+import { createStore, applyMiddleware, Store } from 'redux'
+import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 
@@ -14,9 +14,9 @@ import {
   ReduxDispatch,
   ReduxDispatchNoPayload,
 } from './models/redux/reduxResource'
-import {ReduxDispatchPayloadTypes} from './models/redux/reduxPayloadResource'
-import {SagaDispatch, SagaDispatchNoPayload} from './models/redux/sagaResource'
-import {SagaDispatchPayloadTypes} from './models/redux/sagaPayloadResource'
+import { ReduxDispatchPayloadTypes } from './models/redux/reduxPayloadResource'
+import { SagaDispatch, SagaDispatchNoPayload } from './models/redux/sagaResource'
+import { SagaDispatchPayloadTypes } from './models/redux/sagaPayloadResource'
 
 // Imports our App to be rendered by React
 import App from './components/App/App'

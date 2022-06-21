@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {
   Dialog,
   DialogTitle,
@@ -27,7 +27,10 @@ interface Props {
 
 // NewUserDialog opens if the user is logging in for the first time
 // or has not created a profile yet, only redirects to UpdateProfile
-export default function NewUserDialog({newUserDialogOpen, setNewUserDialogOpen}: Props) {
+export default function NewUserDialog({
+  newUserDialogOpen,
+  setNewUserDialogOpen,
+}: Props) {
   const classes = useStyles()
   const history = useHistory()
 

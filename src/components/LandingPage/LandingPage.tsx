@@ -1,12 +1,20 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
-import {Box, Paper, Tabs, Tab, IconButton, Collapse, makeStyles} from '@material-ui/core'
-import {Close} from '@material-ui/icons'
-import {Alert} from '@material-ui/lab'
+import {
+  Box,
+  Paper,
+  Tabs,
+  Tab,
+  IconButton,
+  Collapse,
+  makeStyles,
+} from '@material-ui/core'
+import { Close } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 // Hooks
-import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 // CSS
 import './LandingPage.css'
 // Components
@@ -34,7 +42,7 @@ export type UseStylesType = ReturnType<typeof useStyles>
 export default function LandingPage() {
   const classes = useStyles()
   const dispatch = useAppDispatch()
-  const {string, open} = useAppSelector((store) => store.landingErrors)
+  const { string, open } = useAppSelector((store) => store.landingErrors)
   const [tab, setTab] = useState<number>(0)
 
   return (
@@ -71,7 +79,7 @@ export default function LandingPage() {
               action={
                 <IconButton
                   size="small"
-                  onClick={() => dispatch({type: ReduxActions.CLEAR_LANDING_ERROR})}
+                  onClick={() => dispatch({ type: ReduxActions.CLEAR_LANDING_ERROR })}
                 >
                   <Close fontSize="inherit" />
                 </IconButton>

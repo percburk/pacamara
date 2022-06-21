@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {UseStylesReturnType} from '../UpdateProfile/UpdateProfile'
+import { useState } from 'react'
+import { UseStylesReturnType } from '../UpdateProfile/UpdateProfile'
 import {
   Dialog,
   DialogTitle,
@@ -12,12 +12,12 @@ import {
   IconButton,
   Chip,
 } from '@material-ui/core'
-import {Alert} from '@material-ui/lab'
-import {Close} from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
+import { Close } from '@material-ui/icons'
 // Hooks
-import {useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import {UpdateProfileState} from '../../models/stateResource'
+import { UpdateProfileState } from '../../models/stateResource'
 
 interface Props {
   newUpdates: UpdateProfileState

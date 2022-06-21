@@ -1,7 +1,7 @@
-import {LandingError} from '../../models/modelResource'
-import {ReduxActions, ReduxDispatch} from '../../models/redux/reduxResource'
+import { LandingError } from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 
-const initialState: LandingError = {string: '', open: false}
+const initialState: LandingError = { string: '', open: false }
 
 // This holds the string that will display on login if there's an error
 // along with the status of the Collapse being open to display the message

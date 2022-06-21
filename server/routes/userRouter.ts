@@ -1,12 +1,12 @@
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import camelcaseKeys from 'camelcase-keys'
-import {PoolClient} from 'pg'
-import {rejectUnauthenticated} from '../modules/authenticationMiddleware'
-import {encryptPassword} from '../modules/encryption'
+import { PoolClient } from 'pg'
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
+import { encryptPassword } from '../modules/encryption'
 import pool from '../modules/pool'
 import userStrategy from '../strategies/userStrategy'
-import {TypedRequest} from '../models/expressResource'
-import {RegisterRequest, User} from '../models/modelResource'
+import { TypedRequest } from '../models/expressResource'
+import { RegisterRequest, User } from '../models/modelResource'
 const router = Router()
 
 // GET request for user information if user is authenticated
@@ -25,7 +25,7 @@ router.get('/methods', rejectUnauthenticated, (req: Request, res: Response): voi
 
   pool
     .query(sqlText, [req.user?.id])
-    .then((result) => res.send(camelcaseKeys(result.rows, {deep: true})))
+    .then((result) => res.send(camelcaseKeys(result.rows, { deep: true })))
     .catch((err) => {
       console.log(`Error in GET with query: ${sqlText}`, err)
       res.sendStatus(500)
@@ -34,7 +34,7 @@ router.get('/methods', rejectUnauthenticated, (req: Request, res: Response): voi
 
 // Handles POST request with new user data, the password gets encrypted
 router.post('/register', (req: TypedRequest<RegisterRequest>, res: Response): void => {
-  const {username, password} = req.body
+  const { username, password } = req.body
   const encryptedPassword = encryptPassword(password)
 
   const sqlText = `
@@ -134,7 +134,10 @@ router.put(
       res.sendStatus(201) // Send back success!
     } catch (err) {
       await connection.query('ROLLBACK;')
-      console.log('Error in PUT to add/edit user profile in userRouter, rollback: ', err)
+      console.log(
+        'Error in PUT to add/edit user profile in userRouter, rollback: ',
+        err
+      )
       res.sendStatus(500)
     } finally {
       connection.release()

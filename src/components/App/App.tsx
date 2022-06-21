@@ -1,10 +1,10 @@
-import {useEffect} from 'react'
-import {HashRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
-import {ThemeProvider, CssBaseline} from '@material-ui/core'
+import { useEffect } from 'react'
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
+import { ThemeProvider, CssBaseline } from '@material-ui/core'
 // Hooks
-import {useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
+import { SagaActions } from '../../models/redux/sagaResource'
 // Components
 import Nav from '../Nav/Nav'
 import Footer from '../Footer/Footer'
@@ -23,7 +23,7 @@ export default function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch({type: SagaActions.FETCH_USER})
+    dispatch({ type: SagaActions.FETCH_USER })
   }, [dispatch])
 
   return (

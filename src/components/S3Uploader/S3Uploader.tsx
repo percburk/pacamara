@@ -2,8 +2,8 @@ import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
 
 // Photo uploader that handles the drag-and-drop to upload a user supplied
 // photo to AWS S3
-export default function S3Uploader({setPhoto}: {setPhoto: (url: string) => void}) {
-  const handleFinishedUpload = (info: {fileUrl: string}) => {
+export default function S3Uploader({ setPhoto }: { setPhoto: (url: string) => void }) {
+  const handleFinishedUpload = (info: { fileUrl: string }) => {
     console.log('Access it on s3 at', info.fileUrl)
     setPhoto(info.fileUrl)
   }

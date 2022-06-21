@@ -1,12 +1,12 @@
-import {ChangeEvent, useState} from 'react'
-import {useHistory, useLocation, Link} from 'react-router-dom'
+import { ChangeEvent, useState } from 'react'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import queryString from 'query-string'
-import {Typography, Box, makeStyles, TextField} from '@material-ui/core'
-import {Autocomplete} from '@material-ui/lab'
-import {Search} from '@material-ui/icons'
-import {grey} from '@material-ui/core/colors'
+import { Typography, Box, makeStyles, TextField } from '@material-ui/core'
+import { Autocomplete } from '@material-ui/lab'
+import { Search } from '@material-ui/icons'
+import { grey } from '@material-ui/core/colors'
 // Hooks
-import {useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Components
 import AvatarBadge from './AvatarBadge'
 import AvatarMenu from '../AvatarMenu/AvatarMenu'
@@ -39,14 +39,14 @@ export default function Nav() {
   const classes = useStyles()
   const history = useHistory()
   const location = useLocation()
-  const {name} = useAppSelector((store) => store.user)
+  const { name } = useAppSelector((store) => store.user)
   const coffeeSearchList = useAppSelector((store) => store.coffeeSearchList)
   const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
   const [autoOpen, setAutoOpen] = useState<boolean>(false)
   const [searchInput, setSearchInput] = useState<string>('')
 
   // Checks to see if there is any data currently in the URL
-  const {filters} = queryString.parse(location.search, {
+  const { filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   })
 
@@ -85,7 +85,7 @@ export default function Nav() {
               src={pacamaraLogo}
               className={classes.logo}
               onClick={() => history.push('/dashboard')}
-              style={{cursor: 'pointer'}}
+              style={{ cursor: 'pointer' }}
             />
           </Box>
           <Link to="/dashboard" className={classes.headerLink}>

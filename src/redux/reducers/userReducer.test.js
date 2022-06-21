@@ -6,7 +6,7 @@ describe('testing userReducer', () => {
     const state = []
     const action = {
       type: 'SET_USER',
-      payload: {username: 'percburk', password: '12345'},
+      payload: { username: 'percburk', password: '12345' },
     }
     expect(userReducer(state, action)).toEqual({
       username: 'percburk',
@@ -16,8 +16,8 @@ describe('testing userReducer', () => {
 
   // UNSET_USER
   test('action UNSET_USER', () => {
-    const state = {username: 'percburk'}
-    const action = {type: 'UNSET_USER'}
+    const state = { username: 'percburk' }
+    const action = { type: 'UNSET_USER' }
     expect(userReducer(state, action)).toEqual({
       id: 0,
       username: '',
@@ -37,8 +37,8 @@ describe('testing userReducer', () => {
 
   // OTHER
   test('action OTHER', () => {
-    const state = {username: 'percburk'}
-    const action = {type: 'SNACKBARS_CREATED_PROFILE'}
+    const state = { username: 'percburk' }
+    const action = { type: 'SNACKBARS_CREATED_PROFILE' }
     expect(userReducer(state, action)).toEqual({
       username: 'percburk',
     })

@@ -1,6 +1,6 @@
-import {CallEffect, PutEffect} from '@redux-saga/core/effects'
-import {AxiosResponse} from 'axios'
-import {ReduxDispatch, ReduxDispatchNoPayload} from './reduxResource'
+import { CallEffect, PutEffect } from '@redux-saga/core/effects'
+import { AxiosResponse } from 'axios'
+import { ReduxDispatch, ReduxDispatchNoPayload } from './reduxResource'
 
 export interface SagaDispatchNoPayload {
   type: SagaActions

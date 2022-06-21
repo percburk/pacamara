@@ -1,5 +1,5 @@
 import camelcaseKeys from 'camelcase-keys'
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import pool from '../modules/pool'
 const router = Router()
 

@@ -1,10 +1,10 @@
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import camelcaseKeys from 'camelcase-keys'
-import {PoolClient} from 'pg'
+import { PoolClient } from 'pg'
 import pool from '../modules/pool'
-import {rejectUnauthenticated} from '../modules/authenticationMiddleware'
-import {TypedRequest} from '../models/expressResource'
-import {FavBrewCoffee, CoffeeItem} from '../models/modelResource'
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
+import { TypedRequest } from '../models/expressResource'
+import { FavBrewCoffee, CoffeeItem } from '../models/modelResource'
 const router = Router()
 
 // GET route for one coffee for CoffeeDetails
@@ -39,7 +39,7 @@ router.put(
   '/fav-brew',
   rejectUnauthenticated,
   (req: TypedRequest<FavBrewCoffee>, res: Response): void => {
-    const {change, id: coffeeId} = req.body
+    const { change, id: coffeeId } = req.body
     const sqlChange = change === 'fav' ? 'is_fav' : 'brewing'
 
     const sqlText = `

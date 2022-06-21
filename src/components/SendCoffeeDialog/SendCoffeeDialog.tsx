@@ -1,4 +1,4 @@
-import {useState, ChangeEvent} from 'react'
+import { useState, ChangeEvent } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -13,14 +13,14 @@ import {
   Collapse,
   IconButton,
 } from '@material-ui/core'
-import {Autocomplete} from '@material-ui/lab'
-import {Close} from '@material-ui/icons'
-import {Alert} from '@material-ui/lab'
+import { Autocomplete } from '@material-ui/lab'
+import { Close } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -99,7 +99,7 @@ export default function SendCoffeeDialog({
           message: shareMessage,
         },
       })
-      dispatch({type: ReduxActions.SNACKBARS_SENT_SHARED_COFFEE})
+      dispatch({ type: ReduxActions.SNACKBARS_SENT_SHARED_COFFEE })
       setShareUsername('')
       setShareMessage('')
       setSendDialogOpen(false)

@@ -1,14 +1,14 @@
-import {useEffect, useState} from 'react'
-import {useLocation} from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import queryString from 'query-string'
-import {Box, Typography, makeStyles} from '@material-ui/core'
+import { Box, Typography, makeStyles } from '@material-ui/core'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
-import {CoffeeItem} from '../../models/modelResource'
-import {SortState} from '../../models/stateResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
+import { CoffeeItem } from '../../models/modelResource'
+import { SortState } from '../../models/stateResource'
 // Components
 import CoffeeCard from '../CoffeeCard/CoffeeCard'
 import Snackbars from '../Snackbars/Snackbars'
@@ -31,20 +31,20 @@ export default function Dashboard() {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const classes = useStyles()
-  const {name} = useAppSelector((store) => store.user)
+  const { name } = useAppSelector((store) => store.user)
   const coffees = useAppSelector((store) => store.coffees)
   const [sort, setSort] = useState<SortState>('date')
   // This local state sees if a user is new, and if so, displays a dialog
   // telling them to create a new profile
   const [newUserDialogOpen, setNewUserDialogOpen] = useState<boolean>(!name)
   // Checks to see if there's a search query or filters in the URL
-  const {q, filters} = queryString.parse(location.search, {
+  const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   })
 
   useEffect(() => {
-    dispatch({type: SagaActions.FETCH_DASHBOARD, payload: q})
-    dispatch({type: ReduxActions.CLEAR_ONE_COFFEE})
+    dispatch({ type: SagaActions.FETCH_DASHBOARD, payload: q })
+    dispatch({ type: ReduxActions.CLEAR_ONE_COFFEE })
   }, [dispatch, q])
 
   // Puts coffees array through any sort or filters set in state

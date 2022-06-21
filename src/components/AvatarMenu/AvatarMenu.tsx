@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {useHistory} from 'react-router-dom'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Menu,
   Box,
@@ -11,12 +11,12 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core'
-import {Edit, Add, ViewModule} from '@material-ui/icons'
+import { Edit, Add, ViewModule } from '@material-ui/icons'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 // Components
 import SharedCoffeeMenu from '../SharedCoffeeMenu/SharedCoffeeMenu'
 
@@ -52,7 +52,7 @@ export default function AvatarMenu() {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const classes = useStyles()
-  const {name, username, profilePic} = useAppSelector((store) => store.user)
+  const { name, username, profilePic } = useAppSelector((store) => store.user)
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<
     (EventTarget & HTMLDivElement) | null
   >(null)
@@ -60,7 +60,7 @@ export default function AvatarMenu() {
 
   // Logs the user out and sends them to LandingPage
   const handleLogout = () => {
-    dispatch({type: SagaActions.LOGOUT})
+    dispatch({ type: SagaActions.LOGOUT })
     history.push('/home')
     setAvatarAnchorEl(null)
   }
@@ -71,7 +71,7 @@ export default function AvatarMenu() {
         className={classes.medium}
         src={profilePic}
         onClick={(event) => setAvatarAnchorEl(event.currentTarget)}
-        style={{cursor: 'pointer'}}
+        style={{ cursor: 'pointer' }}
       >
         {name && name.charAt(0)}
       </Avatar>
@@ -94,7 +94,10 @@ export default function AvatarMenu() {
           <Typography align="center">{name}</Typography>
           <Typography align="center">{username}</Typography>
         </Box>
-        <MenuItem disabled={!sharedCoffees[0]} onClick={() => setSharedOpen(!sharedOpen)}>
+        <MenuItem
+          disabled={!sharedCoffees[0]}
+          onClick={() => setSharedOpen(!sharedOpen)}
+        >
           <ListItemIcon>
             <Avatar className={classes[sharedCoffees[0] ? 'smallBlue' : 'small']}>
               <Typography variant="subtitle2">{sharedCoffees.length}</Typography>
@@ -111,7 +114,7 @@ export default function AvatarMenu() {
           onClick={() => {
             history.push('/dashboard')
             setAvatarAnchorEl(null)
-            dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+            dispatch({ type: ReduxActions.CLEAR_SNACKBARS })
           }}
         >
           <ListItemIcon>

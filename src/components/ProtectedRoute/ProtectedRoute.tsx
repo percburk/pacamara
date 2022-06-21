@@ -1,6 +1,6 @@
-import {Route, Redirect, RouteProps} from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 // Hooks
-import {useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Components
 import LandingPage from '../LandingPage/LandingPage'
 

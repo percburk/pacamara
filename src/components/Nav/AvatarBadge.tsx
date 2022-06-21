@@ -1,4 +1,4 @@
-import {withStyles, Badge} from '@material-ui/core'
+import { withStyles, Badge } from '@material-ui/core'
 
 // Custom component for displaying a badge on a user's avatar if they have
 // shared coffees on their profile

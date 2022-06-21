@@ -1,4 +1,4 @@
-import {createTheme} from '@material-ui/core'
+import { createTheme } from '@material-ui/core'
 
 // Material-UI theme which is constant throughout, imported into App
 // and sent through ThemeProvider

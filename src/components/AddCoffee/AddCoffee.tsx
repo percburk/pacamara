@@ -1,5 +1,5 @@
-import {useState, useEffect, ChangeEvent} from 'react'
-import {useHistory} from 'react-router-dom'
+import { useState, useEffect, ChangeEvent } from 'react'
+import { useHistory } from 'react-router-dom'
 import LuxonUtils from '@date-io/luxon'
 import {
   Box,
@@ -12,15 +12,15 @@ import {
   Button,
   InputAdornment,
 } from '@material-ui/core'
-import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers/'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers/'
 // Hooks
-import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date'
-import {AddCoffeeState} from '../../models/stateResource'
-import {DateTime} from 'luxon'
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+import { AddCoffeeState } from '../../models/stateResource'
+import { DateTime } from 'luxon'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader'
 import Snackbars from '../Snackbars/Snackbars'
@@ -87,13 +87,13 @@ export default function AddCoffee() {
   })
 
   useEffect(() => {
-    dispatch({type: SagaActions.FETCH_FLAVORS})
+    dispatch({ type: SagaActions.FETCH_FLAVORS })
   }, [dispatch])
 
   // Handles all text inputs, adds to local state object
   const handleNewCoffee =
     (key: keyof AddCoffeeState) => (event: ChangeEvent<HTMLInputElement>) => {
-      const {value, checked} = event.target
+      const { value, checked } = event.target
       const switchKeys = ['isBlend', 'brewing']
 
       setNewCoffee({
@@ -122,24 +122,24 @@ export default function AddCoffee() {
 
   // Adds the new coffee to the database with input validation
   const handleSubmit = () => {
-    const {roaster, country, blendName, flavorsArray} = newCoffee
+    const { roaster, country, blendName, flavorsArray } = newCoffee
     if (roaster && (country || blendName) && flavorsArray[0]) {
-      dispatch({type: ReduxActions.SNACKBARS_ADDED_COFFEE})
-      dispatch({type: SagaActions.ADD_COFFEE, payload: newCoffee})
+      dispatch({ type: ReduxActions.SNACKBARS_ADDED_COFFEE })
+      dispatch({ type: SagaActions.ADD_COFFEE, payload: newCoffee })
       clearInputs()
       history.push('/dashboard')
     } else {
       setRoasterError(!!!roaster)
       setBlendCountryError(!(country || blendName))
       if (!flavorsArray[0]) {
-        dispatch({type: ReduxActions.SNACKBARS_FLAVORS_ERROR})
+        dispatch({ type: ReduxActions.SNACKBARS_FLAVORS_ERROR })
       }
     }
   }
 
   // Clears all local state data and sends user back to the previous page
   const handleCancel = () => {
-    dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+    dispatch({ type: ReduxActions.CLEAR_SNACKBARS })
     clearInputs()
     history.goBack()
   }
@@ -294,7 +294,7 @@ export default function AddCoffee() {
             <Box display="flex" py={2}>
               <S3Uploader
                 setPhoto={(picUrl: string) =>
-                  setNewCoffee({...newCoffee, coffeePic: picUrl})
+                  setNewCoffee({ ...newCoffee, coffeePic: picUrl })
                 }
               />
               {newCoffee.coffeePic && (

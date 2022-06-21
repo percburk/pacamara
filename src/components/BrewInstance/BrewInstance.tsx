@@ -1,5 +1,5 @@
-import {ChangeEvent} from 'react'
-import {DateTime} from 'luxon'
+import { ChangeEvent } from 'react'
+import { DateTime } from 'luxon'
 import {
   Box,
   Table,
@@ -14,12 +14,17 @@ import {
   IconButton,
   makeStyles,
 } from '@material-ui/core'
-import {ExpandMore, ThumbUp, ThumbDown, ThumbsUpDownOutlined} from '@material-ui/icons'
+import {
+  ExpandMore,
+  ThumbUp,
+  ThumbDown,
+  ThumbsUpDownOutlined,
+} from '@material-ui/icons'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {Brew} from '../../models/modelResource'
-import {SagaActions} from '../../models/redux/sagaResource'
+import { Brew } from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
 // Components
 import EditDeleteBrewMenu from '../EditDeleteBrewMenu/EditDeleteBrewMenu'
 
@@ -92,7 +97,7 @@ export default function BrewInstance({
             event.stopPropagation()
             dispatch({
               type: SagaActions.LIKE_BREW,
-              payload: {coffeeId, brewId: id, change: liked},
+              payload: { coffeeId, brewId: id, change: liked },
             })
           }}
           onFocus={(event) => event.stopPropagation()}

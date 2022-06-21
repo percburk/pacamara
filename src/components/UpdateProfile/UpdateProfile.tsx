@@ -1,5 +1,5 @@
-import {useState, useEffect, ChangeEvent} from 'react'
-import {useHistory} from 'react-router-dom'
+import { useState, useEffect, ChangeEvent } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Box,
   Typography,
@@ -11,11 +11,11 @@ import {
   Slider,
 } from '@material-ui/core'
 // Hooks
-import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatchSelector'
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatchSelector'
 // Models
-import {UpdateProfileState} from '../../models/stateResource'
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { UpdateProfileState } from '../../models/stateResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 // Components
 import S3Uploader from '../S3Uploader/S3Uploader'
 import CancelProfileDialog from '../CancelProfileDialog/CancelProfileDialog'
@@ -101,7 +101,7 @@ export default function UpdateProfile() {
   })
 
   useEffect(() => {
-    dispatch({type: SagaActions.FETCH_METHODS})
+    dispatch({ type: SagaActions.FETCH_METHODS })
   }, [dispatch])
 
   // Handles toggling of methods being added to a user's profile
@@ -117,14 +117,14 @@ export default function UpdateProfile() {
   // Curried function which handles all text inputs
   const handleNewUpdates =
     (key: keyof UpdateProfileState) => (event: ChangeEvent<HTMLInputElement>) => {
-      setNewUpdates({...newUpdates, [key]: event.target.value})
+      setNewUpdates({ ...newUpdates, [key]: event.target.value })
     }
 
   // Curried function which handles both sliders on the page, tds and ext
   const handleSliders =
     (moved: 'tdsRange' | 'extRange') =>
     (event: ChangeEvent<{}>, newVal: number[] | number) => {
-      setNewUpdates({...newUpdates, [moved]: newVal as number[]})
+      setNewUpdates({ ...newUpdates, [moved]: newVal as number[] })
     }
 
   // Submits any profile updates. This is a PUT route for both a new and
@@ -170,13 +170,13 @@ export default function UpdateProfile() {
     } else {
       setInputError(!newUpdates.name)
       !newUpdates.methodsArray[0] &&
-        dispatch({type: ReduxActions.SNACKBARS_METHODS_ERROR})
+        dispatch({ type: ReduxActions.SNACKBARS_METHODS_ERROR })
     }
   }
 
   // Cancels any updates and sends the user to the previous page
   const handleCancel = () => {
-    dispatch({type: ReduxActions.CLEAR_SNACKBARS})
+    dispatch({ type: ReduxActions.CLEAR_SNACKBARS })
     if (name) {
       history.goBack()
       clearInputs()
@@ -253,11 +253,13 @@ export default function UpdateProfile() {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Typography className={classes.uploadLabel}>Upload Profile photo:</Typography>
+            <Typography className={classes.uploadLabel}>
+              Upload Profile photo:
+            </Typography>
             <Box display="flex" paddingBottom={3}>
               <S3Uploader
                 setPhoto={(picUrl: string) =>
-                  setNewUpdates({...newUpdates, profilePic: picUrl})
+                  setNewUpdates({ ...newUpdates, profilePic: picUrl })
                 }
               />
               {newUpdates.profilePic && (

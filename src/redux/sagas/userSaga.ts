@@ -1,15 +1,15 @@
-import axios, {AxiosResponse} from 'axios'
-import {put, takeLatest, call} from 'redux-saga/effects'
+import axios, { AxiosResponse } from 'axios'
+import { put, takeLatest, call } from 'redux-saga/effects'
 import camelcaseKeys from 'camelcase-keys'
-import {User, MethodsArrayAgg} from '../../models/modelResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
-import {SagaActions, SagaGeneratorReturn} from '../../models/redux/sagaResource'
+import { User, MethodsArrayAgg } from '../../models/modelResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
+import { SagaActions, SagaGeneratorReturn } from '../../models/redux/sagaResource'
 
 // Worker Saga: will be fired on "FETCH_USER" actions
 function* fetchUser(): SagaGeneratorReturn<User & MethodsArrayAgg[], User> {
   try {
     const config = {
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
     }
 

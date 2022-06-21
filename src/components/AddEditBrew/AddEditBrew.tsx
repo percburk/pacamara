@@ -1,4 +1,4 @@
-import {useState, ChangeEvent} from 'react'
+import { useState, ChangeEvent } from 'react'
 import {
   Box,
   Dialog,
@@ -14,16 +14,16 @@ import {
   Collapse,
   IconButton,
 } from '@material-ui/core'
-import {Add, ExpandLess, ExpandMore, Close} from '@material-ui/icons'
-import {Alert} from '@material-ui/lab'
+import { Add, ExpandLess, ExpandMore, Close } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {BrewState} from '../../models/stateResource'
-import {Brew, Methods} from '../../models/modelResource'
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
-import {validateNumberInput, validateSubmit} from './inputValidationUtils'
+import { BrewState } from '../../models/stateResource'
+import { Brew, Methods } from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
+import { validateNumberInput, validateSubmit } from './inputValidationUtils'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -87,10 +87,10 @@ export default function AddEditBrew({
   const classes = useStyles()
   const dispatch = useAppDispatch()
   const methods = useAppSelector((store) => store.methods)
-  const {methodsDefaultId, methodsDefaultLrr, methodsArray} = useAppSelector(
+  const { methodsDefaultId, methodsDefaultLrr, methodsArray } = useAppSelector(
     (store) => store.user
   )
-  const {isBlend, blendName, country, producer} = useAppSelector(
+  const { isBlend, blendName, country, producer } = useAppSelector(
     (store) => store.oneCoffee
   )
   const [advancedOpen, setAdvancedOpen] = useState<boolean>(false)
@@ -105,14 +105,15 @@ export default function AddEditBrew({
   const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
 
   // Curried function to handle all text inputs in local state object
-  const handleBrew = (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
-    const {value} = event.target
-    const validatedInput = key !== 'time' ? validateNumberInput(value, key) : value
+  const handleBrew =
+    (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target
+      const validatedInput = key !== 'time' ? validateNumberInput(value, key) : value
 
-    if (validatedInput !== undefined) {
-      setBrew({...brew, [key]: key === 'time' ? value : validatedInput})
+      if (validatedInput !== undefined) {
+        setBrew({ ...brew, [key]: key === 'time' ? value : validatedInput })
+      }
     }
-  }
 
   // This is the math to calculate the Extraction %, result is rendered
   const adjustedCoffeeDose = (brew.coffeeDose * (100 - brew.moisture - brew.co2)) / 100
@@ -129,7 +130,7 @@ export default function AddEditBrew({
 
   // This adds whatever method was used for the brew into the local state object
   const handleMethod = (method: Methods) => {
-    setBrew({...brew, methodsId: method.id, lrr: method.lrr})
+    setBrew({ ...brew, methodsId: method.id, lrr: method.lrr })
   }
 
   // Sends the new brew instance to the database
@@ -243,8 +244,8 @@ export default function AddEditBrew({
               .filter((method) => methodsArray.includes(method.id))
               .map((method) => (
                 <Chip
-                  className={classes.chips}
                   key={method.id}
+                  className={classes.chips}
                   label={method.name}
                   color={method.id === brew.methodsId ? 'primary' : 'default'}
                   onClick={() => handleMethod(method)}

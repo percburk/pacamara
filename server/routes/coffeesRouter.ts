@@ -1,10 +1,10 @@
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import camelcaseKeys from 'camelcase-keys'
-import {PoolClient} from 'pg'
+import { PoolClient } from 'pg'
 import pool from '../modules/pool'
-import {rejectUnauthenticated} from '../modules/authenticationMiddleware'
-import {TypedRequest} from '../models/expressResource'
-import {CoffeeItem} from '../../src/models/modelResource'
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
+import { TypedRequest } from '../models/expressResource'
+import { CoffeeItem } from '../../src/models/modelResource'
 const router = Router()
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
@@ -40,7 +40,7 @@ router.get(
   '/search-results',
   rejectUnauthenticated,
   (req: Request, res: Response): void => {
-    const {q} = req.query
+    const { q } = req.query
 
     const sqlText = `
       SELECT "coffees".*, 

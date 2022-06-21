@@ -1,13 +1,16 @@
-import axios, {AxiosResponse} from 'axios'
-import {put, takeEvery, call} from 'redux-saga/effects'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import axios, { AxiosResponse } from 'axios'
+import { put, takeEvery, call } from 'redux-saga/effects'
+import { ReduxActions } from '../../models/redux/reduxResource'
 import {
   SagaActions,
   SagaDispatch,
   SagaGeneratorReturn,
 } from '../../models/redux/sagaResource'
-import {Brew} from '../../models/modelResource'
-import {BrewCoffeeIdPayload, FavBrewPayload} from '../../models/redux/sagaPayloadResource'
+import { Brew } from '../../models/modelResource'
+import {
+  BrewCoffeeIdPayload,
+  FavBrewPayload,
+} from '../../models/redux/sagaPayloadResource'
 
 // Fetches list of all brews for the coffee displayed in CoffeeDetails
 function* fetchBrews(action: SagaDispatch<number>): SagaGeneratorReturn<Brew[]> {
@@ -17,7 +20,7 @@ function* fetchBrews(action: SagaDispatch<number>): SagaGeneratorReturn<Brew[]> 
       `/api/brews/${action.payload}`
     )
 
-    yield put({type: ReduxActions.SET_BREWS, payload: response.data})
+    yield put({ type: ReduxActions.SET_BREWS, payload: response.data })
   } catch (err) {
     console.log('Error in fetchBrews', err)
   }
@@ -27,10 +30,10 @@ function* fetchBrews(action: SagaDispatch<number>): SagaGeneratorReturn<Brew[]> 
 function* deleteBrew(
   action: SagaDispatch<BrewCoffeeIdPayload>
 ): SagaGeneratorReturn<number> {
-  const {brewId, coffeeId} = action.payload
+  const { brewId, coffeeId } = action.payload
   try {
     yield call(axios.delete, `/api/brews/delete/${brewId}`)
-    yield put({type: SagaActions.FETCH_BREWS, payload: coffeeId})
+    yield put({ type: SagaActions.FETCH_BREWS, payload: coffeeId })
   } catch (err) {
     console.log('Error in deleteBrew', err)
   }
@@ -38,10 +41,10 @@ function* deleteBrew(
 
 // Toggles whether a brew is thumbs up, down, or none
 function* favBrew(action: SagaDispatch<FavBrewPayload>): SagaGeneratorReturn<number> {
-  const {brewId, coffeeId, change} = action.payload
+  const { brewId, coffeeId, change } = action.payload
   try {
-    yield call(axios.patch, `api/brews/like/${brewId}`, {change})
-    yield put({type: SagaActions.FETCH_BREWS, payload: coffeeId})
+    yield call(axios.patch, `api/brews/like/${brewId}`, { change })
+    yield put({ type: SagaActions.FETCH_BREWS, payload: coffeeId })
   } catch (err) {
     console.log('Error in favBrew', err)
   }

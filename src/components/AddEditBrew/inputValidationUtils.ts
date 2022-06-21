@@ -1,5 +1,5 @@
-import {BrewState} from '../../models/stateResource'
-import {initialBrewState} from './AddEditBrew'
+import { BrewState } from '../../models/stateResource'
+import { initialBrewState } from './AddEditBrew'
 
 const decimalValidationKeys: (keyof BrewState)[] = [
   'co2',
@@ -9,7 +9,7 @@ const decimalValidationKeys: (keyof BrewState)[] = [
   'tds',
 ]
 
-const decimalPlaceOptions: {[K in keyof BrewState]?: number} = {
+const decimalPlaceOptions: { [K in keyof BrewState]?: number } = {
   waterDose: 0,
   coffeeDose: 1,
   grind: 0,
@@ -41,10 +41,10 @@ export const validateSubmit = (brew: BrewState) => {
   return Object.entries(brew).reduce<BrewState>((acc, [key, value]) => {
     if (decimalValidationKeys.includes(key as keyof BrewState)) {
       if ((value as string)[-1] === '.') {
-        return {...acc, [key]: Number((value as string).slice(0, -1))}
+        return { ...acc, [key]: Number((value as string).slice(0, -1)) }
       }
-      return {...acc, [key]: Number(value)}
+      return { ...acc, [key]: Number(value) }
     }
-    return {...acc, [key]: value}
+    return { ...acc, [key]: value }
   }, initialBrewState)
 }

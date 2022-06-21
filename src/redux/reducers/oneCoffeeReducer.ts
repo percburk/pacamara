@@ -1,9 +1,9 @@
-import {ReduxActions, ReduxDispatch} from '../../models/redux/reduxResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 import {
   EditInputsPayload,
   OneCoffeePayloadTypes,
 } from '../../models/redux/reduxPayloadResource'
-import {CoffeeItem} from '../../models/modelResource'
+import { CoffeeItem } from '../../models/modelResource'
 
 const initialState: CoffeeItem = {
   id: 0,
@@ -36,8 +36,8 @@ const oneCoffeeReducer = (
     case ReduxActions.SET_ONE_COFFEE:
       return action.payload as CoffeeItem
     case ReduxActions.EDIT_INPUTS:
-      const {key, change} = action.payload as EditInputsPayload
-      return {...state, [key]: change}
+      const { key, change } = action.payload as EditInputsPayload
+      return { ...state, [key]: change }
     case ReduxActions.EDIT_FLAVORS_ARRAY:
       const id = action.payload as number
       if (!state.flavorsArray.includes(id)) {

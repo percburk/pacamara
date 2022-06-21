@@ -1,5 +1,5 @@
-import {D3Scale} from 'victory-core'
-import {VictoryContainerProps} from 'victory'
+import { D3Scale } from 'victory-core'
+import { VictoryContainerProps } from 'victory'
 
 export interface PolygonProps extends VictoryContainerProps {
   data: {

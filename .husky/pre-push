@@ -5,6 +5,6 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
-echo "${CYAN}→${NO_COLOR} Running Jest unit tests..."
-npx react-scripts test --env=jsdom --watchAll=false --bail
+echo "${CYAN}→${NO_COLOR} Running tests..."
+CI=true npx react-scripts test -o --silent --passWithNoTests
 echo "${GREEN}Success!${NO_COLOR}"

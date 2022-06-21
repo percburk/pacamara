@@ -1,5 +1,5 @@
-import {ReduxDispatch, ReduxActions} from '../../models/redux/reduxResource'
-import {Brew} from '../../models/modelResource'
+import { ReduxDispatch, ReduxActions } from '../../models/redux/reduxResource'
+import { Brew } from '../../models/modelResource'
 
 // brewsReducer contains the list of brew instances for the coffee displayed
 // on CoffeeDetails

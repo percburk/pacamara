@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 import landingErrors from './landingErrorsReducer'
 import user from './userReducer'
 import methods from './methodsReducer'

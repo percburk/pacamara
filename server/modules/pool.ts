@@ -1,11 +1,11 @@
-import {PoolConfig, Pool} from 'pg'
+import { PoolConfig, Pool } from 'pg'
 import url from 'url'
 
 const getConfig = (): PoolConfig => {
   // Heroku gives a url, not a connection object
   // https://github.com/brianc/node-pg-pool
   if (process.env.DATABASE_URL) {
-    const {hostname, port, pathname, auth} = url.parse(process.env.DATABASE_URL)
+    const { hostname, port, pathname, auth } = url.parse(process.env.DATABASE_URL)
     const authArray = auth?.split(':')
 
     if (authArray) {
@@ -15,7 +15,7 @@ const getConfig = (): PoolConfig => {
         host: hostname ?? undefined,
         port: Number(port) ?? undefined,
         database: pathname?.split('/')[1],
-        ssl: {rejectUnauthorized: false},
+        ssl: { rejectUnauthorized: false },
         max: 10, // max number of clients in the pool
         idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
       }

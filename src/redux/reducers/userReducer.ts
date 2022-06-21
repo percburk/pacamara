@@ -1,5 +1,5 @@
-import {User} from '../../models/modelResource'
-import {ReduxActions, ReduxDispatch} from '../../models/redux/reduxResource'
+import { User } from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
 
 const initialState = {
   id: 0,

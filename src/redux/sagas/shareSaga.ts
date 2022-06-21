@@ -1,12 +1,12 @@
-import {put, takeEvery, call} from 'redux-saga/effects'
-import axios, {AxiosResponse} from 'axios'
+import { put, takeEvery, call } from 'redux-saga/effects'
+import axios, { AxiosResponse } from 'axios'
 import {
   SagaDispatch,
   SagaActions,
   SagaGeneratorReturn,
 } from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
-import {CoffeeItem, SharedCoffees, SharingUserList} from '../../models/modelResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
+import { CoffeeItem, SharedCoffees, SharingUserList } from '../../models/modelResource'
 import {
   AddSharedCoffeeToDashboardPayload,
   SendSharedCoffeePayload,
@@ -77,8 +77,8 @@ function* addSharedCoffeeToDashboard(
 ): SagaGeneratorReturn<never> {
   try {
     yield call(axios.post, '/api/share/add', action.payload)
-    yield put({type: SagaActions.FETCH_SHARED_COFFEES})
-    yield put({type: SagaActions.FETCH_COFFEES})
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES })
+    yield put({ type: SagaActions.FETCH_COFFEES })
   } catch (err) {
     console.log('Error in addSharedCoffee', err)
   }
@@ -89,7 +89,7 @@ function* addSharedCoffeeToDashboard(
 function* deleteSharedCoffee(action: SagaDispatch<number>): SagaGeneratorReturn<never> {
   try {
     yield call(axios.delete, `/api/share/delete/${action.payload}`)
-    yield put({type: SagaActions.FETCH_SHARED_COFFEES})
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES })
   } catch (err) {
     console.log('Error in deleteSharedCoffee', err)
   }
@@ -101,5 +101,8 @@ export default function* shareSaga() {
   yield takeEvery(SagaActions.FETCH_SHARED_COFFEES, fetchSharedCoffees)
   yield takeEvery(SagaActions.FETCH_ONE_SHARED_COFFEE, fetchOneSharedCoffee)
   yield takeEvery(SagaActions.DELETE_SHARED_COFFEE, deleteSharedCoffee)
-  yield takeEvery(SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD, addSharedCoffeeToDashboard)
+  yield takeEvery(
+    SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
+    addSharedCoffeeToDashboard
+  )
 }

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import {
   Collapse,
   MenuItem,
@@ -9,10 +9,10 @@ import {
   Box,
 } from '@material-ui/core'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SagaActions} from '../../models/redux/sagaResource'
-import {SharedCoffees} from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { SharedCoffees } from '../../models/modelResource'
 // Components
 import SharedCoffeeDialog from '../SharedCoffeeDialog/SharedCoffeeDialog'
 
@@ -54,7 +54,7 @@ export default function SharedCoffeeMenu({
 
   // Opens the selected coffee in SharedCoffeeDialog and fetches its details
   const handleClickCoffee = (id: number) => {
-    dispatch({type: SagaActions.FETCH_ONE_SHARED_COFFEE, payload: id})
+    dispatch({ type: SagaActions.FETCH_ONE_SHARED_COFFEE, payload: id })
     setDialogOpen(true)
   }
 

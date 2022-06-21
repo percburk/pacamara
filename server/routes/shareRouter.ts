@@ -1,8 +1,8 @@
-import {Router, Request, Response} from 'express'
+import { Router, Request, Response } from 'express'
 import camelcaseKeys from 'camelcase-keys'
 import pool from '../modules/pool'
-import {rejectUnauthenticated} from '../modules/authenticationMiddleware'
-import {TypedRequest} from '../models/expressResource'
+import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
+import { TypedRequest } from '../models/expressResource'
 import {
   SendSharedCoffeePayload,
   AddSharedCoffeeToDashboardPayload,
@@ -70,7 +70,7 @@ router.post(
   '/',
   rejectUnauthenticated,
   (req: TypedRequest<SendSharedCoffeePayload>, res: Response): void => {
-    const {recipientId, coffeesId, coffeeName, message} = req.body
+    const { recipientId, coffeesId, coffeeName, message } = req.body
 
     const sqlText = `
       INSERT INTO "shared_coffees" (
@@ -107,7 +107,7 @@ router.post(
 router.post(
   '/add',
   (req: TypedRequest<AddSharedCoffeeToDashboardPayload>, res: Response): void => {
-    const {coffeesId, sharedById} = req.body
+    const { coffeesId, sharedById } = req.body
 
     const sqlText = `
     INSERT INTO "users_coffees" (

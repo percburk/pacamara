@@ -1,4 +1,4 @@
-import {useLocation} from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 // useQuery is a custom hook for React Router to extract the query string
 // from the URL

@@ -1,5 +1,5 @@
-import {ReduxActions, ReduxDispatch} from '../../models/redux/reduxResource'
-import {OneSharedCoffee} from '../../models/modelResource'
+import { ReduxActions, ReduxDispatch } from '../../models/redux/reduxResource'
+import { OneSharedCoffee } from '../../models/modelResource'
 
 const initialState = {
   id: 0,

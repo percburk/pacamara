@@ -12,13 +12,13 @@ import {
   Grid,
   Paper,
 } from '@material-ui/core'
-import {Add} from '@material-ui/icons'
+import { Add } from '@material-ui/icons'
 // Hooks
-import {useAppSelector, useAppDispatch} from '../../hooks/useAppDispatchSelector'
+import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
-import {SharedCoffees} from '../../models/modelResource'
-import {SagaActions} from '../../models/redux/sagaResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { SharedCoffees } from '../../models/modelResource'
+import { SagaActions } from '../../models/redux/sagaResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +77,7 @@ export default function SharedCoffeeDialog({
   } = useAppSelector((store) => store.oneSharedCoffee)
   const sharedCoffees = useAppSelector((store) => store.sharedCoffees)
   const flavors = useAppSelector((store) => store.flavors)
-  const {id: selectedId, username, message, senderId, profilePic} = selectedCoffee
+  const { id: selectedId, username, message, senderId, profilePic } = selectedCoffee
 
   const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
 
@@ -88,7 +88,7 @@ export default function SharedCoffeeDialog({
       type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
     })
-    dispatch({type: ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE})
+    dispatch({ type: ReduxActions.SNACKBARS_DECLINED_SHARED_COFFEE })
     handleReset()
   }
 
@@ -96,20 +96,20 @@ export default function SharedCoffeeDialog({
   const handleAdd = () => {
     dispatch({
       type: SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
-      payload: {coffeesId: coffeeId, sharedById: senderId},
+      payload: { coffeesId: coffeeId, sharedById: senderId },
     })
     dispatch({
       type: SagaActions.DELETE_SHARED_COFFEE,
       payload: selectedId,
     })
-    dispatch({type: ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE})
+    dispatch({ type: ReduxActions.SNACKBARS_ADDED_SHARED_COFFEE })
     handleReset()
   }
 
   const handleReset = () => {
     setDialogOpen(false)
     if (!sharedCoffees) {
-      dispatch({type: ReduxActions.CLEAR_ONE_SHARED_COFFEE})
+      dispatch({ type: ReduxActions.CLEAR_ONE_SHARED_COFFEE })
       setAvatarAnchorEl(null)
       setSharedOpen(false)
     }

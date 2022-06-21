@@ -1,7 +1,7 @@
-import axios, {AxiosResponse} from 'axios'
-import {put, takeEvery, call} from 'redux-saga/effects'
-import {CoffeeItem} from '../../models/modelResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import axios, { AxiosResponse } from 'axios'
+import { put, takeEvery, call } from 'redux-saga/effects'
+import { CoffeeItem } from '../../models/modelResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 import {
   SagaDispatch,
   SagaActions,
@@ -17,7 +17,7 @@ function* fetchOneCoffee(
       axios.get,
       `/api/one-coffee/${action.payload}`
     )
-    yield put({type: ReduxActions.SET_ONE_COFFEE, payload: response.data[0]})
+    yield put({ type: ReduxActions.SET_ONE_COFFEE, payload: response.data[0] })
   } catch (err) {
     console.log('Error in fetchOneCoffee', err)
   }
@@ -27,7 +27,7 @@ function* fetchOneCoffee(
 function* editCoffee(action: SagaDispatch<CoffeeItem>): SagaGeneratorReturn<never> {
   try {
     yield call(axios.put, '/api/one-coffee/edit', action.payload)
-    yield put({type: SagaActions.FETCH_COFFEES})
+    yield put({ type: SagaActions.FETCH_COFFEES })
   } catch (err) {
     console.log('Error in editCoffee', err)
   }

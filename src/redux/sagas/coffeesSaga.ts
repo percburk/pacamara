@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from 'axios'
-import {put, takeEvery, call} from 'redux-saga/effects'
-import {CoffeeItem} from '../../models/modelResource'
+import axios, { AxiosResponse } from 'axios'
+import { put, takeEvery, call } from 'redux-saga/effects'
+import { CoffeeItem } from '../../models/modelResource'
 import {
   SagaActions,
   SagaDispatch,
@@ -10,21 +10,23 @@ import {
   BrewingOrFavPayload,
   DeleteCoffeePayload,
 } from '../../models/redux/sagaPayloadResource'
-import {ReduxActions} from '../../models/redux/reduxResource'
+import { ReduxActions } from '../../models/redux/reduxResource'
 
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router
 // depending on if a search is being executed
-function* fetchCoffees(action: SagaDispatch<string>): SagaGeneratorReturn<CoffeeItem[]> {
+function* fetchCoffees(
+  action: SagaDispatch<string>
+): SagaGeneratorReturn<CoffeeItem[]> {
   const whichRoute = action.payload
     ? call(axios.get, 'api/coffees/search-results', {
-        params: {q: action.payload},
+        params: { q: action.payload },
       })
     : call(axios.get, '/api/coffees/')
 
   try {
     const response: AxiosResponse<CoffeeItem[]> = yield whichRoute
-    yield put({type: ReduxActions.SET_COFFEES, payload: response.data})
+    yield put({ type: ReduxActions.SET_COFFEES, payload: response.data })
   } catch (err) {
     console.log('Error in fetchCoffees', err)
   }
@@ -34,10 +36,10 @@ function* fetchCoffees(action: SagaDispatch<string>): SagaGeneratorReturn<Coffee
 function* setBrewingOrFav(
   action: SagaDispatch<BrewingOrFavPayload>
 ): SagaGeneratorReturn<number | string> {
-  const {id, change, q, oneCoffeeId} = action.payload
+  const { id, change, q, oneCoffeeId } = action.payload
   const fetchWhichCoffee = id
-    ? {type: SagaActions.FETCH_COFFEES, payload: q}
-    : {type: SagaActions.FETCH_ONE_COFFEE, payload: oneCoffeeId}
+    ? { type: SagaActions.FETCH_COFFEES, payload: q }
+    : { type: SagaActions.FETCH_ONE_COFFEE, payload: oneCoffeeId }
 
   try {
     yield call(axios.put, '/api/one-coffee/fav-brew/', {
@@ -54,14 +56,14 @@ function* setBrewingOrFav(
 function* deleteCoffee(
   action: SagaDispatch<DeleteCoffeePayload>
 ): SagaGeneratorReturn<string> {
-  const {id, q} = action.payload
+  const { id, q } = action.payload
   try {
     yield call(axios.delete, `/api/coffees/delete/${id}`)
     yield put({
       type: SagaActions.FETCH_COFFEES,
       payload: q,
     })
-    yield put({type: SagaActions.FETCH_SHARED_COFFEES})
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES })
   } catch (err) {
     console.log('Error in deleteCoffee', err)
   }
@@ -71,8 +73,8 @@ function* deleteCoffee(
 function* addCoffee(action: SagaDispatch<CoffeeItem>): SagaGeneratorReturn<never> {
   try {
     yield call(axios.post, '/api/coffees/add', action.payload)
-    yield put({type: SagaActions.FETCH_COFFEES})
-    yield put({type: SagaActions.FETCH_SHARED_COFFEES})
+    yield put({ type: SagaActions.FETCH_COFFEES })
+    yield put({ type: SagaActions.FETCH_SHARED_COFFEES })
   } catch (err) {
     console.log('Error in addCoffee', err)
   }

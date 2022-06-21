@@ -1,11 +1,11 @@
 import passport from 'passport'
-import {Strategy as LocalStrategy} from 'passport-local'
+import { Strategy as LocalStrategy } from 'passport-local'
 import camelcaseKeys from 'camelcase-keys'
-import {comparePassword} from '../modules/encryption'
+import { comparePassword } from '../modules/encryption'
 import pool from '../modules/pool'
 
 passport.serializeUser((user, done): void => {
-  const {id} = user as Express.User
+  const { id } = user as Express.User
   done(null, id)
 })
 
