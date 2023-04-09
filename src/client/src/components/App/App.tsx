@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { ThemeProvider, CssBaseline } from '@material-ui/core'
-import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 // Hooks
 import { useAppDispatch } from '../../hooks/useAppDispatchSelector'
 // Models
@@ -29,7 +29,7 @@ export default function App() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <Router>
+      <BrowserRouter>
         <Nav />
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
@@ -72,7 +72,7 @@ export default function App() {
           </Route>
         </Switch>
         <Footer />
-      </Router>
+      </BrowserRouter>
     </ThemeProvider>
   )
 }
