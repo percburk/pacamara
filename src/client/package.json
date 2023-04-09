@@ -25,8 +25,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "test": "vitest run",
+    "build": "vite build",
+    "test": "vitest",
+    "test:ci": "vitest run",
     "compile": "tsc",
     "format": "prettier --write --ignore-unknown .",
     "lint": "eslint --fix src/**/*.{ts,tsx}"

@@ -9,6 +9,7 @@
     "format": "prettier --write --ignore-unknown .",
     "lint": "eslint --fix .",
     "test": "npm test -w pacamara-client",
+    "test:ci": "npm run test:ci -w pacamara-client",
     "prepare": "husky install"
   },
   "devDependencies": {
