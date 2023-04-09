@@ -2,6 +2,9 @@
   "name": "pacamara",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "author": "percburk",
+  "license": "ISC",
   "scripts": {
     "client": "npm run dev -w pacamara-client",
     "server": "npm run dev -w pacamara-server",
@@ -31,6 +34,10 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "engines": {
+    "node": "^18.15.0",
+    "npm": "^9.5.0"
+  },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
     "*": "prettier --write --ignore-unknown"

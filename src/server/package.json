@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "dist/server.js",
   "author": "percburk",
   "license": "ISC",
-  "description": "",
+  "main": "dist/server.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "camelcase-keys": "^7.0.0",
@@ -19,11 +18,12 @@
     "pg": "^8.5.1"
   },
   "scripts": {
-    "start": "node --experimental-specifier-resolution=node dist/server.js",
-    "dev": "nodemon -e ts -x npm run dev:exec",
-    "dev:exec": "node --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+    "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm --watch src/server.ts",
+    "start": "node --experimental-specifier-resolution=node --no-warnings dist/server.js",
     "compile": "tsc",
-    "build": "swc ./src --out-dir dist"
+    "build": "swc ./src --out-dir dist",
+    "format": "prettier --write --ignore-unknown .",
+    "lint": "eslint --fix src/**/*.{ts,js}"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",
