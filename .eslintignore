@@ -1,0 +1,13 @@
+# testing
+/coverage
+
+# Production bundle
+/dist
+
+# auto-generated types
+/types
+*.d.ts
+*.d.ts.map
+
+# dependencies
+package-lock.json

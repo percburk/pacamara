@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
 echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..."
-npx tsc -p base.tsconfig.json --noEmit
+npx tsc -p src/server/tsconfig.json --noEmit
 
 echo "${CYAN}→${NO_COLOR} Running lint-staged..."
 npx lint-staged

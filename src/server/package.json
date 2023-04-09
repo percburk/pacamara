@@ -1,0 +1,50 @@
+{
+  "name": "pacamara-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/server.ts",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "camelcase-keys": "^7.0.0",
+    "cookie-session": "^2.0.0-rc.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.2",
+    "heroku": "^7.2.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.5.1"
+  },
+  "scripts": {
+    "start": "node -r dotenv/config src/server.ts",
+    "dev": "nodemon -e ts -x npm run server:ts",
+    "server:ts": "tsc && node --experimental-specifier-resolution=node -r dotenv/config dist/server.js",
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.0",
+    "@types/cookie-session": "^2.0.42",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.11",
+    "@types/node": "^15.6.0",
+    "@types/passport": "^1.0.5",
+    "@types/passport-local": "^1.0.33",
+    "@types/pg": "^7.14.9",
+    "@types/query-string": "^6.3.0",
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^5.0.4"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "heroku-run-build-script": true
+}

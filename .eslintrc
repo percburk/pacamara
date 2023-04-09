@@ -1,0 +1,141 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "import", "jsx-a11y"],
+  "reportUnusedDisableDirectives": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/no-require-imports": "error",
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+    "array-callback-return": [
+      "error",
+      {
+        "allowImplicit": true,
+        "checkForEach": true
+      }
+    ],
+    "curly": ["warn", "all"],
+    "camelcase": ["error", { "ignoreImports": true }],
+    "default-case": ["error", { "commentPattern": "^no default$" }],
+    "default-case-last": "error",
+    "dot-notation": "warn",
+    "eqeqeq": "error",
+    "import/newline-after-import": ["warn", { "count": 1 }],
+    "import/no-useless-path-segments": ["error", { "noUselessIndex": true }],
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        },
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "src/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react", "src/**"],
+        "newlines-between": "never"
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "jsx-a11y/media-has-caption": "off",
+    "max-params": ["warn", { "max": 3 }],
+    "no-console": "warn",
+    "no-case-declarations": "off",
+    "no-dupe-class-members": "error",
+    "no-duplicate-imports": "error",
+    "no-else-return": "warn",
+    "no-empty": "warn",
+    "no-extra-boolean-cast": "warn",
+    "no-invalid-this": "warn",
+    "no-template-curly-in-string": "warn",
+    "no-underscore-dangle": "error",
+    "no-unneeded-ternary": "warn",
+    "no-useless-constructor": "error",
+    "no-var": "error",
+    "object-shorthand": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-const": "warn",
+    "prefer-object-has-own": "warn",
+    "prefer-object-spread": "error",
+    "prefer-rest-params": "error",
+    "prefer-template": "warn",
+    "react/display-name": "off",
+    "react/function-component-definition": [
+      "warn",
+      {
+        "namedComponents": "function-declaration",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-curly-brace-presence": [
+      "warn",
+      {
+        "props": "never",
+        "children": "never",
+        "propElementValues": "always"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "allow": "as-needed",
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "react/self-closing-comp": "warn",
+    "react/jsx-newline": ["warn", { "prevent": true }],
+    "react/jsx-no-useless-fragment": "warn",
+    "require-await": "warn",
+    "spaced-comment": ["warn", "always", { "markers": ["/"] }]
+  }
+}

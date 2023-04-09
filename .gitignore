@@ -64,8 +64,5 @@ typings/
 # dotenv environment variables file
 .env
 
-# ignore package-lock as it complicates merging
-package-lock.json
-
 # ignore dist folder of TS compilation
 dist/

@@ -1,0 +1,61 @@
+{
+  "name": "pacamara-client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.3.10",
+    "axios": "^0.21.1",
+    "camelcase-keys": "^7.0.0",
+    "luxon": "^1.28.0",
+    "prettier": "^2.5.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-dropzone-s3-uploader": "^1.1.0",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-swipeable-views": "^0.13.9",
+    "redux": "^4.1.0",
+    "redux-saga": "^1.1.3",
+    "victory": "^35.4.13",
+    "victory-core": "^36.2.0",
+    "vitest": "^0.29.8"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "react-scripts test --env=jsdom",
+    "compile": "tsc",
+    "format": "prettier --write --ignore-unknown .",
+    "lint": "eslint --fix src/**/*.{ts,tsx}"
+  },
+  "devDependencies": {
+    "@date-io/luxon": "^1.3.13",
+    "@types/jest": "^26.0.23",
+    "@types/luxon": "^1.27.1",
+    "@types/query-string": "^6.3.0",
+    "@types/react": "^16.14.13",
+    "@types/react-dom": "^16.9.14",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/react-swipeable-views": "^0.13.1",
+    "@types/redux": "^3.6.0",
+    "@types/redux-logger": "^3.0.8",
+    "@types/redux-saga": "^0.10.5",
+    "@vitejs/plugin-react": "^3.0.0",
+    "redux-logger": "^3.0.6",
+    "typescript": "^5.0.4",
+    "vite": "^4.0.3",
+    "vite-plugin-checker": "^0.5.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "heroku-run-build-script": true
+}
