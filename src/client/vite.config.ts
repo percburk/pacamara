@@ -15,15 +15,17 @@ export default defineConfig({
     alias: { src: path.resolve(__dirname, './src') },
   },
   test: {
+    environment: 'jsdom',
     include: ['./src/**/*.{test,spec}.{ts,tsx,js,jsx}'],
   },
   plugins: [
     react(),
-    checker({
-      overlay: { initialIsOpen: false },
-      typescript: true,
-      eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
-      enableBuild: false,
-    }),
+    !process.env.VITEST &&
+      checker({
+        overlay: { initialIsOpen: false },
+        typescript: true,
+        eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
+        enableBuild: false,
+      }),
   ],
 })
