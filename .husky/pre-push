@@ -6,5 +6,5 @@ GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
 echo "${CYAN}→${NO_COLOR} Running Jest unit tests..."
-npx vitest --silent
+npm test
 echo "${GREEN}Success!${NO_COLOR}"

@@ -21,13 +21,12 @@
     "redux": "^4.1.0",
     "redux-saga": "^1.1.3",
     "victory": "^35.4.13",
-    "victory-core": "^36.2.0",
-    "vitest": "^0.29.8"
+    "victory-core": "^36.2.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "vitest",
     "compile": "tsc",
     "format": "prettier --write --ignore-unknown .",
     "lint": "eslint --fix src/**/*.{ts,tsx}"
@@ -49,7 +48,8 @@
     "redux-logger": "^3.0.6",
     "typescript": "^5.0.4",
     "vite": "^4.0.3",
-    "vite-plugin-checker": "^0.5.3"
+    "vite-plugin-checker": "^0.5.3",
+    "vitest": "^0.29.8"
   },
   "browserslist": [
     ">0.2%",
