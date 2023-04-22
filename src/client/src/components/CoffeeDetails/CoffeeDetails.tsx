@@ -188,7 +188,9 @@ export default function CoffeeDetails() {
             {!isBlend && (
               <Box marginBottom={2}>
                 <Typography variant="subtitle1">Region: {region}</Typography>
-                <Typography variant="subtitle1">Elevation: {elevation} meters</Typography>
+                <Typography variant="subtitle1">
+                  Elevation: {elevation} meters
+                </Typography>
                 <Typography variant="subtitle1">Cultivars: {cultivars}</Typography>
                 <Typography variant="subtitle1">Processing: {processing}</Typography>
               </Box>

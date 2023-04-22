@@ -25,6 +25,14 @@
     "browser": true,
     "node": true
   },
+  "overrides": [
+    {
+      "files": "src/server/src/**/*.ts",
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "warn",

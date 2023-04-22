@@ -1,40 +1,43 @@
 import camelcaseKeys from 'camelcase-keys'
 import { Router, Request, Response } from 'express'
-import { PoolClient } from 'pg'
 import { TypedRequest } from '../models/expressResource'
 import { RegisterRequest, User } from '../models/modelResource'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
 import { encryptPassword } from '../modules/encryption'
-import pool from '../modules/pool'
-import userStrategy from '../strategies/userStrategy'
+import { pool } from '../modules/pool'
+import { passport } from '../strategies/userStrategy'
 
-const router = Router()
+const userRouter = Router()
 
 // GET request for user information if user is authenticated
-router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
+userRouter.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from session, previously queried from the database
   res.send(req.user)
 })
 
 // GET request for the methods user owns from "users_methods" junction table
-router.get('/methods', rejectUnauthenticated, (req: Request, res: Response): void => {
-  const sqlText = `
+userRouter.get(
+  '/methods',
+  rejectUnauthenticated,
+  (req: Request, res: Response): void => {
+    const sqlText = `
       SELECT ARRAY_AGG("methods_id") 
       FROM "users_methods" 
       WHERE "users_id" = $1;
     `
 
-  pool
-    .query(sqlText, [req.user?.id])
-    .then((result) => res.send(camelcaseKeys(result.rows, { deep: true })))
-    .catch((err) => {
-      console.log(`Error in GET with query: ${sqlText}`, err)
-      res.sendStatus(500)
-    })
-})
+    pool
+      .query(sqlText, [req.user?.id])
+      .then((result) => res.send(camelcaseKeys(result.rows, { deep: true })))
+      .catch((err) => {
+        console.log(`Error in GET with query: ${sqlText}`, err)
+        res.sendStatus(500)
+      })
+  }
+)
 
 // Handles POST request with new user data, the password gets encrypted
-router.post('/register', (req: TypedRequest<RegisterRequest>, res: Response): void => {
+userRouter.post('/register', (req: TypedRequest<RegisterRequest>, res) => {
   const { username, password } = req.body
   const encryptedPassword = encryptPassword(password)
 
@@ -56,16 +59,12 @@ router.post('/register', (req: TypedRequest<RegisterRequest>, res: Response): vo
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
 // This middleware will run our POST if successful and will send a 404 if not
-router.post(
-  '/login',
-  userStrategy.authenticate('local'),
-  (_: Request, res: Response): void => {
-    res.sendStatus(200)
-  }
-)
+userRouter.post('/login', passport.authenticate('local'), (_, res) => {
+  res.sendStatus(200)
+})
 
 // Clear all server session information about this user
-router.post('/logout', (req: Request, res: Response): void => {
+userRouter.post('/logout', (req, res) => {
   // Use passport's built-in method to log out the user
   req.logout((err) => console.log(err))
   res.sendStatus(200)
@@ -73,11 +72,11 @@ router.post('/logout', (req: Request, res: Response): void => {
 
 // PUT route adding all other information to 'users', in creating both a
 // new profile or updating existing profile, transaction
-router.put(
+userRouter.put(
   '/update',
   rejectUnauthenticated,
-  async (req: TypedRequest<User>, res: Response): Promise<void> => {
-    const connection: PoolClient = await pool.connect()
+  async (req: TypedRequest<User>, res) => {
+    const connection = await pool.connect()
 
     try {
       await connection.query('BEGIN;')
@@ -120,8 +119,8 @@ router.put(
 
       // Query #3, go through methods_array to build query to insert
       // into users_methods
-      const sqlValues = (req.body.methodsArray as number[])
-        .map((_: number, i: number) => `($1, $${i + 2})`)
+      const sqlValues = req.body.methodsArray
+        .map((_, i) => `($1, $${i + 2})`)
         .join(', ')
 
       const methodsSqlText = `
@@ -135,7 +134,10 @@ router.put(
       res.sendStatus(201) // Send back success!
     } catch (err) {
       await connection.query('ROLLBACK;')
-      console.log('Error in PUT to add/edit user profile in userRouter, rollback: ', err)
+      console.log(
+        'Error in PUT to add/edit user profile in userRouter, rollback: ',
+        err
+      )
       res.sendStatus(500)
     } finally {
       connection.release()
@@ -143,4 +145,4 @@ router.put(
   }
 )
 
-export default router
+export { userRouter }

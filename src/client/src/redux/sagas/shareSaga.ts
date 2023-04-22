@@ -101,5 +101,8 @@ export default function* shareSaga() {
   yield takeEvery(SagaActions.FETCH_SHARED_COFFEES, fetchSharedCoffees)
   yield takeEvery(SagaActions.FETCH_ONE_SHARED_COFFEE, fetchOneSharedCoffee)
   yield takeEvery(SagaActions.DELETE_SHARED_COFFEE, deleteSharedCoffee)
-  yield takeEvery(SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD, addSharedCoffeeToDashboard)
+  yield takeEvery(
+    SagaActions.ADD_SHARED_COFFEE_TO_DASHBOARD,
+    addSharedCoffeeToDashboard
+  )
 }

@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
-import pool from '../modules/pool'
+import { pool } from '../modules/pool'
 
-const router = Router()
+const flavorsRouter = Router()
 
 // GET route for list of flavors, displayed as Chips throughout the app
-router.get('/', rejectUnauthenticated, (_: Request, res: Response): void => {
+flavorsRouter.get('/', rejectUnauthenticated, (_, res) => {
   const sqlText = `
     SELECT * FROM "flavors"
     ORDER BY "flavors".name;
@@ -20,4 +20,4 @@ router.get('/', rejectUnauthenticated, (_: Request, res: Response): void => {
     })
 })
 
-export default router
+export { flavorsRouter }

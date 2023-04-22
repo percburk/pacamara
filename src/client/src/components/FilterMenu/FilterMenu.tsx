@@ -18,7 +18,9 @@ const filterOptions: FilterMenuOptions[] = [
 export default function FilterMenu() {
   const location = useLocation()
   const history = useHistory()
-  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(
+    null
+  )
   const { q, filters } = queryString.parse(location.search, {
     arrayFormat: 'bracket',
   })

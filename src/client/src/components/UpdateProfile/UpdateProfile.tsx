@@ -253,7 +253,9 @@ export default function UpdateProfile() {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Typography className={classes.uploadLabel}>Upload Profile photo:</Typography>
+            <Typography className={classes.uploadLabel}>
+              Upload Profile photo:
+            </Typography>
             <Box display="flex" paddingBottom={3}>
               <S3Uploader
                 setPhoto={(picUrl: string) =>

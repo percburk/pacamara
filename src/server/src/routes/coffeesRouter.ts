@@ -1,15 +1,14 @@
 import camelcaseKeys from 'camelcase-keys'
-import { Router, Request, Response } from 'express'
-import { PoolClient } from 'pg'
+import { Router } from 'express'
 import { TypedRequest } from '../models/expressResource'
 import { CoffeeItem } from '../models/modelResource'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
-import pool from '../modules/pool'
+import { pool } from '../modules/pool'
 
-const router = Router()
+const coffeesRouter = Router()
 
 // GET route for all the user's coffees, called conditionally in coffees.saga
-router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
+coffeesRouter.get('/', rejectUnauthenticated, async (req, res) => {
   const sqlText = `
     SELECT "coffees".*, 
            "users_coffees".is_fav, 
@@ -26,24 +25,20 @@ router.get('/', rejectUnauthenticated, (req: Request, res: Response): void => {
              "users_coffees".shared_by_id
     ORDER BY "coffees".date DESC;
   `
-
-  pool
-    .query(sqlText, [req.user?.id])
-    .then((result) => res.send(camelcaseKeys(result.rows)))
-    .catch((err) => {
-      console.log(`Error in GET with query: ${sqlText}`, err)
-      res.sendStatus(500)
-    })
+  try {
+    const result = await pool.query(sqlText, [req.user?.id])
+    res.send(camelcaseKeys(result.rows))
+  } catch (err) {
+    console.log(`Error in GET with query: ${sqlText}`, err)
+    res.sendStatus(500)
+  }
 })
 
 // GET route for search results, called conditionally in coffees.saga
-router.get(
-  '/search-results',
-  rejectUnauthenticated,
-  (req: Request, res: Response): void => {
-    const { q } = req.query
+coffeesRouter.get('/search-results', rejectUnauthenticated, async (req, res) => {
+  const { q } = req.query
 
-    const sqlText = `
+  const sqlText = `
       SELECT "coffees".*, 
              "users_coffees".is_fav, 
              "users_coffees".brewing,
@@ -68,23 +63,22 @@ router.get(
       ORDER BY "coffees".date DESC;
     `
 
-    // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
-    // Outer single quotes get added when the query is sanitized using $1
-    // Also need to remove any '& ' characters already present for to_tsvector
-    const parsedQuery = `"${(q as string).replace('& ', '').replace(/\s/g, '&')}":*`
+  // '"Sweet&Bloom&Hometown&Blend":*' - This is the wanted end query result
+  // Outer single quotes get added when the query is sanitized using $1
+  // Also need to remove any '& ' characters already present for to_tsvector
+  const parsedQuery = `"${(q as string).replace('& ', '').replace(/\s/g, '&')}":*`
 
-    pool
-      .query(sqlText, [parsedQuery, req.user?.id])
-      .then((result) => res.send(camelcaseKeys(result.rows)))
-      .catch((err) => {
-        console.log(`Error in GET with query: ${sqlText}`, err)
-        res.sendStatus(500)
-      })
+  try {
+    const result = await pool.query(sqlText, [parsedQuery, req.user?.id])
+    res.send(camelcaseKeys(result.rows))
+  } catch (err) {
+    console.log(`Error in GET with query: ${sqlText}`, err)
+    res.sendStatus(500)
   }
-)
+})
 
 // GET route of pared down coffee info for search Autocomplete menu
-router.get('/search', rejectUnauthenticated, (req: Request, res: Response): void => {
+coffeesRouter.get('/search', rejectUnauthenticated, async (req, res) => {
   const sqlText = `
       SELECT "coffees".country, 
              "coffees".producer, 
@@ -97,21 +91,21 @@ router.get('/search', rejectUnauthenticated, (req: Request, res: Response): void
       ORDER BY "coffees".date DESC;
     `
 
-  pool
-    .query(sqlText, [req.user?.id])
-    .then((result) => res.send(camelcaseKeys(result.rows)))
-    .catch((err) => {
-      console.log(`Error in GET with query: ${sqlText}`, err)
-      res.sendStatus(500)
-    })
+  try {
+    const result = await pool.query(sqlText, [req.user?.id])
+    res.send(camelcaseKeys(result.rows))
+  } catch (err) {
+    console.log(`Error in GET with query: ${sqlText}`, err)
+    res.sendStatus(500)
+  }
 })
 
 // POST route for adding a new coffee, transaction
-router.post(
+coffeesRouter.post(
   '/add',
   rejectUnauthenticated,
-  async (req: TypedRequest<CoffeeItem>, res: Response): Promise<void> => {
-    const connection: PoolClient = await pool.connect()
+  async (req: TypedRequest<CoffeeItem>, res) => {
+    const connection = await pool.connect()
 
     try {
       await connection.query('BEGIN;')
@@ -171,7 +165,7 @@ router.post(
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
       const sqlValues = req.body.flavorsArray
-        .map((_: number, i: number) => `($1, $${i + 2})`)
+        .map((_, i) => `($1, $${i + 2})`)
         .join(', ')
 
       const newFlavorsSqlText = `
@@ -195,48 +189,44 @@ router.post(
 )
 
 // DELETE route for a coffee from their dashboard
-router.delete(
-  '/delete/:id',
-  rejectUnauthenticated,
-  async (req: Request, res: Response): Promise<void> => {
-    const connection: PoolClient = await pool.connect()
+coffeesRouter.delete('/delete/:id', rejectUnauthenticated, async (req, res) => {
+  const connection = await pool.connect()
 
-    try {
-      await connection.query('BEGIN;')
+  try {
+    await connection.query('BEGIN;')
 
-      // Query #1
-      // Delete entry from users_coffees to delete coffee from user's dashboard
-      const deleteUsersCoffeesEntrySqlText = `
+    // Query #1
+    // Delete entry from users_coffees to delete coffee from user's dashboard
+    const deleteUsersCoffeesEntrySqlText = `
         DELETE FROM "users_coffees" 
         WHERE "users_id" = $1 AND "coffees_id" = $2;
       `
-      await connection.query(deleteUsersCoffeesEntrySqlText, [
-        req.user?.id,
-        req.params.id,
-      ])
+    await connection.query(deleteUsersCoffeesEntrySqlText, [
+      req.user?.id,
+      req.params.id,
+    ])
 
-      // Query #2
-      // Check to see if this coffee is shared. If not, delete it from db
-      const deleteCoffeeSqlText = `
+    // Query #2
+    // Check to see if this coffee is shared. If not, delete it from db
+    const deleteCoffeeSqlText = `
         DELETE FROM "coffees"  
         WHERE NOT EXISTS (
             SELECT * FROM "shared_coffees" WHERE "coffees_id" = $1
           ) 
           AND "coffees".id = $1;
       `
-      await connection.query(deleteCoffeeSqlText, [req.params.id])
+    await connection.query(deleteCoffeeSqlText, [req.params.id])
 
-      // Complete transaction
-      await connection.query('COMMIT;')
-      res.sendStatus(204) // Send back success
-    } catch (err) {
-      await connection.query('ROLLBACK;')
-      console.log('Error in delete coffee DELETE in coffeesRouter, rollback: ', err)
-      res.sendStatus(500)
-    } finally {
-      connection.release()
-    }
+    // Complete transaction
+    await connection.query('COMMIT;')
+    res.sendStatus(204) // Send back success
+  } catch (err) {
+    await connection.query('ROLLBACK;')
+    console.log('Error in delete coffee DELETE in coffeesRouter, rollback: ', err)
+    res.sendStatus(500)
+  } finally {
+    connection.release()
   }
-)
+})
 
-export default router
+export { coffeesRouter }

@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Menu, MenuItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core'
+import {
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+} from '@material-ui/core'
 import { DeleteOutline, MoreVert, Edit, Share } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
 // Components
@@ -21,7 +27,9 @@ export default function EditDeleteShareCoffeeMenu({ id, coffeeName, pic }: Props
   const history = useHistory()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
   const [sendDialogOpen, setSendDialogOpen] = useState<boolean>(false)
-  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(
+    null
+  )
 
   // Opens the send coffee dialog
   const openShare = () => {

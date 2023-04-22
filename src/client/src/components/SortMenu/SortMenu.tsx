@@ -13,7 +13,9 @@ interface Props {
 
 // Menu that opens on Dashboard providing all sort options
 export default function SortMenu({ sort, setSort }: Props) {
-  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(
+    null
+  )
 
   // Capitalize sort option to display on menu
   const uppercaseFirstLetter = (word: string) =>

@@ -1,8 +1,6 @@
 import url from 'url'
 import pg, { PoolConfig } from 'pg'
 
-const { Pool } = pg
-
 const getConfig = (): PoolConfig => {
   // Heroku gives a url, not a connection object
   // https://github.com/brianc/node-pg-pool
@@ -34,7 +32,7 @@ const getConfig = (): PoolConfig => {
 }
 
 // this creates the pool that will be shared by all other modules
-const pool = new Pool(getConfig())
+export const pool = new pg.Pool(getConfig())
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
@@ -42,5 +40,3 @@ pool.on('error', (err): void => {
   console.log('Unexpected error on idle client', err)
   process.exit(-1)
 })
-
-export default pool

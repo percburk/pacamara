@@ -1,17 +1,17 @@
 import camelcaseKeys from 'camelcase-keys'
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { TypedRequest } from '../models/expressResource'
 import {
   SendSharedCoffeePayload,
   AddSharedCoffeeToDashboardPayload,
 } from '../models/modelResource'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
-import pool from '../modules/pool'
+import { pool } from '../modules/pool'
 
-const router = Router()
+const shareRouter = Router()
 
 // GET route for user list to share coffees with
-router.get('/users', rejectUnauthenticated, (req: Request, res: Response): void => {
+shareRouter.get('/users', rejectUnauthenticated, (req, res) => {
   const sqlText = `
       SELECT "id", 
              "username", 
@@ -31,7 +31,7 @@ router.get('/users', rejectUnauthenticated, (req: Request, res: Response): void 
 })
 
 // GET route for a list of any coffees that have been shared with current user
-router.get('/', (req: Request, res: Response): void => {
+shareRouter.get('/', (req, res) => {
   const sqlText = `
     SELECT * FROM "shared_coffees" 
     WHERE "recipient_id" = $1;
@@ -47,7 +47,7 @@ router.get('/', (req: Request, res: Response): void => {
 })
 
 // GET route for one coffee to display on SharedCoffeeDialog
-router.get('/:id', rejectUnauthenticated, (req: Request, res: Response): void => {
+shareRouter.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
       SELECT "coffees".*, 
              ARRAY_AGG("coffees_flavors".flavors_id) AS "flavors_array"
@@ -67,10 +67,10 @@ router.get('/:id', rejectUnauthenticated, (req: Request, res: Response): void =>
 })
 
 // POST route to share a coffee with another user
-router.post(
+shareRouter.post(
   '/',
   rejectUnauthenticated,
-  (req: TypedRequest<SendSharedCoffeePayload>, res: Response): void => {
+  (req: TypedRequest<SendSharedCoffeePayload>, res) => {
     const { recipientId, coffeesId, coffeeName, message } = req.body
 
     const sqlText = `
@@ -105,9 +105,9 @@ router.post(
 )
 
 // POST route to add a shared coffee to the user's dashboard
-router.post(
+shareRouter.post(
   '/add',
-  (req: TypedRequest<AddSharedCoffeeToDashboardPayload>, res: Response): void => {
+  (req: TypedRequest<AddSharedCoffeeToDashboardPayload>, res) => {
     const { coffeesId, sharedById } = req.body
 
     const sqlText = `
@@ -131,7 +131,7 @@ router.post(
 
 // DELETE route that deletes the entry from "shared_coffees" when
 // a user declines to add a shared coffee to their dashboard
-router.delete('/delete/:id', (req: Request, res: Response): void => {
+shareRouter.delete('/delete/:id', (req, res) => {
   const sqlText = `
     DELETE FROM "shared_coffees" 
     WHERE "id" = $1;
@@ -146,4 +146,4 @@ router.delete('/delete/:id', (req: Request, res: Response): void => {
     })
 })
 
-export default router
+export { shareRouter }

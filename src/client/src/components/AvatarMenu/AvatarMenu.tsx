@@ -94,7 +94,10 @@ export default function AvatarMenu() {
           <Typography align="center">{name}</Typography>
           <Typography align="center">{username}</Typography>
         </Box>
-        <MenuItem disabled={!sharedCoffees[0]} onClick={() => setSharedOpen(!sharedOpen)}>
+        <MenuItem
+          disabled={!sharedCoffees[0]}
+          onClick={() => setSharedOpen(!sharedOpen)}
+        >
           <ListItemIcon>
             <Avatar className={classes[sharedCoffees[0] ? 'smallBlue' : 'small']}>
               <Typography variant="subtitle2">{sharedCoffees.length}</Typography>

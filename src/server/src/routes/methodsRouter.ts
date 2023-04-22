@@ -1,12 +1,12 @@
 import camelcaseKeys from 'camelcase-keys'
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
-import pool from '../modules/pool'
+import { pool } from '../modules/pool'
 
-const router = Router()
+const methodsRouter = Router()
 
 // GET route for list of methods
-router.get('/', rejectUnauthenticated, (_: Request, res: Response): void => {
+methodsRouter.get('/', rejectUnauthenticated, (_, res) => {
   const sqlText = `
     SELECT * FROM "methods" 
     ORDER BY "methods".name;
@@ -21,4 +21,4 @@ router.get('/', rejectUnauthenticated, (_: Request, res: Response): void => {
     })
 })
 
-export default router
+export { methodsRouter }

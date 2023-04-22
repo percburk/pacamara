@@ -1,15 +1,15 @@
 import camelcaseKeys from 'camelcase-keys'
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { PoolClient } from 'pg'
 import { TypedRequest } from '../models/expressResource'
 import { FavBrewCoffee, CoffeeItem } from '../models/modelResource'
 import { rejectUnauthenticated } from '../modules/authenticationMiddleware'
-import pool from '../modules/pool'
+import { pool } from '../modules/pool'
 
-const router = Router()
+const oneCoffeeRouter = Router()
 
 // GET route for one coffee for CoffeeDetails
-router.get('/:id', rejectUnauthenticated, (req: Request, res: Response): void => {
+oneCoffeeRouter.get('/:id', rejectUnauthenticated, (req, res) => {
   const sqlText = `
       SELECT "coffees".*, 
              "users_coffees".is_fav, 
@@ -36,10 +36,10 @@ router.get('/:id', rejectUnauthenticated, (req: Request, res: Response): void =>
 })
 
 // PUT route to toggle boolean 'fav' or 'brewing' status of a coffee
-router.put(
+oneCoffeeRouter.put(
   '/fav-brew',
   rejectUnauthenticated,
-  (req: TypedRequest<FavBrewCoffee>, res: Response): void => {
+  (req: TypedRequest<FavBrewCoffee>, res) => {
     const { change, id: coffeeId } = req.body
     const sqlChange = change === 'fav' ? 'is_fav' : 'brewing'
 
@@ -60,10 +60,10 @@ router.put(
 )
 
 // PUT route to edit an individual coffee, transaction
-router.put(
+oneCoffeeRouter.put(
   '/edit',
   rejectUnauthenticated,
-  async (req: TypedRequest<CoffeeItem>, res: Response): Promise<void> => {
+  async (req: TypedRequest<CoffeeItem>, res) => {
     const connection: PoolClient = await pool.connect()
 
     try {
@@ -117,7 +117,7 @@ router.put(
       // Adding new flavors to coffees_flavors
       // Build SQL query for each new entry in flavors_array
       const sqlValues = req.body.flavorsArray
-        .map((_: number, i: number) => `($1, $${i + 2})`)
+        .map((_, i) => `($1, $${i + 2})`)
         .join(', ')
 
       const updateFlavorsSqlText = `
@@ -153,4 +153,4 @@ router.put(
   }
 )
 
-export default router
+export { oneCoffeeRouter }

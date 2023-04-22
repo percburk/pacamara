@@ -99,7 +99,11 @@ export default function CoffeeCard({ coffee }: { coffee: CoffeeItem }) {
         subheader={roaster}
         action={
           <Grid container direction="column" alignItems="center">
-            <EditDeleteShareCoffeeMenu id={id} coffeeName={coffeeName} pic={coffeePic} />
+            <EditDeleteShareCoffeeMenu
+              id={id}
+              coffeeName={coffeeName}
+              pic={coffeePic}
+            />
             <Tooltip title="Currently Brewing" enterDelay={900} leaveDelay={100}>
               <IconButton onClick={() => handleBrewOrFav('brew')}>
                 {brewing ? (

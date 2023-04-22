@@ -21,7 +21,7 @@
     "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm --watch src/server.ts",
     "start": "node --experimental-specifier-resolution=node --no-warnings dist/server.js",
     "compile": "tsc",
-    "build": "swc ./src --out-dir dist",
+    "build": "swc ./src -C jsc.target=es2022 --out-dir dist",
     "format": "prettier --write --ignore-unknown .",
     "lint": "eslint --fix src/**/*.{ts,js}"
   },

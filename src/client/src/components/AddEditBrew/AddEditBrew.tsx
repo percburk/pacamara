@@ -105,14 +105,15 @@ export default function AddEditBrew({
   const nameToDisplay = isBlend ? blendName : `${country} ${producer}`
 
   // Curried function to handle all text inputs in local state object
-  const handleBrew = (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    const validatedInput = key !== 'time' ? validateNumberInput(value, key) : value
+  const handleBrew =
+    (key: keyof BrewState) => (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target
+      const validatedInput = key !== 'time' ? validateNumberInput(value, key) : value
 
-    if (validatedInput !== undefined) {
-      setBrew({ ...brew, [key]: key === 'time' ? value : validatedInput })
+      if (validatedInput !== undefined) {
+        setBrew({ ...brew, [key]: key === 'time' ? value : validatedInput })
+      }
     }
-  }
 
   // This is the math to calculate the Extraction %, result is rendered
   const adjustedCoffeeDose = (brew.coffeeDose * (100 - brew.moisture - brew.co2)) / 100

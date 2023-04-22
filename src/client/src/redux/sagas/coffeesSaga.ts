@@ -15,7 +15,9 @@ import {
 // Fetches coffees to display on Dashboard
 // Conditionally sends to different GET routes on coffees.router
 // depending on if a search is being executed
-function* fetchCoffees(action: SagaDispatch<string>): SagaGeneratorReturn<CoffeeItem[]> {
+function* fetchCoffees(
+  action: SagaDispatch<string>
+): SagaGeneratorReturn<CoffeeItem[]> {
   const whichRoute = action.payload
     ? call(axios.get, 'api/coffees/search-results', {
         params: { q: action.payload },

@@ -1,9 +1,9 @@
 # Production bundle
-/build
-/dist
+build
+dist
 
 # dependencies
 package-lock.json
 
 # testing
-/coverage
+coverage
