@@ -1,0 +1,9 @@
+# Set default behavior to automatically normalize line endings in git
+* text=auto
+
+# Batch scripts use CRLF for Windows
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+
+# Bash scripts use LF for Mac/Linux
+*.sh text eol=lf

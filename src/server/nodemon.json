@@ -1,0 +1,5 @@
+{
+  "ext": "js,ts",
+  "watch": ["src/"],
+  "exec": "eslint src && tsc && node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts"
+}

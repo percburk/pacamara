@@ -2,80 +2,32 @@
   "name": "pacamara",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
-  "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "4.0.0-alpha.57",
-    "@material-ui/pickers": "^3.3.10",
-    "axios": "^0.21.1",
-    "bcryptjs": "^2.4.3",
-    "camelcase-keys": "^7.0.0",
-    "cookie-session": "^2.0.0-rc.1",
-    "express": "^4.17.1",
-    "heroku": "^7.2.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.2",
-    "luxon": "^1.28.0",
-    "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
-    "pg": "^8.5.1",
-    "prettier": "^2.5.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-dropzone-s3-uploader": "^1.1.0",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
-    "react-swipeable-views": "^0.13.9",
-    "redux": "^4.1.0",
-    "redux-saga": "^1.1.3",
-    "typescript": "^4.2.4",
-    "victory": "^35.4.13",
-    "victory-core": "^36.2.0"
-  },
+  "type": "module",
+  "author": "percburk",
+  "license": "ISC",
   "scripts": {
-    "// Deployment": "",
-    "start": "node -r dotenv/config server/server.ts",
-    "// React Client-Side": "",
-    "client": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "// TS for Server": "",
-    "server": "nodemon -e ts --ignore './dist' -x npm run server:ts",
-    "server:ts": "tsc -p base.tsconfig.json && node -r dotenv/config dist/server/server.js",
-    "tsc": "tsc -p base.tsconfig.json",
-    "// Linting and Formatting": "",
+    "client": "npm run dev -w pacamara-client",
+    "server": "npm run dev -w pacamara-server",
+    "build": "npm run build -w pacamara-client && npm run build -w pacamara-server",
     "format": "prettier --write --ignore-unknown .",
-    "lint": "eslint --fix src/**/*.{ts,tsx}"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "npm test -w pacamara-client",
+    "test:ci": "npm run test:ci -w pacamara-client",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "@date-io/luxon": "^1.3.13",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/body-parser": "^1.19.0",
-    "@types/cookie-session": "^2.0.42",
-    "@types/express": "^4.17.11",
-    "@types/jest": "^26.0.23",
-    "@types/luxon": "^1.27.1",
-    "@types/node": "^15.6.0",
-    "@types/passport": "^1.0.5",
-    "@types/passport-local": "^1.0.33",
-    "@types/pg": "^7.14.9",
-    "@types/query-string": "^6.3.0",
-    "@types/react": "^16.14.13",
-    "@types/react-dom": "^16.9.14",
-    "@types/react-redux": "^7.1.16",
-    "@types/react-router-dom": "^5.1.8",
-    "@types/react-swipeable-views": "^0.13.1",
-    "@types/redux": "^3.6.0",
-    "@types/redux-logger": "^3.0.8",
-    "@types/redux-saga": "^0.10.5",
-    "dotenv": "^10.0.0",
-    "nodemon": "^2.0.4",
-    "redux-logger": "^3.0.6",
-    "ts-node": "^9.1.1"
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.39.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4"
   },
   "browserslist": [
     ">0.2%",
@@ -83,15 +35,17 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "engines": {
+    "node": "^18.15.0",
+    "npm": "^9.5.0"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
-    "*.{ts,tsx,js,jsx,css,md,json}": "prettier --write"
+    "*": "prettier --write --ignore-unknown"
   },
-  "heroku-run-build-script": true
+  "heroku-run-build-script": true,
+  "workspaces": [
+    "src/client",
+    "src/server"
+  ]
 }

@@ -5,8 +5,12 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
-echo "${CYAN}→${NO_COLOR} Running TypeScript compiler check..."
-npx tsc -p base.tsconfig.json --noEmit
+if [ -n "$(git status --porcelain -- '*.ts' '*.tsx')" ]; then
+  echo "${CYAN}→${NO_COLOR} Running TypeScript compiler..."
+  npx tsc -p src/server/tsconfig.json & npx tsc -p src/client/tsconfig.json
+  echo "${CYAN}→${NO_COLOR} Running unit tests..."
+  npm run test:ci
+fi
 
 echo "${CYAN}→${NO_COLOR} Running lint-staged..."
 npx lint-staged
