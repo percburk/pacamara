@@ -9,7 +9,7 @@ export default function S3Uploader({ setPhoto }: { setPhoto: (url: string) => vo
     setPhoto(info.fileUrl)
   }
 
-  const s3Url = process.env.REACT_APP_S3_URL
+  const s3Url = import.meta.env.VITE_S3_URL
   return (
     <DropzoneS3Uploader
       onFinish={handleFinishedUpload}

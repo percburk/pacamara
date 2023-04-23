@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
       port: Number(env.PORT),
       strictPort: true,
       proxy: {
-        '/api': {
+        '^/(api|s3)': {
           target: env.SERVER_BASE_URL,
           changeOrigin: true,
         },
@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
         checker({
           overlay: { initialIsOpen: false },
           typescript: true,
-          eslint: { lintCommand: 'eslint "src/**/*.{ts,tsx}"' },
+          eslint: { lintCommand: 'eslint src' },
           enableBuild: false,
         }),
     ],

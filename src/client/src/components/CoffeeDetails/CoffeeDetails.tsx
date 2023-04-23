@@ -9,7 +9,6 @@ import {
   Paper,
   Button,
   Tooltip,
-  CircularProgress,
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import {
@@ -115,14 +114,6 @@ export default function CoffeeDetails() {
     (selected: number) => (event: ChangeEvent<unknown>, isOpen: boolean) => {
       setAccordionOpen(isOpen ? selected : false)
     }
-
-  if (!coffeePic) {
-    return (
-      <Box height="90vh" display="flex" justifyContent="center" alignItems="center">
-        <CircularProgress color="primary" />
-      </Box>
-    )
-  }
 
   return (
     <>
