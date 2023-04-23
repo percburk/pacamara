@@ -10,7 +10,8 @@
     "server": "npm run dev -w pacamara-server",
     "build": "npm run build -w pacamara-client && npm run build -w pacamara-server",
     "format": "prettier --write --ignore-unknown .",
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "npm test -w pacamara-client",
     "test:ci": "npm run test:ci -w pacamara-client",
     "prepare": "husky install"
@@ -23,6 +24,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "globals": "^13.20.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",

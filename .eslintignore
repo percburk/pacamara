@@ -1,11 +1,11 @@
 # testing
-/coverage
+coverage
 
 # Production bundle
-/dist
+dist
 
 # auto-generated types
-/types
+types
 *.d.ts
 *.d.ts.map
 
