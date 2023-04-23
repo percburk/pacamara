@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios'
-import camelcaseKeys from 'camelcase-keys'
 import { put, takeLatest, call } from 'redux-saga/effects'
 import { User, MethodsArrayAgg } from '../../models/modelResource'
 import { ReduxActions } from '../../models/redux/reduxResource'
@@ -28,7 +27,7 @@ function* fetchUser(): SagaGeneratorReturn<User & MethodsArrayAgg[], User> {
     yield put({
       type: ReduxActions.SET_USER,
       payload: {
-        ...camelcaseKeys(userResponse.data),
+        ...userResponse.data,
         methodsArray: methodsResponse.data[0].arrayAgg,
       },
     })
