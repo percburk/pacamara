@@ -43,7 +43,7 @@ function* deleteBrew(
 function* favBrew(action: SagaDispatch<FavBrewPayload>): SagaGeneratorReturn<number> {
   const { brewId, coffeeId, change } = action.payload
   try {
-    yield call(axios.patch, `api/brews/like/${brewId}`, { change })
+    yield call(axios.patch, `/api/brews/like/${brewId}`, { change })
     yield put({ type: SagaActions.FETCH_BREWS, payload: coffeeId })
   } catch (err) {
     console.log('Error in favBrew', err)
