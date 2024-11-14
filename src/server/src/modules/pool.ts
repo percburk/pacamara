@@ -1,7 +1,7 @@
 import url from 'url'
-import pg, { PoolConfig } from 'pg'
+import pg from 'pg'
 
-const getConfig = (): PoolConfig => {
+const getConfig = () => {
   // Heroku gives a url, not a connection object
   // https://github.com/brianc/node-pg-pool
   if (process.env.DATABASE_URL) {
@@ -36,7 +36,7 @@ export const pool = new pg.Pool(getConfig())
 
 // the pool with emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens
-pool.on('error', (err): void => {
+pool.on('error', (err) => {
   console.log('Unexpected error on idle client', err)
   process.exit(-1)
 })

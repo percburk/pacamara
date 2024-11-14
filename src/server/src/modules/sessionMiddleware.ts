@@ -13,7 +13,7 @@ import { badSecret, exampleBadSecret } from '../constants/warnings'
   `application` ->  `storage` -> `cookies` section of the chrome debugger
 */
 
-const serverSessionSecret = (): string | undefined => {
+const serverSessionSecret = () => {
   if (
     !process.env.SERVER_SESSION_SECRET ||
     process.env.SERVER_SESSION_SECRET.length < 8 ||
